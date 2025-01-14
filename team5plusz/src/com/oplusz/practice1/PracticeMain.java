@@ -7,6 +7,7 @@ public class PracticeMain {
 		System.out.println("리파지토리 연결 테스트");
 		System.out.println("마스터로 커밋");
 		System.out.println("새로 만든 브랜치로 커밋.");
+		System.out.println("GitHub 에서 수정");
 	}
 
 }
