@@ -10,6 +10,7 @@ public class PracticeMain {
 		System.out.println("GitHub 에서 수정");
 		System.out.println("testBranch2에서 수정");
 		// 250115 노트북에서 다시 수정
+		// 깃허브 데스크탑에서 보이는지 확인
 	}
 
 }
