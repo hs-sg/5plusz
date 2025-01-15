@@ -9,6 +9,7 @@ public class PracticeMain {
 		System.out.println("새로 만든 브랜치로 커밋.");
 		System.out.println("GitHub 에서 수정");
 		System.out.println("testBranch2에서 수정");
+		// 250115 노트북에서 다시 수정
 	}
 
 }
