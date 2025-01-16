@@ -1,0 +1,79 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.itwill</groupId>
+    <artifactId>jsp2</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>JSP2</name>
+    
+    <!-- POM에서 사용할 속성(변수) 정의 -->
+    <properties>
+        <servlet-api-version>6.0.0</servlet-api-version>
+        <jsp-api-vesrsion>4.0.0</jsp-api-vesrsion>
+        <el-api-version>5.0.0</el-api-version>
+        <jstl-api-version>3.0.2</jstl-api-version>
+        <jstl-impl-version>3.0.1</jstl-impl-version>
+    </properties>
+
+    <!-- 의존성(라이브러리) 설정 -->
+    <dependencies>
+        <!-- Jakarta EE. Tomcat 11에서 실행되는 서블릿 (라이브러리) 버전 -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${servlet-api-version}</version>
+            <!-- ${servlet-api-version}: properties 태그에서 정의한 속성 값을 읽어오는 기능 -->
+            <scope>provided</scope>
+            <!-- scope=provided: WAS에서 제공되는 의존성 -->
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jsp-api-vesrsion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Expression Language -->
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>${el-api-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Standard Tag Library(JSTL) API-->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>${jstl-api-version}</version>
+        </dependency>
+
+        <!-- Jakarta Standard Tag Library(JSTL) Implementation -->
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${jstl-impl-version}</version>
+        </dependency>
+        
+    </dependencies>
+    
+    <description>Blog Web Application</description>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
