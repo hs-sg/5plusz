@@ -13,6 +13,7 @@ public class PracticeMain {
 		// 깃허브 데스크탑에서 보이는지 확인했고, 푸쉬 예정
 		
 		System.out.println("heeseong branch test!!");
+		System.out.println("heeseong branch test!!");
 	}
 
 }
