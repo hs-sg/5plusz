@@ -17,6 +17,7 @@
 	</head>
 	<body>
 		<h1>연습으로 만듬</h1>
+        <h2>연습용 계정에서 수정</h2>
 		
 		<!-- Bootstrap JS -->
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
