@@ -1,0 +1,59 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<header class="mt-2 p-4 bg-primary text-white text-center">
+    <h1>${pageTitle}</h1>
+</header>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <c:url value="/" var="homePage"/>
+        <a class="navbar-brand" href="${homePage}">LOGO</a>
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <c:url value="/" var="homePage"/>
+                    <a class="nav-link " href="${homePage}">전국축제</a>
+                </li>
+                <li class="nav-item">
+                    <c:url value="/fest/cal" var="festCal"/>
+                    <a class="nav-link" href="${festCal}">축제달력</a>
+                </li>
+                <li class="nav-item">
+                    <c:url value="/post/list" var="postList"/>
+                    <a class="nav-link" href="${postList}">커뮤니티</a>
+                </li>
+                <li class="nav-item">
+                    <c:url value="/fest/create" var="festCreate"/>
+                    <a class="nav-link" href="${festCreate}">축제등록</a>
+                </li>
+                <li class="nav-item">
+                    <c:url value="/user/mypage" var="myPage"/>
+                    <a class="nav-link" href="${myPage}">마이페이지</a>
+                </li>
+                
+                <li class="nav-item">
+                    <c:url var="signInPage" value="/user/signin"/> 
+                    <a class="nav-link " href="${signInPage}">LOGIN</a>
+                </li>
+                <li class="nav-item">
+                    <c:url var="signUpPage" value="/user/signup"/>
+                    <a class="nav-link " href="${signUpPage}">SIGNUP</a>
+                </li>
+                
+                <li class="nav-item">
+                    <c:url var="signOutPage" value="/user/signout"/>
+                    <a class="nav-link " href="${signOutPage}">
+                    <span class="text-primary">${signedInUser} </span> LOGOUT</a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</nav>
