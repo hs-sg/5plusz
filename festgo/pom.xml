@@ -1,0 +1,232 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.oplusz</groupId>
+    <artifactId>festgo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>Spring Project</name>
+    <description>Spring MyBatis Example</description>
+    
+    <!-- POM에서 사용할 속성(변수) 정의 -->
+    <properties>
+        <servlet-api-version>6.0.0</servlet-api-version>
+        <jsp-api-vesrsion>4.0.0</jsp-api-vesrsion>
+        <el-api-version>5.0.0</el-api-version>
+        <jstl-api-version>3.0.2</jstl-api-version>
+        <jstl-impl-version>3.0.1</jstl-impl-version>
+        <log4j-version>2.24.3</log4j-version>
+        <sl4fj-api-version>2.0.16</sl4fj-api-version>
+        <junit-version>5.11.4</junit-version>
+        <ojdbc17-version>23.6.0.24.10</ojdbc17-version>
+        <hikaricp-version>6.2.1</hikaricp-version>
+        <spring-version>6.2.1</spring-version>
+        <jackson-version>2.18.2</jackson-version>
+        <lombok-version>1.18.36</lombok-version>
+        <mybatis-version>3.5.19</mybatis-version>
+        <mybatis-spring-version>3.0.4</mybatis-spring-version>
+    </properties>
+
+    <!-- 의존성(라이브러리) 설정 -->
+    <dependencies>
+        <!-- Jakarta EE. Tomcat 11에서 실행되는 서블릿 (라이브러리) 버전 -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${servlet-api-version}</version>
+            <!-- ${servlet-api-version}: properties 태그에서 정의한 속성 값을 읽어오는 기능 -->
+            <scope>provided</scope>
+            <!-- scope=provided: WAS에서 제공되는 의존성 -->
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>${jsp-api-vesrsion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Expression Language -->
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>${el-api-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Standard Tag Library(JSTL) API-->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>${jstl-api-version}</version>
+        </dependency>
+
+        <!-- Jakarta Standard Tag Library(JSTL) Implementation -->
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${jstl-impl-version}</version>
+        </dependency>
+
+        <!-- log4j, slf4j 라이브러리를 사용하기 위해서 설정 -->
+        <!-- Apache log4j implementation -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <!-- Apache Log4j api -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+        
+        <!-- The Apache Log4j SLF4J API binding to Log4j 2 Core -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+        
+        <!-- Slf4j API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${sl4fj-api-version}</version>
+        </dependency>
+        
+        <!-- 자바 단위 테스트(Java unit test)를 하기 위해서 -->
+        <!-- Module "junit-jupiter-engine" of JUnit 5. -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+            <!-- scope=test: 단위 테스트 클래스들만 사용하고, 릴리즈에서는 사용하지 않는다 -->
+        </dependency>
+        
+        <!-- Module "junit-jupiter-api" of JUnit 5. -->
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Oracle JDBC 라이브러리 -->
+        <!-- Oracle JDBC Driver compatible with JDK17, JDK19, and JDK21 -->
+
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc17</artifactId>
+            <version>${ojdbc17-version}</version>
+        </dependency>
+        
+        <!-- DBCP(데이터베이스 커넥션 풀)을 사용하기 위한 라이브러리-->
+        <!-- Ultimate JDBC Connection Pool -->
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikaricp-version}</version>
+        </dependency>
+
+        <!-- Spring Core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        
+        <!-- Spring Web MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        
+        <!-- Spring Context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <!-- Spring Test Context Framework (스프링 프레임워크 단위 테스트) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        
+        <!-- Jackson Data Bind: General data-binding functionality for Jackson: works on core streaming API -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        
+        <!-- Add-on module to support JSR-310 (Java 8 Date & Time API) data types. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        
+        <!-- Lombok : Automatic Resource Management, automatic generation of getters, setters, equals, hashCode and toString, and more! -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok-version}</version>
+        </dependency>
+        
+        <!-- Spring JDBC-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        
+        <!-- Spring Tx(Transaction) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        
+        <!-- MyBatis SQL mapper framework -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis-version}</version>
+        </dependency>
+        
+        <!-- Spring bridge for MyBatis SQL mapper framework -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>${mybatis-spring-version}</version>
+        </dependency>
+        
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
