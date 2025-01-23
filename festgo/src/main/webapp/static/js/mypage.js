@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    function divOpenClose() {
+    function divAllClose() {
         divMyProfile.style.display = 'none';
         divFestivalList.style.display = 'none';
         divPostList.style.display = 'none';
