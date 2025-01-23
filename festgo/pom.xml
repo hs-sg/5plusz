@@ -212,7 +212,7 @@
             <version>${mybatis-spring-version}</version>
         </dependency>
 
-        <dependencies>
+        
             <!-- Spring Web: Spring MVC 및 파일 업로드 기능 지원 -->
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -226,7 +226,7 @@
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.5</version>
             </dependency>
-        </dependencies>
+        
     </dependencies>
     
     <build>
