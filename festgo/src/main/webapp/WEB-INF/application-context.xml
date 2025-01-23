@@ -40,7 +40,7 @@
     -->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="ds" />
-        <property name="mapperLocations" value="classpath:mappers/**/*.xml" />
+        <property name="mapperLocations" value="classpath*:mappers/**/*.xml" />
         <property name="configLocation" value="classpath:mybatis-config.xml" />
     </bean>
     
@@ -58,11 +58,7 @@
     -->
     <context:component-scan base-package="com.oplusz.festgo.service" />
     <!-- Multipart Resolver -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- Maximum upload size -->
-        <property name="maxUploadSize" value="10485760"/> <!-- 10MB -->
-        <property name="maxUploadSizePerFile" value="5242880"/> <!-- 5MB per file -->
-        <property name="defaultEncoding" value="UTF-8"/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
     </bean>
 
 </beans>

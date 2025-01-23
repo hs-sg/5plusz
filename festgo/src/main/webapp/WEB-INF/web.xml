@@ -45,6 +45,11 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/servlet-context.xml</param-value>
         </init-param>
+    <multipart-config>
+        <max-file-size>20971520</max-file-size> <!-- 20MB -->
+        <max-request-size>41943040</max-request-size> <!-- 40MB -->
+        <file-size-threshold>1048576</file-size-threshold> <!-- 1MB -->
+    </multipart-config>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

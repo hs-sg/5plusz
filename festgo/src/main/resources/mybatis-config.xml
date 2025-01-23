@@ -13,8 +13,9 @@
     
     <typeAliases>
         <typeAlias type="com.oplusz.festgo.domain.Post" alias="Post" />
-        <!-- DTO 클래스 패키지 등록 -->
-        <package name="com.oplusz.festgo.dto"/>
+        <typeAlias type="com.oplusz.festgo.dto.PostCreateDto" alias="PostCreateDto" />
+        <!-- DTO 클래스 패키지 등록 
+        <package name="com.oplusz.festgo.dto"/>-->
     </typeAliases>
      
 
