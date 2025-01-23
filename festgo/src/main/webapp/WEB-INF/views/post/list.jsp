@@ -3,13 +3,13 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>   
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8"/>
+    <head>
+        <meta charset="UTF-8"/>
         
         <!-- Bootstrap을 사용하기 위한 meta name"viewport: 설정 -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-		<title>Fest Go</title>
+        <title>Fest Go</title>
         
         <!-- Bootstrap CSS 링크 -->
          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
@@ -17,8 +17,8 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
             crossorigin="anonymous">
          
-	</head>
-	<body>
+    </head>
+    <body>
         <div class = "container-fluid">
             <c:set var="pageTitle" value="List"/>
             <%@ include file="../fragments/header.jspf" %>
@@ -27,8 +27,15 @@
         <main>
             <div class="mt-2 card">
                 <div class="card-header">
+                    <!-- 글쓰기 버튼 추가 -->
+                    <div class="d-flex justify-content-end">
+                        <c:url var="postCreatePage" value="/post/create"/>
+                        <a href="${postCreatePage}" class="btn btn-primary">글쓰기</a>
+                    </div>
+
+                    <!-- 검색 폼 -->
                     <c:url var="postSearchPage" value="/post/search"/>
-                    <form action="${postSearchPage}" method="get">
+                    <form action="${postSearchPage}" method="get" class="mt-2">
                         <div class="row">
                             <div class="col-3">
                                 <select class="form-control" name="category">
@@ -82,12 +89,12 @@
                 </div>
             </div>
         </main>
-		 
+         
         
          <!-- Bootstrap JS -->
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous">
          </script>
-	</body>
+    </body>
 </html>
