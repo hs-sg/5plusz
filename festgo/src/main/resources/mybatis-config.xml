@@ -10,7 +10,7 @@
     </settings>
     
     <typeAliases>
-        <typeAlias type="com.oplusz.festgo.domain.Members" alias="Members"/>
+        <typeAlias type="com.oplusz.festgo.domain.Member" alias="Member"/>
     </typeAliases>
     
     <!-- 

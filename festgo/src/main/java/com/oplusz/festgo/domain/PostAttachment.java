@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostAttachments {
+public class PostAttachment {
     private Integer paId;
     private Integer poId;
     private String paAttachments;
