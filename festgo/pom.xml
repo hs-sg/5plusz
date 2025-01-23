@@ -211,7 +211,22 @@
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring-version}</version>
         </dependency>
-        
+
+        <dependencies>
+            <!-- Spring Web: Spring MVC 및 파일 업로드 기능 지원 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+
+            <!-- Apache Commons FileUpload: 파일 업로드를 위한 추가 유틸리티 -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.5</version>
+            </dependency>
+        </dependencies>
     </dependencies>
     
     <build>
