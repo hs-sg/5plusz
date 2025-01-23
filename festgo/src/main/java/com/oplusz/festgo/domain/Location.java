@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Locations {
+public class Location {
     private Integer lcId;
     private String lcName;
 }

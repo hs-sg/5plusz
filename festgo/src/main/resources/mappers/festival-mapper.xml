@@ -7,7 +7,7 @@
         
         <!-- 새로운 축제 등록 시 사용할 SQL 문장, 메서드 이름과 자동 생성된 f_id를 festival_images 테이블에 참조 -->
         <insert id="insertFestivals" useGeneratedKeys="true" keyProperty="fId" keyColumn="f_id">
-            insert into festivals (f_name, f_start_date, f_end_date, lc_id, 
+            insert into festival (f_name, f_start_date, f_end_date, lc_id, 
             f_address, f_phone, m_sponsor, f_fee, the_id, f_contents, f_homepage, 
             f_image_main, f_poster, f_created_time, f_modified_time) 
             values (#{fName}, #{fStartDate}, #{fEndDate}, #{lcId}, #{fAddress}, #{fPhone}, #{mSponsor},
@@ -17,8 +17,9 @@
     
         <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
         <insert id="insertFestivalImagesBatch"> 
+            INSERT INTO festival_images (f_id, fi_images) VALUES 
             <foreach collection="festivalImages" item="image">
-             INSERT INTO festival_images (f_id, fi_images) VALUES (#{image.fId}, #{image.fiImages})
+             (#{image.fId}, #{image.fiImages})
             </foreach>
         </insert>
 

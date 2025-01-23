@@ -3,10 +3,10 @@ package com.oplusz.festgo.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.oplusz.festgo.domain.FestivalImages;
-import com.oplusz.festgo.domain.Festivals;
+import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.domain.Festival;
 
-public class FestivalsCreateDto {
+public class FestivalCreateDto {
 	// 필드 이름들을 요청 파라미터 이름과 같게 선언 & 기본 생성자 & setter
     private String fName;
     private LocalDateTime fStartDate;
@@ -26,17 +26,17 @@ public class FestivalsCreateDto {
     private List<String> fiImages;
     
     // Festivals DTO를 Model로 변환해서 리턴하는 메서드
-    public Festivals toFestivalsEntity() {
-    	return Festivals.builder().fName(fName).fStartDate(fStartDate).fEndDate(fEndDate).lcId(lcId).fAddress(fAddress).fPhone(fPhone)
-    			.mSponsor(mSponsor).fFee(fFee).theId(theId).fContents(fContents).fHomepage(fHomepage).fImageMain(fImageMain)
-    			.fPoster(fPoster).fCreatedTime(fCreatedTime).fModifiedTime(fModifiedTime).build();
+    public Festival toFestivalEntity() {
+    	return Festival.builder().feName(fName).feStartDate(fStartDate).feEndDate(fEndDate).lcId(lcId).feAddress(fAddress).fePhone(fPhone)
+    			.meSponsor(mSponsor).feFee(fFee).theId(theId).feContents(fContents).feHomepage(fHomepage).feImageMain(fImageMain)
+    			.fePoster(fPoster).feCreatedTime(fCreatedTime).feModifiedTime(fModifiedTime).build();
     }
     
     // FestivalImages DTO를 Model로 변환해서 리턴하는 메서드
-    public List<FestivalImages> toFestivalImagesEntities(Integer fId) {
+    public List<FestivalImage> toFestivalImagesEntities(Integer feId) {
         return fiImages.stream()
-            .map(image -> FestivalImages.builder()
-                .fId(fId)
+            .map(image -> FestivalImage.builder()
+                .feId(feId)
                 .fiImages(image)
                 .build())
             .toList();

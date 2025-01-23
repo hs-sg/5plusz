@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Posts {
-    private Integer pId;
-    private String pTitle;
-    private String pContent;
-    private String pAuthor;
-    private LocalDateTime pCreatedTime;
-    private LocalDateTime pModifiedTime;
+public class Post {
+    private Integer poId;
+    private String poTitle;
+    private String poContent;
+    private String poAuthor;
+    private LocalDateTime poCreatedTime;
+    private LocalDateTime poModifiedTime;
     private Integer pcId;
-    private Integer pViews;
+    private Integer poViews;
     private Integer paId;
 }

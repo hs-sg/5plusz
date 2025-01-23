@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oplusz.festgo.domain.FestivalImages;
-import com.oplusz.festgo.domain.Festivals;
-import com.oplusz.festgo.dto.FestivalsCreateDto;
-import com.oplusz.festgo.repository.FestivalsDao;
+import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.dto.FestivalCreateDto;
+import com.oplusz.festgo.repository.FestivalDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,21 +16,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FestivalsService {
+public class FestivalService {
 	
-	private final FestivalsDao festivalsDao;
+	private final FestivalDao festivalsDao;
 
     @Transactional
-    public int create(FestivalsCreateDto dto) {
+    public int create(FestivalCreateDto dto) {
         log.debug("create(Festivals = {} )", dto);
 
         // 1. Festivals 테이블에 데이터 삽입
-        Festivals festivals = dto.toFestivalsEntity();
+        Festival festivals = dto.toFestivalEntity();
         int result = festivalsDao.insertFestivals(festivals);
         log.debug("insertFestivals = {}", festivals);
 
         // 2. FestivalImages 테이블에 데이터 삽입
-        List<FestivalImages> images = dto.toFestivalImagesEntities(festivals.getFId());
+        List<FestivalImage> images = dto.toFestivalImagesEntities(festivals.getFeId());
         if (!images.isEmpty()) {
             int imagesResult = festivalsDao.insertFestivalImagesBatch(images);
             if (imagesResult != images.size()) {
