@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.oplusz.festgo.domain.Post;
-import com.oplusz.festgo.domain.Posts;
 import com.oplusz.festgo.service.PostService;
 
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.oplusz.festgo.domain.Post;
-import com.oplusz.festgo.domain.Posts;
 import com.oplusz.festgo.repository.PostDao;
 
 import lombok.RequiredArgsConstructor;
