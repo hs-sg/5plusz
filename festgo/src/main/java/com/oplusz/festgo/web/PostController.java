@@ -33,7 +33,10 @@ public class PostController {
 		model.addAttribute("posts", list);
 
 	}
-
+	@GetMapping("/create")
+	public void create() {
+		log.debug(" GET create()");
+	}
 	@PostMapping("/create")
 	public String create(PostCreateDto dto, @RequestParam("file") MultipartFile file) {
 		log.debug("POST create(dto={}, file={})", dto, file);
