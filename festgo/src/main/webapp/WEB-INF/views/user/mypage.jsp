@@ -24,7 +24,7 @@
 	<main>
 		<div class="row">
 			<div class="col-3">
-				<button class="btn" id="btnToggleMyProfileList">내 프로필</button>
+				<button class="btn" id="btnToggleMyProfile">내 프로필</button>
 				<br />
 				<button class="btn" id="btnToggleFestivalList">축제목록</button>
 				<br />
@@ -36,7 +36,10 @@
 				<br />
 			</div>
 			<div class="col">
-				<div id="divMyProfile">
+                <div id="divMyProfile" style="display: block">
+                    <p>divMyProfile</p>
+                </div>
+				<div id="divFestivalList" style="display: none">
 					<c:forEach items="${festivals }" var="f">
 						<div class="card my-3 me-4">
 						    <em class="card-body">
@@ -71,6 +74,15 @@
 						</div>
                     </c:forEach>
 				</div>
+				<div id="divPostList" style="display: none">
+                    <p>divPostList</p>
+                </div>
+                <div id="divCommentList" style="display: none">
+                    <p>divCommentList</p>
+                </div>
+                <div id="divSponsorCheckList" style="display: none">
+                    <p>divSponsorCheckList</p>
+                </div>
 			</div>
 		</div>
 	</main>
@@ -79,6 +91,9 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
+	
+	<!-- Axios Http JS -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 	<c:url var="mypageJS" value="/js/mypage.js" />

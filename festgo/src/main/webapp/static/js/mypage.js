@@ -3,16 +3,20 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btnToggleMyProfileList = document.querySelector('button#btnToggleMyProfileList');
+    const btnToggleMyProfile = document.querySelector('button#btnToggleMyProfile');
     const btnToggleFestivalList = document.querySelector('button#btnToggleFestivalList');
     const btnTogglePostList = document.querySelector('button#btnTogglePostList');
     const btnToggleCommentList = document.querySelector('button#btnToggleCommentList');
     const btnToggleSponsorCheckList = document.querySelector('button#btnToggleSponsorCheckList');
 
     const divMyProfile = document.getElementById('divMyProfile');
-    const test = document.getElementById('test');
+    const divFestivalList = document.getElementById('divFestivalList');
+    const divPostList = document.getElementById('divPostList');
+    const divCommentList = document.getElementById('divCommentList');
+    const divSponsorCheckList = document.getElementById('divSponsorCheckList');
 
-    btnToggleMyProfileList.addEventListener('click', () => {
+    btnToggleMyProfile.addEventListener('click', () => {
+        divAllClose();
         if (divMyProfile.style.display == 'none') {
             divMyProfile.style.display = 'block';
         } else {
@@ -21,34 +25,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     btnToggleFestivalList.addEventListener('click', () => {
-        if (divMyProfile.style.display == 'none') {
-            divMyProfile.style.display = 'block';
+        divAllClose();
+        if (divFestivalList.style.display == 'none') {
+            divFestivalList.style.display = 'block';
         } else {
-            divMyProfile.style.display = 'none';
+            divFestivalList.style.display = 'none';
         }
     });
 
     btnTogglePostList.addEventListener('click', () => {
-        if (divMyProfile.style.display == 'none') {
-            divMyProfile.style.display = 'block';
+        divAllClose();
+        if (divPostList.style.display == 'none') {
+            divPostList.style.display = 'block';
         } else {
-            divMyProfile.style.display = 'none';
+            divPostList.style.display = 'none';
         }
     });
 
     btnToggleCommentList.addEventListener('click', () => {
-        if (divMyProfile.style.display == 'none') {
-            divMyProfile.style.display = 'block';
+        divAllClose();
+        if (divCommentList.style.display == 'none') {
+            divCommentList.style.display = 'block';
         } else {
-            divMyProfile.style.display = 'none';
+            divCommentList.style.display = 'none';
         }
     });
 
     btnToggleSponsorCheckList.addEventListener('click', () => {
-        if (divMyProfile.style.display == 'none') {
-            divMyProfile.style.display = 'block';
+        divAllClose();
+        if (divSponsorCheckList.style.display == 'none') {
+            divSponsorCheckList.style.display = 'block';
         } else {
-            divMyProfile.style.display = 'none';
+            divSponsorCheckList.style.display = 'none';
         }
     });
+    
+    function divOpenClose() {
+        divMyProfile.style.display = 'none';
+        divFestivalList.style.display = 'none';
+        divPostList.style.display = 'none';
+        divCommentList.style.display = 'none';
+        divSponsorCheckList.style.display = 'none';
+    }
 });
