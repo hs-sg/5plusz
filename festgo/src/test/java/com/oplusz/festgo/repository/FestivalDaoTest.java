@@ -27,20 +27,25 @@ public class FestivalDaoTest {
 	    public void testInsertFestivalWithImages() {
 	        // 1. 축제 데이터 준비
 	        Festival festival = Festival.builder()
-	            .feName("통합 테스트 축제")
-	            .feStartDate(LocalDateTime.now())
-	            .feEndDate(LocalDateTime.now().plusDays(10))
-	            .lcId("1")
-	            .feAddress("서울특별시")
-	            .fePhone("010-1234-5678")
-	            .meSponsor("서울")
-	            .feFee("무료")
-	            .theId(1)
-	            .feContents("축제 상세 내용")
-	            .feHomepage("https://festival.itwill.com")
-	            .feImageMain("main_image.jpg")
-	            .fePoster("poster.jpg")
-	            .build();
+	        	    .feName("LC아이디 확인축제")
+	        	    .feStartDate(LocalDateTime.now())
+	        	    .feEndDate(LocalDateTime.now().plusDays(10))
+	        	    .fePostcode("08868")
+	        	    .feAddress("부산") // 여기서 lcId가 "1"로 매핑됨
+	        	    .feDetailAddress("2층")
+	        	    .feExtraAddress("(역삼동)")
+	        	    .fePhone("010-1234-5678")
+	        	    .meSponsor("최하신팀장")
+	        	    .feFee("무료")
+	        	    .theId(1)
+	        	    .feContents("축제 상세 내용")
+	        	    .feHomepage("https://festival.itwill.com")
+	        	    .feImageMain("main_image.jpg")
+	        	    .fePoster("poster.jpg")
+	        	    .build();
+	        
+	        Assertions.assertNotNull(festival.getLcId(), "lcId 값이 null입니다.");
+	        log.debug("lcId: {}", festival.getLcId());
 
 	        // 2. 축제 데이터 삽입 및 검증
 	        int result = festivalDao.insertFestivals(festival);

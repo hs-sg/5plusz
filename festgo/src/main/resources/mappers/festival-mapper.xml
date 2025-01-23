@@ -9,15 +9,20 @@
         참조 -->
     <insert id="insertFestivals" useGeneratedKeys="true"
         keyProperty="feId" keyColumn="fe_id">
-        insert into festival (fe_name, fe_start_date, fe_end_date, lc_id,
-        fe_address, fe_phone, me_sponsor, fe_fee, the_id, fe_contents,
-        fe_lat, fe_long, fe_homepage, fe_image_main, fe_poster,
-        fe_created_time, fe_modified_time)
-        values (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{feAddress},
+        insert into festival (
+            fe_name, fe_start_date, fe_end_date, lc_id, fe_postcode,
+            fe_address, fe_detail_address, fe_extra_address, fe_phone,
+            me_sponsor, fe_fee, the_id, fe_contents,
+            fe_lat, fe_long, fe_homepage, fe_image_main, fe_poster,
+            fe_created_time, fe_modified_time
+        )
+        values 
+        (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{fePostcode}, #{feAddress}, #{feDetailAddress}, #{feExtraAddress},
         #{fePhone}, #{meSponsor}, #{feFee}, #{theId}, #{feContents}, #{feLat, jdbcType=VARCHAR}, #{feLong, jdbcType=VARCHAR}
         , #{feHomepage}, #{feImageMain}, #{fePoster},
         systimestamp, systimestamp)
     </insert>
+    
 
     <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
     <insert id="insertFestivalImagesBatch">
