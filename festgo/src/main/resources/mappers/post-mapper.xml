@@ -5,8 +5,8 @@
 <mapper namespace="com.oplusz.festgo.repository.PostDao">
     
 
-   <select id="selectOrderByIdDesc" resultType="Posts">
-    SELECT * from posts order by p_id desc
+   <select id="selectOrderByIdDesc" resultType="Post">
+    SELECT * from post order by po_id desc
 </select>
 
 </mapper>

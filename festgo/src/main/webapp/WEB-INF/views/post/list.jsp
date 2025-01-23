@@ -64,16 +64,16 @@
                             <c:forEach items="${posts}" var="p">
                             
                                 <tr>
-                                    <td>${p.pId}</td>
+                                    <td>${p.poId}</td>
                                     <td>
                                         <c:url var="postDetailsPage" value="/post/details">
-                                            <c:param name="id" value="${p.pId}"/>
+                                            <c:param name="id" value="${p.poId}"/>
                                         </c:url>
-                                        <a href="${postDetailsPage}">${p.pTitle}</a>
+                                        <a href="${postDetailsPage}">${p.poTitle}</a>
                                     </td>
-                                    <td>${p.pAuthor}</td>
-                                    <td>${p.pModifiedTime}</td>
-                                    <td>${p.pViews}</td>
+                                    <td>${p.poAuthor}</td>
+                                    <td>${p.poModifiedTime}</td>
+                                    <td>${p.poViews}</td>
                                     
                                 </tr>
                             </c:forEach>

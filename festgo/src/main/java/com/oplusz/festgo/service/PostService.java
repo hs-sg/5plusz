@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.domain.Posts;
 import com.oplusz.festgo.repository.PostDao;
 
@@ -18,9 +19,9 @@ public class PostService {
 
 	private final PostDao postDao;
 
-	public List<Posts> read() {
+	public List<Post> read() {
 		log.debug("read()");
-		List<Posts> list = postDao.selectOrderByIdDesc();
+		List<Post> list = postDao.selectOrderByIdDesc();
 		
 		log.debug("Posts list: {}", list);
 		return list;
