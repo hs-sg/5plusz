@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FestRequest {
     private Integer frId;
-    private Integer fId;
+    private Integer feId;
     private Integer frApproval;
     private String frCause;
 }

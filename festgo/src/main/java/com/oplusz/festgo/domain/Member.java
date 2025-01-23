@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Members {
-    private Integer mId;
-    private String mUsername;
-    private String mPassword;
-    private String mEmail;
-    private String mSponsor;
+public class Member {
+    private Integer meId;
+    private String meUsername;
+    private String mePassword;
+    private String meEmail;
+    private String meSponsor;
     private Integer mrId;
-    private LocalDateTime mCreatedTime;
-    private LocalDateTime mAccessedTime;
+    private LocalDateTime meCreatedTime;
+    private LocalDateTime meAccessedTime;
 }
