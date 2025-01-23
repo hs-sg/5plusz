@@ -8,21 +8,23 @@
     <!-- 새로운 축제 등록 시 사용할 SQL 문장, 메서드 이름과 자동 생성된 f_id를 festival_images 테이블에 
         참조 -->
     <insert id="insertFestivals" useGeneratedKeys="true"
-        keyProperty="fId" keyColumn="f_id">
-        insert into festival (f_name, f_start_date, f_end_date, lc_id,
-        f_address, f_phone, m_sponsor, f_fee, the_id, f_contents, f_homepage,
-        f_image_main, f_poster, f_created_time, f_modified_time)
-        values (#{fName}, #{fStartDate}, #{fEndDate}, #{lcId}, #{fAddress},
-        #{fPhone}, #{mSponsor},
-        #{fFee}, #{theId}, #{fContents}, #{fHomepage}, #{fImageMain},
-        #{fPoster}, systimestamp, systimestamp)
+        keyProperty="feId" keyColumn="fe_id">
+        insert into festival (fe_name, fe_start_date, fe_end_date, lc_id,
+        fe_address, fe_phone, me_sponsor, fe_fee, the_id, fe_contents,
+        fe_lat, fe_long, fe_homepage, fe_likes, fe_image_main, fe_poster,
+        fe_created_time, fe_modified_time)
+        values (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{feAddress},
+        #{fePhone}, #{meSponsor}, #{feFee}, #{theId}, #{feContents}, #{feLat},
+        #{feLong}, #{feHomepage}, #{feLikes}, #{feImageMain}, #{fePoster},
+        systimestamp, systimestamp)
     </insert>
 
     <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
     <insert id="insertFestivalImagesBatch">
-        INSERT INTO festival_images (f_id, fi_images) VALUES
-        <foreach collection="festivalImages" item="image">
-            (#{image.fId}, #{image.fiImages})
+        INSERT INTO festival_images (fe_id, fi_images)
+        VALUES
+        <foreach collection="festivalImages" item="image" separator=",">
+            (#{image.feId}, #{image.fiImages})
         </foreach>
     </insert>
 
