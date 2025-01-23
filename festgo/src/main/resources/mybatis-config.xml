@@ -12,7 +12,7 @@
     
     
     <typeAliases>
-        <typeAlias type="com.oplusz.festgo.domain.Posts" alias="Posts" />
+        <typeAlias type="com.oplusz.festgo.domain.Post" alias="Post" />
        
     </typeAliases>
      
