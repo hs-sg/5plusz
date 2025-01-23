@@ -11,12 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("fest")
+@RequestMapping("/fest")
 public class FestivalController {
 
 	@GetMapping("/create")
 	public void create() {
-
+		log.debug("GET create()");
 	}
 
 }
