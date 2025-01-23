@@ -3,10 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oplusz.festgo.repository.PostDao">
-    
 
-   <select id="selectOrderByIdDesc" resultType="Post">
-    SELECT * from post order by po_id desc
-</select>
 
+    <select id="selectOrderByIdDesc" resultType="Post">
+        SELECT * from post order by po_id desc
+    </select>
+
+    <insert id="insertPost" parameterType="PostCreateDto">
+        INSERT INTO post (po_title, po_content, po_author, pa_attachments, pc_id)
+        VALUES (#{poTitle)m #{poContent}, #{poAuthor},#{paAttachments}, #{pcId})
+    </insert>
 </mapper>
