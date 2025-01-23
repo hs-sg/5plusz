@@ -25,7 +25,6 @@ public class Festival {
     private String feLat;
     private String feLong;
     private String feHomepage;
-    private String feLikes;
     private String feImageMain;
     private String fePoster;
     private LocalDateTime feCreatedTime;
