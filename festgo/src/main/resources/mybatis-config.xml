@@ -8,13 +8,10 @@
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
-    
-    <!-- 
+
     <typeAliases>
-        <typeAlias type="com.itwill.spring2.domain.Post" alias="Post" />
-        <typeAlias type="com.itwill.spring2.domain.Comment" alias="Comment" />
-        <typeAlias type="com.itwill.spring2.domain.Member" alias="Member"/>
+        <typeAlias type="com.oplusz.festgo.domain.Festival" alias="Festival" />
+        <typeAlias type="com.oplusz.festgo.domain.FestivalImage" alias="FestivalImage" />
     </typeAliases>
-     -->
 
 </configuration>
