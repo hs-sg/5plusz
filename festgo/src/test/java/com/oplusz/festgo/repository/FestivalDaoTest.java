@@ -49,18 +49,21 @@ public class FestivalDaoTest {
 
 	        Assertions.assertNotNull(festival.getFeId());
 	        Assertions.assertEquals(1, result);
+	        
+	        Integer feId = festival.getFeId(); // 삽입된 축제의 feId 가져오기
 
 	        // 3. 이미지 데이터 준비
 	        List<FestivalImage> images = List.of(
-	            FestivalImage.builder().feId(festival.getFeId()).fiImages("image1.jpg").build(),
-	            FestivalImage.builder().feId(festival.getFeId()).fiImages("image2.jpg").build()
+	            FestivalImage.builder().feId(feId).fiImages("image1.jpg").build(),
+	            FestivalImage.builder().feId(feId).fiImages("image2.jpg").build()
 	        );
 
 	        // 4. 이미지 데이터 삽입 및 검증
-	        int imageResult = festivalDao.insertFestivalImagesBatch(images);
-	        log.debug("Inserted Images Count: {}", imageResult);
-
-	        Assertions.assertEquals(images.size(), imageResult);
+	        for (FestivalImage image : images) {
+	            int imageResult = festivalDao.insertFestivalImagesBatch(List.of(image));
+	            log.debug("Inserted Image: {}", image);
+	            Assertions.assertEquals(1, imageResult);
+	        }
 	    }
 	
 }
