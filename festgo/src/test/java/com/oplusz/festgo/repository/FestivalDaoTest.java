@@ -23,45 +23,44 @@ public class FestivalDaoTest {
 	@Autowired
 	private FestivalDao festivalDao;
 	
-	// @Test
-	public void testInsertFestivals() {
-	    // 1. 테스트 데이터를 생성
-	    Festival festivals = Festival.builder()
-	        .feName("헬로")
-	        .feStartDate(LocalDateTime.now())
-	        .feEndDate(LocalDateTime.now().plusDays(10))
-	        .lcId("1")
-	        .feAddress("서울특별시")
-	        .fePhone("010-1234-5678")
-	        .meSponsor("서울")
-	        .feFee("무료")
-	        .theId(1)
-	        .feContents("아이티윌")
-	        .feHomepage("https://festival.itwill.com")
-	        .feImageMain("main_image.jpg")
-	        .fePoster("poster.jpg")
-	        .build();
+	   @Test
+	    public void testInsertFestivalWithImages() {
+	        // 1. 축제 데이터 준비
+	        Festival festival = Festival.builder()
+	            .feName("통합 테스트 축제")
+	            .feStartDate(LocalDateTime.now())
+	            .feEndDate(LocalDateTime.now().plusDays(10))
+	            .lcId("1")
+	            .feAddress("서울특별시")
+	            .fePhone("010-1234-5678")
+	            .meSponsor("서울")
+	            .feFee("무료")
+	            .theId(1)
+	            .feContents("축제 상세 내용")
+	            .feHomepage("https://festival.itwill.com")
+	            .feImageMain("main_image.jpg")
+	            .fePoster("poster.jpg")
+	            .build();
 
-	    int result = festivalDao.insertFestivals(festivals);
+	        // 2. 축제 데이터 삽입 및 검증
+	        int result = festivalDao.insertFestivals(festival);
+	        log.debug("Insert Festival Result: {}", result);
+	        log.debug("Generated feId: {}", festival.getFeId());
 
-	    log.debug("Insert result: {}", result);
-	    log.debug("Generated fId: {}", festivals.getFeId());
+	        Assertions.assertNotNull(festival.getFeId());
+	        Assertions.assertEquals(1, result);
 
-	    Assertions.assertNotNull(festivals.getFeId());
-	   Assertions.assertEquals(1, result);
-	}
+	        // 3. 이미지 데이터 준비
+	        List<FestivalImage> images = List.of(
+	            FestivalImage.builder().feId(festival.getFeId()).fiImages("image1.jpg").build(),
+	            FestivalImage.builder().feId(festival.getFeId()).fiImages("image2.jpg").build()
+	        );
 
-	@Test
-	public void testInsertFestivalsImages() {
-		List<FestivalImage> images = List.of(
-		        FestivalImage.builder().feId(1).fiImages("image1.jpg").build(),
-		        FestivalImage.builder().feId(1).fiImages("image2.jpg").build()
-		    );
-		
-		int result = festivalDao.insertFestivalImagesBatch(images);
-		
-		Assertions.assertEquals(images.size(), result);
-	}
-	
+	        // 4. 이미지 데이터 삽입 및 검증
+	        int imageResult = festivalDao.insertFestivalImagesBatch(images);
+	        log.debug("Inserted Images Count: {}", imageResult);
+
+	        Assertions.assertEquals(images.size(), imageResult);
+	    }
 	
 }
