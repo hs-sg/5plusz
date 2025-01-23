@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FestivalImages {
+public class FestivalImage {
     private Integer fiId;
-    private Integer fId;
+    private Integer feId;
     private String fiImages;
 }
