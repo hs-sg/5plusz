@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostAttachments {
     private Integer paId;
-    private Integer pId;
+    private Integer poId;
     private String paAttachments;
 }
