@@ -3,30 +3,62 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.oplusz.festgo.repository.FestivalsDao">
+<mapper namespace="com.oplusz.festgo.repository.FestivalDao">
 
     <!-- 새로운 축제 등록 시 사용할 SQL 문장, 메서드 이름과 자동 생성된 f_id를 festival_images 테이블에 
         참조 -->
     <insert id="insertFestivals" useGeneratedKeys="true"
         keyProperty="fId" keyColumn="f_id">
-        insert into festival (f_name, f_start_date, f_end_date, lc_id,
-        f_address, f_phone, m_sponsor, f_fee, the_id, f_contents, f_homepage,
-        f_image_main, f_poster, f_created_time, f_modified_time)
-        values (#{fName}, #{fStartDate}, #{fEndDate}, #{lcId}, #{fAddress},
-        #{fPhone}, #{mSponsor},
-        #{fFee}, #{theId}, #{fContents}, #{fHomepage}, #{fImageMain},
-        #{fPoster}, systimestamp, systimestamp)
+        insert into festival (fe_name, fe_start_date, fe_end_date, lc_id,
+        fe_address, fe_phone, me_sponsor, fe_fee, the_id, fe_contents, fe_homepage,
+        fe_image_main, fe_poster, fe_created_time, fe_modified_time)
+        values (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{feAddress},
+        #{fePhone}, #{meSponsor},
+        #{feFee}, #{theId}, #{feContents}, #{feHomepage}, #{feImageMain},
+        #{fePoster}, systimestamp, systimestamp)
     </insert>
 
     <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
     <insert id="insertFestivalImagesBatch">
-        INSERT INTO festival_images (f_id, fi_images) VALUES
+        INSERT INTO festival_image (fe_id, fi_images) VALUES
         <foreach collection="festivalImages" item="image">
-            (#{image.fId}, #{image.fiImages})
+            (#{image.feId}, #{image.fiImages})
         </foreach>
     </insert>
-
-
-
-
+    
+    <!-- 전체 축제 리스트 불러오기 -->
+    <select id="selectFestival">
+        select * from festival 
+    </select>
+    
+    <!-- likes랑 조인된 축제리스트 불러오기 -->
+    <!-- 축제id, 축제명, 시작일, 종료일, 개최지, 연락처, 주최자, 메인이미지, 좋아요id, 멤버id -->
+    <!-- 임시로 id=21 heeseong 검색으로 해둠 -->
+    <select id="selectFestivalJoinLikes">
+        select festival.fe_id, fe_name, fe_start_date, fe_end_date, 
+            fe_address, fe_phone, me_sponsor, fe_image_main, li_id, me_id
+        from festival
+        inner join likes on likes.fe_id = festival.fe_id
+        where me_id = '21'
+    </select>
+    
+    <!-- fest_request랑 조인된 축제리스트 불러오기 -->
+    <!-- 축제id, 승인분류번호, 거절사유, 축제명, 시작일, 종료일, 개최지, 연락처, 주최자, 메인이미지 -->
+    <!-- 관리자용 전체보기 -->
+    <select id="selectFestivalAllJoinRequest">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+    </select>
+    
+    <!-- 사업자용 전체보기 %%% 임시로 admin으로 설정해둠 %%% -->
+    <select id="selectFestivalBySponsorJoinRequest">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+        where me_sponsor = 'admin'
+    </select>
+    
 </mapper>

@@ -7,6 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
+import com.oplusz.festgo.service.FestivalService;
+import com.oplusz.festgo.service.MyPageService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,8 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user")
 public class UserController {
 	
+	private final MyPageService myPageService;
+	
 	@GetMapping("/mypage")
-	public void myPage() {
+	public void myPage(Model model) {
 		log.debug("get myPage()");
+		
+		List<FestivalSelectJoinLikesDto> list = myPageService.readFestivalUserInMyPage();
+		model.addAttribute("festivals", list);
 	}
 }
