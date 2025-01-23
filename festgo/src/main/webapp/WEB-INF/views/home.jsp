@@ -23,7 +23,6 @@
             <%@ include file="./fragments/header.jspf" %>
         </div>
         <main>
-            <div>잘나오니2</div>
         </main>
         
         <!-- Bootstrap JS -->
