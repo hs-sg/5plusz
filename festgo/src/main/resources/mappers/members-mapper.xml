@@ -9,8 +9,6 @@
         select * from member where me_username = #{meUsername} and me_password = #{mePassword}
     </select>
     
-    
-    
     <!-- 희성 작성 시작 -->
     
     <!-- 마이페이지 진입용 -->
@@ -24,4 +22,5 @@
     </select>
     
     <!-- 희성 작성 끝 -->
+
 </mapper>

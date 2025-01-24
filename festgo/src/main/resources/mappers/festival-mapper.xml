@@ -4,7 +4,6 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oplusz.festgo.repository.FestivalDao">
-
     <!-- 새로운 축제 등록 시 사용할 SQL 문장, 메서드 이름과 자동 생성된 f_id를 festival_images 테이블에 
         참조 -->
     <insert id="insertFestivals" useGeneratedKeys="true"
@@ -18,14 +17,13 @@
         #{fePoster}, systimestamp, systimestamp)
     </insert>
 
-    <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
+    <!-- 새로운 축제 등록 시 다중 이미지 처리  -->
     <insert id="insertFestivalImagesBatch">
         INSERT INTO festival_image (fe_id, fi_images) VALUES
         <foreach collection="festivalImages" item="image">
             (#{image.feId}, #{image.fiImages})
         </foreach>
     </insert>
-    
     
     <!-- 희성 작성 시작 ================================================================================================== -->
     
