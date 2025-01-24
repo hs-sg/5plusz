@@ -5,7 +5,8 @@ import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 
 public interface MemberDao {
 	Member selectByUsernameAndPassword(Member member);
-	
+	int insertMember(Member member);
+	int insertMemberForBusiness(Member member); 
 	
 //	희성 작성 시작 --------------------------------------------------------------------------------------------------------------------
 	

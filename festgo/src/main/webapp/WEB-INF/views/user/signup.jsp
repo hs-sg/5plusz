@@ -15,6 +15,11 @@
             rel="stylesheet" 
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
             crossorigin="anonymous" />
+        <style>
+            div#signup {
+                max-width: 450px;
+            }
+        </style>
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -22,41 +27,51 @@
             <%@ include file="../fragments/header.jspf" %>
         </div>
 		<main>
-            <div class="d-grid col-7 mx-auto mt-5">
-                <ul class="nav nav-tabs">
+            <div id=signup class="d-grid col-7 mx-auto mt-5">
+                <ul class="nav nav-underline d-flex justify-content-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">일반</a>
+                        <a class="nav-link link-dark active" href="#" id="linkGeneral">일반</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">사업자</a>
+                        <a class="nav-link link-dark" href="#" id="linkBusiness">사업자</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">관리자</a>
+                        <a class="nav-link link-dark" href="#" id="linkAdmin">관리자</a>
                     </li>
                 </ul>
                 <div class="card card-body">
                     <form method="post" class="row justify-content-center">
                         <div class="m-2">
                             <input type="text" id="username" class="form-control" 
-                                name="username" placeholder="사용자 아이디" required autofocus />
+                                name="username" placeholder="아이디" required autofocus />
                         </div>
-                        
-                        <%-- username 중복체크 결과를 출력할 영역 --%>
-                        <div id="checkUsernameResult"></div>
-                        
+
                         <div class="m-2">
                             <input type="password" id="password" class="form-control" 
                                 name="password" placeholder="비밀번호" required />
                         </div>
-                        <div id="checkPasswordResult"></div>
+                        
+                        <div class="m-2">
+                            <input type="password" id="passwordCheck" class="form-control" 
+                                name="passwordCheck" placeholder="비밀번호 확인" required />
+                        </div>
                         
                         <div class="m-2">
                             <input type="email" id="email" class="form-control" 
-                                name="email" placeholder="이메일 - example@email.com" required />
+                                name="email" placeholder="이메일 주소" required />
                         </div>
                         
-                        <%-- 이메일 중복체크 결과를 출력할 영역 --%>
-                        <div id="checkEmailResult"></div>
+                        <div class="m-2 d-none" id="divSponsor">
+                            <input type="text" id="sponsor" class="form-control"
+                                name="sponsor" placeholder="업체/기관명" required />
+                        </div>
+                        
+                        <!-- 로그인/비밀번호/이메일/업체/기관명 중복체크 결과를 출력할 영역 -->
+                        <div id="inputCheckResult" class="text-danger"></div>
+                        
+                        <!-- 데이터 저장용 input(화면에 보이지 않음) -->
+                        <input type="text" id="memberRole" class="d-none"
+                            name="memberRole" value="1"/>
                         
                         <div class="mt-4 col-7">
                             <button type="submit" id="signUp" 
@@ -70,5 +85,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous"></script>
+            
+        <c:url var="signUpJS" value="/js/signUp.js"/>
+        <script src="${ signUpJS }"></script>
 	</body>
 </html>
