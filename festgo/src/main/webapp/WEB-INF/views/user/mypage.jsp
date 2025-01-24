@@ -3,65 +3,55 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<!-- Bootstrap을 사용하기 위한 meta name="viewport" 설정 -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fest Go</title>
+    <head>
+        <meta charset="UTF-8">
+        <!-- Bootstrap을 사용하기 위한 meta name="viewport" 설정 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Fest Go</title>
 
-<!-- Bootstrap CSS 링크. -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-	crossorigin="anonymous">
-</head>
-<body>
+        <!-- Bootstrap CSS 링크. -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+    </head>
+    <body>
 	<div class="container-fluid">
 		<c:set var="pageTitle" value="마이페이지" />
 		<%@ include file="../fragments/header.jspf"%>
-	</div>
-	<main>
-		<div class="row">
-			<div class="col-3">
-				<button class="btn" id="btnToggleMyProfile">내 프로필</button>
-				<br />
-				<button class="btn" id="btnToggleFestivalList">축제목록</button>
-				<br />
-				<button class="btn" id="btnTogglePostList">글목록</button>
-				<br />
-				<button class="btn" id="btnToggleCommentList">댓글목록</button>
-				<br />
-				<button class="btn" id="btnToggleSponsorCheckList">사업자 승인목록</button>
-				<br />
-			</div>
-			<div class="col">
-                <div id="divMyProfile" style="display: block">
-                    <c:set var="m" value="${member }"/>
-                    <table>
-                        <tr>
-                            <th>아이디</th>
-                            <td>${m.meUsername}</td> 
-                        </tr>
-                        <tr>
-                            <th>이메일</th>
-                            <td>${m.meEmail}</td> 
-                        </tr>
-                        <tr>
-                            <th>업체명</th>
-                            <td>${m.meSponsor}</td> 
-                        </tr>
-                        <tr>
-                            <th>아이디생성날짜</th>
-                            <td>${m.meCreatedTime}</td> 
-                        </tr>
-                        <tr>
-                            <th>권한명</th>
-                            <td>${m.mrRoles}</td> 
-                        </tr>
-                    </table>
-                </div>
-				<div id="divFestivalList" style="display: none">
+    </div>
+        <main>
+            <div class="row">
+				<div class="col-3">
+					<button class="btn" id="btnToggleMyProfile">내 프로필</button>
+					<br />
+					<button class="btn" id="btnToggleFestivalList">축제목록</button>
+					<br />
+					<button class="btn" id="btnTogglePostList">글목록</button>
+					<br />
+					<button class="btn" id="btnToggleCommentList">댓글목록</button>
+					<br />
+					<c:if test="${member.mrId eq 3 }">
+                        <button class="btn" id="btnToggleSponsorCheckList">사업자 승인목록</button>
+                    </c:if>
+				</div>
+				<div class="col">
+	                <section>
+	                    <div id="divMyProfile">
+	                    </div>
+	                    <div id="divFestivalList">
+	                    </div>
+	                    <div id="divPostList">
+	                    </div>
+	                    <div id="divCommentList">
+	                    </div>
+	                    <c:if test="${member.mrId eq 3 }">
+		                    <div id="divSponsorCheckList">
+		                    </div>
+	                    </c:if>
+	                </section>
+				<%-- <div id="divFestivalList" style="display: none">
 					<c:forEach items="${festivals }" var="f">
 						<div class="card my-3 me-4">
 						    <em class="card-body">
@@ -97,30 +87,24 @@
 							</table>    
 						</div>
                     </c:forEach>
-				</div>
-				<div id="divPostList" style="display: none">
-                    <p>divPostList</p>
-                </div>
-                <div id="divCommentList" style="display: none">
-                    <p>divCommentList</p>
-                </div>
-                <div id="divSponsorCheckList" style="display: none">
-                    <p>divSponsorCheckList</p>
-                </div>
+				</div> --%>
 			</div>
-		</div>
-	</main>
-	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous"></script>
+		</main>
+        <!-- Bootstrap JS -->
+        <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 	
-	<!-- Axios Http JS -->
+        <!-- Axios Http JS -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+        <script>
+            const signedInUser = '${signedInUser}';
+            const role = '${member.mrId}';
+        </script>
 
-
-	<c:url var="mypageJS" value="/js/mypage.js" />
-	<script src="${mypageJS}"></script>
-</body>
+        <c:url var="mypageJS" value="/js/mypage.js" />
+        <script src="${mypageJS}"></script>
+    </body>
 </html>

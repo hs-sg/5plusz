@@ -14,57 +14,142 @@ document.addEventListener('DOMContentLoaded', () => {
     const divPostList = document.getElementById('divPostList');
     const divCommentList = document.getElementById('divCommentList');
     const divSponsorCheckList = document.getElementById('divSponsorCheckList');
-
+    
     btnToggleMyProfile.addEventListener('click', () => {
-        divAllClose();
-        if (divMyProfile.style.display == 'none') {
-            divMyProfile.style.display = 'block';
-        } else {
+        if(btnToggleMyProfile.style.color == 'blue') {
+            btnToggleMyProfile.style.color = 'black';
             divMyProfile.style.display = 'none';
+        } else {
+            btnToggleMyProfile.style.color = 'blue';
+            divMyProfile.style.display = 'block';
+            
+            const uri = `../api/mypage/profile/${signedInUser}`;
+            
+            axios
+            .get(uri)
+            .then((response) => { getMyProfile(response.data); })
+            .catch((error) => { console.log(error); });
         }
     });
 
     btnToggleFestivalList.addEventListener('click', () => {
-        divAllClose();
-        if (divFestivalList.style.display == 'none') {
-            divFestivalList.style.display = 'block';
-        } else {
+        if(btnToggleFestivalList.style.color == 'blue') {
+            btnToggleFestivalList.style.color = 'black';
             divFestivalList.style.display = 'none';
+        } else {
+            btnToggleFestivalList.style.color = 'blue';
+            divFestivalList.style.display = 'block';
+            
+            switch(role) {
+                case 1 : // 일반유저
+                    const UUri = `../api/mypage/ufestivals/${signedInUser}`;
+                    
+                    axios
+                    .get(UUri)
+                    .then((response) => { getUFestivalList(response.data); })
+                    .catch((error) => { console.log(error); });
+                    
+                    break;
+                    
+                case 2 :
+                    const BUri = `../api/mypage/bfestivals/${signedInUser}`;
+
+                    axios
+                    .get(BUri)
+                    .then((response) => { getBFestivalList(response.data); })
+                    .catch((error) => { console.log(error); });
+
+                    break;
+                    
+                case 3 :
+                    const AUri = `../api/mypage/afestivals/${signedInUser}`;
+
+                    axios
+                    .get(AUri)
+                    .then((response) => { getAFestivalList(response.data); })
+                    .catch((error) => { console.log(error); });
+
+                    break;
+
+            }
+            
         }
     });
 
     btnTogglePostList.addEventListener('click', () => {
-        divAllClose();
-        if (divPostList.style.display == 'none') {
-            divPostList.style.display = 'block';
+        if (btnTogglePostList.style.color == 'blue') {
+            btnTogglePostList.style.color = 'black';
         } else {
-            divPostList.style.display = 'none';
+            btnTogglePostList.style.color = 'blue';
         }
     });
 
     btnToggleCommentList.addEventListener('click', () => {
-        divAllClose();
-        if (divCommentList.style.display == 'none') {
-            divCommentList.style.display = 'block';
+        if (btnToggleCommentList.style.color == 'blue') {
+            btnToggleCommentList.style.color = 'black';
         } else {
-            divCommentList.style.display = 'none';
+            btnToggleCommentList.style.color = 'blue';
         }
     });
 
     btnToggleSponsorCheckList.addEventListener('click', () => {
-        divAllClose();
-        if (divSponsorCheckList.style.display == 'none') {
-            divSponsorCheckList.style.display = 'block';
+        if (btnToggleSponsorCheckList.style.color == 'blue') {
+            btnToggleSponsorCheckList.style.color = 'black';
         } else {
-            divSponsorCheckList.style.display = 'none';
+            btnToggleSponsorCheckList.style.color = 'blue';
         }
     });
     
-    function divAllClose() {
-        divMyProfile.style.display = 'none';
-        divFestivalList.style.display = 'none';
-        divPostList.style.display = 'none';
-        divCommentList.style.display = 'none';
-        divSponsorCheckList.style.display = 'none';
+    /* 콜백 함수 --------------------------------------------------------------------------- */
+    
+    function divAllColorBlack() {
+        divMyProfile.style.color = 'black';
+        divFestivalList.style.color = 'black';
+        divPostList.style.color = 'black';
+        divCommentList.style.color = 'black';
+        if(role == 3) {
+            divSponsorCheckList.style.color = 'black';
+        }
+    }
+    
+    /* 로그인한 프로필 출력 */
+    function getMyProfile(data) {
+        let html = `
+            <table>
+                <tr>
+                    <th>아이디</th>
+                    <td>${data.meUsername}</td> 
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td>${data.meEmail}</td> 
+                </tr>
+                <tr>
+                    <th>업체명</th>
+                    <td>${data.meSponsor}</td> 
+                </tr>
+                <tr>
+                    <th>아이디생성날짜</th>
+                    <td>${data.meCreatedTime}</td> 
+                </tr>
+                <tr>
+                    <th>권한명</th>
+                    <td>${data.mrRoles}</td> 
+                </tr>
+            </table>
+        `;
+        divMyProfile.innerHTML = html;
+    }
+    
+    function getUFestivalList(data) {
+        
+    }
+    
+    function getBFestivalList(data) {
+        
+    }
+    
+    function getAFestivalList(data) {
+        
     }
 });
