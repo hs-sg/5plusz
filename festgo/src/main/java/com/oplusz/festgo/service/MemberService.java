@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.MemberSignInDto;
+import com.oplusz.festgo.dto.MemberSignUpDto;
 import com.oplusz.festgo.repository.MemberDao;
 
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,20 @@ public class MemberService {
 		Member signedInMember = memberDao.selectByUsernameAndPassword(dto.toEntity());
 		
 		return signedInMember;
+	}
+	
+	// 회원가입
+	public int create(MemberSignUpDto dto) {
+		log.debug("create(dto={})", dto);
+		int result = 0;
+		
+		// 사업자 회원인 경우
+		if(dto.getMeSponsor() != null) {
+			result = memberDao.insertMemberForBusiness(dto.toEntity());
+			return result;
+		} 
+		// 일반/관리자 회원인 경우
+		result = memberDao.insertMember(dto.toEntity());	
+		return result;
 	}
 }

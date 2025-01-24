@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.MemberDao">
+
+    <!-- 로그인 -->
+    <select id="selectByUsernameAndPassword" resultType="Member">
+        select * from member where me_username = #{meUsername} and me_password = #{mePassword}
+    </select>
+    
+    <!-- 회원가입(일반, 관리자) -->
+    <insert id="insertMember">
+        insert into member(me_username, me_password, me_email, mr_id, me_created_time, me_accessed_time)
+        values(#{meUsername}, #{mePassword}, #{meEmail}, #{mrId}, systimestamp, systimestamp)
+    </insert>
+    
+    <!-- 회원가입(사업자) -->
+    <insert id="insertMemberForBusiness">
+        insert into member(me_username, me_password, me_email, me_sponsor, mr_id, me_created_time, me_accessed_time)
+        values(#{meUsername}, #{mePassword}, #{meEmail}, #{meSponsor}, #{mrId}, systimestamp, systimestamp)
+    </insert>
+</mapper>

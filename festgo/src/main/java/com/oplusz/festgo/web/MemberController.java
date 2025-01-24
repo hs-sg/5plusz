@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.MemberSignInDto;
+import com.oplusz.festgo.dto.MemberSignUpDto;
 import com.oplusz.festgo.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
@@ -54,9 +55,20 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	// 회원가입
+	// 회원가입 페이지
 	@GetMapping("/signup")
-	public void signup() {
-		log.debug("signup()");
+	public void signUp() {
+		log.debug("GET signUp()");
+	}
+	
+	// 새로운 회원 등록
+	@PostMapping("/signup")
+	public String signUp(MemberSignUpDto dto) {
+		log.debug("POST signUp(dto={})", dto);
+		
+		memberService.create(dto);
+		
+		// 회원가입 성공 후 홈페이지로 redirect
+		return "redirect:/";
 	}
 }
