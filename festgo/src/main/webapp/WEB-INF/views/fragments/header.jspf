@@ -98,5 +98,5 @@
     </div>
 </div>
            
-<c:url var="signInAndUpJS" value="/js/signInAndUp.js" />
-<script src="${ signInAndUpJS }"></script>
+<c:url var="signInJS" value="/js/signIn.js" />
+<script src="${ signInJS }"></script>

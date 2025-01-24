@@ -4,4 +4,6 @@ import com.oplusz.festgo.domain.Member;
 
 public interface MemberDao {
 	Member selectByUsernameAndPassword(Member member);
+	int insertMember(Member member);
+	int insertMemberForBusiness(Member member); 
 }
