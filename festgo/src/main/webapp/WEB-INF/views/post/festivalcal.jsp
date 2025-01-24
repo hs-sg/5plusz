@@ -13,19 +13,60 @@
         #calendar {
             max-width: 90%;
             margin: 20px auto;
+            border: 4px solid skyblue;
+            border-radius: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        .no-events {
-            margin-top: 20px;
-            text-align: center;
-            color: #888;
+
+        /* 제목과 버튼 배치 */
+        .fc-toolbar-chunk {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .no-events img {
-            max-width: 150px;
-            display: block;
-            margin: 0 auto;
+
+        .fc-toolbar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 10px;
         }
-        .fc-highlighted {
-            background-color: #ffecd1 !important; /* 클릭한 날짜 강조 */
+
+        .fc-prev-button,
+        .fc-next-button,
+        .fc-today-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin: 0 5px; /* 버튼 간격 */
+            cursor: pointer;
+        }
+
+        .fc-prev-button:hover,
+        .fc-next-button:hover,
+        .fc-today-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* 일요일 요일과 날짜를 빨간색으로 표시 */
+        .fc .fc-col-header-cell.fc-day-sun,
+        .fc .fc-day-sun .fc-daygrid-day-number {
+            color: red !important; /* 빨간색 */
+            text-decoration: none !important; /* 밑줄 제거 */
+        }
+
+        /* 기본 스타일 설정 */
+        .fc .fc-col-header-cell {
+            color: blue;
+            text-decoration: none !important;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: black;
+            text-decoration: none !important;
         }
     </style>
 </head>
@@ -52,19 +93,16 @@
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
-                    left: 'prev,next today', // 이전, 다음, 오늘 버튼만 표시
-                    center: 'title', // 중앙에 제목만 표시
-                    right: '' // 오른쪽 버튼 삭제
+                    left: '', // 왼쪽은 비움
+                    center: 'prev title next today', // 다음 버튼 오른쪽에 오늘 버튼 추가
+                    right: '' // 오른쪽은 비움
                 },
                 locale: 'ko',
-                events: '/api/festivals', // Spring Controller에서 데이터를 JSON으로 가져옴
+                events: '/api/festivals',
                 dateClick: function(info) {
-                    // 기존 강조 제거
-                    document.querySelectorAll('.fc-highlighted').forEach(el => el.classList.remove('fc-highlighted'));
-                    // 클릭한 날짜 강조
+                    document.querySelectorAll('.fc-daygrid-day.fc-highlighted').forEach(el => el.classList.remove('fc-highlighted'));
                     info.dayEl.classList.add('fc-highlighted');
 
-                    // 해당 날짜 이벤트 가져오기
                     fetch('/api/festivals')
                         .then(response => response.json())
                         .then(data => {
