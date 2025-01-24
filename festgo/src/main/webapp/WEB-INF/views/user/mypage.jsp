@@ -18,7 +18,7 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<c:set var="pageTitle" value="홈 페이지" />
+		<c:set var="pageTitle" value="마이페이지" />
 		<%@ include file="../fragments/header.jspf"%>
 	</div>
 	<main>
@@ -37,7 +37,29 @@
 			</div>
 			<div class="col">
                 <div id="divMyProfile" style="display: block">
-                    <p>divMyProfile</p>
+                    <c:set var="m" value="${member }"/>
+                    <table>
+                        <tr>
+                            <th>아이디</th>
+                            <td>${m.meUsername}</td> 
+                        </tr>
+                        <tr>
+                            <th>이메일</th>
+                            <td>${m.meEmail}</td> 
+                        </tr>
+                        <tr>
+                            <th>업체명</th>
+                            <td>${m.meSponsor}</td> 
+                        </tr>
+                        <tr>
+                            <th>아이디생성날짜</th>
+                            <td>${m.meCreatedTime}</td> 
+                        </tr>
+                        <tr>
+                            <th>권한명</th>
+                            <td>${m.mrRoles}</td> 
+                        </tr>
+                    </table>
                 </div>
 				<div id="divFestivalList" style="display: none">
 					<c:forEach items="${festivals }" var="f">
@@ -62,14 +84,16 @@
 							        <th>축제기간<th>
 							        <td><em>${f.feStartDate }</em><em> ~ ${f.feEndDate }</em></td>
 							    </tr>
-							    <tr>
-							        <th>승인분류번호<th>
-							        <td>${f.frApproval}</td>
-							    </tr>
-							    <tr>
-							        <th>거절사유<th>
-							        <td>${f.frCause }</td>
-							    </tr>
+							    <c:if test="${not empty f.frApproval}">
+								    <tr>
+								        <th>승인분류번호<th>
+								        <td>${f.frApproval}</td>
+								    </tr>
+								    <tr>
+								        <th>거절사유<th>
+								        <td>${f.frCause }</td>
+								    </tr>
+							    </c:if>
 							</table>    
 						</div>
                     </c:forEach>

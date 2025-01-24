@@ -8,4 +8,20 @@
     <select id="selectByUsernameAndPassword" resultType="Member">
         select * from member where me_username = #{meUsername} and me_password = #{mePassword}
     </select>
+    
+    
+    
+    <!-- 희성 작성 시작 -->
+    
+    <!-- 마이페이지 진입용 -->
+    <!-- member_role이랑 조인된 테이블에서 username으로 찾기-->
+    <!-- 멤버id, 아이디, 이메일, 업체명, 아이디생성날짜, 권한id, 권한명 -->
+    <select id="selectMemberJoinRoleByUsername" parameterType="String" resultType="com.oplusz.festgo.dto.MemberSelectJoinRoleDto" >
+        select me_id, me_username, me_email, me_sponsor, me_created_time, member.mr_id, mr_roles 
+        from member 
+        inner join member_role on member.mr_id = member_role.mr_id 
+        where me_username = #{meUsername}
+    </select>
+    
+    <!-- 희성 작성 끝 -->
 </mapper>

@@ -14,15 +14,20 @@ public interface FestivalDao {
 
 	int insertFestivalImagesBatch(List<FestivalImage> festivalImages);
 	
+//	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
+	
 	// 전체 축제 읽기
-	List<Festival> selectFestival();
+	List<Festival> selectFestivalAll();
 	
 	// fest_request와 조인된 테이블 전체 축제 읽기 -> 마이페이지 관리자에서 사용
-	List<FestivalSelectJoinRequestDto> selectFestivalAllJoinRequest();
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestAll();
 	
 	// fest_request와 조인된 테이블 중 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
-	List<FestivalSelectJoinRequestDto> selectFestivalBySponsorJoinRequest();
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
 	
 	// likes와 조인된 테이블 중 멤버가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
-	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikes();
-	}
+	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikesByMemberId(Integer meId);
+	
+//	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
+
+}
