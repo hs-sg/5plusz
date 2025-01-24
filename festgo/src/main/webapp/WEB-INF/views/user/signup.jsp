@@ -19,6 +19,10 @@
             div#signup {
                 max-width: 450px;
             }
+            
+            input.dangerBorder {
+                border-color:red;
+            }
         </style>
 	</head>
 	<body>
@@ -63,11 +67,17 @@
                         
                         <div class="m-2 d-none" id="divSponsor">
                             <input type="text" id="sponsor" class="form-control"
-                                name="sponsor" placeholder="업체/기관명" required />
+                                name="sponsor" placeholder="업체/기관명" />
                         </div>
                         
                         <!-- 로그인/비밀번호/이메일/업체/기관명 중복체크 결과를 출력할 영역 -->
-                        <div id="inputCheckResult" class="text-danger"></div>
+                        <div id="inputCheckResult" class="text-danger">
+                            <p id="checkUsernameResult"></p>
+                            <p id="checkPasswordResult"></p>
+                            <p id="checkPasswordCheckResult"></p>
+                            <p id="checkEmailResult"></p>
+                            <p id="checkSponsorResult"></p>
+                        </div>
                         
                         <!-- 데이터 저장용 input(화면에 보이지 않음) -->
                         <input type="text" id="memberRole" class="d-none"
@@ -85,6 +95,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous"></script>
+        
+        <!-- Axios Http JS -->    
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             
         <c:url var="signUpJS" value="/js/signUp.js"/>
         <script src="${ signUpJS }"></script>

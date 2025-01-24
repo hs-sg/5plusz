@@ -40,4 +40,31 @@ public class MemberService {
 		result = memberDao.insertMember(dto.toEntity());	
 		return result;
 	}
+
+	// 입력한 username이 Member 테이블에 없으면 true, 이미 있으면 false를 리턴.
+	public boolean checkUsername(String username) {
+		log.debug("checkUsername(username={})", username);
+		
+		if (memberDao.selectByUsername(username) == null) return true;
+		
+		return false;
+	}
+
+	// 입력한 email이 Member 테이블에 없으면 true, 이미 있으면 false를 리턴.
+	public boolean checkEmail(String email) {
+		log.debug("checkEmail(email={})", email);
+		
+		if (memberDao.selectByEmail(email) == null) return true;
+		
+		return false;
+	}
+	
+	// 입력한 sponsor가 Member 테이블에 없으면 true, 이미 있으면 false를 리턴.
+	public boolean checkSponsor(String sponsor) {
+		log.debug("checkSponsor(sponsor={}", sponsor);
+		
+		if (memberDao.selectBySponsor(sponsor) == null) return true;
+		
+		return false;
+	}
 }

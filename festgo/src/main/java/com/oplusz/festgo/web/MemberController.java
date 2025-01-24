@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.oplusz.festgo.domain.Member;
@@ -71,4 +72,50 @@ public class MemberController {
 		// 회원가입 성공 후 홈페이지로 redirect
 		return "redirect:/";
 	}
+	
+	// username 중복체크
+	// 중복되지 않은 username이면 "Y", 중복된 username이면 "N" 리턴
+	@GetMapping("/checkusername")
+	@ResponseBody
+	public ResponseEntity<String> checkUsername(@RequestParam String username) {
+		log.debug("GET checkUsername(username={})", username);
+		
+		boolean result = memberService.checkUsername(username);
+		if(result) {
+			return ResponseEntity.ok("Y");
+		} else {
+			return ResponseEntity.ok("N");
+		}		
+	}
+	
+	// email 중복체크
+	// 중복되지 않은 email이면 "Y", 중복된 email이면 "N" 리턴
+	@GetMapping("/checkemail")
+	@ResponseBody
+	public ResponseEntity<String> checkEmail(@RequestParam String email) {
+		log.debug("GET checkEmail(email={})", email);
+		
+		boolean result = memberService.checkEmail(email);
+		if(result) {
+			return ResponseEntity.ok("Y");
+		} else {
+			return ResponseEntity.ok("N");
+		}	
+	}
+	
+	// sponsor 중복체크
+	// 중복되지 않은 sponsor이면 "Y", 중복된 sponsor이면 "N" 리턴
+	@GetMapping("/checksponsor")
+	@ResponseBody
+	public ResponseEntity<String> checkSponsor(@RequestParam String sponsor) {
+		log.debug("GET checkSponsor(sponsor={})", sponsor);
+		
+		boolean result = memberService.checkSponsor(sponsor);
+		if(result) {
+			return ResponseEntity.ok("Y");
+		} else {
+			return ResponseEntity.ok("N");
+		}	
+	}
+	
 }

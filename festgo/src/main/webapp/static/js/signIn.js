@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 console.log('data=' + response.data + ', username=' + meUsername);
                 signinModal.hide();
-                window.location.replace('../festgo/');
+                // window.location.replace('../festgo/'); //--> 로그인 성공하면 홈페이지로 이동.
             }
         })
         .catch((error) => {
