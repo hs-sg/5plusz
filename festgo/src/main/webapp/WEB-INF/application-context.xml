@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring https://mybatis.org/schema/mybatis-spring.xsd">
+
+    <!-- bean definitions here: 
+        스프링 프레임워크에서 생성하고 관리할 자바 객체들을 선언.
+    -->
+    
+    <!-- HikariConfig 빈 생성을 위한 설정 
+        HikariConfig hikariConfig = new HikariConfing();
+        hikariConfig.setDriverClassName("oracle.jdbc.OracleDriver");
+        ...
+    -->
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.14.4:1521:xe" />
+        <property name="username" value="splusz" />
+        <property name="password" value="splusz" />
+    </bean>
+    
+    <!-- HikariDataSource 빈 생성을 위한 설정 
+        HikariDataSource ds = new HikariDataSource(hikariConfig);
+    -->
+    <bean id="ds" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+    
+    <!-- SqlSessionFactoryBean 빈 생성을 위한 설정: 
+        영속성 프레임워크인 MyBatis에서 데이터 소스(커넥션 풀)을 이용해서 SQL 문장을 실행하고, 
+        그 결과를 처리해서 리턴할 수 있는 객체.
+        SqlSessionFactoryBean sqlSession = new SqlSessionFactoryBean();
+        sqlSession.setDataSource(ds);
+        sqlSession.setMapperLocations("classpath:/mappers/**/*.xml");
+        sqlSession.setConfigLocation("classpath:/mybatis-config.xml");
+    -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="ds" />
+        <property name="mapperLocations" value="classpath:mappers/**/*.xml" />
+        <property name="configLocation" value="classpath:mybatis-config.xml" />
+    </bean>
+    
+    <!-- MyBatis-Spring 프레임워크에서 SQL을 수행하고 결과처리하는 컴포넌트(들)을 
+    검색할 기본 패키지 설정. 
+    MyBatis 프레임워크는 base-package 아래의 인터페이스(들)을 검색해서 구현 객체를 생성.
+    -->
+    <mybatis:scan base-package="com.oplusz.festgo.repository" />
+
+    <!-- 스프링 컨테이너에서 컴포넌트 빈들을 검색할 기본 패키지를 설정.
+        스프링 컨테이너가 base-package와 그 하위 패키지들을 검색해서
+        컴포넌트 애너테이션(@Component, @Service, ...)이 설정된 클래스 객체들을
+        (싱글턴으로) 생성하고 관리하기 위해서.
+        생성된 컴포넌트 빈들을 필요한 곳(예: 컨트롤러)에 주입할 수 있도록.
+    -->
+    <context:component-scan base-package="com.oplusz.festgo.service" />
+
+</beans>
