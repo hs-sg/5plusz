@@ -17,8 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputPasswordCheck = document.querySelector('input#passwordCheck');
     const inputEmail = document.querySelector('input#email');
     const inputSponsor = document.querySelector('input#sponsor');
+    const showPasswordCheckbox = document.querySelector('input#showPasswordCheckbox')
     const divSponsor = document.querySelector('div#divSponsor');
-    const divInputCheckResult = document.querySelector('div#inputCheckResult');
+    //const divInputCheckResult = document.querySelector('div#inputCheckResult');
     const checkUsernameResult = document.querySelector('p#checkUsernameResult');
     const checkPasswordResult = document.querySelector('p#checkPasswordResult');
     const checkPasswordCheckResult = document.querySelector('p#checkPasswordCheckResult');
@@ -65,6 +66,17 @@ document.addEventListener("DOMContentLoaded", () => {
     inputEmail.addEventListener('change', checkEmail);
     inputSponsor.addEventListener('change', checkSponsor);
     
+    // showingPasswordCheckbox를 클릭하면 비밀번호 입력란의 type이 'text'로 변경됨.
+    showPasswordCheckbox.addEventListener('click', () => {
+        if (inputPassword.type === 'password' && inputPasswordCheck.type === 'password') {
+            inputPassword.type = 'text';
+            inputPasswordCheck.type = 'text';
+        } else {
+            inputPassword.type = 'password';
+            inputPasswordCheck.type = 'password';
+        }
+    });
+    
     
     /*-------------------함수 선언-------------------*/
     // <a>요소의 클래스에 active 클래스가 있으면 제거함.
@@ -88,8 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // 일반/사업자/관리자 카테고리 전환 시 입력 화면을 초기화 시킴.
     function cleanUsernamePasswordEmailSponsorInfo() {
-        // username, password, email, sponsor <input>들과 check용 <p>들에 입력된 값을 지우고,
-        // <input>요소들의 테두리 색을 기본값으로 변경함.
+        // username, password, email, sponsor <input>들에 입력된 값을 지우고, 테두리 색을 기본값으로 변경함.
         const inputs = [
             inputUsername, 
             inputPassword, 
@@ -100,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             x.value = '';
             x.classList.remove('dangerBorder');
         });
-        // [가입 요청] 버튼 위에 표시되는 경고 문구들을 모두 지움.
+        // [가입 요청] 버튼 위에 표시되는 경고 문구<p>들에 입력된 값을 모두 지움.
         const checks = [
             checkUsernameResult, 
             checkPasswordResult, 
@@ -151,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isUsernameChecked = true;
         }
         
-        const regExp = /^(?=.*[a-z0-9])[a-z0-9]{5,20}$/;
+        const regExp = /^(?=.*[a-z])(?=.*\d)[a-z0-9]{5,20}$/;
         if (!regExp.test(username)) {
             checkUsernameResult.innerHTML = '아이디: 5~20자의 영문 소문자, 숫자를 사용해주세요.';
             isUsernameChecked = false;
@@ -204,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
             isPasswordChecked = true;
         }
         
-        const regExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!"#$%&'()*+,\-./:;<=>?@\[₩\]\^_`{\|}~])[a-zA-Z\d!"#$%&'()*+,\-./:;<=>?@\[₩\]\^_`{\|}~]{8,20}$/;
+        const regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&'()*+,\-./:;<=>?@\[₩\]\^_`\{\|\}~])[\w!"#$%&'()*+,\-./:;<=>?@\[₩\]\^`\{\|\}~]{8,20}$/;
         if (!regExp.test(password)) {
             checkPasswordResult.innerHTML = '비밀번호: 8~20자의 영문 대/소문자, 숫자, 특수문자를 사용해주세요.';
             isPasswordChecked = false;

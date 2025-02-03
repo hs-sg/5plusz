@@ -8,7 +8,7 @@
 		<!-- Bootstrap을 사용하기 위한 meta name="viewport" 설정. -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		
-        <title>JSP</title>
+        <title>Fest Go</title>
         
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
@@ -47,12 +47,12 @@
                     <form method="post" class="row justify-content-center">
                         <div class="m-2">
                             <input type="text" id="username" class="form-control" 
-                                name="username" placeholder="아이디" required autofocus />
+                                name="meUsername" placeholder="아이디" required autofocus />
                         </div>
 
                         <div class="m-2">
                             <input type="password" id="password" class="form-control" 
-                                name="password" placeholder="비밀번호" required />
+                                name="mePassword" placeholder="비밀번호" required />
                         </div>
                         
                         <div class="m-2">
@@ -60,14 +60,21 @@
                                 name="passwordCheck" placeholder="비밀번호 확인" required />
                         </div>
                         
+                        <div class="form-check form-switch form-check-reverse col-11">
+                            <input class="form-check-input" type="checkbox" role="switch" id="showPasswordCheckbox"/>
+                            <label class="form-check-label text-secondary" for="showPasswordCheckbox">
+                                비밀번호 표시
+                            </label>                        
+                        </div>
+                        
                         <div class="m-2">
                             <input type="email" id="email" class="form-control" 
-                                name="email" placeholder="이메일 주소" required />
+                                name="meEmail" placeholder="이메일 주소" required />
                         </div>
                         
                         <div class="m-2 d-none" id="divSponsor">
                             <input type="text" id="sponsor" class="form-control"
-                                name="sponsor" placeholder="업체/기관명" />
+                                name="meSponsor" placeholder="업체/기관명" />
                         </div>
                         
                         <!-- 로그인/비밀번호/이메일/업체/기관명 중복체크 결과를 출력할 영역 -->
@@ -81,7 +88,7 @@
                         
                         <!-- 데이터 저장용 input(화면에 보이지 않음) -->
                         <input type="text" id="memberRole" class="d-none"
-                            name="memberRole" value="1"/>
+                            name="mrId" value="1"/>
                         
                         <div class="mt-4 col-7">
                             <button type="submit" id="signUp" 
