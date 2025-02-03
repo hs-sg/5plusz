@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.domain.Festival;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,23 +27,25 @@ public class FestivalDaoTest {
 	   @Test
 	    public void testInsertFestivalWithImages() {
 	        // 1. 축제 데이터 준비
-	        Festival festival = Festival.builder()
-	        	    .feName("LC아이디 확인축제")
-	        	    .feStartDate(LocalDateTime.now())
-	        	    .feEndDate(LocalDateTime.now().plusDays(10))
-	        	    .fePostcode("08868")
-	        	    .feAddress("부산") // 여기서 lcId가 "1"로 매핑됨
-	        	    .feDetailAddress("2층")
-	        	    .feExtraAddress("(역삼동)")
-	        	    .fePhone("010-1234-5678")
-	        	    .meSponsor("최하신팀장")
-	        	    .feFee("무료")
-	        	    .theId(1)
-	        	    .feContents("축제 상세 내용")
-	        	    .feHomepage("https://festival.itwill.com")
-	        	    .feImageMain("main_image.jpg")
-	        	    .fePoster("poster.jpg")
-	        	    .build();
+		   Festival festival = Festival.builder()
+			        .feName("LC아이디 확인축제")
+			        .feStartDate(LocalDateTime.now())
+			        .feEndDate(LocalDateTime.now().plusDays(10))
+			        .fePostcode("08868")
+			        .feAddress("세종") 
+			        .lcId(FestivalCreateDto.LOCATION_MAP.get("세종"))  // 직접 lcId 설정
+			        .feDetailAddress("2층")
+			        .feExtraAddress("(역삼동)")
+			        .fePhone("010-1234-5678")
+			        .meSponsor("최하신팀장")
+			        .feFee("무료")
+			        .theId(1)
+			        .feContents("축제 상세 내용")
+			        .feHomepage("https://festival.itwill.com")
+			        .feImageMain("main_image.jpg")
+			        .fePoster("poster.jpg")
+			        .build();
+
 	        
 	        Assertions.assertNotNull(festival.getLcId(), "lcId 값이 null입니다.");
 	        log.debug("lcId: {}", festival.getLcId());

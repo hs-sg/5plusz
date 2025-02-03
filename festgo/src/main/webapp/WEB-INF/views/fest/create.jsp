@@ -21,11 +21,11 @@
         
     <div class="container">
         <h2 class="mt-5">새 축제 작성</h2>
-        <form action="/create" method="post">
+        <form method="post" enctype="multipart/form-data">
             <!-- 축제 이름 -->
             <div class="mb-3">
                 <label for="feName" class="form-label">축제 이름</label>
-                <input type="text" class="form-control" id="feName" name="feName" placeholder="축제 이름" required>
+                <input type="text" class="form-control" id="feName" name="feName" placeholder="축제 이름" autofocus="autofocus" required>
             </div>
 
             <!-- 시작 날짜 -->
@@ -44,24 +44,24 @@
             <div class="mb-3">
                 <label for="sample6_postcode" class="form-label">우편번호</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="sample6_postcode" name="postcode" placeholder="우편번호" readonly>
+                        <input type="text" class="form-control" id="sample6_postcode" name="fePostcode" placeholder="우편번호" readonly>
                         <button type="button" class="btn btn-outline-secondary" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
                     </div>
             </div>
             
             <div class="mb-3">
                 <label for="sample6_address" class="form-label">주소</label>
-                <input type="text" class="form-control" id="sample6_address" name="address" placeholder="주소" readonly>
+                <input type="text" class="form-control" id="sample6_address" name="feAddress" placeholder="주소" readonly>
             </div>
             
             <div class="mb-3">
                 <label for="sample6_detailAddress" class="form-label">상세주소</label>
-                <input type="text" class="form-control" id="sample6_detailAddress" name="detailAddress" placeholder="상세주소">
+                <input type="text" class="form-control" id="sample6_detailAddress" name="feDetailAddress" placeholder="상세주소" required>
             </div>
             
             <div class="mb-3">
                 <label for="sample6_extraAddress" class="form-label">참고항목</label>
-                <input type="text" class="form-control" id="sample6_extraAddress" name="extraAddress" placeholder="참고항목" readonly>
+                <input type="text" class="form-control" id="sample6_extraAddress" name="feExtraAddress" placeholder="참고항목" readonly>
             </div>
 
 
@@ -86,7 +86,26 @@
             <!-- 테마 ID -->
             <div class="mb-3">
                 <label for="theId" class="form-label">테마</label>
-                <input type="number" class="form-control" id="theId" name="theId" placeholder="테마 ID" required>
+                <select class="form-select" id="theId" name="theId" required>
+                    <option value="">-- 테마 선택 --</option>
+                    <option value="1">꽃</option>
+                    <option value="2">비</option>
+                    <option value="3">음식</option>
+                    <option value="4">빙어</option>
+                    <option value="5">봄</option>
+                    <option value="6">여름</option>
+                    <option value="7">가을</option>
+                    <option value="8">겨울</option>
+                    <option value="9">어린이</option>
+                    <option value="10">눈</option>
+                    <option value="custom">직접 입력</option>
+                </select>
+            </div>
+            
+            <!-- 사용자가 직접 입력할 경우 나타나는 추가 입력란 -->
+            <div class="mb-3" id="customThemeContainer" style="display: none;">
+                <label for="customTheme" class="form-label">테마 입력</label>
+                <input type="text" class="form-control" id="customTheme" name="customTheme" placeholder="테마를 입력하세요">
             </div>
 
             <!-- 내용 -->
@@ -103,40 +122,35 @@
 
             <!-- 대표 이미지 -->
             <div class="mb-3">
-                <label for="feImageMain" class="form-label">축제 대표 이미지</label>
-                <input type="text" class="form-control" id="feImageMain" name="feImageMain" placeholder="대표 이미지 파일명">
+                <label for="feImageMainFile" class="form-label">축제 대표 이미지</label>
+                <input type="file" class="form-control" id="feImageMainFile" name="feImageMainFile" required>
             </div>
-
+        
             <!-- 포스터 -->
             <div class="mb-3">
-                <label for="fePoster" class="form-label">축제 포스터</label>
-                <input type="text" class="form-control" id="fePoster" name="fePoster" placeholder="포스터 파일명">
+                <label for="fePosterFile" class="form-label">축제 포스터</label>
+                <input type="file" class="form-control" id="fePosterFile" name="fePosterFile" required>
             </div>
-
-            <!-- 이미지 파일들 -->
+        
+            <!-- 추가 이미지 (여러 개 업로드 가능) -->
             <div class="mb-3">
-                <label for="festivalImages" class="form-label">축제 추가 이미지 (쉼표로 구분)</label>
-                <textarea class="form-control" id="festivalImages" name="festivalImages" rows="2" placeholder="이미지1.jpg, 이미지2.jpg"></textarea>
+                <label for="fiImagesFiles" class="form-label">축제 추가 이미지</label>
+                <input type="file" class="form-control" id="fiImagesFiles" name="fiImagesFiles" multiple>
             </div>
 
             <!-- 제출 버튼 -->
-            <div class="mb-3">
+            <div class="mb-3 d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">축제 등록</button>
             </div>
         </form>
     </div>
+    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
         
-        <!-- KAKAO MAP -->
-        <input type="text" id="sample6_postcode" placeholder="우편번호">
-        <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
-        <input type="text" id="sample6_address" placeholder="주소"><br>
-        <input type="text" id="sample6_detailAddress" placeholder="상세주소">
-        <input type="text" id="sample6_extraAddress" placeholder="참고항목">
 
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script>
@@ -188,5 +202,12 @@
                 }).open();
             }
         </script>
+        
+        <c:url var="dateConfig" value="/js/date-config.js" /> 
+        <script src="${dateConfig}"></script>
+        
+        <c:url var="themeInput" value="/js/theme-input.js" /> 
+        <script src="${themeInput}"></script>
+        
 </body>
 </html>
