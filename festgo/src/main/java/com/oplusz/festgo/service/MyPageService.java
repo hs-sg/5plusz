@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
@@ -83,5 +84,24 @@ public class MyPageService {
 		log.debug("result mrId={}", mrId);
 		
 		return mrId;
+	}
+	
+	// 로그인된 아이디의 me_sponsor 값 가져오기
+	public String readSponsorByUsername(String meUsername) {
+		log.debug("readSponsorByUsername(meUsername={})", meUsername);
+		
+		String meSponsor = memberDao.selectMemberJoinRoleByUsername(meUsername).getMeSponsor();
+		log.debug("result meSponsor={}", meSponsor);
+		
+		return meSponsor;
+	}
+	
+	public Integer readMeIdByUsername(String meUsername) {
+		log.debug("readSponsorByUsername(meUsername={})", meUsername);
+		
+		Integer meId = memberDao.selectMemberJoinRoleByUsername(meUsername).getMeId();
+		log.debug("result meId={}", meId);
+		
+		return meId;
 	}
 }

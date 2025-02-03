@@ -6,12 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 import com.oplusz.festgo.service.MyPageService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,10 +41,34 @@ public class MyPageController {
 	public ResponseEntity<List<FestivalSelectJoinLikesDto>> getFestivalsByUsername(@PathVariable("signedInUser") String username) {
 		log.debug("getFestivalsByUsername(username={}", username);
 		
-		Integer mrId = myPageService.readRoleIdByUsername(username);
+		Integer meId = myPageService.readMeIdByUsername(username);
+		log.debug("getFestivalsByUsername(meId={}", meId);
 		
-		List<FestivalSelectJoinLikesDto> list = myPageService.readFestivalUserInMyPage(mrId);
+		List<FestivalSelectJoinLikesDto> festivals = myPageService.readFestivalUserInMyPage(meId);
 		
-		return ResponseEntity.ok(list);
+		return ResponseEntity.ok(festivals);
+	}
+	
+	// 마이페이지 상에 스폰서가 등록한 축제 리스트 가져오기
+	@GetMapping("/sfestivals/{signedInUser}")
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getFestivalsBySponsor(@PathVariable("signedInUser") String username) {
+		log.debug("getFestivalsByUsername(username={}", username);
+		
+		String sponsor = myPageService.readSponsorByUsername(username);
+		log.debug("getFestivalsByUsername(sponsor={}", sponsor);
+		
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalSponsorInMyPage(sponsor);
+		
+		return ResponseEntity.ok(festivals);
+	}
+	
+	// 마이페이지 상에 관리자가 볼 모든 축제 리스트 가져오기
+	@GetMapping("/afestivals/")
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getAllFestivals() {
+		log.debug("getAllFestivals()");
+		
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
+		
+		return ResponseEntity.ok(festivals);
 	}
 }

@@ -50,7 +50,7 @@
     <select id="selectFestivalJoinRequestAll">
         select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
             fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
-        from fest_request 
+        from fest_request
         inner join festival on fest_request.fe_id = festival.fe_id
     </select>
     

@@ -76,9 +76,9 @@ public class FestivalDaoTest {
 		Assertions.assertNotNull(list);
 	}
 	
-	// @Test
+	//@Test
 	public void testSelectFestivalJoinLikesByMemberId() {
-		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberId(21);
+		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberId(23);
 		for(FestivalSelectJoinLikesDto f : list) {
 			log.debug(f.toString());
 		}

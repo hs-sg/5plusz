@@ -32,25 +32,8 @@ public class UserController {
 	public void myPage(Model model, HttpSession session) {
 		log.debug("get myPage()");
 		
-		String me_Username = session.getAttribute("signedInUser").toString();
-		MemberSelectJoinRoleDto member = myPageService.readMemberInMyPage(me_Username);
+		String meUsername = session.getAttribute("signedInUser").toString();
+		MemberSelectJoinRoleDto member = myPageService.readMemberInMyPage(meUsername);
 		model.addAttribute("member", member);
-		
-		List<FestivalSelectJoinLikesDto> likeList = new ArrayList<>();
-		List<FestivalSelectJoinRequestDto> requestList = new ArrayList<>();
-		switch(member.getMrId()) {
-		case 1 :
-			likeList = myPageService.readFestivalUserInMyPage(member.getMeId());
-			model.addAttribute("festivals", likeList);
-			break;
-		case 2 :
-			requestList = myPageService.readFestivalSponsorInMyPage(member.getMeSponsor());
-			model.addAttribute("festivals", requestList);
-			break;
-		case 3 :
-			requestList = myPageService.readFestivalAdminInMyPage();
-			model.addAttribute("festivals", requestList);
-			break;
-		}
 	}
 }
