@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FestivalImage {
-    private Integer fiId;
+public class Like {
+    private Integer liId;
     private Integer feId;
-    private String fiImages;
+    private Integer meId;
 }
-
