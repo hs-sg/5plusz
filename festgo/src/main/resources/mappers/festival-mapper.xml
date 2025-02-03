@@ -7,20 +7,26 @@
     <!-- 새로운 축제 등록 시 사용할 SQL 문장, 메서드 이름과 자동 생성된 f_id를 festival_images 테이블에 
         참조 -->
     <insert id="insertFestivals" useGeneratedKeys="true"
-        keyProperty="fId" keyColumn="f_id">
-        insert into festival (fe_name, fe_start_date, fe_end_date, lc_id,
-        fe_address, fe_phone, me_sponsor, fe_fee, the_id, fe_contents, fe_homepage,
-        fe_image_main, fe_poster, fe_created_time, fe_modified_time)
-        values (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{feAddress},
-        #{fePhone}, #{meSponsor},
-        #{feFee}, #{theId}, #{feContents}, #{feHomepage}, #{feImageMain},
-        #{fePoster}, systimestamp, systimestamp)
+        keyProperty="feId" keyColumn="fe_id">
+        insert into festival (
+            fe_name, fe_start_date, fe_end_date, lc_id, fe_postcode,
+            fe_address, fe_detail_address, fe_extra_address, fe_phone,
+            me_sponsor, fe_fee, the_id, fe_contents,
+            fe_lat, fe_long, fe_homepage, fe_image_main, fe_poster,
+            fe_created_time, fe_modified_time
+        )
+        values 
+        (#{feName}, #{feStartDate}, #{feEndDate}, #{lcId}, #{fePostcode}, #{feAddress}, #{feDetailAddress}, #{feExtraAddress},
+        #{fePhone}, #{meSponsor}, #{feFee}, #{theId}, #{feContents}, #{feLat, jdbcType=VARCHAR}, #{feLong, jdbcType=VARCHAR}
+        , #{feHomepage}, #{feImageMain}, #{fePoster},
+        systimestamp, systimestamp)
     </insert>
 
-    <!-- 새로운 축제 등록 시 다중 이미지 처리  -->
+    <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
     <insert id="insertFestivalImagesBatch">
-        INSERT INTO festival_image (fe_id, fi_images) VALUES
-        <foreach collection="festivalImages" item="image">
+        INSERT INTO festival_image (fe_id, fi_images)
+        VALUES
+        <foreach collection="festivalImages" item="image" separator=",">
             (#{image.feId}, #{image.fiImages})
         </foreach>
     </insert>

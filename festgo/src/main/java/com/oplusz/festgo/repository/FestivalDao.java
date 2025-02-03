@@ -2,6 +2,8 @@ package com.oplusz.festgo.repository;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
@@ -15,7 +17,6 @@ import com.oplusz.festgo.domain.Festival;
 
 @Mapper
 public interface FestivalDao {
-
 
     // 새로운 축제 등록 (매퍼 XML의 insertFestivals 사용)
     int insertFestivals(Festival festival);
@@ -44,5 +45,6 @@ public interface FestivalDao {
 	
 //	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
 
-
 }
+
+

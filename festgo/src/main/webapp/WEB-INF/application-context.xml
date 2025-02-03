@@ -44,6 +44,10 @@
         <property name="configLocation" value="classpath:mybatis-config.xml" />
     </bean>
     
+    <!-- MultipartResolver 등록 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
+    
     <!-- MyBatis-Spring 프레임워크에서 SQL을 수행하고 결과처리하는 컴포넌트(들)을 
     검색할 기본 패키지 설정. 
     MyBatis 프레임워크는 base-package 아래의 인터페이스(들)을 검색해서 구현 객체를 생성.
