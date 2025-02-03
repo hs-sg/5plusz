@@ -18,13 +18,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FestivalSelectJoinLikesDto {
 	private Integer feId;
-	private Integer frApproval;
-	private String frCause;
 	private String feName;
-	private String fePhone;
 	private LocalDateTime feStartDate;
 	private LocalDateTime feEndDate;
 	private String feAddress;
 	private String meSponsor;
+	private String fePhone;
 	private String feImageMain;
+	private Integer liId;
+	private Integer meId;
 }

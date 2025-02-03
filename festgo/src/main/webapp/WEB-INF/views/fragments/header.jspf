@@ -34,10 +34,6 @@
                     <c:url value="/fest/create" var="festCreate"/>
                     <a class="nav-link" href="${festCreate}">축제등록</a>
                 </li>
-                <li class="nav-item">
-                    <c:url value="/user/mypage" var="myPage"/>
-                    <a class="nav-link" href="${myPage}">마이페이지</a>
-                </li>
                 
                 <%-- 세션에 로그인 사용자 정보가 없는 경우 --%>
                 <c:if test="${ empty signedInUser }">
@@ -53,6 +49,10 @@
                 
                 <%-- 세션에 로그인 사용자 정보가 있는 경우 --%>
                 <c:if test="${ not empty signedInUser }">
+                <li class="nav-item">
+                    <c:url value="/user/mypage" var="myPage"/>
+                    <a class="nav-link" href="${myPage}">마이페이지</a>
+                </li>
                 <li class="nav-item">
                     <c:url var="signOutPage" value="/user/signout"/>
                     <a class="nav-link " href="${signOutPage}">LOGOUT</a>
