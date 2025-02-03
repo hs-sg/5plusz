@@ -203,6 +203,9 @@
             }
         </script>
         
+        <!-- Axios Http JS -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
         <c:url var="dateConfig" value="/js/date-config.js" /> 
         <script src="${dateConfig}"></script>
         
