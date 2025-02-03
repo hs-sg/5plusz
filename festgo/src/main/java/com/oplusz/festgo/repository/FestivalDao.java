@@ -5,14 +5,46 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.domain.Festival;
 
+import java.util.List;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import com.oplusz.festgo.dto.FestivalCalendarDto;
+import com.oplusz.festgo.domain.Festival;
+
+@Mapper
 public interface FestivalDao {
 
-	// 새 축제 작성
-	int insertFestivals(Festival festivals);
-	// 축제 이미지들 추가 @Param은 MyBatis가 XML에서 collection 속성을 참조할 수 있도록 명시.
-	int insertFestivalImagesBatch(@Param("festivalImages") List<FestivalImage> festivalImages);
+    // 새로운 축제 등록 (매퍼 XML의 insertFestivals 사용)
+    int insertFestivals(Festival festival);
+
+    // 새로운 축제 등록 시 다중 이미지 처리 (매퍼 XML의 insertFestivalImagesBatch 사용)
+    int insertFestivalImagesBatch(@Param("festivalImages") List<?> festivalImages);
+
+    // 특정 기간 내 축제 데이터 조회 (매퍼 XML의 findFestivalsBetween 사용)
+    List<FestivalCalendarDto> findFestivalsBetween(@Param("startDate") String startDate,
+                                                    @Param("endDate") String endDate);
+
+	
+//	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
+	
+	// 전체 축제 읽기
+	List<Festival> selectFestivalAll();
+	
+	// fest_request와 조인된 테이블 전체 축제 읽기 -> 마이페이지 관리자에서 사용
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestAll();
+	
+	// fest_request와 조인된 테이블 중 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
+	
+	// likes와 조인된 테이블 중 멤버가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
+	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikesByMemberId(Integer meId);
+	
+//	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
+
 }
 
 

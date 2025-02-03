@@ -11,7 +11,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.oplusz.festgo.domain.FestivalImage;
+
 import com.oplusz.festgo.dto.FestivalCreateDto;
+
+import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
+
 import com.oplusz.festgo.domain.Festival;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +65,7 @@ public class FestivalDaoTest {
 	        
 	        Integer feId = festival.getFeId(); // 삽입된 축제의 feId 가져오기
 
+
 	        // 3. 이미지 데이터 준비
 	        List<FestivalImage> images = List.of(
 	            FestivalImage.builder().feId(feId).fiImages("image1.jpg").build(),
@@ -73,5 +79,49 @@ public class FestivalDaoTest {
 	            Assertions.assertEquals(1, imageResult);
 	        }
 	    }
+
 	
+//	희성 작성 시작 -------------------------------------------------------------------------------------------------
+	// @Test
+	public void testSelectFestivalAll() {
+		List<Festival> list = festivalDao.selectFestivalAll();
+		for(Festival f : list) {
+			log.debug(f.toString());
+		}
+		
+		Assertions.assertNotNull(list);
+	}
+
+	
+	//@Test
+	public void testSelectFestivalJoinLikesByMemberId() {
+		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberId(23);
+		for(FestivalSelectJoinLikesDto f : list) {
+			log.debug(f.toString());
+		}
+		
+		Assertions.assertNotNull(list);
+	}
+	
+	// @Test
+	public void testSelectFestivalJoinRequestAll() {
+		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestAll();
+		for(FestivalSelectJoinRequestDto f : list) {
+			log.debug(f.toString());
+		}
+		
+		Assertions.assertNotNull(list);
+	}
+	
+	// @Test
+	public void selectFestivalJoinRequestBySponsor() {
+		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor("서울");
+		for(FestivalSelectJoinRequestDto f : list) {
+			log.debug(f.toString());
+		}
+		
+		Assertions.assertNotNull(list);
+	}
+	
+//	희성 작성 끝 -------------------------------------------------------------------------------------------------
 }

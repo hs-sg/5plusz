@@ -20,3 +20,4 @@ public class Member {
     private LocalDateTime meCreatedTime;
     private LocalDateTime meAccessedTime;
 }
+

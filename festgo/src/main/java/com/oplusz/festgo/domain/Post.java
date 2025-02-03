@@ -21,3 +21,4 @@ public class Post {
     private Integer poViews;
     private Integer paId;
 }
+
