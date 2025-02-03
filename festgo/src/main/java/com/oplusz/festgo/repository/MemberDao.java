@@ -1,5 +1,7 @@
 package com.oplusz.festgo.repository;
 
+import java.util.List;
+
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 
@@ -14,6 +16,9 @@ public interface MemberDao {
 //	희성 작성 시작 --------------------------------------------------------------------------------------------------------------------
 	
 	MemberSelectJoinRoleDto selectMemberJoinRoleByUsername(String meUsername);
+	Integer deleteMemberByUsername(String meUsername);
+	Integer deleteSponRequestByUsername(String meUsername);
+	List<Member> selectMemberJoinSponRequestBySrApproval();
 	
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------

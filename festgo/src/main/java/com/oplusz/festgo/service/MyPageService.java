@@ -96,6 +96,7 @@ public class MyPageService {
 		return meSponsor;
 	}
 	
+	// 로그인된 아이디의 me_id 값 가져오기
 	public Integer readMeIdByUsername(String meUsername) {
 		log.debug("readSponsorByUsername(meUsername={})", meUsername);
 		
@@ -103,5 +104,27 @@ public class MyPageService {
 		log.debug("result meId={}", meId);
 		
 		return meId;
+	}
+	
+	// feId로 축제 삭제하기 -> 댓글, 좋아요도 삭제해야함 아직 미완성
+	public Integer deleteFestivalByFeId(Integer feId) {
+		log.debug("deleteFestivalByFeId(feId={}", feId);
+		
+		Integer ImageDelResult = festivalDao.deleteFestivalImageByFeId(feId);
+		Integer RequestDelResult = festivalDao.deleteFestivalRequestByFeId(feId);
+		Integer FestivalDelResult = festivalDao.deleteFestivalByFeId(feId);
+		log.debug("ImageDelResult={}, RequestDelResult={}, FestivalDelResult={}", ImageDelResult, RequestDelResult, FestivalDelResult);
+		
+		return FestivalDelResult;
+	}
+	
+	// srApproval로 승인 대기 중인 스폰서 아이디 리스트 가져오기
+	public List<Member> readRequestSponsorInMyPage() {
+		log.debug("readRequestSponsorInMyPage()");
+		
+		List<Member> requestSponsors = memberDao.selectMemberJoinSponRequestBySrApproval();
+		log.debug("result requestSponsors = {}", requestSponsors);
+		
+		return requestSponsors;
 	}
 }

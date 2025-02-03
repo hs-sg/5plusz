@@ -33,5 +33,11 @@ public class MemberDaoTest {
 		
 		Assertions.assertNotNull(member);
 	}
+	
+	// @Test
+	public void testDeleteMemberByUsername() {
+		Integer sponRequestDeleteResult = memberDao.deleteSponRequestByUsername(null);
+	} //-> 아직 미완서 멤버 삭제하려면 다른 테이블에서 삭제할 것들이 너무 많음.
+	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
 }

@@ -85,6 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
         allBtnAndDivDisable();
         btnToggleSponsorCheckList.style.color = 'blue';
         divSponsorCheckList.style.display = 'block';
+        
+        const uri = `../api/mypage/sponcheck/`;
+        
+        axios
+        .get(uri)
+        .then((response) => { getSponsorCheckList(resonse.data); })
+        .catch((error) => { console.log(error); });
     });
     
     /* 콜백 함수 --------------------------------------------------------------------------- */
@@ -300,5 +307,34 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const result = confirm("거절사유를 입력해주세요!")
         console.log(result);
+    }
+    
+    function getSponsorCheckList(data) {
+        let html = "";
+        if(data == "") {
+            html = `<h>승인대기 아이디가 없습니다.<h>`
+            divSponsorCheckList.innerHTML = html;
+            return;
+        }
+        for(const requestSponsor of data) {
+            let addHtml = `
+                <table>
+                    <tr>
+                        <th>아이디</th>
+                        <td>${requestSponsor.meUsername}</td> 
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td>${requestSponsor.meEmail}</td> 
+                    </tr>
+                    <tr>
+                        <th>업체명</th>
+                        <td>${requestSponsor.meSponsor}</td> 
+                    </tr>
+                </table>
+            `;
+            html += addHtml;
+        }
+        divMyProfile.innerHTML = html;
     }
 });

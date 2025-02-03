@@ -84,6 +84,21 @@
         where me_sponsor = #{me_sponsor}
     </select>
     
+    <!-- 마이페이지에서 축제 삭제 -->
+    <delete id="deleteFestivalByFeId">
+        delete from festival where fe_id = #{fe_id}
+    </delete>
+    
+    <!-- 외래키때문에 삭제전 축제 등록 요청 삭제 sql -->
+    <delete id="deleteFestivalRequestByFeId">
+        delete from fest_request where fe_id = #{fe_id}
+    </delete>
+    
+    <!-- 외래키때문에 삭제전 축제 이미지 삭제 sql -->
+    <delete id="deleteFestivalImageByFeId">
+        delete from festival_image where fe_id = #{fe_id}
+    </delete>
+    
     <!-- 희성 작성 끝 ================================================================================================== -->
     
 </mapper>

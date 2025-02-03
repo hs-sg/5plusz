@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
@@ -70,5 +71,15 @@ public class MyPageController {
 		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
 		
 		return ResponseEntity.ok(festivals);
+	}
+	
+	// 마이페이지 상에 관리자가 볼 승인 대기중인 사업자 아이디 리스트 가져오기
+	@GetMapping("/sponcheck/")
+	public ResponseEntity<List<Member>> getSponsorMemberByApproval() {
+		log.debug("getMemberByApproval()");
+		
+		List<Member> requestSponsors = myPageService.readRequestSponsorInMyPage();
+		
+		return ResponseEntity.ok(requestSponsors);
 	}
 }
