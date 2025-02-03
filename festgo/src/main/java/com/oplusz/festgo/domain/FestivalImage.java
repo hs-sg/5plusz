@@ -14,3 +14,4 @@ public class FestivalImage {
     private Integer feId;
     private String fiImages;
 }
+

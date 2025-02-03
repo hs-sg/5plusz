@@ -19,4 +19,6 @@ public class Post {
     private LocalDateTime poModifiedTime;
     private Integer pcId;
     private Integer poViews;
+    private Integer paId;
 }
+

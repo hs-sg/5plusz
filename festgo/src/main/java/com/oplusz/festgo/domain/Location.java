@@ -1,3 +1,4 @@
+
 package com.oplusz.festgo.domain;
 
 import lombok.AllArgsConstructor;
@@ -13,3 +14,4 @@ public class Location {
     private Integer lcId;
     private String lcName;
 }
+
