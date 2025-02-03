@@ -21,6 +21,20 @@
         values(#{meUsername}, #{mePassword}, #{meEmail}, #{meSponsor}, #{mrId}, systimestamp, systimestamp)
     </insert>
     
+    <!-- username으로 검색 -->
+    <select id="selectByUsername" resultType="Member">
+        select * from member where me_username = #{meUsername}
+    </select>
+    
+    <!-- email로 검색 -->
+    <select id="selectByEmail" resultType="Member">
+        select * from member where me_email = #{meEmail}    
+    </select>
+    
+    <!-- sponsor로 검색 -->
+    <select id="selectBySponsor" resultType="Member">
+        select * from member where me_sponsor = #{meSponsor}
+    </select>
     
     <!-- 희성 작성 시작 -->
     
