@@ -67,7 +67,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('calendar');
         const eventDetailsEl = document.getElementById('eventDetails');
-
+          
         // 컨텍스트 경로가 포함된 URL 생성
         var festivalsUrl = '<c:url value="/api/festivals" />';
 
@@ -111,16 +111,18 @@
                             console.log("시작 날짜:", fest.feStartDate);
                             console.log("종료 날짜:", fest.feEndDate);
                             console.log("주소:", fest.feAddress);
+                          
 
                             var eventCol = document.createElement('div');
                             eventCol.classList.add('col');
 
                             var eventDiv = document.createElement('div');
                             eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-
+                            
+                                                                               
                             // 로그를 통해 확인된 데이터 직접 사용
                             eventDiv.innerHTML = `
-                                <img src= ` + fest.feImageMain + `~  alt= ` + fest.feName + `~  
+                                <img src=  ` + fest.feImageMain + `  alt= ` + fest.feName + `  
                                      class="card-img-top" 
                                      style="height: 200px; object-fit: cover;">
                                 <div class="card-body">
