@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cleanUsernamePasswordEmailSponsorInfo();
         inputMemberRole.value = 1;
         btnSignUp.classList.add('disabled');
+        IsCheckedToFalse();
         console.log(inputMemberRole.value);
     });
     linkAdmin.addEventListener('click', () => {
@@ -45,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cleanUsernamePasswordEmailSponsorInfo();
         inputMemberRole.value = 3;
         btnSignUp.classList.add('disabled');
+        IsCheckedToFalse();
         console.log(inputMemberRole.value);
     });
     
@@ -56,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cleanUsernamePasswordEmailSponsorInfo();
         inputMemberRole.value = 2;
         btnSignUp.classList.add('disabled');
+        IsCheckedToFalse();
         console.log(inputMemberRole.value);
     });
     
@@ -88,6 +91,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         rest.forEach(x => removeActive(x));
+    }
+    
+    // 회원가입요청 버튼 활성화에 필요한 정보 중복 체크 결과를 false로 초기화함.
+    function IsCheckedToFalse() {
+        isUsernameChecked = false;
+        isPasswordChecked = false;
+        isEmailChecked = false;
+        isSponsorChecked = false;
     }
     
     // <input>요소의 테두리 색을 변경함(빨간색).
