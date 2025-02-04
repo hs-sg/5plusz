@@ -10,6 +10,7 @@ import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.dto.FestivalWithImagesDto;
+import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
 
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 public class FestivalService {
 
 	private final FestivalDao festivalsDao;
+	private final FestRequestDao festRequestDao;
 
 	// 축체 등록
 	@Transactional
@@ -33,6 +35,12 @@ public class FestivalService {
 		Festival festival = dto.toFestivalEntity();
 		festivalsDao.insertFestivals(festival);
 		log.debug("insertFestivals = {}", festival);
+		
+		// FEST_REQUEST 테이블에 승인대기 상태(1)로 삽입
+        int requestResult = festRequestDao.insertFestRequest(festival.getFeId(), 1);
+        if (requestResult != 1) {
+            throw new RuntimeException("축제 승인 요청 등록 실패");
+        }
 
 		// FestivalImages 테이블에 데이터 삽입
 		List<FestivalImage> images = dto.toFestivalImagesEntities(festival.getFeId());
