@@ -235,11 +235,15 @@
                     <!-- 추가 이미지 미리보기를 위한 영역 -->
                 </div>
             </div>
-
-            <!-- 제출 버튼 -->
-            <div class="mb-3 d-flex justify-content-end">
+            
+            <!-- 제출버튼 -->
+            <div class="mb-3 d-flex justify-content-end align-items-center">
+                <span class="me-3" style="color: red; font-weight: bold;">
+                    축제승인까지 영업일 기준 3일정도 소요됩니다
+                </span>
                 <button type="submit" class="btn btn-primary">축제 등록</button>
             </div>
+            
         </form>
     </div>
 
