@@ -6,21 +6,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>새 축제 작성</title>
+    <title>새 축제 등록</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
           rel="stylesheet" 
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
           crossorigin="anonymous" />
+          
+    <!-- Drag and drop CSS -->
+    <style>
+       .drop-area {
+                border: 2px dashed #4a90e2; /* 약간 더 어두운 파란색 */
+                border-radius: 16px;
+                padding: 40px;
+                text-align: center;
+                background: linear-gradient(135deg, #ffffff, #f0f8ff); /* 은은한 파스텔 그라데이션 */
+                transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+                cursor: pointer;
+                position: relative;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 효과 */
+            }
+            
+            .drop-area:hover {
+                box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* 마우스 오버 시 그림자 강화 */
+            }
+            
+            .drop-area.drag-over {
+                background: linear-gradient(135deg, #e0f7ff, #cfe8ff); /* 드래그 오버 시 더 밝은 배경 */
+                transform: scale(1.03); /* 살짝 확대 효과 */
+            }
+            
+            .spanText {
+                font-size: 1.3rem;
+                font-weight: bold;
+                color: #4a90e2; /* 텍스트도 일관성 있게 파란 계열 사용 */
+            }
+            
+            .img-preview {
+                max-width: 100%;
+                height: auto;
+                border: 2px solid #e1e8ee;
+                margin-top: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* 제거 버튼 스타일 */
+            .remove-btn {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background: rgba(0, 0, 0, 0.6);
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                width: 28px; /* 약간 키워서 더 두드러지게 */
+                height: 28px;
+                display: flex;              /* 플렉스 컨테이너 설정 */
+                align-items: center;        /* 수직 중앙 정렬 */
+                justify-content: center;    /* 수평 중앙 정렬 */
+                cursor: pointer;
+                font-size: 18px;            /* 폰트 크기 조정 */
+                z-index: 10;
+                outline: none;
+                padding: 0;
+            }
+            
+            .remove-btn:hover {
+                background: rgba(0, 0, 0, 0.8);
+            }
+            
+                    
+            .img-preview {
+                width: 1000px;            /* 고정 너비 (원하는 크기로 조정 가능) */
+                height: 500px;           /* 고정 높이 (원하는 크기로 조정 가능) */
+                object-fit: cover;       /* 이미지가 영역을 채우도록 (잘림 발생 가능) */
+                border: 2px solid #e1e8ee;
+                margin-top: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* 추가 이미지 미리보기에만 적용 */
+            #previewAdditionalContainer .img-preview {
+                width: 200px;            /* 고정 너비 (원하는 크기로 조정 가능) */
+                height: 200px;           /* 고정 높이 (원하는 크기로 조정 가능) */
+                object-fit: cover;       /* 이미지가 영역을 채우도록, 일부 잘림 발생 가능 */
+                border: 2px solid #e1e8ee;
+                margin-top: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+    </style>
+    
 </head>
 <body>
         <div class="container-fluid">
-            <c:set var="pageTitle" value="포스트 작성" />
+            <c:set var="pageTitle" value="새 축제 등록" />
             <%@ include file="../fragments/header.jspf" %>
         </div>
         
     <div class="container">
-        <h2 class="mt-5">새 축제 작성</h2>
+        <h2 class="mt-5">새 축제 등록</h2>
         <form method="post" enctype="multipart/form-data">
             <!-- 축제 이름 -->
             <div class="mb-3">
@@ -73,8 +160,8 @@
 
             <!-- 후원자 -->
             <div class="mb-3">
-                <label for="meSponsor" class="form-label">작성자</label>
-                <input type="text" class="form-control" id="meSponsor" name="meSponsor" placeholder="후원자" required>
+                <label for="meSponsor" class="form-label">주최자명</label>
+                <input type="text" class="form-control" id="meSponsor" name="meSponsor" placeholder="주최자명" required>
             </div>
 
             <!-- 참가비 -->
@@ -83,21 +170,14 @@
                 <input type="text" class="form-control" id="feFee" name="feFee" placeholder="참가비" required>
             </div>
 
-            <!-- 테마 ID -->
+            <!-- 테마 선택 -->
             <div class="mb-3">
                 <label for="theId" class="form-label">테마</label>
                 <select class="form-select" id="theId" name="theId" required>
                     <option value="">-- 테마 선택 --</option>
-                    <option value="1">꽃</option>
-                    <option value="2">비</option>
-                    <option value="3">음식</option>
-                    <option value="4">빙어</option>
-                    <option value="5">봄</option>
-                    <option value="6">여름</option>
-                    <option value="7">가을</option>
-                    <option value="8">겨울</option>
-                    <option value="9">어린이</option>
-                    <option value="10">눈</option>
+                    <c:forEach var="theme" items="${themes}">
+                        <option value="${theme.theId}">${theme.theName}</option>
+                    </c:forEach>
                     <option value="custom">직접 입력</option>
                 </select>
             </div>
@@ -120,31 +200,52 @@
                 <input type="url" class="form-control" id="feHomepage" name="feHomepage" placeholder="홈페이지 URL">
             </div>
 
-            <!-- 대표 이미지 -->
+            <!-- 대표 이미지 (드래그 앤 드롭) -->
             <div class="mb-3">
                 <label for="feImageMainFile" class="form-label">축제 대표 이미지</label>
-                <input type="file" class="form-control" id="feImageMainFile" name="feImageMainFile" required>
+                <div id="dropAreaRep" class="drop-area">
+                    <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
+                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*" required hidden>
+                </div>
+                <div class="mt-2">
+                    <img id="previewRep" src="" alt="대표 이미지 미리보기" class="img-preview d-none" />
+                </div>
             </div>
-        
-            <!-- 포스터 -->
+            
+            <!-- 포스터 (드래그 앤 드롭) -->
             <div class="mb-3">
                 <label for="fePosterFile" class="form-label">축제 포스터</label>
-                <input type="file" class="form-control" id="fePosterFile" name="fePosterFile" required>
+                <div id="dropAreaPoster" class="drop-area">
+                    <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
+                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*" required hidden>
+                </div>
+                <div class="mt-2">
+                    <img id="previewPoster" src="" alt="포스터 미리보기" class="img-preview d-none" />
+                </div>
             </div>
-        
-            <!-- 추가 이미지 (여러 개 업로드 가능) -->
+            
+            <!-- 추가 이미지 (드래그 앤 드롭, 다중 업로드) -->
             <div class="mb-3">
                 <label for="fiImagesFiles" class="form-label">축제 추가 이미지</label>
-                <input type="file" class="form-control" id="fiImagesFiles" name="fiImagesFiles" multiple>
+                <div id="dropAreaAdditional" class="drop-area">
+                    <span class="spanText">여러개의 사진을 마우스로 끌거나 선택하세요 📂</span>
+                    <input type="file" id="fiImagesFiles" name="fiImagesFiles" accept="image/*" multiple hidden>
+                </div>
+                <div class="mt-2" id="previewAdditionalContainer">
+                    <!-- 추가 이미지 미리보기를 위한 영역 -->
+                </div>
             </div>
-
-            <!-- 제출 버튼 -->
-            <div class="mb-3 d-flex justify-content-end">
+            
+            <!-- 제출버튼 -->
+            <div class="mb-3 d-flex justify-content-end align-items-center">
+                <span class="me-3" style="color: red; font-weight: bold;">
+                    축제승인까지 영업일 기준 3일정도 소요됩니다
+                </span>
                 <button type="submit" class="btn btn-primary">축제 등록</button>
             </div>
+            
         </form>
     </div>
-    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -203,11 +304,19 @@
             }
         </script>
         
+        <!-- Axios Http JS -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+        <!-- 날짜 설정 및 테마 입력 관련 JS (date-config.js, theme-input.js) -->
         <c:url var="dateConfig" value="/js/date-config.js" /> 
         <script src="${dateConfig}"></script>
         
         <c:url var="themeInput" value="/js/theme-input.js" /> 
         <script src="${themeInput}"></script>
+        
+        <!-- 드래그 앤 드롭 JS (drag_and_drop.js) -->
+        <c:url var="dragAndDrop" value="/js/drag_and_drop.js" /> 
+        <script src="${dragAndDrop}"></script>
         
 </body>
 </html>

@@ -6,6 +6,7 @@ import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.MemberSignInDto;
 import com.oplusz.festgo.dto.MemberSignUpDto;
 import com.oplusz.festgo.repository.MemberDao;
+import com.oplusz.festgo.repository.SponRequestDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberService {
 	private final MemberDao memberDao;
+	private final SponRequestDao sponRequestDao;
 	
 	// 입력한 아이디(username), 비밀번호(password)와 동일한 값을 갖는 행이 
-	// DB의 Members 테이블에 존재한다면 Members 객체로 리턴.
+	// DB의 Member 테이블에 존재한다면 Member 객체로 리턴.
 	public Member read(MemberSignInDto dto) {
 		log.debug("read(dto={})", dto);
 		
@@ -26,18 +28,28 @@ public class MemberService {
 		return signedInMember;
 	}
 	
-	// 회원가입
-	public int create(MemberSignUpDto dto) {
-		log.debug("create(dto={})", dto);
-		int result = 0;
+	// username으로 검색한 결과를 Member 객체로 리턴
+	public Member read(String username) {
+		log.debug("read(username={})", username);
 		
-		// 사업자 회원인 경우
-		if(dto.getMeSponsor() != null) {
-			result = memberDao.insertMemberForBusiness(dto.toEntity());
-			return result;
-		} 
-		// 일반/관리자 회원인 경우
-		result = memberDao.insertMember(dto.toEntity());	
+		Member member = memberDao.selectByUsername(username);
+		
+		return member;
+	}
+	
+	
+	// 회원가입
+	public int create(MemberSignUpDto dto, int approval) {
+		log.debug("create(dto={}, approval={})", dto, approval);
+		
+		int result = memberDao.insertMember(dto.toEntity());
+		
+		// spon_request 테이블에 회원가입을 요청한 회원의 id와 승인여부를 입력.
+		int meId = memberDao.selectByUsername(dto.getMeUsername()).getMeId();
+		int srApproval = approval;
+		log.debug("insertSponRequest(meId={}, srApproval={})", meId, srApproval);
+		sponRequestDao.insertSponRequest(meId, srApproval);
+		
 		return result;
 	}
 

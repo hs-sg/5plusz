@@ -6,17 +6,16 @@
 
     <!-- 로그인 -->
     <select id="selectByUsernameAndPassword" resultType="Member">
-        select * from member where me_username = #{meUsername} and me_password = #{mePassword}
+        with approved_member as (
+            select * 
+            from member m
+                inner join spon_request sr on m.me_id = sr.me_id
+        )
+        select * from approved_member where me_username = #{meUsername} and me_password = #{mePassword}
     </select>
-    
-    <!-- 회원가입(일반, 관리자) -->
+
+    <!-- 회원가입 -->
     <insert id="insertMember">
-        insert into member(me_username, me_password, me_email, mr_id, me_created_time, me_accessed_time)
-        values(#{meUsername}, #{mePassword}, #{meEmail}, #{mrId}, systimestamp, systimestamp)
-    </insert>
-    
-    <!-- 회원가입(사업자) -->
-    <insert id="insertMemberForBusiness">
         insert into member(me_username, me_password, me_email, me_sponsor, mr_id, me_created_time, me_accessed_time)
         values(#{meUsername}, #{mePassword}, #{meEmail}, #{meSponsor}, #{mrId}, systimestamp, systimestamp)
     </insert>

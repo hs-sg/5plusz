@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.oplusz.festgo.repository.ThemeDao">
+  
+    <!-- 커스텀 테마 선택 시 테마 테이블에 추가 -->
+    <insert id="insertTheme" parameterType="com.oplusz.festgo.domain.Theme"
+            useGeneratedKeys="true" keyProperty="theId" keyColumn="THE_ID">
+        INSERT INTO THEME (THE_NAME)
+        VALUES (#{theName})
+    </insert>
+    
+    <!-- 입력된 테마 전체 불러오기 -->
+    <select id="findAllThemes" resultType="com.oplusz.festgo.domain.Theme">
+        SELECT THE_ID, THE_NAME
+        FROM THEME
+        ORDER BY THE_ID
+    </select>
+    
+  </mapper>
