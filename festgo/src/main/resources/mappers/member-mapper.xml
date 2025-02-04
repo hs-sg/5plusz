@@ -47,6 +47,23 @@
         where me_username = #{meUsername}
     </select>
     
+    <delete id="deleteMemberByUsername">
+        delete from member where me_username = #{meUsername}
+    </delete>
+    
+    <delete id="deleteSponRequestByUsername">
+        delete from spon_request where me_usernam = #{meUsername}
+    </delete>
+    
+    <!-- 승인 대기중인 스폰서 목록 찾기 -->
+    <select id="selectMemberJoinSponRequestBySrApproval">
+        select member.me_id, me_username, me_sponsor, me_email, me_created_time 
+        from member 
+        inner join spon_request on member.me_id = spon_request.me_id 
+        where sr_approval = 0 
+        order by me_created_time
+    </select>
+    
     <!-- 희성 작성 끝 -->
     
 </mapper>

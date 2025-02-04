@@ -46,6 +46,15 @@ public interface FestivalDao {
 	// likes와 조인된 테이블 중 멤버가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
 	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikesByMemberId(Integer meId);
 	
+	// fe_id로 축제 삭제
+	Integer deleteFestivalByFeId(Integer feId);
+	
+	// fe_id로 축제 승인 요청 삭제
+	Integer deleteFestivalRequestByFeId(Integer feId);
+	
+	// fe_id로 축제 이미지 삭제
+	Integer deleteFestivalImageByFeId(Integer feId);
+	
 //	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
 
 }
