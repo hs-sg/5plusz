@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
+import com.oplusz.festgo.dto.FestivalWithImagesDto;
 import com.oplusz.festgo.domain.Festival;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface FestivalDao {
 
     // 새로운 축제 등록 시 다중 이미지 처리 (매퍼 XML의 insertFestivalImagesBatch 사용)
     int insertFestivalImagesBatch(@Param("festivalImages") List<?> festivalImages);
+    
+    int insertFestivalImage(FestivalImage image);
 
     // 특정 기간 내 축제 데이터 조회 (매퍼 XML의 findFestivalsBetween 사용)
     List<FestivalCalendarDto> findFestivalsBetween(@Param("startDate") String startDate,

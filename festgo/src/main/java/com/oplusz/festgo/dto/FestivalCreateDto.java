@@ -48,11 +48,12 @@ public class FestivalCreateDto {
     private String fePhone;
     private String meSponsor;
     private String feFee;
-    private Integer theId;
     private String feContents;
     private String feHomepage;
     private String feImageMain;
     private String fePoster;
+    private String theId;       
+    private String customTheme; 
     private LocalDateTime feCreatedTime;
     private LocalDateTime feModifiedTime;
     private List<String> fiImages;
@@ -77,6 +78,16 @@ public class FestivalCreateDto {
         }
         
         log.debug("feAddress = ", feAddress);
+        
+        // 폼에서 전달된 theId를 String -> Integer 변환
+        Integer themeId = null;
+        if (theId != null && !theId.isEmpty()) {
+            try {
+                themeId = Integer.parseInt(theId);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("잘못된 테마 ID: " + theId);
+            }
+        }
 
         return Festival.builder()
                 .feName(feName)
@@ -90,7 +101,7 @@ public class FestivalCreateDto {
                 .fePhone(fePhone)
                 .meSponsor(meSponsor)
                 .feFee(feFee)
-                .theId(theId)
+                .theId(themeId)
                 .feContents(feContents)
                 .feHomepage(feHomepage)
                 .feImageMain(feImageMain)

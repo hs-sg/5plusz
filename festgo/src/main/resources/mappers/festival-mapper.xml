@@ -23,12 +23,9 @@
     </insert>
 
     <!-- 새로운 축제 등록 시 다중 이미지 처리 -->
-    <insert id="insertFestivalImagesBatch">
+    <insert id="insertFestivalImage" parameterType="com.oplusz.festgo.domain.FestivalImage">
         INSERT INTO festival_image (fe_id, fi_images)
-        VALUES
-        <foreach collection="festivalImages" item="image" separator=",">
-            (#{image.feId}, #{image.fiImages})
-        </foreach>
+        VALUES (#{feId}, #{fiImages})
     </insert>
     
       <!-- 특정 기간 내 축제 데이터 조회 -->

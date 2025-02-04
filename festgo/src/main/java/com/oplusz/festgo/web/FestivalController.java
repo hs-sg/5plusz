@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oplusz.festgo.domain.Theme;
 import com.oplusz.festgo.dto.FestivalCreateDto;
+import com.oplusz.festgo.repository.ThemeDao;
 import com.oplusz.festgo.service.FestivalService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,11 +35,17 @@ public class FestivalController {
 
 	// 축제 서비스 생성
 	private final FestivalService festivalService;
+    // 테마 DAO를 직접 주입받음
+    private final ThemeDao themeDao;
 
 	// GET 방식 매핑
 	@GetMapping("/create")
-	public void create() {
+	public String create(Model model) {
 		log.debug("GET create()");
+		
+		List<Theme> themes = themeDao.findAllThemes();
+	    model.addAttribute("themes", themes);
+	    return "fest/create";
 	}
 
 	// POST 방식 매핑 저장 후 홈으로 리턴
@@ -44,7 +54,27 @@ public class FestivalController {
 	        @RequestParam("feImageMainFile") MultipartFile feImageMainFile,
 	        @RequestParam("fePosterFile") MultipartFile fePosterFile,
 	        @RequestParam("fiImagesFiles") List<MultipartFile> fiImagesFiles,
-	        @ModelAttribute FestivalCreateDto dto) {
+	        @ModelAttribute FestivalCreateDto dto,
+	        BindingResult result) {
+		
+		   // 테마 처리: 만약 "custom" 옵션이 선택되었으면, 
+        // DTO의 customTheme 값으로 테마를 DB에 저장 후, 생성된 THE_ID를 DTO에 설정
+        if ("custom".equals(dto.getTheId())) {
+            String customTheme = dto.getCustomTheme();
+            if (customTheme == null || customTheme.trim().isEmpty()) {
+                result.rejectValue("customTheme", "error.customTheme", "테마를 입력해 주세요.");
+                return "fest/create";
+            }
+            // 새 테마 객체 생성
+            Theme newTheme = Theme.builder()
+                                  .theName(customTheme)
+                                  .build();
+            // DB에 테마 저장 (매퍼 XML의 useGeneratedKeys 설정에 따라 newTheme.theId가 채워짐)
+            themeDao.insertTheme(newTheme);
+            // 생성된 THE_ID를 DTO에 설정 (문자열 형태로)
+            dto.setTheId(String.valueOf(newTheme.getTheId()));
+        }
+
 
 	    // 웹 애플리케이션 내 /uploads 폴더의 절대 경로를 구함
 	    String uploadDir = request.getServletContext().getRealPath("/uploads/");

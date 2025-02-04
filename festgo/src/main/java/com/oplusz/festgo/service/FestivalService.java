@@ -37,11 +37,16 @@ public class FestivalService {
 		// FestivalImages 테이블에 데이터 삽입
 		List<FestivalImage> images = dto.toFestivalImagesEntities(festival.getFeId());
 		if (!images.isEmpty()) {
-			int imagesResult = festivalsDao.insertFestivalImagesBatch(images);
-			if (imagesResult != images.size()) {
-				throw new RuntimeException("이미지 삽입 실패");
-			}
+		    int count = 0;
+		    // 이미지 리스트를 순회하며 각 이미지를 단건으로 삽입
+		    for (FestivalImage image : images) {
+		        count += festivalsDao.insertFestivalImage(image);
+		    }
+		    if (count != images.size()) {
+		        throw new RuntimeException("이미지 삽입 실패");
+		    }
 		}
+
 
 		// 축제 정보와 이미지 생성
 		return FestivalWithImagesDto.builder().festival(festival).images(images).build();
