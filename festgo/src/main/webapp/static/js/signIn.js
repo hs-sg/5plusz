@@ -49,6 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((response) => {
             if(response.data === 0) {
                 divWarningText.innerHTML = '아이디 또는 비밀번호를 확인하세요.';
+            } else if(response.data === 2) {
+                divWarningText.innerHTML = '가입요청이 승인되지 않은 계정입니다.';
             } else {
                 console.log('data=' + response.data + ', username=' + meUsername);
                 signinModal.hide();
