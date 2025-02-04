@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.SponRequestDao">
+
+    
+    <!-- 희성 작성 시작 -->
+    <!-- 스폰서 멤버 승인해주기 sr_approval을 1로 바꿔줌 -->
+    <update id="approveSponsorMemberByMeId">
+        update spon_request
+        set sr_approval = 1
+        where me_id = #{meId}
+    </update>
+    
+    <update id="refuseSponsorMemberByMeId">
+        update spon_request
+        set sr_approval = 2, sr_cause = #{srCause}
+        where me_id = #{meId}
+    </update>
+    
+    
+    <!-- 희성 작성 끝 -->
+    
+</mapper>

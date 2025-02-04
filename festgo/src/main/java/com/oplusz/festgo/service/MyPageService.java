@@ -9,10 +9,12 @@ import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
+import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 import com.oplusz.festgo.repository.FestivalDao;
 import com.oplusz.festgo.repository.MemberDao;
 import com.oplusz.festgo.repository.MemberRoleDao;
+import com.oplusz.festgo.repository.SponRequestDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class MyPageService {
 	private final FestivalDao festivalDao;
 	private final MemberDao memberDao;
 	private final MemberRoleDao memberRoleDao;
+	private final SponRequestDao sponRequestDao;
 	
 	//	전체 축제목록 읽기
 	public List<Festival> readFestivalInMyPage() {
@@ -119,12 +122,30 @@ public class MyPageService {
 	}
 	
 	// srApproval로 승인 대기 중인 스폰서 아이디 리스트 가져오기
-	public List<Member> readRequestSponsorInMyPage() {
+	public List<MemberSelectJoinRequestDto> readRequestSponsorInMyPage() {
 		log.debug("readRequestSponsorInMyPage()");
 		
-		List<Member> requestSponsors = memberDao.selectMemberJoinSponRequestBySrApproval();
+		List<MemberSelectJoinRequestDto> requestSponsors = memberDao.selectMemberJoinSponRequestBySrApproval();
 		log.debug("result requestSponsors = {}", requestSponsors);
 		
 		return requestSponsors;
+	}
+	
+	public Integer approveSponsorMemberByMeId(Integer meId) {
+		log.debug("approveSponsorMemberByMeId(meId={}", meId);
+		
+		Integer appSponsorResult = sponRequestDao.approveSponsorMemberByMeId(meId);
+		log.debug("result appSponsorResult = {}", appSponsorResult);
+		
+		return appSponsorResult;
+	}
+	
+	public Integer refuseSponsorMemberByMeId(Integer meId, String srCause) {
+		log.debug("refuseSponsorMemberByMeId(meId={}", meId);
+		
+		Integer refSponsorResult = sponRequestDao.refuseSponsorMemberByMeId(srCause, meId);
+		log.debug("result refSponsorResult = {}", refSponsorResult);
+		
+		return refSponsorResult;
 	}
 }

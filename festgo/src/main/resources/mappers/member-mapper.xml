@@ -57,11 +57,12 @@
     </delete>
     
     <!-- 승인 대기중인 스폰서 목록 찾기 -->
-    <select id="selectMemberJoinSponRequestBySrApproval" resultType="Member">
-        select member.me_id, me_username, me_password, me_email, me_sponsor, mr_id, me_created_time, me_accessed_time
-        from member
-        inner join spon_request on member.me_id = spon_request.me_id
-        where sr_approval = 0
+    <select id="selectMemberJoinSponRequestBySrApproval">
+        select member.me_id, me_username, me_sponsor, me_email, me_created_time 
+        from member 
+        inner join spon_request on member.me_id = spon_request.me_id 
+        where sr_approval = 0 
+        order by me_created_time
     </select>
     
     <!-- 희성 작성 끝 -->

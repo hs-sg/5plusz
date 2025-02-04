@@ -3,6 +3,7 @@ package com.oplusz.festgo.repository;
 import java.util.List;
 
 import com.oplusz.festgo.domain.Member;
+import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 
 public interface MemberDao {
@@ -18,7 +19,7 @@ public interface MemberDao {
 	MemberSelectJoinRoleDto selectMemberJoinRoleByUsername(String meUsername);
 	Integer deleteMemberByUsername(String meUsername);
 	Integer deleteSponRequestByUsername(String meUsername);
-	List<Member> selectMemberJoinSponRequestBySrApproval();
+	List<MemberSelectJoinRequestDto> selectMemberJoinSponRequestBySrApproval();
 	
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
