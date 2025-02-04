@@ -17,7 +17,7 @@ public class FestivalCalendarDto {
     private String feStartDate;       // 축제 시작 날짜 (yyyy-MM-dd)
     private String feEndDate;         // 축제 종료 날짜 (yyyy-MM-dd)
     private String feImageMain;       // 축제 이미지
-    private String feDetailAddress;   // 상세 주소
+    private String feAddress;   // 주소
 
     // 날짜 포맷터 상수
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -33,7 +33,7 @@ public class FestivalCalendarDto {
                 .feStartDate(festival.getFeStartDate() != null ? festival.getFeStartDate().format(FORMATTER) : null)
                 .feEndDate(festival.getFeEndDate() != null ? festival.getFeEndDate().format(FORMATTER) : null)
                 .feImageMain(festival.getFeImageMain())
-                .feDetailAddress(festival.getFeAddress())
+                .feAddress(festival.getFeAddress())
                 .build();
     }
 }
