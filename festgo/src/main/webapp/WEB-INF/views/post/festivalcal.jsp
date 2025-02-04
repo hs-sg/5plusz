@@ -64,111 +64,84 @@
     
     <!-- JSP 페이지 내 스크립트 부분 -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const calendarEl = document.getElementById('calendar');
-        const eventDetailsEl = document.getElementById('eventDetails');
-          
-        // 컨텍스트 경로가 포함된 URL 생성
-        var festivalsUrl = '<c:url value="/api/festivals" />';
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const eventDetailsEl = document.getElementById('eventDetails');
+    
+    // JSP EL을 통해 컨텍스트 경로를 자바스크립트 변수에 저장
+    var contextPath = '${pageContext.request.contextPath}';
+    var festivalsUrl = '<c:url value="/api/festivals" />';
+    
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: ''
+        },
+        locale: 'ko',
+        events: festivalsUrl,
+        dateClick: function(info) {
+            // 기존 강조 제거
+            document.querySelectorAll('.fc-daygrid-day.fc-highlighted')
+                .forEach(el => el.classList.remove('fc-highlighted'));
+            // 클릭한 날짜 강조
+            info.dayEl.classList.add('fc-highlighted');
 
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: ''
-            },
-            locale: 'ko',
-            // FullCalendar의 자동 이벤트 로딩
-            events: festivalsUrl,
-            dateClick: function(info) {
-                // 기존 강조 제거
-                document.querySelectorAll('.fc-daygrid-day.fc-highlighted')
-                    .forEach(el => el.classList.remove('fc-highlighted'));
+            var clickedDate = info.dateStr.split("T")[0];
 
-                // 클릭한 날짜 강조
-                info.dayEl.classList.add('fc-highlighted');
+            fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
+            .then(response => response.json())
+            .then(data => {
+                console.log("받은 데이터:", data);
 
-                // ISO 8601 형식에서 날짜 부분만 추출
-                var clickedDate = info.dateStr.split("T")[0];
+                eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
 
-                // 클릭한 날짜에 해당하는 축제 정보를 fetch()로 호출
-                fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("받은 데이터:", data); // 받은 데이터 전체 로그
+                if (data && data.length > 0) {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
 
-                    eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
+                    data.forEach(function(fest) {
+                        var eventCol = document.createElement('div');
+                        eventCol.classList.add('col');
 
-                    if (data && data.length > 0) {
-                        const rowDiv = document.createElement('div');
-                        rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
+                        var eventDiv = document.createElement('div');
+                        eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
 
-                        for(const fest of data) {
-                            // 각 이벤트 개별 속성 로그 출력
-                            console.log(data);
-                            console.log("축제 이름:", fest.feName);
-                            console.log("시작 날짜:", fest.feStartDate);
-                            console.log("종료 날짜:", fest.feEndDate);
-                            console.log("주소:", fest.feAddress);
-                          
+                        eventDiv.innerHTML = 
+                            '<img src="' + contextPath + '/uploads/' + fest.feImageMain + '" alt="' + fest.feName + '" ' +
+                            'class="card-img-top" style="height: 200px; object-fit: cover;">' +
+                            '<div class="card-body">' +
+                                '<h5 class="card-title">' + fest.feName + '</h5>' +
+                                '<p class="card-text"><strong>기간:</strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                                '<p class="card-text"><strong>위치:</strong> ' + fest.feAddress + '</p>' +
+                                '<a href="#" class="btn btn-primary">자세히 보기</a>' +
+                            '</div>';
 
-                            var eventCol = document.createElement('div');
-                            eventCol.classList.add('col');
+                        eventCol.appendChild(eventDiv);
+                        rowDiv.appendChild(eventCol);
+                    });
 
-                            var eventDiv = document.createElement('div');
-                            eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-                            
-                                                                               
-                            // 로그를 통해 확인된 데이터 직접 사용
-                            eventDiv.innerHTML = `
-                                <img src=  ` + fest.feImageMain + `  alt= ` + fest.feName + `  
-                                     class="card-img-top" 
-                                     style="height: 200px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title"></h5>
-                                    <p class="card-text">
-                                        <strong>기간:</strong> 
-                                        ` + fest.feStartDate + `~ 
-                                        ` + fest.feEndDate + `
-                                    </p>
-                                    <p class="card-text">
-                                        <strong>위치:</strong> 
-                                       ` + fest.feAddress + `
-                                    </p>
-                                    <a href="#" class="btn btn-primary">
-                                        자세히 보기
-                                    </a>
-                                </div>
-                            `;
-
-                            eventCol.appendChild(eventDiv);
-                            rowDiv.appendChild(eventCol);
-                        }
-
-                        eventDetailsEl.appendChild(rowDiv);
-                    } else {
-                        eventDetailsEl.innerHTML = `
-                            <div class="alert alert-info" role="alert">
-                                해당 날짜에 진행하는 축제가 없습니다.
-                            </div>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error("축제 정보를 불러오는 중 오류 발생:", error);
-                    eventDetailsEl.innerHTML = `
-                        <div class="alert alert-danger" role="alert">
-                            축제 정보를 불러오는데 실패했습니다.
-                        </div>
-                    `;
-                });
-            }
-        });
-
-        calendar.render();
+                    eventDetailsEl.appendChild(rowDiv);
+                } else {
+                    eventDetailsEl.innerHTML = 
+                        '<div class="alert alert-info" role="alert">' +
+                        '해당 날짜에 진행하는 축제가 없습니다.' +
+                        '</div>';
+                }
+            })
+            .catch(error => {
+                console.error("축제 정보를 불러오는 중 오류 발생:", error);
+                eventDetailsEl.innerHTML = 
+                    '<div class="alert alert-danger" role="alert">' +
+                    '축제 정보를 불러오는데 실패했습니다.' +
+                    '</div>';
+            });
+        }
     });
 
+    calendar.render();
+});
 </script>
 
 </body>
