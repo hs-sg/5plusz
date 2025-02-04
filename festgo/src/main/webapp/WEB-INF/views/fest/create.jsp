@@ -12,6 +12,33 @@
           rel="stylesheet" 
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
           crossorigin="anonymous" />
+          
+    <style>
+        .drop-area {
+            border: 2px dashed #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .drop-area.drag-over {
+            background-color: #e0ffe0;
+        }
+        .spanText {
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+        /* 미리보기 이미지 스타일 */
+        .img-preview {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+    </style>
+    
 </head>
 <body>
         <div class="container-fluid">
@@ -83,21 +110,14 @@
                 <input type="text" class="form-control" id="feFee" name="feFee" placeholder="참가비" required>
             </div>
 
-            <!-- 테마 ID -->
+            <!-- 테마 선택 -->
             <div class="mb-3">
                 <label for="theId" class="form-label">테마</label>
                 <select class="form-select" id="theId" name="theId" required>
                     <option value="">-- 테마 선택 --</option>
-                    <option value="1">꽃</option>
-                    <option value="2">비</option>
-                    <option value="3">음식</option>
-                    <option value="4">빙어</option>
-                    <option value="5">봄</option>
-                    <option value="6">여름</option>
-                    <option value="7">가을</option>
-                    <option value="8">겨울</option>
-                    <option value="9">어린이</option>
-                    <option value="10">눈</option>
+                    <c:forEach var="theme" items="${themes}">
+                        <option value="${theme.theId}">${theme.theName}</option>
+                    </c:forEach>
                     <option value="custom">직접 입력</option>
                 </select>
             </div>
@@ -120,22 +140,40 @@
                 <input type="url" class="form-control" id="feHomepage" name="feHomepage" placeholder="홈페이지 URL">
             </div>
 
-            <!-- 대표 이미지 -->
+            <!-- 대표 이미지 (드래그 앤 드롭) -->
             <div class="mb-3">
                 <label for="feImageMainFile" class="form-label">축제 대표 이미지</label>
-                <input type="file" class="form-control" id="feImageMainFile" name="feImageMainFile" required>
+                <div id="dropAreaRep" class="drop-area">
+                    <span class="spanText">대표 이미지 또는 클릭하여 선택</span>
+                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*" required hidden>
+                </div>
+                <div class="mt-2">
+                    <img id="previewRep" src="" alt="대표 이미지 미리보기" class="img-preview d-none" />
+                </div>
             </div>
-        
-            <!-- 포스터 -->
+            
+            <!-- 포스터 (드래그 앤 드롭) -->
             <div class="mb-3">
                 <label for="fePosterFile" class="form-label">축제 포스터</label>
-                <input type="file" class="form-control" id="fePosterFile" name="fePosterFile" required>
+                <div id="dropAreaPoster" class="drop-area">
+                    <span class="spanText">포스터 이미지 또는 클릭하여 선택</span>
+                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*" required hidden>
+                </div>
+                <div class="mt-2">
+                    <img id="previewPoster" src="" alt="포스터 미리보기" class="img-preview d-none" />
+                </div>
             </div>
-        
-            <!-- 추가 이미지 (여러 개 업로드 가능) -->
+            
+            <!-- 추가 이미지 (드래그 앤 드롭, 다중 업로드) -->
             <div class="mb-3">
                 <label for="fiImagesFiles" class="form-label">축제 추가 이미지</label>
-                <input type="file" class="form-control" id="fiImagesFiles" name="fiImagesFiles" multiple>
+                <div id="dropAreaAdditional" class="drop-area">
+                    <span class="spanText">추가 이미지를 선택하거나 클릭하세요</span>
+                    <input type="file" id="fiImagesFiles" name="fiImagesFiles" accept="image/*" multiple hidden>
+                </div>
+                <div class="mt-2" id="previewAdditionalContainer">
+                    <!-- 추가 이미지 미리보기를 위한 영역 -->
+                </div>
             </div>
 
             <!-- 제출 버튼 -->
@@ -206,11 +244,16 @@
         <!-- Axios Http JS -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         
+        <!-- 날짜 설정 및 테마 입력 관련 JS (date-config.js, theme-input.js) -->
         <c:url var="dateConfig" value="/js/date-config.js" /> 
         <script src="${dateConfig}"></script>
         
         <c:url var="themeInput" value="/js/theme-input.js" /> 
         <script src="${themeInput}"></script>
+        
+        <!-- 드래그 앤 드롭 JS (drag_and_drop.js) -->
+        <c:url var="dragAndDrop" value="/js/drag_and_drop.js" /> 
+        <script src="${dragAndDrop}"></script>
         
 </body>
 </html>
