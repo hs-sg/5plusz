@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>새 축제 작성</title>
+    <title>새 축제 등록</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
           rel="stylesheet" 
@@ -102,12 +102,12 @@
 </head>
 <body>
         <div class="container-fluid">
-            <c:set var="pageTitle" value="포스트 작성" />
+            <c:set var="pageTitle" value="새 축제 등록" />
             <%@ include file="../fragments/header.jspf" %>
         </div>
         
     <div class="container">
-        <h2 class="mt-5">새 축제 작성</h2>
+        <h2 class="mt-5">새 축제 등록</h2>
         <form method="post" enctype="multipart/form-data">
             <!-- 축제 이름 -->
             <div class="mb-3">

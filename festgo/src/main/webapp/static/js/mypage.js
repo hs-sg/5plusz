@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => { console.log(error); });
     });
 
+    function bbbbb() {
+        const UUri = `../api/mypage/ufestivals/${signedInUser}`;
+                        
+        axios
+        .get(UUri)
+        .then((response) => { getUFestivalList(response.data); })
+        .catch((error) => { console.log(error); });
+    }
+    
     btnToggleFestivalList.addEventListener('click', () => {
         allBtnAndDivDisable();
         btnToggleFestivalList.style.color = 'blue';
@@ -35,12 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         switch(role) {
             case `1` : // 일반유저
                 console.log("user");
-                const UUri = `../api/mypage/ufestivals/${signedInUser}`;
-                
-                axios
-                .get(UUri)
-                .then((response) => { getUFestivalList(response.data); })
-                .catch((error) => { console.log(error); });
+                bbbbb();
                 
                 break;
                 
@@ -85,10 +89,24 @@ document.addEventListener('DOMContentLoaded', () => {
         allBtnAndDivDisable();
         btnToggleSponsorCheckList.style.color = 'blue';
         divSponsorCheckList.style.display = 'block';
+        
+        SponsorCheckList();
     });
+    
+    
     
     /* 콜백 함수 --------------------------------------------------------------------------- */
     
+    function SponsorCheckList() {
+        const uri = `../api/mypage/sponcheck/`;
+                
+        axios
+        .get(uri)
+        .then((response) => { getSponsorCheckList(response.data); })
+        .catch((error) => { console.log(error); });
+    }
+    
+    // 모든 버튼을 검정으로 모든 리스트를 안보이게 함!
     function allBtnAndDivDisable() {
         btnToggleMyProfile.style.color = 'black';
         divMyProfile.style.display = 'none';
@@ -247,21 +265,35 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${period}</td>
                         </tr>
                     </table>
-                    <div class="justify-content-end">
-                        <h2><span class="badge text-bg-secondary">4</span></h2>
-                    </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end">
+                <div class="card-footer d-flex justify-content-between">
+                    <div class="justify-content-start d-inline">`
+            switch(festival.frApproval) {
+                case 0 :
+                    addHtml += `
+                        <button class="btn btn-success disabled">게시중</button>`;
+                    break;
+                case 1 :
+                    addHtml += `
+                        <button class="btn btn-primary disabled">승인대기</button>`;
+                    break;
+                case 2 :
+                    addHtml += `
+                        <button class="btn btn-secondary disabled">거절됨</button>`;
+                    break;
+            }
+            addHtml +=`    
+                    </div>
+                <div class="justify-content-end d-inline">
             `;
-            html += addHtml;
             if(festival.frApproval == 1) {
-                addHtml = `
+                addHtml += `
                 <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-2">승인</button>
                 <button data-id="${festival.feId}" class="btnRefuseFestival btn btn-outline-secondary mx-2">거절</button>`
-                html += addHtml;
             }
-            addHtml = `
+            addHtml += `
             <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
+                    </div>
                 </div>
             </div>   
             `;
@@ -283,22 +315,152 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // 축제 승인 함수
+    function approveFestival(event) {
+        console.log(event.target);
+                        
+        const result = confirm("축제등록을 승인할까요?");
+        if(!result) {
+            return;
+        }
+        
+        const feId = event.target.getAttribute("data-id");
+        const uri = `../api/mypage/festapp/${feId}`
+        
+        axios
+        .get(uri)
+        .then((response) => {
+            console.log(response);
+            alert("축제 승인완료");
+        })
+        .catch((error) => { console.log(error) });
+    }
+
     function deleteFestival(event) {
         console.log(event.target);
         
         const result = confirm("축제를 삭제할까요?")
         console.log(result);
     }
-    function approveFestival(event) {
-        console.log(event.target);
-        
-        const result = alert("축제승인완료!")
-        console.log(result);
-    }
+    
     function refuseFestival(event) {
         console.log(event.target);
         
         const result = confirm("거절사유를 입력해주세요!")
         console.log(result);
+    }
+    
+    function getSponsorCheckList(data) {
+        let html = "";
+        if(data == "") {
+            html = `<h>승인대기 아이디가 없습니다.<h>`
+            divSponsorCheckList.innerHTML = html;
+            return;
+        }
+        for(const requestSponsor of data) {
+            const createdTime = requestSponsor.meCreatedTime[0] + "년 " + requestSponsor.meCreatedTime[1] + "월 "
+                                 + requestSponsor.meCreatedTime[2] + "일 " + requestSponsor.meCreatedTime[4] + "시 "
+                                 + requestSponsor.meCreatedTime[5] + "분";
+            let addHtml = `
+                <div class="card my-3 me-4">
+                    <div class="card-body d-flex">
+                        <table>
+                            <tr>
+                                <th>아이디</th>
+                                <td>${requestSponsor.meUsername}</td> 
+                            </tr>
+                            <tr>
+                                <th>이메일</th>
+                                <td>${requestSponsor.meEmail}</td> 
+                            </tr>
+                            <tr>
+                                <th>업체명</th>
+                                <td>${requestSponsor.meSponsor}</td> 
+                            </tr>
+                            <tr>
+                                <th>생성날짜</th>
+                                <td>${createdTime}</td> 
+                            </tr>
+                            
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
+                        <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
+                        data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
+                            거절
+                        </button>
+                    </div>
+                    <div class="collapse" id="collapseRefuseSponsor${requestSponsor.meId}">
+                        <div class="card card-body">
+                            <div class="input-group mb-3">
+                                <input data-id="${requestSponsor.meId}" type="text" class="inputRefuseText form-control" placeholder="거절사유를 입력해주세요" aria-describedby="button-addon2">
+                                <button data-id="${requestSponsor.meId}" class="btnRefuseSponsor btn btn-outline-secondary" type="button" id="button-addon2">작성완료</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            html += addHtml;
+        }
+        divSponsorCheckList.innerHTML = html;
+        
+        const btnApproveSponsors = document.querySelectorAll('button.btnApproveSponsor');
+        for(const btn of btnApproveSponsors) {
+            btn.addEventListener('click', approveSponsor);
+        }
+        
+        const btnRefuseSponsors = document.querySelectorAll('button.btnRefuseSponsor');
+        for(const btn of btnRefuseSponsors) {
+            btn.addEventListener('click', RefuseSponsor);
+        }
+    }
+    
+    function approveSponsor(event) {
+        console.log(event.target);
+                
+        const result = confirm("업체등록을 승인할까요?");
+        if(!result) {
+            return;
+        }
+        
+        const meId = event.target.getAttribute("data-id");
+        const uri = `../api/mypage/sponapp/${meId}`
+        
+        axios
+        .get(uri)
+        .then((response) => {
+            console.log(response);
+            alert("업체 승인완료");
+            SponsorCheckList();
+        })
+        .catch((error) => { console.log(error) });
+        console.log(result);
+    }
+    
+    function RefuseSponsor(event) {
+        console.log(event.target);
+        const meId = event.target.getAttribute("data-id");
+        const srCause = document.querySelector(`input[data-id="${meId}"]`).value;
+        if(srCause == "") {
+            alert("내용을 입력해주세요")
+            return;
+        }
+        const result = confirm("등록을 거절하시겠습니까?");
+        if(!result) {
+            return;
+        }
+        
+        const data = { srCause, meId };
+        const uri = `../api/mypage/sponref/`
+        
+        axios
+        .put(uri, data)
+        .then((response) => {
+            console.log(response);
+            alert("업체 거절완료");
+            SponsorCheckList();
+        })    
+        .catch((error) => { console.log(error); });
     }
 });
