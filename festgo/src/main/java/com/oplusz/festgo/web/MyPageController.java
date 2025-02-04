@@ -89,6 +89,17 @@ public class MyPageController {
 		return ResponseEntity.ok(requestSponsors);
 	}
 	
+	// 마이페이지 상에 대기중인 축제 승인하기
+	@GetMapping("/festapp/{feId}")
+	public ResponseEntity<Integer> approveFestival(@PathVariable("feId") Integer feId) {
+		log.debug("approveFestival(feId={})", feId);
+		
+		Integer approveResult = myPageService.approveFestivalByFeId(feId);
+		log.debug("approveResult = {}", approveResult);
+		
+		return ResponseEntity.ok(approveResult);
+	}
+	
 	// 마이페이지 상에 대기중인 사업자 아이디 승인하기
 	@GetMapping("/sponapp/{meId}")
 	public ResponseEntity<Integer> approveSponsorMember(@PathVariable("meId") Integer meId) {

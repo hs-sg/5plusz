@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => { console.log(error); });
     }
     
+    // 모든 버튼을 검정으로 모든 리스트를 안보이게 함!
     function allBtnAndDivDisable() {
         btnToggleMyProfile.style.color = 'black';
         divMyProfile.style.display = 'none';
@@ -264,21 +265,35 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${period}</td>
                         </tr>
                     </table>
-                    <div class="justify-content-end">
-                        <h2><span class="badge text-bg-secondary">4</span></h2>
-                    </div>
                 </div>
-                <div class="card-footer d-flex justify-content-end">
+                <div class="card-footer d-flex justify-content-between">
+                    <div class="justify-content-start d-inline">`
+            switch(festival.frApproval) {
+                case 0 :
+                    addHtml += `
+                        <button class="btn btn-success disabled">게시중</button>`;
+                    break;
+                case 1 :
+                    addHtml += `
+                        <button class="btn btn-primary disabled">승인대기</button>`;
+                    break;
+                case 2 :
+                    addHtml += `
+                        <button class="btn btn-secondary disabled">거절됨</button>`;
+                    break;
+            }
+            addHtml +=`    
+                    </div>
+                <div class="justify-content-end d-inline">
             `;
-            html += addHtml;
             if(festival.frApproval == 1) {
-                addHtml = `
+                addHtml += `
                 <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-2">승인</button>
                 <button data-id="${festival.feId}" class="btnRefuseFestival btn btn-outline-secondary mx-2">거절</button>`
-                html += addHtml;
             }
-            addHtml = `
+            addHtml += `
             <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
+                    </div>
                 </div>
             </div>   
             `;
@@ -300,18 +315,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // 축제 승인 함수
+    function approveFestival(event) {
+        console.log(event.target);
+                        
+        const result = confirm("축제등록을 승인할까요?");
+        if(!result) {
+            return;
+        }
+        
+        const feId = event.target.getAttribute("data-id");
+        const uri = `../api/mypage/festapp/${feId}`
+        
+        axios
+        .get(uri)
+        .then((response) => {
+            console.log(response);
+            alert("축제 승인완료");
+        })
+        .catch((error) => { console.log(error) });
+    }
+
     function deleteFestival(event) {
         console.log(event.target);
         
         const result = confirm("축제를 삭제할까요?")
         console.log(result);
     }
-    function approveFestival(event) {
-        console.log(event.target);
-        
-        const result = alert("축제승인완료!")
-        console.log(result);
-    }
+    
     function refuseFestival(event) {
         console.log(event.target);
         

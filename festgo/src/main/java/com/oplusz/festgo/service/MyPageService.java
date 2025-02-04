@@ -11,6 +11,7 @@ import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
+import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
 import com.oplusz.festgo.repository.MemberDao;
 import com.oplusz.festgo.repository.MemberRoleDao;
@@ -28,6 +29,7 @@ public class MyPageService {
 	private final MemberDao memberDao;
 	private final MemberRoleDao memberRoleDao;
 	private final SponRequestDao sponRequestDao;
+	private final FestRequestDao festRequestDao;
 	
 	//	전체 축제목록 읽기
 	public List<Festival> readFestivalInMyPage() {
@@ -131,6 +133,17 @@ public class MyPageService {
 		return requestSponsors;
 	}
 	
+	// 측제 승인하기
+	public Integer approveFestivalByFeId(Integer feId) {
+		log.debug("approveFestivalByFeId(feId={}", feId);
+		
+		Integer appFestivalResult = festRequestDao.approveFestivalByFeId(feId);
+		log.debug("result appFestivalResult = {}", appFestivalResult);
+		
+		return appFestivalResult;
+	}
+	
+	// 스폰서 멤버 승인하기
 	public Integer approveSponsorMemberByMeId(Integer meId) {
 		log.debug("approveSponsorMemberByMeId(meId={}", meId);
 		
@@ -140,6 +153,7 @@ public class MyPageService {
 		return appSponsorResult;
 	}
 	
+	// 스폰서 멤버 삭제하기
 	public Integer refuseSponsorMemberByMeId(Integer meId, String srCause) {
 		log.debug("refuseSponsorMemberByMeId(meId={}", meId);
 		
