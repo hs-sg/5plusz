@@ -32,7 +32,7 @@
     </insert>
     
       <!-- 특정 기간 내 축제 데이터 조회 -->
-    <select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
+  <select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
         SELECT 
             fe_id AS feId,
             fe_name AS feName,
@@ -40,7 +40,7 @@
             TO_CHAR(fe_end_date, 'YYYY-MM-DD') AS feEndDate,
             fe_contents AS feContents,
             fe_image_main AS feImageMain,
-            fe_detail_address AS feDetailAddress
+            fe_address AS feAddress
         FROM festival
         WHERE fe_start_date &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
           AND fe_end_date &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')

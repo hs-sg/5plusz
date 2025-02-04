@@ -96,48 +96,77 @@
                 fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
                 .then(response => response.json())
                 .then(data => {
+                    console.log("받은 데이터:", data); // 받은 데이터 전체 로그
+
                     eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
 
                     if (data && data.length > 0) {
-                        data.forEach(event => {
-                            console.log("받은 데이터:", event); // JSON 데이터 콘솔 출력 (디버깅)
+                        const rowDiv = document.createElement('div');
+                        rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
+
+                        for(const fest of data) {
+                            // 각 이벤트 개별 속성 로그 출력
+                            console.log(data);
+                            console.log("축제 이름:", fest.feName);
+                            console.log("시작 날짜:", fest.feStartDate);
+                            console.log("종료 날짜:", fest.feEndDate);
+                            console.log("주소:", fest.feAddress);
+
+                            var eventCol = document.createElement('div');
+                            eventCol.classList.add('col');
 
                             var eventDiv = document.createElement('div');
-                            eventDiv.classList.add('card', 'mb-3', 'p-3', 'text-center', 'shadow-sm');
-                            eventDiv.style.width = '300px';
-                            eventDiv.style.margin = 'auto';
+                            eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
 
+                            // 로그를 통해 확인된 데이터 직접 사용
                             eventDiv.innerHTML = `
-                                <img src="${event.feImageMain}" alt="${event.feName}" class="card-img-top"
-                                    style="width: 100%; height: auto; border-radius: 10px;">
+                                <img src= ` + fest.feImageMain + `~  alt= ` + fest.feName + `~  
+                                     class="card-img-top" 
+                                     style="height: 200px; object-fit: cover;">
                                 <div class="card-body">
-                                    <h5 class="card-title">${event.feName ? event.feName : '이름 없음'}</h5>
+                                    <h5 class="card-title"></h5>
                                     <p class="card-text">
-                                        <strong>기간:</strong> ${event.feStartDate ? event.feStartDate : '미정'} ~ 
-                                        ${event.feEndDate ? event.feEndDate : '미정'}
+                                        <strong>기간:</strong> 
+                                        ` + fest.feStartDate + `~ 
+                                        ` + fest.feEndDate + `
                                     </p>
                                     <p class="card-text">
-                                        <strong>위치:</strong> ${event.feDetailAddress ? event.feDetailAddress : '위치 정보 없음'}
+                                        <strong>위치:</strong> 
+                                       ` + fest.feAddress + `
                                     </p>
-                                    <a href="${event.feDetailAddress}" class="btn btn-primary">자세히 보기</a>
+                                    <a href="#" class="btn btn-primary">
+                                        자세히 보기
+                                    </a>
                                 </div>
                             `;
 
-                            eventDetailsEl.appendChild(eventDiv);
-                        });
+                            eventCol.appendChild(eventDiv);
+                            rowDiv.appendChild(eventCol);
+                        }
+
+                        eventDetailsEl.appendChild(rowDiv);
                     } else {
-                        eventDetailsEl.innerHTML = '<p>해당 날짜에 진행하는 축제가 없습니다.</p>';
+                        eventDetailsEl.innerHTML = `
+                            <div class="alert alert-info" role="alert">
+                                해당 날짜에 진행하는 축제가 없습니다.
+                            </div>
+                        `;
                     }
                 })
                 .catch(error => {
                     console.error("축제 정보를 불러오는 중 오류 발생:", error);
-                    eventDetailsEl.innerHTML = '<p>축제 정보를 불러오는데 실패했습니다.</p>';
+                    eventDetailsEl.innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            축제 정보를 불러오는데 실패했습니다.
+                        </div>
+                    `;
                 });
             }
         });
 
         calendar.render();
     });
+
 </script>
 
 </body>
