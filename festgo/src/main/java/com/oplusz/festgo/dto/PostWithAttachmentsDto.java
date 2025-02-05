@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostWithAttachmentsDto {
     private Post post;
-    private List<PostAttachment> attachments;
+    private List<String> attachments;
 }
 

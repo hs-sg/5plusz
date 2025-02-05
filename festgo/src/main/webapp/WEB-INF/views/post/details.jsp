@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>  <%-- JSTL Functions 추가 --%>
+
 
 <!DOCTYPE html>
 <html>
@@ -23,27 +23,7 @@
         <main class="mt-2">
             <div class="card">
                 <div class="card-body">
-                    <c:set var="post" value="${postWithAttachments.post}" />
-                    <c:set var="attachments" value="${postWithAttachments.attachments}" />
-                    <c:set var="imageAttachments" value="" />
-                    <c:set var="fileAttachments" value="" />
-                    
-                    <c:forEach var="attachment" items="${attachments}">
-                        <c:choose>
-                            <%-- 이미지 파일이면 imageAttachments에 추가 --%>
-                            <c:when test="${fn:endsWith(attachment.paAttachments, '.jpg') 
-                                           or fn:endsWith(attachment.paAttachments, '.jpeg') 
-                                           or fn:endsWith(attachment.paAttachments, '.png') 
-                                           or fn:endsWith(attachment.paAttachments, '.gif')}">
-                                <c:set var="imageAttachments" value="${imageAttachments},${attachment.paAttachments}" />
-                            </c:when>
-                            <%-- 일반 파일이면 fileAttachments에 추가 --%>
-                            <c:otherwise>
-                                <c:set var="fileAttachments" value="${fileAttachments},${attachment.paAttachments}" />
-                            </c:otherwise>
-                        </c:choose>
-                    </c:forEach>
-                    
+
                     <form>
                         <div class="mt-2">
                             <label class="form-label" for="id">번호</label>
@@ -58,21 +38,20 @@
                             <div class="form-control" id="content" style="min-height: 200px; white-space: pre-wrap; overflow-y: auto;">
                                 ${post.poContent}
                             </div>
-                            <!-- 이미지 미리보기 -->
-                        <c:if test="${not empty imageAttachments}">
-                            <div class="mt-3">
-                                <h5>이미지 미리보기</h5>
-                                <div id="previewPoContentContainer" class="d-flex flex-wrap">
-                                    <c:forTokens var="image" items="${fn:trim(imageAttachments)}" delims="," >
-                                        <c:if test="${not empty image}">
-                                            <img src="/uploads/${image}" class="img-thumbnail me-2" style="max-width: 200px; height: auto;" alt="첨부 이미지">
-                                        </c:if>
-                                    </c:forTokens>
-                                </div>
-                            </div>
-                        </c:if>
-                            
                         </div>
+
+                        <!-- 이미지 미리보기 영역 -->
+                        
+<c:forEach var="attachment" items="${postWithAttachments.attachments}">
+    <img id="previewPoContentContainer"
+         src="${attachment}"
+         alt="이미지 미리보기"
+         class="img-thumbnail"
+         style="max-width: 200px; height: auto;" />
+</c:forEach>
+
+
+
                         <div class="mt-2">
                             <label class="form-label" for="author">작성자</label>
                             <input class="form-control" id="author" type="text" value="${post.poAuthor}" readonly />
@@ -88,24 +67,8 @@
                             <input class="form-control" id="views" type="text" value="${post.poViews}" readonly />
                         </div>
                     </form>
-                    
-                    <!-- 일반 파일 다운로드 목록 -->
-                    <c:if test="${not empty fileAttachments}">
-                        <div class="mt-3">
-                            <h5>첨부파일</h5>
-                            <ul class="list-group">
-                                <c:forTokens var="file" items="${fileAttachments}" delims="," >
-                                    <li class="list-group-item">
-                                        <a href="/attachments/${file}" download="${file}">
-                                            ${file} 다운로드
-                                        </a>
-                                    </li>
-                                </c:forTokens>
-                            </ul>
-                        </div>
-                    </c:if>
 
-                    <!-- 수정 버튼 -->
+                    <%-- 수정 버튼 --%>
                     <div class="card-footer d-flex justify-content-center">
                         <c:url var="postModifyPage" value="/post/modify">
                             <c:param name="poId" value="${post.poId}" />
@@ -118,12 +81,11 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-            crossorigin="anonymous">
-    </script>
-    
-        <c:url var="postImagePreview" value="/js/post-image-preview.js" /> 
-        <script src="${postImagePreview}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <%-- JavaScript 분리된 파일 로드 --%>
+    <c:url var="postPreviewJS" value="/js/post-image-preview.js" /> 
+    <script src="${postPreviewJS}"></script>
+
 </body>
 </html>

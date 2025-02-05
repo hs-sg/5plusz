@@ -1,6 +1,9 @@
 package com.oplusz.festgo.web;
 
 import java.util.List;
+
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +48,17 @@ public class PostController {
 	public String details(@RequestParam("poId") Integer poId, Model model) {
 	    // 게시글 + 첨부파일 조회
 	    PostWithAttachmentsDto postDto = postService.readById(poId);
-	    
-	    // JSP에서 사용할 수 있도록 Model에 추가
-	    model.addAttribute("postWithAttachments", postDto);
+	    model.addAttribute("postWithAttachments", postDto); // 여기서 제대로 전달되고 있는지 확인
+	    model.addAttribute("imageAttachments", postDto.getAttachments()); // 첨부파일
 	    return "post/details";
 	}
+
+	
+	@RequestMapping("/uploads/**")
+	public Resource getFile(@RequestParam String fileName) {
+	    return new FileSystemResource("uploads/" + fileName); // 경로 문제
+	}
+
 	/*
 	 * * 게시글 수정 화면 (조회수 증가 X)
 	 */

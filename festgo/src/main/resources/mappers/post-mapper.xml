@@ -41,11 +41,13 @@
         </foreach>
     </insert>
     
-    <!-- 첨부파일 조회  -->
-    
-    <select id="selectAttachmentsByPostId" resultType="PostAttachment">
-    SELECT * FROM post_attachment WHERE po_id = #{poId}
+    <!-- 첨부파일 불러오기 -->
+    <select id="selectAttachmentsByPostId" resultType="string">
+    SELECT PA_ATTACHMENTS
+    FROM post_attachment
+    WHERE po_id = #{poId}
     </select>
+    
     
     <!-- 게시글 수정 -->
     

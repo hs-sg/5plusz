@@ -29,8 +29,8 @@ public class PostService {
 	private final PostDao postDao;
 
 	// 업로드된 파일을 저장할 기본 디렉토리
-	private static final String UPLOAD_DIR = "C:/uploads/";
-
+	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
+	
 	/**
 	 * 게시글 목록 조회
 	 */
@@ -45,42 +45,46 @@ public class PostService {
 	 * 게시글 상세 조회 (조회수 증가)
 	 */
 	public PostWithAttachmentsDto readById(Integer poId) {
-		log.debug("readById(poId={})", poId);
+	    log.debug("readById(poId={})", poId);
 
-		// 조회수 증가
-		postDao.increaseViewCount(poId);
+	    Post post = postDao.selectById(poId);
+	    if (post == null) {
+	        log.error("게시글이 존재하지 않습니다.");
+	        throw new RuntimeException("게시글이 존재하지 않습니다.");
+	    }
 
-		// 게시글 조회
-		Post post = postDao.selectById(poId);
-		if (post == null) {
-			throw new RuntimeException("게시글이 존재하지 않습니다.");
-		}
+	    // 첨부파일 리스트 조회
+	    List<String> attachments = postDao.selectAttachmentsByPostId(poId);
 
-		// 첨부파일 목록 조회
-		List<PostAttachment> attachments = postDao.selectAttachmentsByPostId(poId);
+	    log.debug("게시글 정보: {}", post);
+	    log.debug("첨부파일 리스트: {}", attachments);
 
-		// DTO 반환
-		return new PostWithAttachmentsDto(post, attachments);
+	    return new PostWithAttachmentsDto(post, attachments);
 	}
+
+
 
 	/**
 	 * 게시글 조회 (조회수 증가 X, 수정 페이지에서 사용)
 	 */
 	public PostWithAttachmentsDto getPostWithoutIncreasingViews(Integer poId) {
-		log.debug("getPostWithoutIncreasingViews(poId={})", poId);
+	    log.debug("getPostWithoutIncreasingViews(poId={})", poId);
 
-		// 조회수 증가 없이 게시글 조회
-		Post post = postDao.selectById(poId);
-		if (post == null) {
-			throw new RuntimeException("게시글이 존재하지 않습니다.");
-		}
+	    // 조회수 증가 없이 게시글 조회
+	    Post post = postDao.selectById(poId);
+	    if (post == null) {
+	        throw new RuntimeException("게시글이 존재하지 않습니다.");
+	    }
 
-		// 첨부파일 목록 조회
-		List<PostAttachment> attachments = postDao.selectAttachmentsByPostId(poId);
+	    // 첨부파일 리스트 조회
+	    List<String> attachments = postDao.selectAttachmentsByPostId(poId);
 
-		// DTO 반환
-		return new PostWithAttachmentsDto(post, attachments);
+	    // DTO 반환 (게시글과 첨부파일 리스트 포함)
+	    return new PostWithAttachmentsDto(post, attachments);  // Attachments as List<String>
 	}
+
+
+
 
 	/**
 	 * 게시글 생성 (첨부파일 포함)
@@ -206,11 +210,6 @@ public class PostService {
 				postDao.insertAttachment(attachments);
 			}
 		}
-	}
-
-	// 기존 첨부파일 목록
-	public List<PostAttachment> getAttachments(Integer poId) {
-		return postDao.selectAttachmentsByPostId(poId);
 	}
 
 	// 삭제하기 서비스

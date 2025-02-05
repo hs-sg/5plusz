@@ -31,9 +31,6 @@ public interface PostDao {
 
 	// 기존 첨부파일 삭제
 	void deleteAttachmentsByIds(@Param("ids") List<Integer> attachmentIds);
-
-	// 기존 첨부파일 목록
-	List<PostAttachment> selectAttachmentsByPostId(Integer poId);
 	
 	// 게시글 삭제
 	void deleteById(@Param("poId") Integer poId);
@@ -43,6 +40,10 @@ public interface PostDao {
 	
 	// 검색
 	List<Post> search(PostSearchDto dto);
+	
+	// 특정 게시글의 첨부파일 리스트 조회
+	List<String> selectAttachmentsByPostId(@Param("poId") Integer poId);
+
 
 
 }
