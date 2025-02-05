@@ -9,10 +9,13 @@ import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
+import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
+import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
 import com.oplusz.festgo.repository.MemberDao;
 import com.oplusz.festgo.repository.MemberRoleDao;
+import com.oplusz.festgo.repository.SponRequestDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,8 @@ public class MyPageService {
 	private final FestivalDao festivalDao;
 	private final MemberDao memberDao;
 	private final MemberRoleDao memberRoleDao;
+	private final SponRequestDao sponRequestDao;
+	private final FestRequestDao festRequestDao;
 	
 	//	전체 축제목록 읽기
 	public List<Festival> readFestivalInMyPage() {
@@ -96,6 +101,7 @@ public class MyPageService {
 		return meSponsor;
 	}
 	
+	// 로그인된 아이디의 me_id 값 가져오기
 	public Integer readMeIdByUsername(String meUsername) {
 		log.debug("readSponsorByUsername(meUsername={})", meUsername);
 		
@@ -103,5 +109,57 @@ public class MyPageService {
 		log.debug("result meId={}", meId);
 		
 		return meId;
+	}
+	
+	// feId로 축제 삭제하기 -> 댓글, 좋아요도 삭제해야함 아직 미완성
+	public Integer deleteFestivalByFeId(Integer feId) {
+		log.debug("deleteFestivalByFeId(feId={}", feId);
+		
+		Integer ImageDelResult = festivalDao.deleteFestivalImageByFeId(feId);
+		Integer RequestDelResult = festivalDao.deleteFestivalRequestByFeId(feId);
+		Integer FestivalDelResult = festivalDao.deleteFestivalByFeId(feId);
+		log.debug("ImageDelResult={}, RequestDelResult={}, FestivalDelResult={}", ImageDelResult, RequestDelResult, FestivalDelResult);
+		
+		return FestivalDelResult;
+	}
+	
+	// srApproval로 승인 대기 중인 스폰서 아이디 리스트 가져오기
+	public List<MemberSelectJoinRequestDto> readRequestSponsorInMyPage() {
+		log.debug("readRequestSponsorInMyPage()");
+		
+		List<MemberSelectJoinRequestDto> requestSponsors = memberDao.selectMemberJoinSponRequestBySrApproval();
+		log.debug("result requestSponsors = {}", requestSponsors);
+		
+		return requestSponsors;
+	}
+	
+	// 측제 승인하기
+	public Integer approveFestivalByFeId(Integer feId) {
+		log.debug("approveFestivalByFeId(feId={}", feId);
+		
+		Integer appFestivalResult = festRequestDao.approveFestivalByFeId(feId);
+		log.debug("result appFestivalResult = {}", appFestivalResult);
+		
+		return appFestivalResult;
+	}
+	
+	// 스폰서 멤버 승인하기
+	public Integer approveSponsorMemberByMeId(Integer meId) {
+		log.debug("approveSponsorMemberByMeId(meId={}", meId);
+		
+		Integer appSponsorResult = sponRequestDao.approveSponsorMemberByMeId(meId);
+		log.debug("result appSponsorResult = {}", appSponsorResult);
+		
+		return appSponsorResult;
+	}
+	
+	// 스폰서 멤버 삭제하기
+	public Integer refuseSponsorMemberByMeId(Integer meId, String srCause) {
+		log.debug("refuseSponsorMemberByMeId(meId={}", meId);
+		
+		Integer refSponsorResult = sponRequestDao.refuseSponsorMemberByMeId(srCause, meId);
+		log.debug("result refSponsorResult = {}", refSponsorResult);
+		
+		return refSponsorResult;
 	}
 }

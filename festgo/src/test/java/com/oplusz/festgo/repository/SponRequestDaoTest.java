@@ -12,20 +12,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/application-context.xml" })
-public class MemberRoleDaoTest {
+public class SponRequestDaoTest {
 
 	@Autowired
-	private MemberRoleDao memberRoleDao;
-	
-	
-	
+	private SponRequestDao sponRequestDao;
 	
 //	희성 작성 시작 -------------------------------------------------------------------------------------------------
+	
 	// @Test
-	public void testSelectMrIdByUsername() {
-		Integer mrId = memberRoleDao.selectMrIdByUsername("admin");
-		log.debug(mrId.toString());
-		Assertions.assertEquals(mrId, 3);
+	public void testaApproveSponsorMemberByMeId() {
+		Integer approveResult = sponRequestDao.approveSponsorMemberByMeId(61);
+		log.debug(approveResult.toString());
+		Assertions.assertEquals(approveResult, 1);
 	}
+	
+	// @Test
+	public void testRefuseSponsorMemberByMeId() {
+		Integer refuseResult = sponRequestDao.refuseSponsorMemberByMeId("거절됐습니다", 61);
+		log.debug(refuseResult.toString());
+		Assertions.assertEquals(refuseResult, 1);
+	}
+	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
 }

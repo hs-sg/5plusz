@@ -1,5 +1,7 @@
 package com.oplusz.festgo.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,13 @@ public class ThemeService {
 		log.debug("new theme = {}", theme);
 		themeDao.insertTheme(theme);
 		return theme.getTheId();
+	}
+	
+	// theme 테이블에 입력된 데이터를 List 객체로 리턴
+	public List<Theme> read() {
+		log.debug("read()");
+		
+		return themeDao.findAllThemes();
 	}
 	
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.oplusz.festgo.repository.LocationDao">
+    <!-- 입력된 장소 전부 불러오기 -->
+    <select id="selectAll" resultType="Location">
+        select * from location order by lc_id
+    </select>
+
+</mapper>
