@@ -1,6 +1,8 @@
 package com.oplusz.festgo.web;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import com.oplusz.festgo.domain.Post;
-import com.oplusz.festgo.domain.PostAttachment;
+
 import com.oplusz.festgo.dto.PostCreateDto;
+import com.oplusz.festgo.dto.PostSearchDto;
 import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
 import com.oplusz.festgo.service.PostService;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +31,20 @@ public class PostController {
 	private final PostService postService;
 
 	/**
-	 * 게시글 목록 조회
+	 * 게시글 목록 조회 (페이징 포함)
 	 */
 	@GetMapping("/list")
-	public String list(Model model) {
-		log.debug("list()");
-		List<Post> list = postService.read();
-		model.addAttribute("posts", list);
+	public String getPagedPosts(@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "5") int pageSize, Model model) {
+
+		log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
+
+		Map<String, Object> result = postService.getPagedPosts(page, pageSize);
+		model.addAttribute("posts", result.get("posts"));
+		model.addAttribute("currentPage", result.get("currentPage"));
+		model.addAttribute("totalPages", result.get("totalPages"));
+		model.addAttribute("pageSize", result.get("pageSize"));
+
 		return "post/list";
 	}
 
@@ -43,27 +53,27 @@ public class PostController {
 	 */
 	@GetMapping("/details")
 	public String details(@RequestParam("poId") Integer poId, Model model) {
-	    // 게시글 + 첨부파일 조회
-	    PostWithAttachmentsDto postDto = postService.readById(poId);
-	    
-	    // JSP에서 사용할 수 있도록 Model에 추가
-	    model.addAttribute("postWithAttachments", postDto);
-	    return "post/details";
+		// 게시글 + 첨부파일 조회
+		PostWithAttachmentsDto postDto = postService.readById(poId);
+
+		// JSP에서 사용할 수 있도록 Model에 추가
+		model.addAttribute("postWithAttachments", postDto);
+		return "post/details";
 	}
+
 	/*
 	 * * 게시글 수정 화면 (조회수 증가 X)
 	 */
 	@GetMapping("/modify")
 	public String modify(@RequestParam("poId") Integer poId, Model model) {
-	    // 수정 페이지에서는 조회수 증가 없이 가져오기
-	    PostWithAttachmentsDto postDto = postService.getPostWithoutIncreasingViews(poId);
-	    
-	    // JSP에서 사용할 수 있도록 Model에 추가
-	    model.addAttribute("postWithAttachments", postDto);
-	    return "post/modify";
+		// 수정 페이지에서는 조회수 증가 없이 가져오기
+		PostWithAttachmentsDto postDto = postService.getPostWithoutIncreasingViews(poId);
+
+		// JSP에서 사용할 수 있도록 Model에 추가
+		model.addAttribute("postWithAttachments", postDto);
+		return "post/modify";
 	}
 
-	 
 	@GetMapping("/create")
 	public String showCreatePage() {
 		log.debug("GET create page");
@@ -125,16 +135,52 @@ public class PostController {
 
 		return "redirect:/post/list";
 	}
+
+	/**
+	 * 검색 및 페이징 처리된 게시글 목록 조회
+	 */
 	@GetMapping("/search")
-	public String search(PostSearchDto dto, Model model) {
-		log.debug("search(dto={})",dto);
-		
-		// 서비스 계층의 메서드를 호출해서 검색 결과 리스트를 가져옴
-		List<Post> list = postService.read(dto);
-		// 검색 결과를 뷰에게 전달
-		model.addAttribute("posts",list);
-		
-		return"post/list"; 
+	public String search(@RequestParam(value = "category", required = false) String category,
+	        @RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "page", defaultValue = "1") int page,
+	        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
+	        Model model) {
+	    if (page < 1) {
+	        page = 1;
+	    }
+
+	    log.debug("Parameter values - category: '{}', keyword: '{}', page: {}, pageSize: {}",
+	            category, keyword, page, pageSize);
+
+	    // 검색 DTO 생성
+	    PostSearchDto dto = new PostSearchDto();
+	    dto.setCategory(category);
+	    dto.setKeyword(keyword);
+	    dto.setPage(page);
+	    dto.setPageSize(pageSize);
+
+	    log.debug("Created DTO: {}", dto); // DTO 생성 후 로그
+
+	    // 검색 및 페이징 결과 조회
+	    Map<String, Object> result = postService.searchWithPaging(dto);
+	    
+	    log.debug("Search result map: {}", result); // 결과 맵 로그
+
+	    // 모델에 결과 데이터 추가 전 값들 확인
+	    log.debug("Posts: {}", result.get("posts"));
+	    log.debug("Current Page: {}", result.get("currentPage"));
+	    log.debug("Total Pages: {}", result.get("totalPages"));
+	    log.debug("Page Size: {}", result.get("pageSize"));
+
+	    // 모델에 결과 데이터 추가
+	    model.addAttribute("posts", result.get("posts"));
+	    model.addAttribute("currentPage", result.get("currentPage"));
+	    model.addAttribute("totalPages", result.get("totalPages"));
+	    model.addAttribute("pageSize", result.get("pageSize"));
+	    model.addAttribute("category", category);
+	    model.addAttribute("keyword", keyword);
+
+	    return "post/list";
 	}
 
 }

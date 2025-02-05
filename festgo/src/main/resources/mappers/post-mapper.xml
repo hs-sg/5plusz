@@ -76,32 +76,90 @@
         DELETE FROM post_attachment WHERE po_id = #{poId}
     </delete>
     
-    <!-- 포스트 검색(카테고리, 키워드)에서 사용할 메서드 이름과 SQL 문장 -->
-    <!-- Dynamic SQL -->
-    <select id="search" resultType="Post">
-        <bind name="searchKeyword" value="'%' + keyword + '%'"/>
-        select * from post
-        <where>
-            <choose>
-                <when test='category.equals("t")'>
-                    upper(po_title) like upper(#{searchKeyword})
-                </when>
-                <when test='category.equals("c")'>
-                    upper(po_content) like upper(#{searchKeyword})
-                </when>
-                <when test='category.equals("tc")'>
-                    upper(po_title) like upper(#{searchKeyword})
-                    or
-                    upper(po_content) like upper(#{searchKeyword})
-                </when>
-                <when test='category.equals("a")'>
-                    upper(po_author) like upper(#{searchKeyword})
-                </when>
-            </choose>
-        </where>
-        order by po_id desc
-    </select>
+    <!-- 게시글 목록 조회 (페이징) -->
+        <select id="selectPagedPosts" parameterType="map" resultType="com.oplusz.festgo.domain.Post">
+                SELECT *
+                FROM (
+                    SELECT a.*, ROWNUM rnum
+                    FROM (
+                        SELECT *
+                        FROM post
+                        ORDER BY po_id DESC
+                    ) a
+                    WHERE ROWNUM &lt;= #{endRow}
+                )
+                WHERE rnum &gt; #{startRow}
+            </select>
+
+        
+    <!-- 게시글 총 개수 조회 -->
+        <select id="countPosts" resultType="int">
+            SELECT COUNT(*) FROM post
+        </select>
+        
+     <!-- 검색 및 페이징 처리 -->
+     
+        <select id="searchWithPaging" parameterType="map" resultType="com.oplusz.festgo.domain.Post">
+            SELECT *
+            FROM (
+                SELECT A.*, ROWNUM AS rnum
+                FROM (
+                    SELECT *
+                    FROM post
+                    WHERE 1=1
+                    <if test="category != null">
+                        <choose>
+                            <when test='category == "t"'>
+                                AND po_title LIKE '%' || #{keyword} || '%'
+                            </when>
+                            <when test='category == "c"'>
+                                AND po_content LIKE '%' || #{keyword} || '%'
+                            </when>
+                            <when test='category == "tc"'>
+                                AND (po_title LIKE '%' || #{keyword} || '%' OR po_content LIKE '%' || #{keyword} || '%')
+                            </when>
+                            <when test='category == "a"'>
+                                AND po_author LIKE '%' || #{keyword} || '%'
+                            </when>
+                        </choose>
+                    </if>
+                    ORDER BY po_id DESC
+                ) A
+                WHERE ROWNUM >= #{startRow} AND ROWNUM &lt;= #{endRow}
+            )
+        </select>
+
+
+
+
+
+    <!-- 검색된 게시글 개수 -->
     
+        <select id="countSearchResults" parameterType="map" resultType="int">
+            SELECT COUNT(*) FROM post
+            <where>
+                <trim prefixOverrides="AND">
+                    <if test="category != null and keyword != null">
+                        <choose>
+                            <when test='category == "t"'>
+                                AND UPPER(po_title) LIKE '%' || UPPER(#{keyword}) || '%'
+                            </when>
+                            <when test='category == "c"'>
+                                AND UPPER(po_content) LIKE '%' || UPPER(#{keyword}) || '%'
+                            </when>
+                            <when test='category == "tc"'>
+                                AND (UPPER(po_title) LIKE '%' || UPPER(#{keyword}) || '%' 
+                                     OR UPPER(po_content) LIKE '%' || UPPER(#{keyword}) || '%')
+                            </when>
+                            <when test='category == "a"'>
+                                AND UPPER(po_author) LIKE '%' || UPPER(#{keyword}) || '%'
+                            </when>
+                        </choose>
+                    </if>
+                </trim>
+            </where>
+        </select>
 
 
+    
 </mapper>

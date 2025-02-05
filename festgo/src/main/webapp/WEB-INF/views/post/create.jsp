@@ -15,11 +15,10 @@
     </head>
         <body>
             <div class="container-fluid">
-                <c:set var="pageTitle" value="List"/>
+                <c:set var="pageTitle" value="새 글 작성"/>
                 <%@ include file="../fragments/header.jspf" %>
             </div>
             <div class="container mt-4">
-                <h2 class="mb-4">새 글 작성</h2>
                 <form action="${pageContext.request.contextPath}/post/create" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="poTitle" class="form-label">제목</label>

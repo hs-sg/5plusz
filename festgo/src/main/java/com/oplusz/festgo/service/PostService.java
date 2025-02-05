@@ -3,7 +3,9 @@ package com.oplusz.festgo.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -13,10 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.domain.PostAttachment;
 import com.oplusz.festgo.dto.PostCreateDto;
+import com.oplusz.festgo.dto.PostSearchDto;
 import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
 import com.oplusz.festgo.repository.PostDao;
-import com.oplusz.festgo.web.PostSearchDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,7 @@ public class PostService {
 	private static final String UPLOAD_DIR = "C:/uploads/";
 
 	/**
-	 * 게시글 목록 조회
+	 * 모든 게시글 목록 조회( 페이징 없음 )
 	 */
 	public List<Post> read() {
 		log.debug("read()");
@@ -89,18 +91,15 @@ public class PostService {
 	public int create(PostCreateDto dto, List<MultipartFile> files) {
 		log.debug("create(dto={}, files={})", dto, files);
 
-		/* [임시 설정] 로그인 기능 없이 테스트하기 위해 역할을 직접 설정
-		int mrId = 3; // ⚠️ 테스트할 때 바꿔서 사용 (1: 일반, 2: 사업자, 3: 관리자)
-
-		// 사용자의 역할에 따라 pc_id 설정
-		if (mrId == 3) { // 관리자라면?
-			if (dto.getPcId() == null || (dto.getPcId() != 1 && dto.getPcId() != 2)) {
-				dto.setPcId(1); // 기본값 일반글(1) (잘못된 값이 들어오면 1로 설정)
-			}
-		} else {
-			dto.setPcId(1); // 일반 사용자 및 사업자는 무조건 일반글(1)
-		}
-*/
+		/*
+		 * [임시 설정] 로그인 기능 없이 테스트하기 위해 역할을 직접 설정 int mrId = 3; // ⚠️ 테스트할 때 바꿔서 사용 (1:
+		 * 일반, 2: 사업자, 3: 관리자)
+		 * 
+		 * // 사용자의 역할에 따라 pc_id 설정 if (mrId == 3) { // 관리자라면? if (dto.getPcId() == null
+		 * || (dto.getPcId() != 1 && dto.getPcId() != 2)) { dto.setPcId(1); // 기본값
+		 * 일반글(1) (잘못된 값이 들어오면 1로 설정) } } else { dto.setPcId(1); // 일반 사용자 및 사업자는 무조건
+		 * 일반글(1) }
+		 */
 		// 게시글 저장 후 poId 가져오기
 		int result = postDao.insert(dto);
 		if (result == 0) {
@@ -225,13 +224,69 @@ public class PostService {
 		postDao.deleteById(poId);
 	}
 
-	public List<Post> read(PostSearchDto dto) {
-		log.debug("read(dto={})", dto);
+	/**
+	 * 페이징 목록 조회
+	 */
 
-		// 영속성 계층의 메서드를 호출해서 DB에서 select를 수행하고 결과를 가져옴.
-		List<Post> list = postDao.search(dto);
-		log.debug("# of search result = {}", list.size());
-		return list;
+	public Map<String, Object> getPagedPosts(int page, int pageSize) {
+		int startRow = (page - 1) * pageSize;
+		int endRow = page * pageSize;
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("startRow", startRow);
+		params.put("endRow", endRow);
+
+		List<Post> posts = postDao.selectPagedPosts(params);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("posts", posts);
+		result.put("currentPage", page);
+		result.put("pageSize", pageSize);
+		result.put("totalPages", calculateTotalPages());
+
+		return result;
+	}
+
+	private Object calculateTotalPages() {
+		int totalCount = postDao.countPosts(); // 전체 게시글 수 조회
+		int pageSize = 5; // 한 페이지에 표시할 게시글 수
+		return (int) Math.ceil((double) totalCount / pageSize);
+	}
+
+	// 검색 & 페이징
+	
+	public Map<String, Object> searchWithPaging(PostSearchDto dto) {
+	    log.debug("Executing search query with category: {}, keyword: {}", dto.getCategory(), dto.getKeyword());
+
+	    int startRow = (dto.getPage() - 1) * dto.getPageSize() + 1;
+	    int endRow = dto.getPage() * dto.getPageSize();
+
+	    // 페이징 및 검색 조건을 매개변수로 전달
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("category", dto.getCategory());
+	    params.put("keyword", dto.getKeyword());
+	    params.put("startRow", startRow);
+	    params.put("endRow", endRow);
+
+	    // 검색 쿼리 호출
+	    List<Post> posts = postDao.searchWithPaging(params);
+	    int totalResults = postDao.countSearchResults(params);
+
+	    // 전체 페이지 수 계산
+	    int totalPages = (int) Math.ceil((double) totalResults / dto.getPageSize());
+	    
+	    if (totalPages == 0) {
+	        totalPages = 1;
+	    }
+
+	    // 결과 반환
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("posts", posts);
+	    result.put("currentPage", dto.getPage());
+	    result.put("totalPages", totalPages);
+	    result.put("pageSize", dto.getPageSize());
+
+	    return result;
 	}
 
 }
