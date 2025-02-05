@@ -4,13 +4,104 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oplusz.festgo.repository.PostDao">
 
-
+    <!-- 게시글 목록 조회 -->
+    
     <select id="selectOrderByIdDesc" resultType="Post">
-        SELECT * from post order by po_id desc
+        SELECT * FROM post ORDER BY po_id DESC
     </select>
-
-    <insert id="insertPost" parameterType="PostCreateDto">
-        INSERT INTO post (po_title, po_content, po_author, pa_attachments, pc_id)
-        VALUES (#{poTitle)m #{poContent}, #{poAuthor},#{paAttachments}, #{pcId})
+    
+    <!-- 특정 게시글 조회( 조회수 증가 후 반환) -->
+    
+    <select id="selectById" parameterType="int" resultType="Post">
+        SELECT * FROM post WHERE po_id = #{poId}
+    </select>
+    
+    <!-- 조회수 증가 -->
+    
+    <update id="increaseViewCount" parameterType="int">
+        UPDATE post SET po_views = po_views + 1 WHERE po_id = #{poId}
+    </update>
+    
+    <!-- 게시글 생성 -->
+    
+     <insert id="insert" parameterType="PostCreateDto"  useGeneratedKeys="true"
+        keyProperty="poId" keyColumn="po_id">
+     
+        INSERT INTO post (po_title, po_content, po_author, pc_id, po_created_time, po_modified_time)
+        VALUES (#{poTitle}, #{poContent}, #{poAuthor}, #{pcId}, systimestamp, systimestamp)
     </insert>
+   
+    <!-- 첨부파일 저장 -->
+    
+    <insert id="insertAttachment" parameterType="java.util.List">
+        INSERT INTO post_attachment (po_id, pa_attachments)
+        VALUES 
+        <foreach collection="list" item="attachment" separator=",">
+            (#{attachment.poId}, #{attachment.paAttachments})
+        </foreach>
+    </insert>
+    
+    <!-- 첨부파일 조회  -->
+    
+    <select id="selectAttachmentsByPostId" resultType="PostAttachment">
+    SELECT * FROM post_attachment WHERE po_id = #{poId}
+    </select>
+    
+    <!-- 게시글 수정 -->
+    
+    <update id="update" parameterType="PostUpdateDto">
+        UPDATE post 
+        SET po_title = #{poTitle}, 
+            po_content = #{poContent}, 
+            po_modified_time = systimestamp
+        WHERE po_id = #{poId}
+    </update>
+    
+    <!-- 첨부파일 삭제 -->
+    <delete id="deleteAttachmentsByIds" parameterType="java.util.Map">
+        DELETE FROM post_attachment
+        WHERE pa_id IN
+        <foreach item="paId" collection="ids" open="(" separator="," close=")">
+            #{paId}
+        </foreach>
+    </delete>
+    
+    <!-- 게시글 삭제 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM post WHERE po_id = #{poId}
+    </delete>
+    
+    <!-- 특정 게시글의 모든 첨부파일 삭제 (게시글 삭제 전 실행)-->
+    <delete id="deleteAttachmentsByPostId" parameterType="java.lang.Integer">
+        DELETE FROM post_attachment WHERE po_id = #{poId}
+    </delete>
+    
+    <!-- 포스트 검색(카테고리, 키워드)에서 사용할 메서드 이름과 SQL 문장 -->
+    <!-- Dynamic SQL -->
+    <select id="search" resultType="Post">
+        <bind name="searchKeyword" value="'%' + keyword + '%'"/>
+        select * from post
+        <where>
+            <choose>
+                <when test='category.equals("t")'>
+                    upper(po_title) like upper(#{searchKeyword})
+                </when>
+                <when test='category.equals("c")'>
+                    upper(po_content) like upper(#{searchKeyword})
+                </when>
+                <when test='category.equals("tc")'>
+                    upper(po_title) like upper(#{searchKeyword})
+                    or
+                    upper(po_content) like upper(#{searchKeyword})
+                </when>
+                <when test='category.equals("a")'>
+                    upper(po_author) like upper(#{searchKeyword})
+                </when>
+            </choose>
+        </where>
+        order by po_id desc
+    </select>
+    
+
+
 </mapper>

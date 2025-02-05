@@ -74,7 +74,7 @@
                                     <td>${p.poId}</td>
                                     <td>
                                         <c:url var="postDetailsPage" value="/post/details">
-                                            <c:param name="id" value="${p.poId}"/>
+                                            <c:param name="poId" value="${p.poId}"/>
                                         </c:url>
                                         <a href="${postDetailsPage}">${p.poTitle}</a>
                                     </td>
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </main>
-         
+         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         
          <!-- Bootstrap JS -->
          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
