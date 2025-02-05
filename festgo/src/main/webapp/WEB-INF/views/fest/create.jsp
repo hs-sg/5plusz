@@ -97,6 +97,12 @@
                 border-radius: 12px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
+            
+            .error-message {
+                color: red;
+                margin-top: 5px;
+                font-size: 0.9rem;
+            }
     </style>
     
 </head>
@@ -108,7 +114,7 @@
         
     <div class="container">
         <h2 class="mt-5">새 축제 등록</h2>
-        <form method="post" enctype="multipart/form-data">
+        <form id="festivalForm" method="post" enctype="multipart/form-data">
             <!-- 축제 이름 -->
             <div class="mb-3">
                 <label for="feName" class="form-label">축제 이름</label>
@@ -201,15 +207,18 @@
             </div>
 
             <!-- 대표 이미지 (드래그 앤 드롭) -->
+            
             <div class="mb-3">
                 <label for="feImageMainFile" class="form-label">축제 대표 이미지</label>
                 <div id="dropAreaRep" class="drop-area">
                     <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
-                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*" required hidden>
+                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*"  hidden>
                 </div>
                 <div class="mt-2">
                     <img id="previewRep" src="" alt="대표 이미지 미리보기" class="img-preview d-none" />
                 </div>
+                <!-- 대표 이미지 오류 메시지 -->
+                <div id="errorRep" class="error-message"></div>
             </div>
             
             <!-- 포스터 (드래그 앤 드롭) -->
@@ -217,12 +226,15 @@
                 <label for="fePosterFile" class="form-label">축제 포스터</label>
                 <div id="dropAreaPoster" class="drop-area">
                     <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
-                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*" required hidden>
+                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*"  hidden>
                 </div>
                 <div class="mt-2">
                     <img id="previewPoster" src="" alt="포스터 미리보기" class="img-preview d-none" />
                 </div>
+                <!-- 포스터 오류 메시지 -->
+                <div id="errorPoster" class="error-message"></div>
             </div>
+          
             
             <!-- 추가 이미지 (드래그 앤 드롭, 다중 업로드) -->
             <div class="mb-3">
@@ -306,6 +318,10 @@
         
         <!-- Axios Http JS -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+        <!-- 메인, 포스터 이미지 없을 시 알람 -->
+        <c:url var="festivalMainPosterImage" value="/js/festival-main-poster-image.js" /> 
+        <script src="${festivalMainPosterImage}"></script>
         
         <!-- 날짜 설정 및 테마 입력 관련 JS (date-config.js, theme-input.js) -->
         <c:url var="dateConfig" value="/js/date-config.js" /> 
