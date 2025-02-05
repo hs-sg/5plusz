@@ -42,6 +42,32 @@
             color: red !important;
             text-decoration: none !important;
         }
+        /* 축제 카드 스타일 - 연보라 테두리와 둥근 모서리, 마우스 오버 효과 추가 */
+        .festival-card {
+            border: 2px solid #E6E6FA;  /* 연보라 색 테두리 (lavender) */
+            border-radius: 10px;          /* 둥근 모서리 */
+            cursor: pointer;              /* 카드 전체 클릭 가능 */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .festival-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        /* 축제 이름(카드 제목) 글씨 굵게 */
+        .card-title {
+            font-weight: bold;
+        }
+        /* 축제 리스트 텍스트 스타일 (두껍게) */
+        .festival-list-title {
+            font-weight: bold;
+        }
+        /* hr 스타일 - 필요에 따라 여백 및 선 스타일 조정 */
+        .custom-hr {
+            border: none;
+            border-top: 2px solid #ccc;
+            margin: 0 auto 20px;
+            max-width: 90%;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +78,9 @@
     </div>
     <main>
         <div id="calendar"></div>
+        <!-- 달력 바로 밑에 "축제 리스트" 텍스트와 수평선 추가 -->
+        <h3 class="text-center my-3 festival-list-title">축제 리스트</h3>
+        <hr class="custom-hr">
         <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
         <div id="eventDetails" class="my-4 text-center"></div>
     </main>
@@ -59,11 +88,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-
     <!-- Axios Http JS -->    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>  
-
-    
     <!-- JSP 페이지 내 스크립트 부분 -->
     <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -110,6 +136,7 @@
                             eventCol.classList.add('col');
                             
                             var eventDiv = document.createElement('div');
+                            // "festival-card" 클래스에 연보라 테두리와 둥근 모서리, 마우스 오버 효과 적용됨
                             eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
                             
                             // 이미지 URL: 업로드 폴더에 있는 파일을 가리킴
@@ -119,15 +146,18 @@
                             console.log("생성된 이미지 URL:", imageUrl);
                             
                             eventDiv.innerHTML = 
-                                '<img src="' + imageUrl + '" alt="' + fest.feName + '" ' +
+                                '<img src="' + imageUrl + '" alt="" ' +
                                 'class="card-img-top" style="height: 200px; object-fit: cover;">' +
                                 '<div class="card-body">' +
                                     '<h5 class="card-title">' + fest.feName + '</h5>' +
-                                    '<p class="card-text"><strong>기간:</strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-                                    '<p class="card-text"><strong>위치:</strong> ' + fest.feAddress + '</p>' +
-                                    // "자세히 보기" 버튼: 컨트롤러에 매핑된 URL로 이동
-                                   '<a href="' + contextPath + '/fest/details" class="btn btn-primary">자세히 보기</a>' +
+                                    '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                                    '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
                                 '</div>';
+                            
+                            // 카드 전체 클릭 시, 상세 페이지로 이동 (축제 ID를 쿼리 파라미터로 전달)
+                            eventDiv.onclick = function() {
+                                window.location.href = contextPath + '/fest/details?feId=' + fest.feId;
+                            };
                             
                             eventCol.appendChild(eventDiv);
                             rowDiv.appendChild(eventCol);
@@ -135,7 +165,7 @@
                         
                         eventDetailsEl.appendChild(rowDiv);
                     } else {
-                        eventDetailsEl.innerHTML = 
+                    	eventDetailsEl.innerHTML = 
                             '<div class="alert alert-info" role="alert">' +
                             '해당 날짜에 진행하는 축제가 없습니다.' +
                             '</div>';

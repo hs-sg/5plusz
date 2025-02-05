@@ -20,7 +20,7 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     
-        <!-- 정적 리소스 매핑 설정 -->
+    <!-- 정적 리소스 매핑 설정 -->
    <mvc:resources mapping="/uploads/**" 
                location="file:C:/Users/asc19/eclipse-workspace/teamproject/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
 
@@ -33,10 +33,7 @@
     -->
     <mvc:resources location="/static/" mapping="/**" />
     <mvc:resources mapping="/attachments/**" location="file:///C:/uploads/" />
-
-    
-    
-    
+       
     <!-- 뷰 리졸버: Spring MVC에서 사용하는 뷰(JSP)를 찾기 위한 설정. -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/" />
