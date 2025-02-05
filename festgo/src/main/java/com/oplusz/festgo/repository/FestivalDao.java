@@ -49,12 +49,6 @@ public interface FestivalDao {
 	// fe_id로 축제 삭제
 	Integer deleteFestivalByFeId(Integer feId);
 	
-	// fe_id로 축제 승인 요청 삭제
-	Integer deleteFestivalRequestByFeId(Integer feId);
-	
-	// fe_id로 축제 이미지 삭제
-	Integer deleteFestivalImageByFeId(Integer feId);
-	
 //	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
 
 }

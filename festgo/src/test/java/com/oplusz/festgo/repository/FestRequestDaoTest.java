@@ -26,12 +26,12 @@ public class FestRequestDaoTest {
 		Assertions.assertEquals(approveResult, 1);
 	}
 	
-//	@Test
-//	public void testRefuseSponsorMemberByMeId() {
-//		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 61);
-//		log.debug(refuseResult.toString());
-//		Assertions.assertEquals(refuseResult, 1);
-//	}
+	@Test
+	public void testRefuseFestivalByMeId() {
+		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 117);
+		log.debug(refuseResult.toString());
+		Assertions.assertEquals(refuseResult, 1);
+	}
 	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
 }

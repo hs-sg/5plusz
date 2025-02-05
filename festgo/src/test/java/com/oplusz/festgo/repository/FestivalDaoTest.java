@@ -125,11 +125,7 @@ public class FestivalDaoTest {
 	
 	// @Test
 	public void testDeleteFestivalByFeId() {
-		Integer imageDelResult = festivalDao.deleteFestivalImageByFeId(21);
-		Integer requestDelResult = festivalDao.deleteFestivalRequestByFeId(21);
 		Integer festivalDelResult = festivalDao.deleteFestivalByFeId(21);
-		Assertions.assertEquals(1, imageDelResult);
-		Assertions.assertEquals(1, requestDelResult);
 		Assertions.assertEquals(1, festivalDelResult);
 	} //-> 아직 임시 테스트중 좋아요하고 댓글쪽도 같이 삭제 해야됨.
 	

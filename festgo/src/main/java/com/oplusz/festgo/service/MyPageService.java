@@ -111,14 +111,12 @@ public class MyPageService {
 		return meId;
 	}
 	
-	// feId로 축제 삭제하기 -> 댓글, 좋아요도 삭제해야함 아직 미완성
+	// feId로 축제 삭제하기
 	public Integer deleteFestivalByFeId(Integer feId) {
 		log.debug("deleteFestivalByFeId(feId={}", feId);
 		
-		Integer ImageDelResult = festivalDao.deleteFestivalImageByFeId(feId);
-		Integer RequestDelResult = festivalDao.deleteFestivalRequestByFeId(feId);
 		Integer FestivalDelResult = festivalDao.deleteFestivalByFeId(feId);
-		log.debug("ImageDelResult={}, RequestDelResult={}, FestivalDelResult={}", ImageDelResult, RequestDelResult, FestivalDelResult);
+		log.debug("FestivalDelResult={}", FestivalDelResult);
 		
 		return FestivalDelResult;
 	}
@@ -143,6 +141,16 @@ public class MyPageService {
 		return appFestivalResult;
 	}
 	
+	// 축제 거절하기
+	public Integer refuseFestivalByFeId(Integer feId, String frCause) {
+		log.debug("refuseFestivalByFeId(feId={}", feId);
+		
+		Integer refFestivalResult = festRequestDao.refuseFestivalByMeId(frCause, feId);
+		log.debug("result refFestivalResult = {}", refFestivalResult);
+		
+		return refFestivalResult;
+	}
+	
 	// 스폰서 멤버 승인하기
 	public Integer approveSponsorMemberByMeId(Integer meId) {
 		log.debug("approveSponsorMemberByMeId(meId={}", meId);
@@ -153,7 +161,7 @@ public class MyPageService {
 		return appSponsorResult;
 	}
 	
-	// 스폰서 멤버 삭제하기
+	// 스폰서 멤버 거절하기
 	public Integer refuseSponsorMemberByMeId(Integer meId, String srCause) {
 		log.debug("refuseSponsorMemberByMeId(meId={}", meId);
 		
@@ -162,4 +170,25 @@ public class MyPageService {
 		
 		return refSponsorResult;
 	}
+	
+	// 로그인된 아이디에서 비밀번호 변경하기
+	public Integer updatePasswordByUsername(String meUsername, String mePassword) {
+		log.debug("updatePasswordByUsername(meUsername={}, mePassword={}", meUsername, mePassword);
+		
+		Integer updatePasswordResult = memberDao.updatePasswordByUsername(mePassword, meUsername);
+		log.debug("result updatePasswordResult = {}", updatePasswordResult);
+		
+		return updatePasswordResult;
+	}
+	
+	// 로그인된 아이디 삭제하기
+	public Integer deleteMemberByUsername(String meUsername) {
+		log.debug("deleteMemberByUsername(meUsername={}", meUsername);
+		
+		Integer deleteMemberResult = memberDao.deleteMemberByUsername(meUsername);
+		log.debug("result deleteMemberResult = {}", deleteMemberResult);
+		
+		return deleteMemberResult;
+	}
+	
 }
