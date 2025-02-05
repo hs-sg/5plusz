@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oplusz.festgo.domain.Member;
+import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.dto.FestRequestRefuseDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
@@ -22,11 +23,11 @@ import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 import com.oplusz.festgo.dto.MemberSignInDto;
 import com.oplusz.festgo.dto.SponRequestRefuseDto;
 import com.oplusz.festgo.service.MyPageService;
+import com.oplusz.festgo.service.PostService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy.annotation.Post;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +36,7 @@ import oracle.jdbc.proxy.annotation.Post;
 public class MyPageController {
 
 	private final MyPageService myPageService;
+	private final PostService postService;
 	
 	// 프로필 정보 가져오기
 	@GetMapping("/profile/{signedInUser}")
@@ -105,6 +107,16 @@ public class MyPageController {
 		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
 		
 		return ResponseEntity.ok(festivals);
+	}
+	
+	// 마이페이지 상에 관리자가 볼 전체 글 목록 가져오기
+	@GetMapping("/aposts/")
+	public ResponseEntity<List<Post>> getAllPosts() {
+		log.debug("getAllPosts()");
+		
+		List<Post> posts = postService.read();
+		
+		return ResponseEntity.ok(posts);
 	}
 	
 	// 마이페이지 상에 관리자가 볼 승인 대기중인 사업자 아이디 리스트 가져오기

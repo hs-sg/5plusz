@@ -33,13 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
         btnToggleFestivalList.style.color = 'blue';
         divFestivalList.style.display = 'block';
         
-        FestivalList()
+        festivalList();
     });
 
     btnTogglePostList.addEventListener('click', () => {
         allBtnAndDivDisable();
         btnTogglePostList.style.color = 'blue';
         divPostList.style.display = 'block';
+        
+        postList();
     });
 
     btnToggleCommentList.addEventListener('click', () => {
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // 로그인된 아이디 권한별 축제 리스트 가져오기
-    function FestivalList() {
+    function festivalList() {
         switch(role) {
             case `1` : // 일반유저
                 console.log("user");
@@ -250,6 +252,103 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = '../';
             })
          })
+    }
+    
+    function postList(){
+        let html = '';
+        let addHtml = '';
+        addHtml = `
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성날짜</th>
+                                <th>조회수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <div class="divPost">
+        `
+        const divPost = document.querySelector('div.divPost');
+        switch(role) {
+            case `1`:
+            case `2`:
+                const usUri = `../api/mypage/usposts/${signedInUser}`;
+                
+                axios
+                .get(usUri)
+                .then((response) => {
+                    getUSPostList(response.data);
+                })
+                .error((error) => { console.log(error)} );
+            case `3`:
+                
+                const aUri = `../api/mypage/aposts/`;
+                
+                axios
+                .get(aUri)
+                .then((response) => {
+                    if(response.data == '') {
+                        notPostList();
+                        return;
+                    }
+                    getAPostList(response.data, divPost);
+                })
+                .error((error) => { console.log(error)} );
+        }
+        addHtml += `
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `
+        html = addHtml;
+        divPostList.innerHTML = html;
+    }
+    
+    function notPostList() {
+        const tbodyPostList = document.querySelector('tbody.tbodyPostList');
+        tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
+    }
+    
+    function getUSPostList(data){
+        /*<c:forEach items="${posts}" var="p">
+            <tr>
+                <td>${p.poId}</td>
+                <td>
+                    <c:url var="postDetailsPage" value="/post/details">
+                        <c:param name="poId" value="${p.poId}"/>
+                    </c:url>
+                    <a href="${postDetailsPage}">${p.poTitle}</a>
+                </td>
+                <td>${p.poAuthor}</td>
+                <td>${p.poModifiedTime}</td>
+                <td>${p.poViews}</td>
+            </tr>
+        </c:forEach>*/
+    }
+    
+    function getAPostList(data, divPost)
+    {
+        let html = ``
+        for(const post of data) {
+            let addHtml = `
+                <tr>
+                    <td>${post.poId}</td>
+                    <td>${post.poAuthor}</td>
+                    <td>${post.poModifiedTime}</td>
+                    <td>${post.poViews}</td>
+                </tr>
+            `
+            html += addHtml;
+        }
+        console.log(html); 
+        divPost.innerHTML = html;
     }
     
     function getUFestivalList(data) {
