@@ -172,8 +172,11 @@
 
             <!-- 참가비 -->
             <div class="mb-3">
-                <label for="feFee" class="form-label">축제비용</label>
-                <input type="text" class="form-control" id="feFee" name="feFee" placeholder="참가비" required>
+                <label for="feFeeType" class="form-label">축제비용</label>
+                <select class="form-select" id="feFeeType" name="feFeeType">
+                    <option value="paid">유료</option>
+                    <option value="free">무료</option>
+                </select>
             </div>
 
             <!-- 테마 선택 -->
@@ -197,7 +200,7 @@
             <!-- 내용 -->
             <div class="mb-3">
                 <label for="feContents" class="form-label">내용</label>
-                <textarea class="form-control" id="feContents" name="feContents" rows="5" placeholder="내용" required></textarea>
+                <textarea class="form-control" id="feContents" name="feContents" rows="5" placeholder="축제 비용이 유료이면 1인기준 성인, 어린이, 노약자 등 금액을 상세히 적어주시기 바랍니다." required></textarea>
             </div>
 
             <!-- 홈페이지 -->

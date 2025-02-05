@@ -60,6 +60,15 @@ public class FestivalService {
 		return FestivalWithImagesDto.builder().festival(festival).images(images).build();
 	}
 	
+	// 상세보기 서비스
+	public Festival read(Integer feId) {
+		log.debug("read = {}", feId);
+		
+		Festival festival = festivalsDao.selectFestivalById(feId);
+		
+		return festival;
+	}
+	
 	  /**
      * 지정된 기간 (start ~ end, 형식: yyyy-MM-dd) 내의 축제 정보를 조회하여 반환합니다.
      * FullCalendar가 자동으로 start, end 파라미터를 전달할 때 사용합니다.
