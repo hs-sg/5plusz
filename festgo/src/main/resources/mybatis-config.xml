@@ -8,18 +8,31 @@
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
-
-    
     
     <typeAliases>
+    
+    
+        <typeAlias type="com.oplusz.festgo.domain.Post" alias="Post" />
+        <typeAlias type="com.oplusz.festgo.domain.Review" alias="Review" />
+        <typeAlias type="com.oplusz.festgo.domain.Member" alias="Member"/>
+        <typeAlias type="com.oplusz.festgo.domain.Festival" alias="Festival"/>
+        <typeAlias type="com.oplusz.festgo.domain.FestRequest" alias="FestRequest"/>
+        <typeAlias type="com.oplusz.festgo.domain.FestivalImage" alias="FestivalImage" />
+        <typeAlias type="com.oplusz.festgo.domain.Likes" alias="Likes" />
+        <typeAlias type="com.oplusz.festgo.domain.Location" alias="Location" />
+        <typeAlias type="com.oplusz.festgo.domain.MemberRole" alias="MemberRole" />
+        <typeAlias type="com.oplusz.festgo.domain.PostAttachment" alias="PostAttachment" />
+        <typeAlias type="com.oplusz.festgo.domain.PostCategory" alias="PostCategory" />
+        <typeAlias type="com.oplusz.festgo.domain.SponRequest" alias="SponRequest" />
+        <typeAlias type="com.oplusz.festgo.domain.Theme" alias="Theme" />
         <typeAlias type="com.oplusz.festgo.domain.Post" alias="Post" />
         <typeAlias type="com.oplusz.festgo.dto.PostCreateDto" alias="PostCreateDto" />
         <typeAlias type="com.oplusz.festgo.domain.PostAttachment" alias="PostAttachment"/>
         <typeAlias type="com.oplusz.festgo.dto.PostUpdateDto" alias="PostUpdateDto" />
         <typeAlias type="com.oplusz.festgo.dto.PostWithAttachmentsDto" alias="PostWithAttachmentsDto" />
         
-        
+
     </typeAliases>
-     
+
 
 </configuration>

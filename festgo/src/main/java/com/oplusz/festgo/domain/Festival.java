@@ -15,8 +15,11 @@ public class Festival {
     private String feName;
     private LocalDateTime feStartDate;
     private LocalDateTime feEndDate;
-    private String lcId;
+    private Integer lcId;
     private String feAddress;
+    private String fePostcode;
+    private String feDetailAddress;
+    private String feExtraAddress;
     private String fePhone;
     private String meSponsor;
     private String feFee;
