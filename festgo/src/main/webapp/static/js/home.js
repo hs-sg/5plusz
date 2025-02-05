@@ -84,33 +84,44 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data && data.length > 0) {
                 const rowDiv = document.createElement('div');
                 rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
-
+                
                 data.forEach(function(fest) {
                     var eventCol = document.createElement('div');
                     eventCol.classList.add('col');
-
+                    
                     var eventDiv = document.createElement('div');
+                    // "festival-card" 클래스에 연보라 테두리와 둥근 모서리, 마우스 오버 효과 적용됨
                     eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-
-                    eventDiv.innerHTML =
-                        '<img src="' + contextPath + '/uploads/' + fest.feImageMain + '" alt="' + fest.feName + '" ' +
+                    
+                    // 이미지 URL: 업로드 폴더에 있는 파일을 가리킴
+                    var imageUrl = fest.feImageMain 
+                        ? contextPath + '/uploads/' + fest.feImageMain 
+                        : contextPath + '/resources/images/default-festival.jpg';
+                    console.log("생성된 이미지 URL:", imageUrl);
+                    
+                    eventDiv.innerHTML = 
+                        '<img src="' + imageUrl + '" alt="" ' +
                         'class="card-img-top" style="height: 200px; object-fit: cover;">' +
                         '<div class="card-body">' +
-                        '<h5 class="card-title">' + fest.feName + '</h5>' +
-                        '<p class="card-text"><strong>기간:</strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-                        '<p class="card-text"><strong>위치:</strong> ' + fest.feAddress + '</p>' +
-                        '<a href="#" class="btn btn-primary">자세히 보기</a>' +
+                            '<h5 class="card-title">' + fest.feName + '</h5>' +
+                            '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                            '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
                         '</div>';
-
+                    
+                    // 카드 전체 클릭 시, 상세 페이지로 이동 (축제 ID를 쿼리 파라미터로 전달)
+                    eventDiv.onclick = function() {
+                        window.location.href = contextPath + '/fest/details?feId=' + fest.feId;
+                    };
+                    
                     eventCol.appendChild(eventDiv);
                     rowDiv.appendChild(eventCol);
                 });
-
+                
                 eventDetailsEl.appendChild(rowDiv);
             } else {
-                eventDetailsEl.innerHTML =
+                eventDetailsEl.innerHTML = 
                     '<div class="alert alert-info" role="alert">' +
-                    '검색 조건을 만족하는 축제가 없습니다.' +
+                    '해당 날짜에 진행하는 축제가 없습니다.' +
                     '</div>';
             }
         })

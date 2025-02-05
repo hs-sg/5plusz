@@ -47,7 +47,15 @@
     <!-- 축제 검색 -->
     <select id="selectFestivalForSearch" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
         <bind name="searchKeyword" value="'%' + keyword + '%'" />
-        select * from festival
+        select 
+            fe_id AS feId,
+            fe_name AS feName,
+            TO_CHAR(fe_start_date, 'YYYY-MM-DD') AS feStartDate,
+            TO_CHAR(fe_end_date, 'YYYY-MM-DD') AS feEndDate,
+            fe_contents AS feContents,
+            fe_image_main AS feImageMain,
+            fe_address AS feAddress
+        from festival
         where upper(fe_name) like upper(#{searchKeyword})
         <if test="month != null">
             and to_char(fe_start_date, 'mm') = #{month} and to_char(fe_end_date, 'mm') = #{month}   
