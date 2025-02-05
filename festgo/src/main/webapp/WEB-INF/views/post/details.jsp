@@ -57,15 +57,21 @@
                             <label class="form-label" for="content">내용</label>
                             <div class="form-control" id="content" style="min-height: 200px; white-space: pre-wrap; overflow-y: auto;">
                                 ${post.poContent}
-                                <c:if test="${not empty imageAttachments}">
-                                    <br>
-                                    <c:forTokens var="image" items="${imageAttachments}" delims="," >
-                                        <img src="/attachments/${image}" 
-                                             alt="첨부 이미지" class="img-fluid rounded mt-2" 
-                                             style="max-width: 100%; height: auto;" />
-                                    </c:forTokens>
-                                </c:if>
                             </div>
+                            <!-- 이미지 미리보기 -->
+                        <c:if test="${not empty imageAttachments}">
+                            <div class="mt-3">
+                                <h5>이미지 미리보기</h5>
+                                <div id="previewPoContentContainer" class="d-flex flex-wrap">
+                                    <c:forTokens var="image" items="${fn:trim(imageAttachments)}" delims="," >
+                                        <c:if test="${not empty image}">
+                                            <img src="/uploads/${image}" class="img-thumbnail me-2" style="max-width: 200px; height: auto;" alt="첨부 이미지">
+                                        </c:if>
+                                    </c:forTokens>
+                                </div>
+                            </div>
+                        </c:if>
+                            
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="author">작성자</label>
@@ -116,5 +122,8 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
             crossorigin="anonymous">
     </script>
+    
+        <c:url var="postImagePreview" value="/js/post-image-preview.js" /> 
+        <script src="${postImagePreview}"></script>
 </body>
 </html>
