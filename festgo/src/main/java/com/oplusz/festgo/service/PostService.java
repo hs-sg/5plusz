@@ -89,7 +89,7 @@ public class PostService {
 	public int create(PostCreateDto dto, List<MultipartFile> files) {
 		log.debug("create(dto={}, files={})", dto, files);
 
-		// [임시 설정] 로그인 기능 없이 테스트하기 위해 역할을 직접 설정
+		/* [임시 설정] 로그인 기능 없이 테스트하기 위해 역할을 직접 설정
 		int mrId = 3; // ⚠️ 테스트할 때 바꿔서 사용 (1: 일반, 2: 사업자, 3: 관리자)
 
 		// 사용자의 역할에 따라 pc_id 설정
@@ -100,7 +100,7 @@ public class PostService {
 		} else {
 			dto.setPcId(1); // 일반 사용자 및 사업자는 무조건 일반글(1)
 		}
-
+*/
 		// 게시글 저장 후 poId 가져오기
 		int result = postDao.insert(dto);
 		if (result == 0) {
