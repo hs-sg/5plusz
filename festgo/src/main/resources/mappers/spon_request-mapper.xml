@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.SponRequestDao">
+    <!-- 회원가입요청 -->
+    <insert id="insertSponRequest">
+        insert into spon_request(me_id, sr_approval)
+        values(#{meId}, #{srApproval})
+    </insert>
+    
+    <!-- 회원가입요청 승인 여부 확인 -->
+    <select id="selectByMeId" resultType="SponRequest">
+        select * from spon_request where me_id = #{meId}
+    </select>
+</mapper>

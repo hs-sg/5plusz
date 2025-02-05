@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.MemberDao">
+
+    <!-- 로그인 -->
+    <select id="selectByUsernameAndPassword" resultType="Member">
+        with approved_member as (
+            select * 
+            from member m
+                inner join spon_request sr on m.me_id = sr.me_id
+        )
+        select * from approved_member where me_username = #{meUsername} and me_password = #{mePassword}
+    </select>
+
+    <!-- 회원가입 -->
+    <insert id="insertMember">
+        insert into member(me_username, me_password, me_email, me_sponsor, mr_id, me_created_time, me_accessed_time)
+        values(#{meUsername}, #{mePassword}, #{meEmail}, #{meSponsor}, #{mrId}, systimestamp, systimestamp)
+    </insert>
+    
+    <!-- username으로 검색 -->
+    <select id="selectByUsername" resultType="Member">
+        select * from member where me_username = #{meUsername}
+    </select>
+    
+    <!-- email로 검색 -->
+    <select id="selectByEmail" resultType="Member">
+        select * from member where me_email = #{meEmail}    
+    </select>
+    
+    <!-- sponsor로 검색 -->
+    <select id="selectBySponsor" resultType="Member">
+        select * from member where me_sponsor = #{meSponsor}
+    </select>
+    
+    <!-- 희성 작성 시작 -->
+    
+    <!-- 마이페이지 진입용 -->
+    <!-- member_role이랑 조인된 테이블에서 username으로 찾기-->
+    <!-- 멤버id, 아이디, 이메일, 업체명, 아이디생성날짜, 권한id, 권한명 -->
+    <select id="selectMemberJoinRoleByUsername" parameterType="String" resultType="com.oplusz.festgo.dto.MemberSelectJoinRoleDto" >
+        select me_id, me_username, me_email, me_sponsor, me_created_time, member.mr_id, mr_roles 
+        from member 
+        inner join member_role on member.mr_id = member_role.mr_id 
+        where me_username = #{meUsername}
+    </select>
+    
+    <delete id="deleteMemberByUsername">
+        delete from member where me_username = #{meUsername}
+    </delete>
+    
+    <delete id="deleteSponRequestByUsername">
+        delete from spon_request where me_usernam = #{meUsername}
+    </delete>
+    
+    <!-- 승인 대기중인 스폰서 목록 찾기 -->
+    <select id="selectMemberJoinSponRequestBySrApproval">
+        select member.me_id, me_username, me_sponsor, me_email, me_created_time 
+        from member 
+        inner join spon_request on member.me_id = spon_request.me_id 
+        where sr_approval = 0 
+        order by me_created_time
+    </select>
+    
+    <!-- 희성 작성 끝 -->
+    
+</mapper>

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SponRequest {
     private Integer srId;
-    private Integer mId;
+    private Integer meId;
     private Integer srApproval;
     private String srCause;
 }

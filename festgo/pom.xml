@@ -26,10 +26,20 @@
         <lombok-version>1.18.36</lombok-version>
         <mybatis-version>3.5.19</mybatis-version>
         <mybatis-spring-version>3.0.4</mybatis-spring-version>
+        <multipart-version>1.5</multipart-version>
     </properties>
 
     <!-- 의존성(라이브러리) 설정 -->
+    
     <dependencies>
+    
+        <!-- multipart 라이브러리 사용하기 위해 설정-->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${multipart-version}</version>
+        </dependency>
+    
         <!-- Jakarta EE. Tomcat 11에서 실행되는 서블릿 (라이브러리) 버전 -->
         <dependency>
             <groupId>jakarta.servlet</groupId>

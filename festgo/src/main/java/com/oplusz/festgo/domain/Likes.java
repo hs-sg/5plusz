@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Likes {
-    private Integer lId;
-    private Integer fId;
-    private Integer mId;
+    private Integer liId;
+    private Integer feId;
+    private Integer meId;
 }
