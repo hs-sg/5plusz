@@ -20,44 +20,8 @@
         <!-- Swiper CSS -->
         <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
             
-        <style>
-            .searchArea #searchText {
-                border: none;
-                border-bottom: 1px solid #1A1A24;
-            }
-            .searchArea #searchBtn {
-                width: 20px;
-                height: 20px;
-                background: url(https://kfescdn.visitkorea.or.kr/kfes/resources/img/search_box_btn.png) no-repeat center;
-                background-size: 20px 20px;
-                border: none;
-            }
-            .keyword a {
-                color: #80808a;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-sizing: border-box;
-                padding: 0 16px;
-                height: 100%;
-                border-radius: 99px;
-                border: 1px solid #80808a;
-            }
-            .keyword ul {
-                flex-wrap: wrap;
-                gap: 8px;
-                display: flex;
-                margin-top: 15px;
-                list-style: none;
-            }
-            .keyword li {
-                text-align: -webkit-match-parent;
-            }
-            .swiper {
-                width: 600px;
-                height: 300px;
-            }
-        </style>
+        <c:url var="homeCSS" value="/css/home.css"/>
+        <link href="${ homeCSS }" rel="stylesheet"/>
     </head>
     <body>
         <div class="container-fluid">
@@ -70,61 +34,21 @@
                 <div class="mainVisual">
                     <!--<div class="bg-info" id="backgroundImage"></div>-->
                     <div class="innerVisual">
-                        <div id="carouselExampleIndicators" class="carousel slide">
-                            <div class="carousel-indicators">
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="0" class="active"
-                                    aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="1"
-                                    aria-label="Slide 2"></button>
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="2"
-                                    aria-label="Slide 3"></button>
+                        <div class="swiper mainVisualSwiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">Slide 1</div>
+                                <div class="swiper-slide">Slide 2</div>
+                                <div class="swiper-slide">Slide 3</div>
+                                <div class="swiper-slide">Slide 4</div>
+                                <div class="swiper-slide">Slide 5</div>
+                                <div class="swiper-slide">Slide 6</div>
+                                <div class="swiper-slide">Slide 7</div>
+                                <div class="swiper-slide">Slide 8</div>
+                                <div class="swiper-slide">Slide 9</div>
                             </div>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 1</text>
-                                    </svg>
-                                </div>
-                                <div class="carousel-item">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 2</text>
-                                    </svg>
-                                </div>
-                                <div class="carousel-item">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 3</text>
-                                    </svg>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev"
-                                type="button"
-                                data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next"
-                                type="button"
-                                data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-pagination"></div>
                         </div>
                     </div>                
                 </div>
@@ -136,33 +60,43 @@
                     <div class="col-sm-3">
                         <div class="input-group">
                             <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectTime">
+                            <select class="form-select" id="selectTime" name="month">
                                 <option selected>시기</option>
-                                <option value="1">1월</option>
+                                <% // 드롭박스에 시기(1~12월)를 입력
+                                for (int i = 1; i <= 12; i++) { %>
+                                <option value="<%=i%>"><%=i%>월</option>
+                                <% } %>
                             </select>
                         </div>
                     </div>
+                    
                     <div class="col-sm-3">
                         <div class="input-group">
                             <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectRegion">
+                            <select class="form-select" id="selectLocation" name="lcId">
                                 <option selected>지역</option>
-                                <option value="1">서울</option>
+                                <c:forEach var="lc" items="${ locations }">
+                                    <option value="${ lc.lcId }">${ lc.lcName }</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
+                    
                     <div class="col-sm-3">
                         <div class="input-group">
                             <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectTheme">
+                            <select class="form-select" id="selectTheme" name="theId">
                                 <option selected>테마</option>
-                                <option value="1">눈꽃</option>
+                                <c:forEach var="the" items="${ themes }">
+                                    <option value="${ the.theId }">${ the.theName }</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
+                    
                     <div class="col-sm-3">
                         <div class="searchArea">
-                            <input id="searchText" name="searchText" class="searchLine" title="검색"
+                            <input class="searchLine" id="searchText" name="keyword" title="검색"
                                 value placeholder="검색어를 입력해주세요."/>
                             <button type="button" id="searchBtn"></button>
                         </div>
@@ -187,6 +121,11 @@
                 </div>
             </section>
             <!--// 추천 축제 -->
+            <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
+            <section>
+                <div id="eventDetails" class="my-4 text-center"></div>
+            </section>
+            <!--// AJAX로 불러온 축제 정보들이 표시될 영역 -->
             <!-- HOT & NEW 축제 -->
             <section>
                 <div class="mt-3">
@@ -194,7 +133,7 @@
                         <em>HOT & NEW</em> 축제
                     </h2>
                     <!-- Slider main container -->
-                    <div class="swiper">
+                    <div class="swiper festivalSwiper">
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <!-- Slides -->
@@ -227,6 +166,12 @@
         
         <!-- Swiper JS -->
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        
+        <!-- JSP 페이지 내 스크립트 부분 -->
+        <script>
+            // JSP EL을 통해 컨텍스트 경로를 자바스크립트 변수에 저장
+            var contextPath = '${pageContext.request.contextPath}';
+        </script> 
         
         <c:url var="homeJS" value="/js/home.js"/>
         <script src="${ homeJS }"></script>
