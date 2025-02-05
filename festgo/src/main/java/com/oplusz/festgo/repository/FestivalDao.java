@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.oplusz.festgo.dto.FestivalCalendarDto;
+import com.oplusz.festgo.dto.FestivalSearchDto;
 import com.oplusz.festgo.domain.Festival;
 
 @Mapper
@@ -31,7 +32,9 @@ public interface FestivalDao {
     List<FestivalCalendarDto> findFestivalsBetween(@Param("startDate") String startDate,
                                                     @Param("endDate") String endDate);
 
-	
+	// 축제 검색
+    List<FestivalCalendarDto> selectFestivalForSearch(FestivalSearchDto dto);
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기

@@ -44,11 +44,37 @@ document.addEventListener('DOMContentLoaded', () => {
     
 //------------------------- 축제 검색 결과 관련 ------------------------- 
     const eventDetailsEl = document.getElementById('eventDetails');
+    const formSearchFestival = document.getElementById('searchFestival');
+    
+    // form 태그의 기본 동작 대신 fetch를 활용 
+    formSearchFestival.addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼 제출 기본 동작 방지
+        
+        const formData = new FormData(this); // 폼 데이터를 FormData 객체로 변환
+        console.log(...formData.entries());
+        const jsonData = {};
+        
+        formData.forEach((value, key) => {
+            jsonData[key] = value;
+        });
+        
+        // 검색 조건을 입력하지 않았을 경우 경고 메세지를 출력
+        if (jsonData.month === '' && jsonData.lcId === '' && jsonData.theId === '' && jsonData.keyword === '') {
+            eventDetailsEl.innerHTML =
+                '<div class="alert alert-info" role="alert">' +
+                '검색 조건을 선택 혹은 입력해주세요.' +
+                '</div>';
+            return;
+        }
 
-    var festivalsUrl = '<c:url value="/api/festivals" />';
-
-    // 축제 상세정보 불러오는 fetch() 메서드
-    fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
+        // 축제 상세정보 불러오는 fetch() 메서드
+        fetch('api/search', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonData)            
+        })
         .then(response => response.json())
         .then(data => {
             console.log("받은 데이터:", data);
@@ -95,7 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 '축제 정보를 불러오는데 실패했습니다.' +
                 '</div>';
         });
-                    
+    });    
+            
 });
 
 

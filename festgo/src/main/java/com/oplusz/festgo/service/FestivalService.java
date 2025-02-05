@@ -9,6 +9,7 @@ import com.oplusz.festgo.dto.FestivalCalendarDto;
 import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.dto.FestivalCreateDto;
+import com.oplusz.festgo.dto.FestivalSearchDto;
 import com.oplusz.festgo.dto.FestivalWithImagesDto;
 import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
@@ -67,6 +68,14 @@ public class FestivalService {
     public List<FestivalCalendarDto> getFestivalsBetweenDates(String start, String end) {
         log.debug("getFestivalsBetweenDates() invoked with start: {}, end: {}", start, end);
         return festivalsDao.findFestivalsBetween(start, end);
+    }
+    
+    // 축제 검색
+    public List<FestivalCalendarDto> read(FestivalSearchDto dto) {
+    	log.debug("read(dto={})", dto);
+    	if(dto.getKeyword() == null) dto.setKeyword("");
+    	
+    	return festivalsDao.selectFestivalForSearch(dto);
     }
 
 
