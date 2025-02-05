@@ -32,6 +32,10 @@
     폴더위치를 webapp/static/ 폴더에 찾을 수 있도록 하기 위한 설정.
     -->
     <mvc:resources location="/static/" mapping="/**" />
+    <mvc:resources mapping="/attachments/**" location="file:///C:/uploads/" />
+
+    
+    
     
     <!-- 뷰 리졸버: Spring MVC에서 사용하는 뷰(JSP)를 찾기 위한 설정. -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
