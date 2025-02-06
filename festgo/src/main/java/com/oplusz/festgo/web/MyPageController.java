@@ -1,5 +1,6 @@
 package com.oplusz.festgo.web;
 
+import java.util.Enumeration;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -63,6 +64,7 @@ public class MyPageController {
 		return ResponseEntity.ok(updatePasswordResult);
 	}
 	
+	// 로그인된 멤버 탈퇴하기
 	@DeleteMapping("/delmem/{signedInUser}")
 	public ResponseEntity<Integer> deleteMemberByUsername(@PathVariable("signedInUser") String meUsername) {
 		log.debug("deleteMemberByUsername(meUsername= {})", meUsername);
@@ -109,6 +111,16 @@ public class MyPageController {
 		return ResponseEntity.ok(festivals);
 	}
 	
+	// 마이페이지 상에 로그인한 유저, 스폰서가 등록한 글 목록 가져오기
+//	@GetMapping("/usposts/{signedInUser}")
+//	public ResponseEntity<List<Post>> getWrittenPostsByMember(@PathVariable("signedInUser") String username) {
+//		log.debug("getWrittenPostsByMember(username={})", username);
+//		
+//		List<Post> posts = postService.readByMeUsername(username);
+//		
+//		return ResponseEntity.ok(posts);
+//	}
+	
 	// 마이페이지 상에 관리자가 볼 전체 글 목록 가져오기
 	@GetMapping("/aposts/")
 	public ResponseEntity<List<Post>> getAllPosts() {
@@ -117,6 +129,44 @@ public class MyPageController {
 		List<Post> posts = postService.read();
 		
 		return ResponseEntity.ok(posts);
+	}
+	
+	// 마이페이지 상에 관리자가 볼 전체 글 목록 페이지 마다 원하는 개수로 가져오기
+	@GetMapping("/aposts/{pagenum}")
+	public ResponseEntity<List<Post>> getVarialbePostsByPageNum(@PathVariable("pagenum") String pageNum) {
+		log.debug("getVarialbePostsByPageNum(pageNum={})", pageNum);
+		
+		List<Post> posts = postService.readVariableByPageNum(10, Integer.parseInt(pageNum));
+		
+		return ResponseEntity.ok(posts);
+	}
+	
+	// 마이페이지 상에 유저, 스폰서가 볼 작성 글목록 페이지 마다 원하는 개수로 가져오기
+	@GetMapping("/usposts/{pagenum}")
+	public ResponseEntity<List<Post>> getVarialbePostsByPageNumAndUsername(@PathVariable("pagenum") String pageNum, HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
+		log.debug("getVarialbePostsByPageNumAndUsername(pageNum={}, username={})", pageNum, username);
+		List<Post> posts = postService.readVariableByPageNumAndUsername(10, Integer.parseInt(pageNum), username);
+		
+		return ResponseEntity.ok(posts);
+	}
+	
+	//  마이페이지 상에 전체 글 갯수 가져오기
+	@GetMapping("/cntaposts/")
+	public ResponseEntity<Integer> getCountAllPosts() {
+		log.debug("getCountAllPosts()");
+		Integer countPosts = postService.countAllPosts();
+		
+		return ResponseEntity.ok(countPosts);
+	}
+	
+	//  마이페이지 상에 유저나 사업자가 등록한 갯수 가져오기
+	@GetMapping("/cntaposts/{signedInUser}")
+	public ResponseEntity<Integer> getCountAllPostsByUsername(@PathVariable("signedInUser") String username) {
+		log.debug("getCountAllPostsByUsername()");
+		Integer countPosts = postService.getCountAllPostsByUsername(username);
+		
+		return ResponseEntity.ok(countPosts);
 	}
 	
 	// 마이페이지 상에 관리자가 볼 승인 대기중인 사업자 아이디 리스트 가져오기

@@ -15,32 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const divCommentList = document.getElementById('divCommentList');
     const divSponsorCheckList = document.getElementById('divSponsorCheckList');
     
+    myProfile();
+    
     btnToggleMyProfile.addEventListener('click', () => {
         allBtnAndDivDisable();
-        btnToggleMyProfile.style.color = 'blue';
-        divMyProfile.style.display = 'block';
-        
-        const uri = `../api/mypage/profile/${signedInUser}`;
-            
-        axios
-        .get(uri)
-        .then((response) => { getMyProfile(response.data); })
-        .catch((error) => { console.log(error); });
+        myProfile();
     });
     
     btnToggleFestivalList.addEventListener('click', () => {
         allBtnAndDivDisable();
-        btnToggleFestivalList.style.color = 'blue';
-        divFestivalList.style.display = 'block';
-        
         festivalList();
     });
 
     btnTogglePostList.addEventListener('click', () => {
         allBtnAndDivDisable();
-        btnTogglePostList.style.color = 'blue';
-        divPostList.style.display = 'block';
-        
         postList();
     });
 
@@ -53,19 +41,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if(role == 3) {
         btnToggleSponsorCheckList.addEventListener('click', () => {
             allBtnAndDivDisable();
-            btnToggleSponsorCheckList.style.color = 'blue';
-            divSponsorCheckList.style.display = 'block';
-            
             SponsorCheckList();
         });
     }
     
-    
-    
     /* 콜백 함수 --------------------------------------------------------------------------- */
+    
+    // json 시간에서 문자열로 날짜만 가져오기
+    function getDate(jsonTime){
+        return jsonTime[0] + "년 " + jsonTime[1] + "월 " + jsonTime[2] + "일"
+    }
+    
+    // json 시간에서 문자열로 날짜시간 가져오기
+    function getDateTime(jsonTime){
+        const date = new Date(jsonTime[0], jsonTime[1], jsonTime[2], jsonTime[3], jsonTime[4], jsonTime[5]);
+        const formattedDate = `${date.getFullYear()}. ${date.getMonth()}. ${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        return formattedDate;
+    }
+    
+/*    // 날짜 시간이 한자리면 0채워 주기
+    function addZero(data) {
+        console.log(data.length);
+        if(data.length === 1) {
+            const newData = `0${data}`;
+            return newData;
+        }
+        return data;
+    }*/
+    
+    // 로그인된 아이디 프로필 가져오기
+    function myProfile() {
+        btnToggleMyProfile.style.color = 'blue';
+        divMyProfile.style.display = 'block';
+        const uri = `../api/mypage/profile/${signedInUser}`;
+                    
+        axios
+        .get(uri)
+        .then((response) => { getMyProfile(response.data); })
+        .catch((error) => { console.log(error); });
+    }
     
     // 사업자 아이디 승인목록 불러오기
     function SponsorCheckList() {
+        btnToggleSponsorCheckList.style.color = 'blue';
+        divSponsorCheckList.style.display = 'block';
         const uri = `../api/mypage/sponcheck/`;
                 
         axios
@@ -76,6 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 로그인된 아이디 권한별 축제 리스트 가져오기
     function festivalList() {
+        btnToggleFestivalList.style.color = 'blue';
+        divFestivalList.style.display = 'block';
         switch(role) {
             case `1` : // 일반유저
                 console.log("user");
@@ -120,8 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
         divFestivalList.style.display = 'none';
         btnTogglePostList.style.color = 'black';
         divPostList.style.display = 'none';
-        btnToggleCommentList.style.color = 'black';
-        divCommentList.style.display = 'none';
+        if(role == 1 || role == 3) {
+            btnToggleCommentList.style.color = 'black';
+            divCommentList.style.display = 'none';
+        }
         if(role == 3) {
             btnToggleSponsorCheckList.style.color = 'black';
             divSponsorCheckList.style.display = 'none';
@@ -130,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     /* 로그인한 프로필 출력 */
     function getMyProfile(data) {
-        const createdDate = data.meCreatedTime[0] + "년 " + data.meCreatedTime[1] + "월 " + data.meCreatedTime[2] + "일 ";
+        const createdDate = getDate(data.meCreatedTime);
         let html = `
             <table>
                 <tr>
@@ -251,15 +274,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(response);
                 window.location.href = '../';
             })
+            .catch((error) => { console.log(error); });
          })
     }
     
-    function postList(){
+    function postList() {
+        btnTogglePostList.style.color = 'blue';
+        divPostList.style.display = 'block';
         let html = '';
-        let addHtml = '';
-        addHtml = `
-            <div class="card-body">
-                <div class="table-responsive">
+        let pageCount = 1;
+        
+        getPostNum(function(totalPostNum) {
+            const maxPage = Math.ceil(totalPostNum / 10);
+            console.log(`maxPage=${maxPage}`);
+            html = `
+                <div class="table-responsive m-2">
                     <table class="table table-striped table-hover">
                         <thead class="table-primary">
                             <tr>
@@ -270,24 +299,139 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <th>조회수</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <div class="divPost">
-        `
-        const divPost = document.querySelector('div.divPost');
+                        <tbody class="tbodyPostList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btnPrevious btn btn-outline-dark">Previous</button>
+                    <input type="button" class="btnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                    <input type="button" class="btnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                    <input type="button" class="btnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                    <button type="button" class="btnNext btn btn-outline-dark">Next</button>
+                </div>
+            `;
+            
+            divPostList.innerHTML = html;
+            
+            const inputFirstPaging = document.querySelector('input.btnFirstPaging');
+            const inputSecondPaging = document.querySelector('input.btnSecondPaging');
+            const inputThirdPaging = document.querySelector('input.btnThirdPaging');
+            const btnPrevious = document.querySelector('button.btnPrevious');
+            const btnNext = document.querySelector('button.btnNext');
+            
+            let pageNum = inputFirstPaging.value;
+            btnPrevious.disabled = true;
+            if(maxPage <= pageCount) btnNext.disabled = true;
+            makeingPostList(pageNum);
+            
+            inputFirstPaging.addEventListener('click', () => {
+                pageNum = inputFirstPaging.value;
+                makeingPostList(pageNum);
+            });
+            inputSecondPaging.addEventListener('click', () => {
+                pageNum = inputSecondPaging.value;
+                makeingPostList(pageNum);
+            });
+            inputThirdPaging.addEventListener('click', () => {
+                pageNum = inputThirdPaging.value;
+                makeingPostList(pageNum);
+            });
+            btnPrevious.addEventListener('click', () => {
+                const result = decreasePageBtn(pageCount);
+                pageCount = result;
+            });
+            btnNext.addEventListener('click', () => {
+                const result = increasePageBtn(pageCount, maxPage);
+                pageCount = result;
+            });
+        });
+    }
+
+    function getPostNum(callback) {
         switch(role) {
             case `1`:
             case `2`:
-                const usUri = `../api/mypage/usposts/${signedInUser}`;
+                const usUri = `../api/mypage/cntaposts/${signedInUser}`;
+                axios
+                .get(usUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+            case `3`:
+                const aUri = `../api/mypage/cntaposts/`;
+                axios
+                .get(aUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+        }
+        
+        
+    }
+    
+    function increasePageBtn(pageCount, maxPage) {
+        pageCount += 3
+        console.log(pageCount);
+        const btnPrevious = document.querySelector('button.btnPrevious');
+        const btnNext = document.querySelector('button.btnNext');
+        const inputFirstPaging = document.querySelector('input.btnFirstPaging');
+        const inputSecondPaging = document.querySelector('input.btnSecondPaging');
+        const inputThirdPaging = document.querySelector('input.btnThirdPaging');
+        btnPrevious.disabled = false;
+        if(maxPage <= pageCount) btnNext.disabled = true;
+        inputFirstPaging.value = pageCount;
+        inputSecondPaging.value = pageCount+1;
+        inputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+    
+    function decreasePageBtn(pageCount) {
+        pageCount -= 3
+        console.log(pageCount);
+        const btnPrevious = document.querySelector('button.btnPrevious');
+        const btnNext = document.querySelector('button.btnNext');
+        const inputFirstPaging = document.querySelector('input.btnFirstPaging');
+        const inputSecondPaging = document.querySelector('input.btnSecondPaging');
+        const inputThirdPaging = document.querySelector('input.btnThirdPaging');
+        btnNext.disabled = false;
+        if(pageCount <= 2) btnPrevious.disabled = true;
+        inputFirstPaging.value = pageCount;
+        inputSecondPaging.value = pageCount+1;
+        inputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+    
+    function makeingPostList(pageNum) {    
+        switch(role) {
+            case `1`:
+            case `2`:
+                const usUri = `../api/mypage/usposts/${pageNum}`;
                 
                 axios
                 .get(usUri)
                 .then((response) => {
+                    if(response.data == '') {
+                        notPostList();
+                        return;
+                    }
                     getUSPostList(response.data);
                 })
-                .error((error) => { console.log(error)} );
+                .catch((error) => { console.log(error)} );
+                break;
             case `3`:
-                
-                const aUri = `../api/mypage/aposts/`;
+                getAPostList
+                const aUri = `../api/mypage/aposts/${pageNum}`;
                 
                 axios
                 .get(aUri)
@@ -296,19 +440,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         notPostList();
                         return;
                     }
-                    getAPostList(response.data, divPost);
+                    getAPostList(response.data);
                 })
-                .error((error) => { console.log(error)} );
+                .catch((error) => { console.log(error)} );
+                break;
         }
-        addHtml += `
-                            </div>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        `
-        html = addHtml;
-        divPostList.innerHTML = html;
     }
     
     function notPostList() {
@@ -316,39 +452,44 @@ document.addEventListener('DOMContentLoaded', () => {
         tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
     }
     
-    function getUSPostList(data){
-        /*<c:forEach items="${posts}" var="p">
-            <tr>
-                <td>${p.poId}</td>
-                <td>
-                    <c:url var="postDetailsPage" value="/post/details">
-                        <c:param name="poId" value="${p.poId}"/>
-                    </c:url>
-                    <a href="${postDetailsPage}">${p.poTitle}</a>
-                </td>
-                <td>${p.poAuthor}</td>
-                <td>${p.poModifiedTime}</td>
-                <td>${p.poViews}</td>
-            </tr>
-        </c:forEach>*/
-    }
-    
-    function getAPostList(data, divPost)
+    function getUSPostList(data)
     {
         let html = ``
+        const tbodyPostList = document.querySelector("tbody.tbodyPostList");
         for(const post of data) {
+            const date = getDateTime(post.poModifiedTime);
             let addHtml = `
                 <tr>
                     <td>${post.poId}</td>
+                    <td><a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a></td>
                     <td>${post.poAuthor}</td>
-                    <td>${post.poModifiedTime}</td>
+                    <td>${date}</td>
+                    <td>${post.poViews}</td>
+                </tr>
+            `
+        html += addHtml;
+    }
+    tbodyPostList.innerHTML = html;
+    }
+    
+    function getAPostList(data)
+    {
+        let html = ``
+        const tbodyPostList = document.querySelector("tbody.tbodyPostList");
+        for(const post of data) {
+            const date = getDateTime(post.poModifiedTime);
+            let addHtml = `
+                <tr>
+                    <td>${post.poId}</td>
+                    <td><a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a></td>
+                    <td>${post.poAuthor}</td>
+                    <td>${date}</td>
                     <td>${post.poViews}</td>
                 </tr>
             `
             html += addHtml;
         }
-        console.log(html); 
-        divPost.innerHTML = html;
+        tbodyPostList.innerHTML = html;
     }
     
     function getUFestivalList(data) {
@@ -364,13 +505,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         for(const festival of data) {
-            const period = festival.feStartDate[0] + "년 " + festival.feStartDate[1] + "월 " + festival.feStartDate[2] + "일 ~ " +
-                            festival.feEndDate[0] + "년 " + festival.feEndDate[1] + "월 " + festival.feEndDate[2] + "일";
+            const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             const imgUrl = `${contextPath}/uploads/${festival.feImageMain}`;
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="https://picsum.photos/300/300?random=1" class="rounded float-start" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -421,12 +561,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         for(const festival of data) {
-            const period = festival.feStartDate[0] + "년 " + festival.feStartDate[1] + "월 " + festival.feStartDate[2] + "일 ~ " +
-                            festival.feEndDate[0] + "년 " + festival.feEndDate[1] + "월 " + festival.feEndDate[2] + "일";
+            const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
+            console.log(`/uploads/${festival.feImageMain}`);
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="https://picsum.photos/300/300?random=1" class="rounded float-start" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -486,12 +626,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         for(const festival of data) {
-            const period = festival.feStartDate[0] + "년 " + festival.feStartDate[1] + "월 " + festival.feStartDate[2] + "일 ~ " +
-                            festival.feEndDate[0] + "년 " + festival.feEndDate[1] + "월 " + festival.feEndDate[2] + "일";
+            const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="https://picsum.photos/300/300?random=1" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>

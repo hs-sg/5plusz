@@ -43,6 +43,16 @@ public interface PostDao {
 	
 	// 검색
 	List<Post> search(PostSearchDto dto);
-
+	
+	
+//	희성 작성 시작
+	
+	List<Post> readByMeUsername(String meUsername);
+	List<Post> readVariable(Integer minPostNum, Integer maxPostNum);
+	List<Post> readVariableByMeUsername(Integer minPostNum, Integer maxPostNum, String meUsername);
+	Integer countAllPosts();
+	Integer countPostsByMeUsername(String meUsername);
+	
+//	희성 작성 끝
 
 }
