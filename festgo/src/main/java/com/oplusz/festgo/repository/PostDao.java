@@ -44,6 +44,9 @@ public interface PostDao {
 	// 특정 게시글의 첨부파일 리스트 조회
 	List<String> selectAttachmentsByPostId(@Param("poId") Integer poId);
 
+	List<PostAttachment> selectAttachmentsByPostIdWithObject(@Param("poId") Integer poId);
+	
+	
 
 
 }

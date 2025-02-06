@@ -3,8 +3,11 @@ package com.oplusz.festgo.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,13 +56,13 @@ public class PostService {
 	        throw new RuntimeException("게시글이 존재하지 않습니다.");
 	    }
 
-	    // 첨부파일 리스트 조회
-	    List<String> attachments = postDao.selectAttachmentsByPostId(poId);
+	    // 첨부파일 리스트 조회를 PostAttachment로 변경
+	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
 	    log.debug("게시글 정보: {}", post);
 	    log.debug("첨부파일 리스트: {}", attachments);
 
-	    return new PostWithAttachmentsDto(post, attachments);
+	    return new PostWithAttachmentsDto(post, attachments); // Attachments as List<PostAttachment>
 	}
 
 
@@ -70,17 +73,16 @@ public class PostService {
 	public PostWithAttachmentsDto getPostWithoutIncreasingViews(Integer poId) {
 	    log.debug("getPostWithoutIncreasingViews(poId={})", poId);
 
-	    // 조회수 증가 없이 게시글 조회
+	    // 게시글 조회
 	    Post post = postDao.selectById(poId);
 	    if (post == null) {
 	        throw new RuntimeException("게시글이 존재하지 않습니다.");
 	    }
 
-	    // 첨부파일 리스트 조회
-	    List<String> attachments = postDao.selectAttachmentsByPostId(poId);
+	    // 첨부파일 조회를 PostAttachment 객체 리스트로 변경
+	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
-	    // DTO 반환 (게시글과 첨부파일 리스트 포함)
-	    return new PostWithAttachmentsDto(post, attachments);  // Attachments as List<String>
+	    return new PostWithAttachmentsDto(post, attachments);  // PostAttachment 리스트로 변경
 	}
 
 
@@ -106,10 +108,10 @@ public class PostService {
 		}
 */
 		// 게시글 저장 후 poId 가져오기
-		int result = postDao.insert(dto);
-		if (result == 0) {
-			throw new RuntimeException("게시글 저장 실패");
-		}
+	    int result = postDao.insert(dto);
+	    if (result == 0 || dto.getPoId() == null) {
+	        throw new RuntimeException("게시글 저장 실패");
+	    }
 
 		log.debug("게시글 생성 성공, ID: {}", dto.getPoId()); // poId 확인
 		if (dto.getPoId() == null) {
@@ -132,7 +134,9 @@ public class PostService {
 
 			// poId가 null이 아닌지 확인 후 저장
 			if (!attachments.isEmpty()) {
-				postDao.insertAttachment(attachments);
+			    for (PostAttachment attachment : attachments) {
+			        postDao.insertAttachment(Collections.singletonList(attachment)); 
+			    }
 			}
 		}
 
@@ -143,23 +147,16 @@ public class PostService {
 	 * 파일 저장 처리
 	 */
 	private String saveFile(MultipartFile file) throws IllegalStateException, IOException {
-		// 파일 이름 생성 (UUID로 고유 이름 설정)
-		String originalFileName = file.getOriginalFilename();
-		String savedFileName = UUID.randomUUID() + "_" + originalFileName;
-
-		// 저장 경로 생성
-		File saveFile = new File(UPLOAD_DIR, savedFileName);
-
-		// 저장 디렉토리 없으면 생성
-		if (!saveFile.getParentFile().exists()) {
-			saveFile.getParentFile().mkdirs();
-		}
-
-		// 파일 저장
-		file.transferTo(saveFile);
-		log.debug("파일 저장 완료: {}", saveFile.getAbsolutePath());
-
-		return savedFileName;
+	    ensureUploadDirectoryExists(); // 디렉토리 존재 확인
+	    
+	    String originalFileName = file.getOriginalFilename();
+	    String savedFileName = UUID.randomUUID() + "_" + originalFileName;
+	    
+	    File saveFile = new File(UPLOAD_DIR, savedFileName);
+	    file.transferTo(saveFile);
+	    log.debug("파일 저장 완료: {}", saveFile.getAbsolutePath());
+	    
+	    return savedFileName;
 	}
 
 	/**
@@ -178,39 +175,61 @@ public class PostService {
 
 	@Transactional
 	public void updatePost(PostUpdateDto dto, List<MultipartFile> newFiles) {
-		log.debug("updatePost(dto={}, newFiles={})", dto, newFiles);
+	    log.debug("updatePost(dto={}, newFiles={})", dto, newFiles);
 
-		// 1. 게시글 내용 수정
-		int result = postDao.update(dto.toEntity());
-		if (result == 0) {
-			throw new RuntimeException("게시글 수정 실패");
-		}
+	    // 1. 게시글 내용 수정
+	    int result = postDao.update(dto.toEntity());
+	    if (result == 0) {
+	        throw new RuntimeException("게시글 수정 실패");
+	    }
 
-		// 2. 기존 첨부파일 삭제 (체크한 파일만 삭제)
-		if (dto.getRemoveAttachmentIds() != null && !dto.getRemoveAttachmentIds().isEmpty()) {
-			log.debug("삭제할 첨부파일 ID 리스트: {}", dto.getRemoveAttachmentIds());
-			postDao.deleteAttachmentsByIds(dto.getRemoveAttachmentIds());
-		}
+	    // 2. 기존 첨부파일 삭제 (빈 리스트 및 null 제거 후 실행)
+	    List<Integer> removeAttachmentIds = dto.getRemoveAttachmentIds();
+	    if (removeAttachmentIds != null) {
+	        removeAttachmentIds = removeAttachmentIds.stream()
+	            .filter(Objects::nonNull) // null 값 제거
+	            .collect(Collectors.toList());
 
-		// 3. 새로운 첨부파일 추가
-		if (newFiles != null && !newFiles.isEmpty()) {
-			List<PostAttachment> attachments = new ArrayList<>();
-			for (MultipartFile file : newFiles) {
-				try {
-					String savedFileName = saveFile(file);
-					attachments.add(PostAttachment.builder().poId(dto.getPoId()) // 게시글 ID 설정
-							.paAttachments(savedFileName).build());
-				} catch (IOException e) {
-					log.error("파일 저장 실패", e);
-					throw new RuntimeException("파일 저장 실패: " + file.getOriginalFilename());
-				}
-			}
+	        if (!removeAttachmentIds.isEmpty()) { // 리스트가 비어있지 않은 경우만 실행
+	            postDao.deleteAttachmentsByIds(removeAttachmentIds);
+	        }
+	    }
+
+	    // 3. 새로운 첨부파일 추가 (빈 파일 방지)
+	    if (newFiles != null && !newFiles.isEmpty()) {
+	        List<PostAttachment> attachments = new ArrayList<>();
+	        for (MultipartFile file : newFiles) {
+	            if (!file.isEmpty()) {
+	                try {
+	                    String savedFileName = saveFile(file);
+	                    attachments.add(PostAttachment.builder()
+	                            .poId(dto.getPoId())
+	                            .paAttachments(savedFileName)
+	                            .build());
+	                } catch (IOException e) {
+	                    log.error("파일 저장 실패", e);
+	                    throw new RuntimeException("파일 저장 실패: " + file.getOriginalFilename());
+	                }
+	            }
+	        }
 
 			if (!attachments.isEmpty()) {
-				postDao.insertAttachment(attachments);
+			    for (PostAttachment attachment : attachments) {
+			        postDao.insertAttachment(Collections.singletonList(attachment)); 
+			    }
 			}
-		}
+	    }
 	}
+
+	
+	// 파일 저장 시 디렉토리 존재 여부 확인 및 생성
+	private void ensureUploadDirectoryExists() {
+	    File directory = new File(UPLOAD_DIR);
+	    if (!directory.exists()) {
+	        directory.mkdirs();
+	    }
+	}
+
 
 	// 삭제하기 서비스
 	@Transactional

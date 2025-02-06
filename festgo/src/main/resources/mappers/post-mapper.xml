@@ -33,13 +33,11 @@
    
     <!-- 첨부파일 저장 -->
     
-    <insert id="insertAttachment" parameterType="java.util.List">
-        INSERT INTO post_attachment (po_id, pa_attachments)
-        VALUES 
-        <foreach collection="list" item="attachment" separator=",">
-            (#{attachment.poId}, #{attachment.paAttachments})
-        </foreach>
-    </insert>
+<insert id="insertAttachment" parameterType="java.util.List">
+    <foreach collection="list" item="attachment" separator=";">
+        INSERT INTO post_attachment (po_id, pa_attachments) VALUES (#{attachment.poId}, #{attachment.paAttachments})
+    </foreach>
+</insert>
     
     <!-- 첨부파일 불러오기 -->
     <select id="selectAttachmentsByPostId" resultType="string">
@@ -60,13 +58,14 @@
     </update>
     
     <!-- 첨부파일 삭제 -->
-    <delete id="deleteAttachmentsByIds" parameterType="java.util.Map">
-        DELETE FROM post_attachment
-        WHERE pa_id IN
-        <foreach item="paId" collection="ids" open="(" separator="," close=")">
-            #{paId}
-        </foreach>
-    </delete>
+<delete id="deleteAttachmentsByIds" parameterType="java.util.List">
+    DELETE FROM post_attachment
+    WHERE pa_id IN
+    <foreach item="paId" collection="ids" open="(" separator="," close=")" >
+        #{paId}
+    </foreach>
+</delete>
+
     
     <!-- 게시글 삭제 -->
     <delete id="deleteById" parameterType="java.lang.Integer">
@@ -104,6 +103,12 @@
         order by po_id desc
     </select>
     
+    <!-- resultType을 PostAttachment로 지정하여 PostAttachment 객체로 매핑하도록 설정 -->
+    <select id="selectAttachmentsByPostIdWithObject" resultType="PostAttachment">
+	  SELECT PA_ID, PO_ID, PA_ATTACHMENTS
+	  FROM post_attachment
+	  WHERE po_id = #{poId}
+	</select>
 
 
 </mapper>

@@ -1,7 +1,6 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const modifyForm = document.querySelector('form#modifyForm');
-    const inputId = document.querySelector("input[name='poId']"); // poId 가져오기
+    const inputId = document.querySelector("input[name='poId']");
     const inputTitle = document.querySelector('input#title');
     const textareaContent = document.querySelector('textarea#content');
     const btnDelete = document.querySelector('button#btnDelete');
@@ -23,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 업데이트 버튼 클릭 이벤트
     if (btnUpdate) {
         btnUpdate.addEventListener('click', (e) => {
+            e.preventDefault(); // 기본 동작 방지
+
             const title = inputTitle.value.trim();
             const content = textareaContent.value.trim();
 
@@ -31,11 +32,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // 체크된 체크박스의 값을 수집
+            const removeFiles = Array.from(document.querySelectorAll('input[name="removeFiles"]:checked')).map(checkbox => checkbox.value);
+            console.log('Remove Files:', removeFiles); // 콘솔에 로그 출력
+
             if (confirm('변경된 내용을 저장할까요?')) {
+                // hidden input 추가
+                removeFiles.forEach(id => {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'removeFiles';
+                    hiddenInput.value = id;
+                    modifyForm.appendChild(hiddenInput);
+                });
+
                 modifyForm.method = 'post';
-                modifyForm.action = `/festgo/post/update`; // 절대 경로 설정
+                modifyForm.action = `/festgo/post/update`;
                 modifyForm.submit();
             }
+            // "취소" 버튼을 누른 경우 아무 작업도 하지 않고 페이지에 머무름
         });
     }
 });
