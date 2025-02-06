@@ -37,11 +37,6 @@ public class MemberDaoTest {
 	}
 	
 	// @Test
-	public void testDeleteMemberByUsername() {
-		Integer sponRequestDeleteResult = memberDao.deleteSponRequestByUsername(null);
-	} //-> 아직 미완서 멤버 삭제하려면 다른 테이블에서 삭제할 것들이 너무 많음.
-	
-	// @Test
 	public void testselectMemberJoinSponRequestBySrApproval() {
 		List<MemberSelectJoinRequestDto> sponsors = memberDao.selectMemberJoinSponRequestBySrApproval();
 		log.debug(sponsors.toString());

@@ -26,14 +26,26 @@
 				<div class="col-3">
 					<button class="btn" id="btnToggleMyProfile">내 프로필</button>
 					<br />
-					<button class="btn" id="btnToggleFestivalList">축제목록</button>
-					<br />
-					<button class="btn" id="btnTogglePostList">글목록</button>
-					<br />
-					<button class="btn" id="btnToggleCommentList">댓글목록</button>
-					<br />
+					<c:if test="${member.mrId eq 1 }">
+                        <button class="btn" id="btnToggleFestivalList">찜한축제</button>
+	                    <br />
+	                    <button class="btn" id="btnTogglePostList">작성글</button>
+	                    <br />
+	                    <button class="btn" id="btnToggleCommentList">작성리뷰</button>
+                    </c:if>
+					<c:if test="${member.mrId eq 2 }">
+				        <button class="btn" id="btnToggleFestivalList">등록축제</button>
+                        <br />
+                        <button class="btn" id="btnTogglePostList">작성글</button>
+                    </c:if>
 					<c:if test="${member.mrId eq 3 }">
-                        <button class="btn" id="btnToggleSponsorCheckList">사업자 승인목록</button>
+					    <button class="btn" id="btnToggleFestivalList">전체축제</button>
+                        <br />
+                        <button class="btn" id="btnTogglePostList">전체글</button>
+                        <br />
+                        <button class="btn" id="btnToggleCommentList">전체리뷰</button>
+                        <br />
+                        <button class="btn" id="btnToggleSponsorCheckList">사업자승인</button>
                     </c:if>
 				</div>
 				<div class="col">
