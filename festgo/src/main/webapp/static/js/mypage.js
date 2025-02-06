@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputSecondPaging = document.querySelector('input.btnSecondPaging');
         const inputThirdPaging = document.querySelector('input.btnThirdPaging');
         btnPrevious.disabled = false;
-        if(maxPage <= pageCount) btnNext.disabled = true;
+        if(maxPage >= pageCount) btnNext.disabled = true;
         inputFirstPaging.value = pageCount;
         inputSecondPaging.value = pageCount+1;
         inputThirdPaging.value = pageCount+2;
