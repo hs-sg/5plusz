@@ -233,17 +233,21 @@ public class PostService {
 	        pageSize = 5; // 기본값 설정
 	    }
 
-	    int startRow = (page - 1) * pageSize;
+	    // 공지사항은 항상 고정되도록 먼저 조회
+	    List<Post> notices = getNotices();
 
-	    log.debug("Fetching paged posts - startRow: {}, pageSize: {}", startRow, pageSize);
+	    int startRow = (page - 1) * pageSize + 1;
+	    int endRow = page * pageSize;
 
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("startRow", startRow);
-	    params.put("pageSize", pageSize);
+	    params.put("endRow", endRow);
 
+	    // 일반 게시글 조회
 	    List<Post> posts = postDao.selectPagedPosts(params);
 
 	    Map<String, Object> result = new HashMap<>();
+	    result.put("notices", notices);  // 공지사항은 무조건 포함
 	    result.put("posts", posts);
 	    result.put("currentPage", page);
 	    result.put("pageSize", pageSize);
@@ -253,18 +257,14 @@ public class PostService {
 	}
 
 
+
 	private int calculateTotalPages(int pageSize) {
 	    int totalCount = postDao.countPosts();
 	    return (int) Math.ceil((double) totalCount / pageSize);
 	}
 
 
-	private Object calculateTotalPages() {
-		int totalCount = postDao.countPosts(); // 전체 게시글 수 조회
-		int pageSize = 5; // 한 페이지에 표시할 게시글 수
-		return (int) Math.ceil((double) totalCount / pageSize);
-	}
-
+	
 	// 검색 & 페이징
 	
 	public Map<String, Object> searchWithPaging(PostSearchDto dto) {
@@ -292,15 +292,26 @@ public class PostService {
 	    if (totalPages == 0) {
 	        totalPages = 1;
 	    }
-
+	    List<Post> notices = getNotices();
 	    // 결과 반환
 	    Map<String, Object> result = new HashMap<>();
+	    result.put("notices", notices); 
 	    result.put("posts", posts);
 	    result.put("currentPage", dto.getPage());
 	    result.put("totalPages", totalPages);
 	    result.put("pageSize", dto.getPageSize());
 
 	    return result;
+	}
+
+	public List<Post> getNotices() {
+    log.debug("Fetching notices");
+    return postDao.selectNotices(); // 공지사항만 가져오는 메서드
+}
+
+	
+	public List<Post> getPagedPosts(Map<String, Object> params) {
+	    return postDao.selectPagedPosts(params);
 	}
 
 

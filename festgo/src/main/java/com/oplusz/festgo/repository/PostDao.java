@@ -53,4 +53,6 @@ public interface PostDao {
     // 검색된 게시글 개수 조회
     int countSearchResults(Map<String, Object> params);
 
+	List<Post> selectNotices();
+
 }

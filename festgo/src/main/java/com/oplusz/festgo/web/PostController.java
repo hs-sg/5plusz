@@ -1,5 +1,6 @@
 package com.oplusz.festgo.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.dto.PostCreateDto;
 import com.oplusz.festgo.dto.PostSearchDto;
 import com.oplusz.festgo.dto.PostUpdateDto;
@@ -34,24 +36,26 @@ public class PostController {
 	/**
 	 * 게시글 목록 조회 (페이징 포함)
 	 */
+	// 게시글 목록 조회 (공지사항 먼저 가져오기)
 	@GetMapping("/list")
 	public String getPagedPosts(@RequestParam(defaultValue = "1") int page,
-			@RequestParam(required = false) Integer pageSize, Model model) {
+	        @RequestParam(required = false) Integer pageSize, Model model) {
 
-		if (pageSize == null || pageSize <= 0) {
-			pageSize = 5; // 기본값 설정
-		}
+	    if (pageSize == null || pageSize <= 0) {
+	        pageSize = 5; // 기본값 설정
+	    }
 
-		log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
+	    Map<String, Object> result = postService.getPagedPosts(page, pageSize);
 
-		Map<String, Object> result = postService.getPagedPosts(page, pageSize);
-		model.addAttribute("posts", result.get("posts"));
-		model.addAttribute("currentPage", result.get("currentPage"));
-		model.addAttribute("totalPages", result.get("totalPages"));
-		model.addAttribute("pageSize", result.get("pageSize"));
+	    model.addAttribute("notices", result.get("notices"));
+	    model.addAttribute("posts", result.get("posts"));
+	    model.addAttribute("currentPage", result.get("currentPage"));
+	    model.addAttribute("pageSize", result.get("pageSize"));
+	    model.addAttribute("totalPages", result.get("totalPages"));
 
-		return "post/list";
+	    return "post/list"; 
 	}
+
 
 	/**
 	 * 게시글 상세 조회 (조회수 증가)
@@ -195,6 +199,7 @@ public class PostController {
 		log.debug("Page Size: {}", result.get("pageSize"));
 
 		// 모델에 결과 데이터 추가
+		model.addAttribute("notices", result.get("notices")); 
 		model.addAttribute("posts", result.get("posts"));
 		model.addAttribute("currentPage", result.get("currentPage"));
 		model.addAttribute("totalPages", result.get("totalPages"));
