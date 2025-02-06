@@ -1,6 +1,7 @@
 package com.oplusz.festgo.repository;
 
 import org.apache.ibatis.annotations.Param;
+
 import com.oplusz.festgo.domain.SponRequest;
 
 public interface SponRequestDao {

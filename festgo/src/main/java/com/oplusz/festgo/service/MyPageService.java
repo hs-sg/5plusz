@@ -3,10 +3,8 @@ package com.oplusz.festgo.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.oplusz.festgo.domain.Festival;
-import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;

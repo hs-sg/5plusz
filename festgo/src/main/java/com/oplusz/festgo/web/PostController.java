@@ -16,6 +16,7 @@ import com.oplusz.festgo.dto.PostCreateDto;
 import com.oplusz.festgo.dto.PostSearchDto;
 import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
+import com.oplusz.festgo.service.MyPageService;
 import com.oplusz.festgo.service.PostService;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,30 +30,28 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 
 	private final PostService postService;
-
+	private final MyPageService myPageService;
 	/**
 	 * 게시글 목록 조회 (페이징 포함)
 	 */
 	@GetMapping("/list")
 	public String getPagedPosts(@RequestParam(defaultValue = "1") int page,
-	                            @RequestParam(required = false) Integer pageSize,
-	                            Model model) {
+			@RequestParam(required = false) Integer pageSize, Model model) {
 
-	    if (pageSize == null || pageSize <= 0) {
-	        pageSize = 5; // 기본값 설정
-	    }
+		if (pageSize == null || pageSize <= 0) {
+			pageSize = 5; // 기본값 설정
+		}
 
-	    log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
+		log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
 
-	    Map<String, Object> result = postService.getPagedPosts(page, pageSize);
-	    model.addAttribute("posts", result.get("posts"));
-	    model.addAttribute("currentPage", result.get("currentPage"));
-	    model.addAttribute("totalPages", result.get("totalPages"));
-	    model.addAttribute("pageSize", result.get("pageSize"));
+		Map<String, Object> result = postService.getPagedPosts(page, pageSize);
+		model.addAttribute("posts", result.get("posts"));
+		model.addAttribute("currentPage", result.get("currentPage"));
+		model.addAttribute("totalPages", result.get("totalPages"));
+		model.addAttribute("pageSize", result.get("pageSize"));
 
-	    return "post/list";
+		return "post/list";
 	}
-
 
 	/**
 	 * 게시글 상세 조회 (조회수 증가)
@@ -81,36 +80,54 @@ public class PostController {
 	}
 
 	@GetMapping("/create")
-	public String showCreatePage() {
-		log.debug("GET create page");
-		return "post/create";
+	public String showCreatePage(HttpSession session, Model model) {
+	    // 로그인된 사용자 확인
+	    String signedInUser = (String) session.getAttribute("signedInUser");
+
+	    if (signedInUser == null) {
+	        return "redirect:/post/list?loginRequired=true"; // 로그인 요구 파라미터 추가
+	    }
+
+	    // 사용자 역할 가져오기 (DB 조회)
+	    Integer mrId = myPageService.readRoleIdByUsername(signedInUser);
+	    model.addAttribute("mrId", mrId);
+
+	    log.debug("로그인된 사용자: {}, 역할 ID: {}", signedInUser, mrId);
+
+	    return "post/create"; // 글쓰기 페이지로 이동
 	}
+
+
 
 	@PostMapping("/create")
 	public String create(@ModelAttribute PostCreateDto dto,
-			@RequestParam(value = "files", required = false) List<MultipartFile> files, HttpSession session) {
-		log.debug("POST create(dto={}, files={})", dto, files);
+	                     @RequestParam(value = "files", required = false) List<MultipartFile> files,
+	                     HttpSession session) {
+	    log.debug("POST create(dto={}, files={})", dto, files);
 
-		// 세션에서 사용자 역할(mrId) 가져오기
-		Integer mrId = (Integer) session.getAttribute("mrId");
-		if (mrId == null) {
-			mrId = 1; // 기본값: 일반 사용자
-		}
+	    // 로그인된 사용자 확인
+	    String signedInUser = (String) session.getAttribute("signedInUser");
+	    if (signedInUser == null) {
+	        return "redirect:/user/signin";
+	    }
 
-		// pcId 값 설정 (관리자만 1 또는 2 선택 가능)
-		if (mrId != 3) {
-			dto.setPcId(1);
-		} else {
-			if (dto.getPcId() == null || (dto.getPcId() != 1 && dto.getPcId() != 2)) {
-				dto.setPcId(1);
-			}
-		}
+	    // 사용자의 mrId 조회
+	    Integer mrId = myPageService.readRoleIdByUsername(signedInUser);
+	    log.debug("로그인된 사용자의 mrId: {}", mrId);
 
-		log.debug("최종 pcId 값: {}", dto.getPcId());
+	    // 게시글 유형(pcId) 설정
+	    if (dto.getPcId() == null) {
+	        dto.setPcId((mrId == 3) ? 2 : 1); // 관리자(3) → 공지사항(2), 그 외 → 일반글(1)
+	    }
 
-		int result = postService.create(dto, files);
-		return (result > 0) ? "redirect:/post/list" : "error";
+	    log.debug("최종 pcId 값: {}", dto.getPcId());
+
+	    // 게시글 저장
+	    int result = postService.create(dto, files);
+	    return (result > 0) ? "redirect:/post/list" : "error";
 	}
+
+
 
 	@PostMapping("/update")
 	public String update(@ModelAttribute PostUpdateDto dto,
@@ -147,46 +164,45 @@ public class PostController {
 	 */
 	@GetMapping("/search")
 	public String search(@RequestParam(value = "category", required = false) String category,
-	        @RequestParam(value = "keyword", required = false) String keyword,
-	        @RequestParam(value = "page", defaultValue = "1") int page,
-	        @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
-	        Model model) {
-	    if (page < 1) {
-	        page = 1;
-	    }
+			@RequestParam(value = "keyword", required = false) String keyword,
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "pageSize", defaultValue = "5") int pageSize, Model model) {
+		if (page < 1) {
+			page = 1;
+		}
 
-	    log.debug("Parameter values - category: '{}', keyword: '{}', page: {}, pageSize: {}",
-	            category, keyword, page, pageSize);
+		log.debug("Parameter values - category: '{}', keyword: '{}', page: {}, pageSize: {}", category, keyword, page,
+				pageSize);
 
-	    // 검색 DTO 생성
-	    PostSearchDto dto = new PostSearchDto();
-	    dto.setCategory(category);
-	    dto.setKeyword(keyword);
-	    dto.setPage(page);
-	    dto.setPageSize(pageSize);
+		// 검색 DTO 생성
+		PostSearchDto dto = new PostSearchDto();
+		dto.setCategory(category);
+		dto.setKeyword(keyword);
+		dto.setPage(page);
+		dto.setPageSize(pageSize);
 
-	    log.debug("Created DTO: {}", dto); // DTO 생성 후 로그
+		log.debug("Created DTO: {}", dto); // DTO 생성 후 로그
 
-	    // 검색 및 페이징 결과 조회
-	    Map<String, Object> result = postService.searchWithPaging(dto);
-	    
-	    log.debug("Search result map: {}", result); // 결과 맵 로그
+		// 검색 및 페이징 결과 조회
+		Map<String, Object> result = postService.searchWithPaging(dto);
 
-	    // 모델에 결과 데이터 추가 전 값들 확인
-	    log.debug("Posts: {}", result.get("posts"));
-	    log.debug("Current Page: {}", result.get("currentPage"));
-	    log.debug("Total Pages: {}", result.get("totalPages"));
-	    log.debug("Page Size: {}", result.get("pageSize"));
+		log.debug("Search result map: {}", result); // 결과 맵 로그
 
-	    // 모델에 결과 데이터 추가
-	    model.addAttribute("posts", result.get("posts"));
-	    model.addAttribute("currentPage", result.get("currentPage"));
-	    model.addAttribute("totalPages", result.get("totalPages"));
-	    model.addAttribute("pageSize", result.get("pageSize"));
-	    model.addAttribute("category", category);
-	    model.addAttribute("keyword", keyword);
+		// 모델에 결과 데이터 추가 전 값들 확인
+		log.debug("Posts: {}", result.get("posts"));
+		log.debug("Current Page: {}", result.get("currentPage"));
+		log.debug("Total Pages: {}", result.get("totalPages"));
+		log.debug("Page Size: {}", result.get("pageSize"));
 
-	    return "post/list";
+		// 모델에 결과 데이터 추가
+		model.addAttribute("posts", result.get("posts"));
+		model.addAttribute("currentPage", result.get("currentPage"));
+		model.addAttribute("totalPages", result.get("totalPages"));
+		model.addAttribute("pageSize", result.get("pageSize"));
+		model.addAttribute("category", category);
+		model.addAttribute("keyword", keyword);
+
+		return "post/list";
 	}
 
 }
