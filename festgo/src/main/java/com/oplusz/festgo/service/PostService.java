@@ -228,24 +228,36 @@ public class PostService {
 	 * 페이징 목록 조회
 	 */
 
-	public Map<String, Object> getPagedPosts(int page, int pageSize) {
-		int startRow = (page - 1) * pageSize;
-		int endRow = page * pageSize;
+	public Map<String, Object> getPagedPosts(int page, Integer pageSize) {
+	    if (pageSize == null || pageSize <= 0) {
+	        pageSize = 5; // 기본값 설정
+	    }
 
-		Map<String, Object> params = new HashMap<>();
-		params.put("startRow", startRow);
-		params.put("endRow", endRow);
+	    int startRow = (page - 1) * pageSize;
 
-		List<Post> posts = postDao.selectPagedPosts(params);
+	    log.debug("Fetching paged posts - startRow: {}, pageSize: {}", startRow, pageSize);
 
-		Map<String, Object> result = new HashMap<>();
-		result.put("posts", posts);
-		result.put("currentPage", page);
-		result.put("pageSize", pageSize);
-		result.put("totalPages", calculateTotalPages());
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("startRow", startRow);
+	    params.put("pageSize", pageSize);
 
-		return result;
+	    List<Post> posts = postDao.selectPagedPosts(params);
+
+	    Map<String, Object> result = new HashMap<>();
+	    result.put("posts", posts);
+	    result.put("currentPage", page);
+	    result.put("pageSize", pageSize);
+	    result.put("totalPages", calculateTotalPages(pageSize));
+
+	    return result;
 	}
+
+
+	private int calculateTotalPages(int pageSize) {
+	    int totalCount = postDao.countPosts();
+	    return (int) Math.ceil((double) totalCount / pageSize);
+	}
+
 
 	private Object calculateTotalPages() {
 		int totalCount = postDao.countPosts(); // 전체 게시글 수 조회
@@ -258,15 +270,18 @@ public class PostService {
 	public Map<String, Object> searchWithPaging(PostSearchDto dto) {
 	    log.debug("Executing search query with category: {}, keyword: {}", dto.getCategory(), dto.getKeyword());
 
-	    int startRow = (dto.getPage() - 1) * dto.getPageSize() + 1;
-	    int endRow = dto.getPage() * dto.getPageSize();
+	    if (dto.getPageSize() == null || dto.getPageSize() <= 0) {
+	        dto.setPageSize(5); // 기본값 설정
+	    }
+
+	    int startRow = (dto.getPage() - 1) * dto.getPageSize();
 
 	    // 페이징 및 검색 조건을 매개변수로 전달
 	    Map<String, Object> params = new HashMap<>();
 	    params.put("category", dto.getCategory());
 	    params.put("keyword", dto.getKeyword());
 	    params.put("startRow", startRow);
-	    params.put("endRow", endRow);
+	    params.put("pageSize", dto.getPageSize());
 
 	    // 검색 쿼리 호출
 	    List<Post> posts = postDao.searchWithPaging(params);
@@ -274,7 +289,6 @@ public class PostService {
 
 	    // 전체 페이지 수 계산
 	    int totalPages = (int) Math.ceil((double) totalResults / dto.getPageSize());
-	    
 	    if (totalPages == 0) {
 	        totalPages = 1;
 	    }
@@ -288,5 +302,6 @@ public class PostService {
 
 	    return result;
 	}
+
 
 }

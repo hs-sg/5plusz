@@ -35,18 +35,24 @@ public class PostController {
 	 */
 	@GetMapping("/list")
 	public String getPagedPosts(@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "5") int pageSize, Model model) {
+	                            @RequestParam(required = false) Integer pageSize,
+	                            Model model) {
 
-		log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
+	    if (pageSize == null || pageSize <= 0) {
+	        pageSize = 5; // 기본값 설정
+	    }
 
-		Map<String, Object> result = postService.getPagedPosts(page, pageSize);
-		model.addAttribute("posts", result.get("posts"));
-		model.addAttribute("currentPage", result.get("currentPage"));
-		model.addAttribute("totalPages", result.get("totalPages"));
-		model.addAttribute("pageSize", result.get("pageSize"));
+	    log.debug("Fetching paged posts - page: {}, pageSize: {}", page, pageSize);
 
-		return "post/list";
+	    Map<String, Object> result = postService.getPagedPosts(page, pageSize);
+	    model.addAttribute("posts", result.get("posts"));
+	    model.addAttribute("currentPage", result.get("currentPage"));
+	    model.addAttribute("totalPages", result.get("totalPages"));
+	    model.addAttribute("pageSize", result.get("pageSize"));
+
+	    return "post/list";
 	}
+
 
 	/**
 	 * 게시글 상세 조회 (조회수 증가)
