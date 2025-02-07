@@ -25,6 +25,18 @@
     		font-weight: bold !important;
    			color: skyblue !important;
 		}
+		
+		/* 🟢 년/월 타이틀 왼쪽으로 이동 */
+.fc-toolbar-title {
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    font-weight: bold !important;
+    width: 100% !important;
+    display: block !important;
+    position: relative !important;
+    transform: translateX(-100px) !important;  /* ✅ 왼쪽으로 20px 이동 */
+}
+		
         /* 클릭한 날짜 강조 스타일 */
         .fc-daygrid-day.fc-highlighted {
             background-color: #ffecd1 !important;
