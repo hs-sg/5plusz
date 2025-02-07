@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class FestivalDetailsController {
 
-    @GetMapping("/fest/details")
+    @GetMapping("/fest/detail")
     public String festivalDetails() {
         log.debug("festivalDetails()");
         
-        return "fest/details";
+        return "fest/detail";
     }
 }
 
