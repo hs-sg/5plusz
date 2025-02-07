@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oplusz.festgo.dto.FestivalCalendarDto;
-import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.dto.FestivalCalendarDto;
 import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.dto.FestivalWithImagesDto;
 import com.oplusz.festgo.repository.FestRequestDao;
@@ -15,8 +15,6 @@ import com.oplusz.festgo.repository.FestivalDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,6 +56,15 @@ public class FestivalService {
 
 		// 축제 정보와 이미지 생성
 		return FestivalWithImagesDto.builder().festival(festival).images(images).build();
+	}
+	
+	// 상세보기 서비스
+	public Festival read(Integer feId) {
+		log.debug("read = {}", feId);
+		
+		Festival festival = festivalsDao.selectFestivalById(feId);
+		
+		return festival;
 	}
 	
 	  /**

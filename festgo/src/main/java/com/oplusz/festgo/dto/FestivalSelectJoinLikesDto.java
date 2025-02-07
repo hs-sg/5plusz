@@ -1,11 +1,6 @@
 package com.oplusz.festgo.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import com.oplusz.festgo.domain.Festival;
-import com.oplusz.festgo.domain.FestivalImage;
-import com.oplusz.festgo.domain.Post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -30,7 +30,7 @@
         <typeAlias type="com.oplusz.festgo.domain.PostAttachment" alias="PostAttachment"/>
         <typeAlias type="com.oplusz.festgo.dto.PostUpdateDto" alias="PostUpdateDto" />
         <typeAlias type="com.oplusz.festgo.dto.PostWithAttachmentsDto" alias="PostWithAttachmentsDto" />
-        
+        <typeAlias type="com.oplusz.festgo.dto.PostSearchDto" alias="PostSearchDto" />
 
     </typeAliases>
 

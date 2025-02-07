@@ -21,6 +21,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnSignin = document.querySelector('button#btnSignin');
     btnSignin.addEventListener('click', signin);
+	/* --------------------(추가된 부분)-------------------- */
+	/*  글쓰기 버튼 클릭 시 로그인 후 이동할 URL 저장 */
+	    const postCreateLink = document.querySelector("a.btn-primary[href*='post/create']");
+	    if (postCreateLink) {
+	        postCreateLink.addEventListener("click", (event) => {
+	            if (!isUserLoggedIn()) {  // ⬅️ 유저 로그인 여부 체크하는 함수
+	                event.preventDefault(); // 기본 이동 막기
+	                sessionStorage.setItem("redirectAfterLogin", postCreateLink.getAttribute("href"));
+	                signinModal.show();
+	            }
+	        });
+	    }
     
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
@@ -45,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log(uri);
         axios
-        .post(uri, data)
+        .post(uri, data,{ withCredentials: true })  // 쿠키 포함하여 요청)
         .then((response) => {
             if(response.data === 0) {
                 divWarningText.innerHTML = '아이디 또는 비밀번호를 확인하세요.';
@@ -54,11 +66,31 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 console.log('data=' + response.data + ', username=' + meUsername);
                 signinModal.hide();
-                window.location.replace(window.location.href); //-> 로그인 성공하면 현재 보고있는 페이지로 redirect
-            }
-        })
+				
+				/* 추가: 세션 쿠키 확인 */
+		        console.log("세션 쿠키 확인:", document.cookie);
+				/* --------------------(추가된 부분)-------------------- */
+				/*  로그인 후 이동할 페이지 확인 */
+		        const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
+		        sessionStorage.removeItem("redirectAfterLogin");  // 사용 후 삭제
+
+		        if (redirectUrl && redirectUrl !== window.location.pathname) {
+		            console.log("🔄 로그인 후 이동할 페이지:", redirectUrl);
+		            window.location.href = redirectUrl;  //  해당 URL로 이동
+		        } else {
+		            console.log("🔄 로그인 후 새로고침!");
+		            window.location.replace(window.location.href);//-> 로그인 성공하면 현재 보고있는 페이지로 새로고침
+		        }
+		    }
+		})
+   
         .catch((error) => {
             console.log('error');
-        })
+        });
     }
-});
+		/* --------------------(추가된 부분)-------------------- */
+		 /*  로그인 여부 확인 함수 */
+		    function isUserLoggedIn() {
+		        return document.cookie.includes("JSESSIONID");  // 세션 쿠키 기반 체크
+		    }
+		});
