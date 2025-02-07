@@ -22,7 +22,7 @@
 
     <!-- 정적 리소스 매핑 설정 -->
    <mvc:resources mapping="/uploads/**" 
-               location="file:C:/Users/asc19/eclipse-workspace/teamproject/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
+               location="file:/C:/uploads"/>
 
 
 
