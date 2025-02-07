@@ -298,7 +298,7 @@ public class PostService {
 		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
 		Integer maxPostNum = pageNum * postNumberInList;
 		
-		List<Post> list = postDao.readVariable(minPostNum, maxPostNum);
+		List<Post> list = postDao.readPostVariable(minPostNum, maxPostNum);
 		log.debug("# of search result = {}", list.size());
 		
 		return list;
@@ -310,7 +310,7 @@ public class PostService {
 		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
 		Integer maxPostNum = pageNum * postNumberInList;
 		
-		List<Post> list = postDao.readVariableByMeUsername(minPostNum, maxPostNum, username);
+		List<Post> list = postDao.readPostVariableByMeUsername(minPostNum, maxPostNum, username);
 		log.debug("# of search result = {}", list.size());
 		
 		return list;
