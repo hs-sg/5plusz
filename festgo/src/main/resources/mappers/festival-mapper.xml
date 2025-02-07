@@ -33,8 +33,6 @@
         select * from festival where fe_id = #{feId}
     </select>
     
-
-      
     <!-- 특정 기간 내 축제 데이터 조회 -->
  
 <select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
@@ -76,7 +74,7 @@
         </if>
         offset #{startIndexNum} rows fetch first 12 rows only
     </select>
-    
+    <!--  -->
     <!-- 검색한 축제 개수 -->
     <select id="selectFestivalForReload" resultType="integer">
         <bind name="searchKeyword" value="'%' + keyword + '%'" />
