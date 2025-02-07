@@ -56,7 +56,6 @@ public class PostController {
 	    return "post/list"; 
 	}
 
-
 	/**
 	 * 게시글 상세 조회 (조회수 증가)
 	 */

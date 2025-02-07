@@ -257,7 +257,6 @@ public class PostService {
 	}
 
 
-
 	private int calculateTotalPages(int pageSize) {
 	    int totalCount = postDao.countPosts();
 	    return (int) Math.ceil((double) totalCount / pageSize);
@@ -266,7 +265,7 @@ public class PostService {
 
 	
 	// 검색 & 페이징
-	
+
 	public Map<String, Object> searchWithPaging(PostSearchDto dto) {
 	    log.debug("Executing search query with category: {}, keyword: {}", dto.getCategory(), dto.getKeyword());
 
@@ -308,11 +307,9 @@ public class PostService {
     log.debug("Fetching notices");
     return postDao.selectNotices(); // 공지사항만 가져오는 메서드
 }
-
 	
 	public List<Post> getPagedPosts(Map<String, Object> params) {
 	    return postDao.selectPagedPosts(params);
 	}
-
 
 }

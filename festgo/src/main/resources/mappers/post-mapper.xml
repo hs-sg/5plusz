@@ -78,42 +78,41 @@
     </select>
 
    <!-- 게시글 목록 조회 (공지사항 우선, 페이징) -->
-		<select id="selectPagedPosts" parameterType="map" resultType="com.oplusz.festgo.domain.Post">
-		    SELECT *
-		    FROM (
-		        SELECT 
-		            a.*, 
-		            ROWNUM rn
-		        FROM (
-		            SELECT *
-		            FROM post
-		            WHERE pc_id != 2  <!-- 공지사항 제외 -->
-		            ORDER BY po_created_time DESC
-		        ) a
-		        WHERE ROWNUM <![CDATA[<=]]> #{endRow}
-		    )
-		    WHERE rn >= #{startRow}
-		</select>
-		
-	<!-- 일반 게시글만 페이징 처리하여 조회 -->
-		<select id="selectPagedNormalPosts" resultType="Post">
-		    SELECT *
-		    FROM (
-		        SELECT post.*, ROWNUM AS rn
-		        FROM post 
-		        WHERE pc_id != 2  <!-- pc_id가 2가 아닌 글들만 -->
-		        ORDER BY pc_id DESC, po_created_time DESC
-		    )
-		    WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
-		</select>
-		
-	<!-- 일반 게시글 수 카운트 -->
-		<select id="countPosts" resultType="int">
-		    SELECT COUNT(*)
-		    FROM post
-		    WHERE pc_id != 2
-		</select>
-
+        <select id="selectPagedPosts" parameterType="map" resultType="com.oplusz.festgo.domain.Post">
+            SELECT *
+            FROM (
+                SELECT 
+                    a.*, 
+                    ROWNUM rn
+                FROM (
+                    SELECT *
+                    FROM post
+                    WHERE pc_id != 2  <!-- 공지사항 제외 -->
+                    ORDER BY po_created_time DESC
+                ) a
+                WHERE ROWNUM <![CDATA[<=]]> #{endRow}
+            )
+            WHERE rn >= #{startRow}
+        </select>
+        
+    <!-- 일반 게시글만 페이징 처리하여 조회 -->
+        <select id="selectPagedNormalPosts" resultType="Post">
+            SELECT *
+            FROM (
+                SELECT post.*, ROWNUM AS rn
+                FROM post 
+                WHERE pc_id != 2  <!-- pc_id가 2가 아닌 글들만 -->
+                ORDER BY pc_id DESC, po_created_time DESC
+            )
+            WHERE rn BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+        </select>
+        
+    <!-- 일반 게시글 수 카운트 -->
+        <select id="countPosts" resultType="int">
+            SELECT COUNT(*)
+            FROM post
+            WHERE pc_id != 2
+        </select>
     
     <!-- 검색 및 페이징 처리 -->
     <select id="searchWithPaging" parameterType="map" resultType="com.oplusz.festgo.domain.Post">
