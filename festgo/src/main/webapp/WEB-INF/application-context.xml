@@ -16,12 +16,22 @@
         hikariConfig.setDriverClassName("oracle.jdbc.OracleDriver");
         ...
     -->
+    
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-        <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.14.4:1521:xe" />
+         <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.14.4:1521:xe" />
         <property name="username" value="splusz" />
         <property name="password" value="splusz" />
     </bean>
+    
+    <!--
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+        <property name="username" value="user3" />
+        <property name="password" value="user3" />
+    </bean>
+    -->
     
     <!-- HikariDataSource 빈 생성을 위한 설정 
         HikariDataSource ds = new HikariDataSource(hikariConfig);
