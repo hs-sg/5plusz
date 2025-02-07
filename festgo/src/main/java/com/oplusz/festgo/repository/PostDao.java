@@ -46,9 +46,6 @@ public interface PostDao {
     int countSearchResults(Map<String, Object> params);
 
 	List<Post> selectNotices();
-
-	// 기존 첨부파일 목록
-	List<PostAttachment> selectAttachmentsByPostId(Integer poId);
 	
 	// 게시글 삭제
 	void deleteById(@Param("poId") Integer poId);
@@ -59,6 +56,10 @@ public interface PostDao {
 	// 검색
 	List<Post> search(PostSearchDto dto);
 	
+	// 특정 게시글의 첨부파일 리스트 조회
+	List<String> selectAttachmentsByPostId(@Param("poId") Integer poId);
+
+	List<PostAttachment> selectAttachmentsByPostIdWithObject(@Param("poId") Integer poId);
 	
 //	희성 작성 시작
 	

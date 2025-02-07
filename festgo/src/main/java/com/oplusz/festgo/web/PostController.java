@@ -2,15 +2,20 @@ package com.oplusz.festgo.web;
 
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import java.util.Map;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oplusz.festgo.domain.Post;
@@ -32,7 +37,9 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 
 	private final PostService postService;
+	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
 	private final MyPageService myPageService;
+
 	/**
 	 * 게시글 목록 조회 (페이징 포함)
 	 */
@@ -61,12 +68,32 @@ public class PostController {
 	 */
 	@GetMapping("/details")
 	public String details(@RequestParam("poId") Integer poId, Model model) {
-		// 게시글 + 첨부파일 조회
-		PostWithAttachmentsDto postDto = postService.readById(poId);
+	    // 게시글 + 첨부파일 조회
+	    PostWithAttachmentsDto postDto = postService.readById(poId);
+	    model.addAttribute("postWithAttachments", postDto); // 여기서 제대로 전달되고 있는지 확인
+	    model.addAttribute("imageAttachments", postDto.getAttachments()); // 첨부파일
+	    return "post/details";
+	}
 
-		// JSP에서 사용할 수 있도록 Model에 추가
-		model.addAttribute("postWithAttachments", postDto);
-		return "post/details";
+
+	// 이미지 미리보기 메서드
+	@GetMapping("/uploads/{fileName}")
+	@ResponseBody
+	public ResponseEntity<Resource> serveFile(@PathVariable String fileName) {
+	    try {
+	        // 파일 시스템에서 리소스 생성
+	        Resource resource = new FileSystemResource(UPLOAD_DIR + fileName);
+	        
+	        if (resource.exists()) {
+	            return ResponseEntity.ok()
+	                    .contentType(MediaType.IMAGE_JPEG) // 또는 적절한 미디어 타입
+	                    .body(resource);
+	        } else {
+	            return ResponseEntity.notFound().build();
+	        }
+	    } catch (Exception e) {
+	        return ResponseEntity.internalServerError().build();
+	    }
 	}
 
 	/*
@@ -134,18 +161,19 @@ public class PostController {
 
 	@PostMapping("/update")
 	public String update(@ModelAttribute PostUpdateDto dto,
-			@RequestParam(value = "files", required = false) List<MultipartFile> files,
-			@RequestParam(value = "removeFiles", required = false) List<Integer> removeFileIds) {
-		log.debug("POST update(dto={}, files={}, removeFiles={})", dto, files, removeFileIds);
+	        @RequestParam(value = "files", required = false) List<MultipartFile> files,
+	        @RequestParam(value = "removeFiles", required = false) List<Integer> removeFileIds) {
+	    log.debug("POST update(dto={}, files={}, removeFiles={})", dto, files, removeFileIds);
+	    log.debug("removeFileIds: {}", removeFileIds); // 여기서 removeFileIds의 값을 확인
 
-		// 파일 정보 DTO에 저장
-		dto.setNewAttachments(files);
-		dto.setRemoveAttachmentIds(removeFileIds);
+	    // 파일 정보 DTO에 저장
+	    dto.setNewAttachments(files);
+	    dto.setRemoveAttachmentIds(removeFileIds);
 
-		// 게시글 및 첨부파일 업데이트 수행
-		postService.updatePost(dto, files);
+	    // 게시글 및 첨부파일 업데이트 수행
+	    postService.updatePost(dto, files);
 
-		return "redirect:/post/details?poId=" + dto.getPoId(); // 수정 후 상세 페이지로 이동
+	    return "redirect:/post/details?poId=" + dto.getPoId(); // 수정 후 상세 페이지로 이동
 	}
 
 	@GetMapping("/delete")

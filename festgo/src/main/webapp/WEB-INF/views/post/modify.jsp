@@ -39,38 +39,46 @@
                                         <label class="form-label" for="content">내용</label>
                                         <textarea class="form-control" id="content" rows="5" name="poContent" required>${postWithAttachments.post.poContent}</textarea>
                                     </div>
-            
-                                    <!-- 기존 첨부파일 목록 -->
-                                    <!-- 기존 첨부파일 목록 -->
-                                    <div class="mt-3">
-                                        <label class="form-label">현재 첨부파일</label>
-                                        <c:choose>
-                                            <c:when test="${not empty postWithAttachments.attachments}">
-                                                <ul class="list-group">
-                                                    <c:forEach var="attachment" items="${postWithAttachments.attachments}">
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
-                                                            <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
-                                    
-                                                            <!-- 이미지 파일이면 미리보기 -->
-                                                            <c:choose>
-                                                                <c:when test="${fileExt eq 'jpg' or fileExt eq 'jpeg' or fileExt eq 'png' or fileExt eq 'gif'}">
-                                                                    <img src="/attachments/${attachment.paAttachments}" class="img-thumbnail" style="max-width: 100px;">
-                                                                </c:when>
-                                                            </c:choose>
-                                    
-                                                            <span>${attachment.paAttachments}</span>
-                                                            <input type="checkbox" name="removeFiles" value="${attachment.paId}" class="form-check-input">
-                                                        </li>
-                                                    </c:forEach>
-                                                </ul>
-                                                <small class="text-danger">삭제할 파일을 선택하세요.</small>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <p class="text-muted">첨부파일이 없습니다.</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
+
+									<!-- 기존 첨부파일 목록 -->
+									<ul class="list-group">
+									    <c:forEach var="attachment" items="${postWithAttachments.attachments}" varStatus="status">
+									        <li class="list-group-item d-flex justify-content-between align-items-center">
+									            <div class="d-flex align-items-center">
+									                <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
+									                <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
+									
+									                <!-- 이미지 파일이면 미리보기 -->
+									                <c:choose>
+									                    <c:when test="${fileExt eq 'jpg' or fileExt eq 'jpeg' or fileExt eq 'png' or fileExt eq 'gif'}">
+									                        <img src="${pageContext.request.contextPath}/post/uploads/${attachment.paAttachments}"
+									                             alt="첨부 이미지"
+									                             class="img-thumbnail me-2"
+									                             style="max-width: 100px; height: auto;" />
+									                    </c:when>
+									                    <c:otherwise>
+									                        <span class="material-icons me-2">attachment</span>
+									                    </c:otherwise>
+									                </c:choose>
+									
+									                <!-- 파일명 -->
+									                <span>${attachment.paAttachments}</span>
+									            </div>
+									
+									            <!-- 삭제 체크박스 -->
+									            <div class="form-check">
+									                <input type="checkbox" 
+									                       name="removeFiles" 
+									                       value="${attachment.paId}" 
+									                       class="form-check-input removeFileCheckbox"
+									                       id="removeFile${status.index}">
+									                <label class="form-check-label" for="removeFile${status.index}">삭제</label>
+									            </div>
+									        </li>
+									    </c:forEach>
+									</ul>
+
+
             
             
                                     <!-- 새 첨부파일 추가 -->
@@ -79,11 +87,13 @@
                                         <input type="file" name="files" class="form-control" multiple />
                                     </div>
             
-                                    <!-- 수정 & 삭제 버튼 -->
-                                    <div class="card-footer d-flex justify-content-end mt-3">
-                                        <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
-                                        <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
-                                    </div>
+									
+									<!-- 수정 & 삭제 버튼 -->
+									<div class="card-footer d-flex justify-content-end mt-3">
+									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
+									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
+									</div>
+
                                 </form>
                             </div>
                         </div>

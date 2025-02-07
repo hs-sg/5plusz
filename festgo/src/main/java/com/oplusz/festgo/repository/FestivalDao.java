@@ -15,12 +15,14 @@ import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 public interface FestivalDao {
 
     // 새로운 축제 등록 (매퍼 XML의 insertFestivals 사용)
-    int insertFestivals(Festival festival);
+	Integer insertFestivals(Festival festival);
 
     // 새로운 축제 등록 시 다중 이미지 처리 (매퍼 XML의 insertFestivalImagesBatch 사용)
-    int insertFestivalImagesBatch(@Param("festivalImages") List<?> festivalImages);
+    Integer insertFestivalImagesBatch(@Param("festivalImages") List<?> festivalImages);
     
-    int insertFestivalImage(FestivalImage image);
+    Integer insertFestivalImage(FestivalImage image);
+    
+    Festival selectFestivalById(Integer feId);
 
     // 특정 기간 내 축제 데이터 조회 (매퍼 XML의 findFestivalsBetween 사용)
     List<FestivalCalendarDto> findFestivalsBetween(@Param("startDate") String startDate,
