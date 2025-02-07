@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnToggleMyProfile = document.querySelector('button#btnToggleMyProfile');
     const btnToggleFestivalList = document.querySelector('button#btnToggleFestivalList');
     const btnTogglePostList = document.querySelector('button#btnTogglePostList');
-    const btnToggleCommentList = document.querySelector('button#btnToggleCommentList');
+    const btnToggleReviewList = document.querySelector('button#btnToggleReviewList');
     const btnToggleSponsorCheckList = document.querySelector('button#btnToggleSponsorCheckList');
 
     const divMyProfile = document.getElementById('divMyProfile');
     const divFestivalList = document.getElementById('divFestivalList');
     const divPostList = document.getElementById('divPostList');
-    const divCommentList = document.getElementById('divCommentList');
+    const divReviewList = document.getElementById('divReviewList');
     const divSponsorCheckList = document.getElementById('divSponsorCheckList');
     
     myProfile();
@@ -31,44 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
         allBtnAndDivDisable();
         postList();
     });
-
-    btnToggleCommentList.addEventListener('click', () => {
-        allBtnAndDivDisable();
-        btnToggleCommentList.style.color = 'blue';
-        divCommentList.style.display = 'block';
-    });
+    
+    if(role == 1 || role == 3) {
+        btnToggleReviewList.addEventListener('click', () => {
+            allBtnAndDivDisable();
+            reviewList();
+        })
+    }
     
     if(role == 3) {
         btnToggleSponsorCheckList.addEventListener('click', () => {
             allBtnAndDivDisable();
-            SponsorCheckList();
+            sponsorCheckList();
         });
     }
     
-    /* 콜백 함수 --------------------------------------------------------------------------- */
-    
-    // json 시간에서 문자열로 날짜만 가져오기
-    function getDate(jsonTime){
-        return jsonTime[0] + "년 " + jsonTime[1] + "월 " + jsonTime[2] + "일"
-    }
-    
-    // json 시간에서 문자열로 날짜시간 가져오기
-    function getDateTime(jsonTime){
-        const date = new Date(jsonTime[0], jsonTime[1], jsonTime[2], jsonTime[3], jsonTime[4], jsonTime[5]);
-        const formattedDate = `${date.getFullYear()}. ${date.getMonth()}. ${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        return formattedDate;
-    }
-    
-/*    // 날짜 시간이 한자리면 0채워 주기
-    function addZero(data) {
-        console.log(data.length);
-        if(data.length === 1) {
-            const newData = `0${data}`;
-            return newData;
-        }
-        return data;
-    }*/
-    
+/* 콜백 함수 --------------------------------------------------------------------------- */
+
+// ---------------- 왼쪽 버튼 부분 시작--------------------------------------
+  
     // 로그인된 아이디 프로필 가져오기
     function myProfile() {
         btnToggleMyProfile.style.color = 'blue';
@@ -78,18 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         axios
         .get(uri)
         .then((response) => { getMyProfile(response.data); })
-        .catch((error) => { console.log(error); });
-    }
-    
-    // 사업자 아이디 승인목록 불러오기
-    function SponsorCheckList() {
-        btnToggleSponsorCheckList.style.color = 'blue';
-        divSponsorCheckList.style.display = 'block';
-        const uri = `../api/mypage/sponcheck/`;
-                
-        axios
-        .get(uri)
-        .then((response) => { getSponsorCheckList(response.data); })
         .catch((error) => { console.log(error); });
     }
     
@@ -132,7 +101,163 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
     }
+
+    // 로그인된 아이디 권한별 작성글 가져오기
+    function postList() {
+        btnTogglePostList.style.color = 'blue';
+        divPostList.style.display = 'block';
+        let html = '';
+        let pageCount = 1;
+        
+        getPostNum(
+            function(totalPostNum) {
+                const maxPage = Math.ceil(totalPostNum / 10);
+                console.log(`maxPage=${maxPage}`);
+                html = `
+                    <div class="table-responsive m-2">
+                        <table class="table table-striped table-hover">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>작성자</th>
+                                    <th>작성날짜</th>
+                                    <th>조회수</th>
+                                </tr>
+                            </thead>
+                            <tbody class="tbodyPostList">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="pbtnPrevious btn btn-outline-dark">Previous</button>
+                        <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                        <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                        <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                        <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
+                    </div>
+                `;
+                
+                divPostList.innerHTML = html;
+                
+                const pinputFirstPaging = document.querySelector('input.pbtnFirstPaging');
+                const pinputSecondPaging = document.querySelector('input.pbtnSecondPaging');
+                const pinputThirdPaging = document.querySelector('input.pbtnThirdPaging');
+                const pbtnPrevious = document.querySelector('button.pbtnPrevious');
+                const pbtnNext = document.querySelector('button.pbtnNext');
+                
+                let pageNum = pinputFirstPaging.value;
+                pbtnPrevious.disabled = true;
+                if(maxPage <= pageCount) pbtnNext.disabled = true;
+                makeingPostList(pageNum);
+                
+                pinputFirstPaging.addEventListener('click', () => {
+                    pageNum = pinputFirstPaging.value;
+                    makeingPostList(pageNum);
+                });
+                pinputSecondPaging.addEventListener('click', () => {
+                    pageNum = pinputSecondPaging.value;
+                    makeingPostList(pageNum);
+                });
+                pinputThirdPaging.addEventListener('click', () => {
+                    pageNum = pinputThirdPaging.value;
+                    makeingPostList(pageNum);
+                });
+                pbtnPrevious.addEventListener('click', () => {
+                    const result = pdecreasePageBtn(pageCount);
+                    pageCount = result;
+                });
+                pbtnNext.addEventListener('click', () => {
+                    const result = pincreasePageBtn(pageCount, maxPage);
+                    pageCount = result;
+                });
+            }
+        );
+    }
+
+    // 로그인 아이디 권한별 리뷰 목록 가져오기
+    function reviewList() {
+        btnToggleReviewList.style.color = 'blue';
+        divReviewList.style.display = 'block';
+        let html = '';
+        let pageCount = 1;
+        
+        getReviewNum(function(totalReviewNum) {
+            const maxPage = Math.ceil(totalReviewNum / 10);
+            console.log(`maxPage=${maxPage}`);
+            html = `
+                <div class="table-responsive m-2">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>번호</th>
+                                <th>제목</th>
+                                <th>작성자</th>
+                                <th>작성날짜</th>
+                                <th>평점</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbodyReviewList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn-group" role="group">
+                    <button type="button" class="rbtnPrevious btn btn-outline-dark">Previous</button>
+                    <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                    <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                    <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                    <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
+                </div>
+            `;
+            
+            divReviewList.innerHTML = html;
+            
+            const rinputFirstPaging = document.querySelector('input.rbtnFirstPaging');
+            const rinputSecondPaging = document.querySelector('input.rbtnSecondPaging');
+            const rinputThirdPaging = document.querySelector('input.rbtnThirdPaging');
+            const rbtnPrevious = document.querySelector('button.rbtnPrevious');
+            const rbtnNext = document.querySelector('button.rbtnNext');
+            
+            let pageNum = rinputFirstPaging.value;
+            rbtnPrevious.disabled = true;
+            if(maxPage <= pageCount) rbtnNext.disabled = true;
+            makeingReviewList(pageNum);
+            
+            rinputFirstPaging.addEventListener('click', () => {
+                pageNum = rinputFirstPaging.value;
+                makeingReviewList(pageNum);
+            });
+            rinputSecondPaging.addEventListener('click', () => {
+                pageNum = rinputSecondPaging.value;
+                makeingReviewList(pageNum);
+            });
+            rinputThirdPaging.addEventListener('click', () => {
+                pageNum = rinputThirdPaging.value;
+                makeingReviewList(pageNum);
+            });
+            rbtnPrevious.addEventListener('click', () => {
+                const result = rdecreasePageBtn(pageCount);
+                pageCount = result;
+            });
+            rbtnNext.addEventListener('click', () => {
+                const result = rincreasePageBtn(pageCount, maxPage);
+                pageCount = result;
+            });
+        });
+    }
     
+    // 사업자 아이디 승인목록 불러오기
+    function sponsorCheckList() {
+        btnToggleSponsorCheckList.style.color = 'blue';
+        divSponsorCheckList.style.display = 'block';
+        const uri = `../api/mypage/sponcheck/`;
+                
+        axios
+        .get(uri)
+        .then((response) => { getSponsorCheckList(response.data); })
+        .catch((error) => { console.log(error); });
+    }
+
     // 모든 버튼을 검정으로 모든 리스트를 안보이게 함!
     function allBtnAndDivDisable() {
         btnToggleMyProfile.style.color = 'black';
@@ -142,8 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnTogglePostList.style.color = 'black';
         divPostList.style.display = 'none';
         if(role == 1 || role == 3) {
-            btnToggleCommentList.style.color = 'black';
-            divCommentList.style.display = 'none';
+            btnToggleReviewList.style.color = 'black';
+            divReviewList.style.display = 'none';
         }
         if(role == 3) {
             btnToggleSponsorCheckList.style.color = 'black';
@@ -151,6 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+// ---------------- 왼쪽 버튼 부분 끝--------------------------------------
+
+// ---------------- 내프로필 기능 부분 시작--------------------------------------    
+
     /* 로그인한 프로필 출력 */
     function getMyProfile(data) {
         const createdDate = getDate(data.meCreatedTime);
@@ -164,10 +293,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <th>이메일</th>
                     <td>${data.meEmail}</td> 
                 </tr>
+        `
+        if(role == `2`) {
+            html += `
                 <tr>
                     <th>업체명</th>
                     <td>${data.meSponsor}</td> 
                 </tr>
+            `    
+        }
+        html += `
                 <tr>
                     <th>아이디생성날짜</th>
                     <td>${createdDate}</td> 
@@ -218,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // 로그인된 아이디의 비밀번호 바꾸기
     function passwordChange() {
         let html = '';
         const divPasswordCheckMessage = document.querySelector('div.divPasswordCheckMessage');
@@ -257,8 +393,9 @@ document.addEventListener('DOMContentLoaded', () => {
         divPasswordCheckMessage.innerHTML = html;
     }
     
+    // 로그인된 아이디 탈퇴하기
     function memberWithdraw() {
-         const result = confirm("계정을 삭제하시겠습니까?/n기존 데이터는 복구되지 않습니다.");
+         const result = confirm("계정을 삭제하시겠습니까?\n기존 데이터는 복구되지 않습니다.");
          if(!result) return;
          const uri = `../api/mypage/delmem/${signedInUser}`;
          
@@ -278,220 +415,10 @@ document.addEventListener('DOMContentLoaded', () => {
          })
     }
     
-    function postList() {
-        btnTogglePostList.style.color = 'blue';
-        divPostList.style.display = 'block';
-        let html = '';
-        let pageCount = 1;
-        
-        getPostNum(function(totalPostNum) {
-            const maxPage = Math.ceil(totalPostNum / 10);
-            console.log(`maxPage=${maxPage}`);
-            html = `
-                <div class="table-responsive m-2">
-                    <table class="table table-striped table-hover">
-                        <thead class="table-primary">
-                            <tr>
-                                <th>번호</th>
-                                <th>제목</th>
-                                <th>작성자</th>
-                                <th>작성날짜</th>
-                                <th>조회수</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tbodyPostList">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btnPrevious btn btn-outline-dark">Previous</button>
-                    <input type="button" class="btnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
-                    <input type="button" class="btnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
-                    <input type="button" class="btnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
-                    <button type="button" class="btnNext btn btn-outline-dark">Next</button>
-                </div>
-            `;
-            
-            divPostList.innerHTML = html;
-            
-            const inputFirstPaging = document.querySelector('input.btnFirstPaging');
-            const inputSecondPaging = document.querySelector('input.btnSecondPaging');
-            const inputThirdPaging = document.querySelector('input.btnThirdPaging');
-            const btnPrevious = document.querySelector('button.btnPrevious');
-            const btnNext = document.querySelector('button.btnNext');
-            
-            let pageNum = inputFirstPaging.value;
-            btnPrevious.disabled = true;
-            if(maxPage <= pageCount) btnNext.disabled = true;
-            makeingPostList(pageNum);
-            
-            inputFirstPaging.addEventListener('click', () => {
-                pageNum = inputFirstPaging.value;
-                makeingPostList(pageNum);
-            });
-            inputSecondPaging.addEventListener('click', () => {
-                pageNum = inputSecondPaging.value;
-                makeingPostList(pageNum);
-            });
-            inputThirdPaging.addEventListener('click', () => {
-                pageNum = inputThirdPaging.value;
-                makeingPostList(pageNum);
-            });
-            btnPrevious.addEventListener('click', () => {
-                const result = decreasePageBtn(pageCount);
-                pageCount = result;
-            });
-            btnNext.addEventListener('click', () => {
-                const result = increasePageBtn(pageCount, maxPage);
-                pageCount = result;
-            });
-        });
-    }
+// ---------------- 내프로필 기능 부분 끝--------------------------------------    
 
-    function getPostNum(callback) {
-        switch(role) {
-            case `1`:
-            case `2`:
-                const usUri = `../api/mypage/cntaposts/${signedInUser}`;
-                axios
-                .get(usUri)
-                .then((response) => {
-                    callback(response.data); // 콜백 함수로 데이터 전달
-                })
-                .catch((error) => { 
-                    console.log(error);
-                    callback(null); // 오류 발생 시 null 반환
-                });
-                break;
-            case `3`:
-                const aUri = `../api/mypage/cntaposts/`;
-                axios
-                .get(aUri)
-                .then((response) => {
-                    callback(response.data); // 콜백 함수로 데이터 전달
-                })
-                .catch((error) => { 
-                    console.log(error);
-                    callback(null); // 오류 발생 시 null 반환
-                });
-                break;
-        }
-        
-        
-    }
-    
-    function increasePageBtn(pageCount, maxPage) {
-        pageCount += 3
-        console.log(pageCount);
-        const btnPrevious = document.querySelector('button.btnPrevious');
-        const btnNext = document.querySelector('button.btnNext');
-        const inputFirstPaging = document.querySelector('input.btnFirstPaging');
-        const inputSecondPaging = document.querySelector('input.btnSecondPaging');
-        const inputThirdPaging = document.querySelector('input.btnThirdPaging');
-        btnPrevious.disabled = false;
-        if(maxPage >= pageCount) btnNext.disabled = true;
-        inputFirstPaging.value = pageCount;
-        inputSecondPaging.value = pageCount+1;
-        inputThirdPaging.value = pageCount+2;
-        return pageCount
-    }
-    
-    function decreasePageBtn(pageCount) {
-        pageCount -= 3
-        console.log(pageCount);
-        const btnPrevious = document.querySelector('button.btnPrevious');
-        const btnNext = document.querySelector('button.btnNext');
-        const inputFirstPaging = document.querySelector('input.btnFirstPaging');
-        const inputSecondPaging = document.querySelector('input.btnSecondPaging');
-        const inputThirdPaging = document.querySelector('input.btnThirdPaging');
-        btnNext.disabled = false;
-        if(pageCount <= 2) btnPrevious.disabled = true;
-        inputFirstPaging.value = pageCount;
-        inputSecondPaging.value = pageCount+1;
-        inputThirdPaging.value = pageCount+2;
-        return pageCount
-    }
-    
-    function makeingPostList(pageNum) {    
-        switch(role) {
-            case `1`:
-            case `2`:
-                const usUri = `../api/mypage/usposts/${pageNum}`;
-                
-                axios
-                .get(usUri)
-                .then((response) => {
-                    if(response.data == '') {
-                        notPostList();
-                        return;
-                    }
-                    getUSPostList(response.data);
-                })
-                .catch((error) => { console.log(error)} );
-                break;
-            case `3`:
-                getAPostList
-                const aUri = `../api/mypage/aposts/${pageNum}`;
-                
-                axios
-                .get(aUri)
-                .then((response) => {
-                    if(response.data == '') {
-                        notPostList();
-                        return;
-                    }
-                    getAPostList(response.data);
-                })
-                .catch((error) => { console.log(error)} );
-                break;
-        }
-    }
-    
-    function notPostList() {
-        const tbodyPostList = document.querySelector('tbody.tbodyPostList');
-        tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
-    }
-    
-    function getUSPostList(data)
-    {
-        let html = ``
-        const tbodyPostList = document.querySelector("tbody.tbodyPostList");
-        for(const post of data) {
-            const date = getDateTime(post.poModifiedTime);
-            let addHtml = `
-                <tr>
-                    <td>${post.poId}</td>
-                    <td><a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a></td>
-                    <td>${post.poAuthor}</td>
-                    <td>${date}</td>
-                    <td>${post.poViews}</td>
-                </tr>
-            `
-        html += addHtml;
-    }
-    tbodyPostList.innerHTML = html;
-    }
-    
-    function getAPostList(data)
-    {
-        let html = ``
-        const tbodyPostList = document.querySelector("tbody.tbodyPostList");
-        for(const post of data) {
-            const date = getDateTime(post.poModifiedTime);
-            let addHtml = `
-                <tr>
-                    <td>${post.poId}</td>
-                    <td><a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a></td>
-                    <td>${post.poAuthor}</td>
-                    <td>${date}</td>
-                    <td>${post.poViews}</td>
-                </tr>
-            `
-            html += addHtml;
-        }
-        tbodyPostList.innerHTML = html;
-    }
-    
+// ---------------- 축제 기능 부분 시작 ---------------------------------------
+
     function getUFestivalList(data) {
         let today = new Date();
         let html = ""
@@ -506,11 +433,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
-            const imgUrl = `${contextPath}/uploads/${festival.feImageMain}`;
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
+                    alt="${festival.feImageMain}"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -542,6 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
+                        <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btn btn-outline-danger mx-2">좋아요 해제</button>
                     </div>
                 </div>
@@ -562,11 +490,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
-            console.log(`/uploads/${festival.feImageMain}`);
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
+                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -608,6 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
+                    <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
                     </div>
                 </div>
@@ -630,7 +559,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let addHtml = `
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="rounded float-start" alt="${festival.feImageMain}"/>
+                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
+                        alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -669,6 +599,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
+                        <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
             `;
             if(festival.frApproval == 1) {
@@ -731,7 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => {
             console.log(response);
             alert("축제 승인완료");
-            FestivalList()
+            festivalList()
         })
         .catch((error) => { console.log(error) });
     }
@@ -758,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => {
             console.log(response);
             alert("축제 거절완료");
-            FestivalList()
+            festivalList()
         })    
         .catch((error) => { console.log(error); });
     }
@@ -777,11 +708,241 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => {
             console.log(response);
             alert("축제 삭제완료");
-            FestivalList()
+            festivalList()
         })
         console.log(result);
     }
+
+// ---------------- 축제 기능 부분 끝 -----------------------------------------
+
+// ---------------- 작성글 기능 부분 시작 -------------------------------------
+
+    function getPostNum(callback) {
+        switch(role) {
+            case `1`:
+            case `2`:
+                const usUri = `../api/mypage/cntaposts/${signedInUser}`;
+                axios
+                .get(usUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+            case `3`:
+                const aUri = `../api/mypage/cntaposts/`;
+                axios
+                .get(aUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+        }
+    }
     
+    function makeingPostList(pageNum) {    
+        switch(role) {
+            case `1`:
+            case `2`:
+                const usUri = `../api/mypage/usposts/${pageNum}`;
+                
+                axios
+                .get(usUri)
+                .then((response) => {
+                    if(response.data == '') {
+                        notPostList();
+                        return;
+                    }
+                    getPostList(response.data);
+                })
+                .catch((error) => { console.log(error)} );
+                break;
+            case `3`:
+                const aUri = `../api/mypage/aposts/${pageNum}`;
+                
+                axios
+                .get(aUri)
+                .then((response) => {
+                    if(response.data == '') {
+                        notPostList();
+                        return;
+                    }
+                    getPostList(response.data);
+                })
+                .catch((error) => { console.log(error)} );
+                break;
+        }
+    }
+    
+    function notPostList() {
+        const tbodyPostList = document.querySelector('tbody.tbodyPostList');
+        tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
+    }
+    
+    function getPostList(data)
+    {
+        let html = ``
+        const tbodyPostList = document.querySelector("tbody.tbodyPostList");
+        for(const post of data) {
+            const date = getDateTime(post.poModifiedTime);
+            let addHtml = `
+                <tr>
+                    <td>${post.poId}</td>
+                    <td>
+                        <a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a>
+            `
+            if(role == 1 || role == 2){
+                addHtml+= `
+                        <a href="/festgo/post/modify?poId=${post.poId}" onclick="return confirmDelete()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                            class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                            </svg>
+                        </a>
+                `
+            }
+            addHtml += `
+                        <a href="/festgo/post/delete?poId=${post.poId}" onclick="return confirmDelete()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </a>
+                    </td>
+                    <td>${post.poAuthor}</td>
+                    <td>${date}</td>
+                    <td>${post.poViews}</td>
+                </tr>
+            `
+            html += addHtml;
+            }
+        tbodyPostList.innerHTML = html;
+    }
+
+// ---------------- 작성글 기능 부분 끝 ---------------------------------------
+
+// ---------------- 리뷰 기능 부분 시작 ---------------------------------------
+
+    function getReviewNum(callback) {
+        switch(role) {
+            case `1`:
+                const uUri = `../api/mypage/cntreviews/${signedInUser}`;
+                axios
+                .get(uUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+            case `3`:
+                const aUri = `../api/mypage/cntreviews/`;
+                axios
+                .get(aUri)
+                .then((response) => {
+                    callback(response.data); // 콜백 함수로 데이터 전달
+                })
+                .catch((error) => { 
+                    console.log(error);
+                    callback(null); // 오류 발생 시 null 반환
+                });
+                break;
+        }
+    }
+    
+    function makeingReviewList(pageNum) {    
+        switch(role) {
+            case `1`:
+                const uUri = `../api/mypage/ureviews/${pageNum}`;
+                
+                axios
+                .get(uUri)
+                .then((response) => {
+                    if(response.data == '') {
+                        notReviewList();
+                        return;
+                    }
+                    getReviewList(response.data);
+                })
+                .catch((error) => { console.log(error)} );
+                break;
+            case `3`:
+                const aUri = `../api/mypage/areviews/${pageNum}`;
+                
+                axios
+                .get(aUri)
+                .then((response) => {
+                    if(response.data == '') {
+                        notReviewList();
+                        return;
+                    }
+                    getReviewList(response.data);
+                })
+                .catch((error) => { console.log(error)} );
+                break;
+        }
+    }
+        
+    function notReviewList() {
+        const tbodyReviewList = document.querySelector('tbody.tbodyReviewList');
+        tbodyReviewList.innerHTML = '<p>작성한 리뷰가 없습니다.</p>'
+    }
+    
+    function getReviewList(data)
+    {
+        let html = ``
+        const tbodyReviewList = document.querySelector("tbody.tbodyReviewList");
+        for(const review of data) {
+            const date = getDateTime(review.reModifiedTime);
+            let addHtml = `
+                <tr>
+                    <td>${review.reId}</td>
+                    <td>
+                        <a href="/festgo/festival/details?feId=${review.feId}">${review.reTitle}</a>
+            `
+            if(role == 1){
+                addHtml+= `
+                        <a href="/festgo/review/modify?reId=${review.reId}" onclick="return confirmDelete()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                            class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                            </svg>
+                        </a>
+                `
+            }
+            addHtml += `
+                        <a href="/festgo/review/delete?reId=${review.reId}" onclick="return confirmDelete()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                            class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </a>
+                    </td>
+                    <td>${review.reAuthor}</td>
+                    <td>${date}</td>
+                    <td>${review.reGrade}</td>
+                </tr>
+            `
+        html += addHtml;
+        }
+    tbodyReviewList.innerHTML = html;
+    }
+
+// ---------------- 리뷰 기능 부분 끝 -----------------------------------------
+
+// ---------------- 사업자승인 기능 부분 시작 ---------------------------------
+
     function getSponsorCheckList(data) {
         let html = "";
         if(data == "") {
@@ -895,4 +1056,96 @@ document.addEventListener('DOMContentLoaded', () => {
         })    
         .catch((error) => { console.log(error); });
     }
+
+// ---------------- 사업자승인 기능 부분 끝 -----------------------------------
+
+// ---------------- 기타 기능 부분 시작 ---------------------------------------
+    
+    // json 시간에서 문자열로 날짜만 가져오기
+    function getDate(jsonTime){
+        return jsonTime[0] + "년 " + jsonTime[1] + "월 " + jsonTime[2] + "일"
+    }
+    
+    // json 시간에서 문자열로 날짜시간 가져오기
+    function getDateTime(jsonTime){
+        const date = new Date(jsonTime[0], jsonTime[1], jsonTime[2], jsonTime[3], jsonTime[4], jsonTime[5]);
+        const formattedDate = `${date.getFullYear()}. ${date.getMonth()}. ${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        return formattedDate;
+    }
+
+    function pincreasePageBtn(pageCount, maxPage) {
+        pageCount += 3
+        console.log(pageCount);
+        const pbtnPrevious = document.querySelector('button.pbtnPrevious');
+        const pbtnNext = document.querySelector('button.pbtnNext');
+        const pinputFirstPaging = document.querySelector('input.pbtnFirstPaging');
+        const pinputSecondPaging = document.querySelector('input.pbtnSecondPaging');
+        const pinputThirdPaging = document.querySelector('input.pbtnThirdPaging');
+        pbtnPrevious.disabled = false;
+        if(maxPage >= pageCount) pbtnNext.disabled = true;
+        pinputFirstPaging.value = pageCount;
+        pinputSecondPaging.value = pageCount+1;
+        pinputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+
+    function pdecreasePageBtn(pageCount) {
+        pageCount -= 3
+        console.log(pageCount);
+        const pbtnPrevious = document.querySelector('button.pbtnPrevious');
+        const pbtnNext = document.querySelector('button.pbtnNext');
+        const pinputFirstPaging = document.querySelector('input.pbtnFirstPaging');
+        const pinputSecondPaging = document.querySelector('input.pbtnSecondPaging');
+        const pinputThirdPaging = document.querySelector('input.pbtnThirdPaging');
+        pbtnNext.disabled = false;
+        if(pageCount <= 2) pbtnPrevious.disabled = true;
+        pinputFirstPaging.value = pageCount;
+        pinputSecondPaging.value = pageCount+1;
+        pinputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+
+    function rincreasePageBtn(pageCount, maxPage) {
+        pageCount += 3
+        console.log(pageCount);
+        const rbtnPrevious = document.querySelector('button.rbtnPrevious');
+        const rbtnNext = document.querySelector('button.rbtnNext');
+        const rinputFirstPaging = document.querySelector('input.rbtnFirstPaging');
+        const rinputSecondPaging = document.querySelector('input.rbtnSecondPaging');
+        const rinputThirdPaging = document.querySelector('input.rbtnThirdPaging');
+        rbtnPrevious.disabled = false;
+        if(maxPage >= pageCount) rbtnNext.disabled = true;
+        rinputFirstPaging.value = pageCount;
+        rinputSecondPaging.value = pageCount+1;
+        rinputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+
+    function rdecreasePageBtn(pageCount) {
+        pageCount -= 3
+        console.log(pageCount);
+        const rbtnPrevious = document.querySelector('button.rbtnPrevious');
+        const rbtnNext = document.querySelector('button.rbtnNext');
+        const rinputFirstPaging = document.querySelector('input.rbtnFirstPaging');
+        const rinputSecondPaging = document.querySelector('input.rbtnSecondPaging');
+        const rinputThirdPaging = document.querySelector('input.rbtnThirdPaging');
+        rbtnNext.disabled = false;
+        if(pageCount <= 2) rbtnPrevious.disabled = true;
+        rinputFirstPaging.value = pageCount;
+        rinputSecondPaging.value = pageCount+1;
+        rinputThirdPaging.value = pageCount+2;
+        return pageCount
+    }
+    
+    /*    // 날짜 시간이 한자리면 0채워 주기
+    function addZero(data) {
+        console.log(data.length);
+        if(data.length === 1) {
+            const newData = `0${data}`;
+            return newData;
+        }
+        return data;
+    }*/
+
+// ---------------- 기타 기능 부분 끝 -----------------``````------------------
 });
