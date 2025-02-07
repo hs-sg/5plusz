@@ -40,14 +40,20 @@ public class FestivalController {
     private final ThemeDao themeDao;
     
     // 해당 축제 상세보기 서비스
-    @GetMapping("/details")
-    public void details(@RequestParam Integer feId, Model model) {
-    	log.debug("details(id={})", feId);
-    	
-    	Festival festival = festivalService.read(feId);
-    	
-    	model.addAttribute("festival", festival);
+    @GetMapping("/detail")
+    public String festivalDetails(@RequestParam("feId") Integer feId, Model model) {
+        log.debug("festivalDetails(feId={})", feId);
+
+        Festival festival = festivalService.read(feId);
+        if (festival == null) {
+            model.addAttribute("error", "해당 축제를 찾을 수 없습니다.");
+            return "error"; // 별도의 에러 페이지로 이동
+        }
+
+        model.addAttribute("festival", festival);
+        return "fest/detail"; // JSP로 이동
     }
+
 
 	// GET 방식 매핑
     // 새 축제 등록
