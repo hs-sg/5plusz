@@ -68,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         divFestivalList.style.display = 'block';
         switch(role) {
             case `1` : // 일반유저
-                console.log("user");
                 const UUri = `../api/mypage/ufestivals/${signedInUser}`;
                                         
                 axios
@@ -79,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
                 
             case `2` :
-                console.log("sponsor");
                 const BUri = `../api/mypage/sfestivals/${signedInUser}`;
 
                 axios
@@ -90,18 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
                 
             case `3` :
-                console.log("admin");
                 const AUri = `../api/mypage/afestivals/`;
-
+                
                 axios
                 .get(AUri)
                 .then((response) => { getAFestivalList(response.data); })
                 .catch((error) => { console.log(error); });
-
                 break;
         }
     }
-
+    
     // 로그인된 아이디 권한별 작성글 가져오기
     function postList() {
         btnTogglePostList.style.color = 'blue';
@@ -114,6 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const maxPage = Math.ceil(totalPostNum / 10);
                 console.log(`maxPage=${maxPage}`);
                 html = `
+                    <a>전체글</a>
+                    <a>공지글</a>
                     <div class="table-responsive m-2">
                         <table class="table table-striped table-hover">
                             <thead class="table-primary">
@@ -548,7 +546,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function getAFestivalList(data) {
-        let html = ""
+        let html = `
+            <input type="button" class="btnAllFestival btn" value="전체"/>
+            <input type="button" class="btnAllFestival btn" value="승인대기"/>
+        `;     
+                            
         if(data == "") {
             html = `<h>등록된 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
@@ -667,6 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => { console.log(error) });
     }
     
+    // 축제 거절 함수
     function refuseFestival(event) {
         console.log(event.target);
         
@@ -794,7 +797,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const date = getDateTime(post.poModifiedTime);
             let addHtml = `
                 <tr>
-                    <td>${post.poId}</td>
+            `
+            if(post.pcId == 1) addHtml += `<td>${post.poId}</td>`
+            else if(post.pcId == 2) addHtml += `<td>공지</td>`
+            addHtml += `  
                     <td>
                         <a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a>
             `
