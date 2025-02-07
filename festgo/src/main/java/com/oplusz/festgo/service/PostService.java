@@ -251,5 +251,63 @@ public class PostService {
 		log.debug("# of search result = {}", list.size());
 		return list;
 	}
+	
+//	희성 작성 시작
+	
+	// 마이페이지 상에 로그인된 아이디가 작성한 글 목록 가져오기
+	public List<Post> readByMeUsername(String meUsername) {
+		log.debug("readByMeUsername(meUsername={})", meUsername);
+		
+		List<Post> list = postDao.readByMeUsername(meUsername);
+		log.debug("# of search result = {}", list.size());
+		
+		return list;
+	}
+	
+	// 마이페이지 상에 관리자가 모든글 원하는 갯수대로 가져오기
+	public List<Post> readVariableByPageNum(Integer postNumberInList, Integer pageNum) {
+		log.debug("readVariableByPageNum(postNumberInList={}, pageNum={})", postNumberInList, pageNum);
+		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
+		Integer maxPostNum = pageNum * postNumberInList;
+		
+		List<Post> list = postDao.readVariable(minPostNum, maxPostNum);
+		log.debug("# of search result = {}", list.size());
+		
+		return list;
+	}
+	
+	// 마이페이지 상에 유저, 스폰서가 작성한 글 원하는 갯수대로 가져오기
+	public List<Post> readVariableByPageNumAndUsername(Integer postNumberInList, Integer pageNum, String username) {
+		log.debug("readVariableByPageNum(postNumberInList={}, pageNum={}, username={})", postNumberInList, pageNum, username);
+		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
+		Integer maxPostNum = pageNum * postNumberInList;
+		
+		List<Post> list = postDao.readVariableByMeUsername(minPostNum, maxPostNum, username);
+		log.debug("# of search result = {}", list.size());
+		
+		return list;
+	}
+	
+	// 전체 글 갯수 가져오기
+	public Integer countAllPosts() {
+		log.debug("countAllPosts()");
+		
+		Integer countPosts = postDao.countAllPosts();
+		log.debug("countPosts result = {}", countPosts);
+		
+		return countPosts;
+	}
+	
+	// 아이디로 글 갯수 가져오기
+	public Integer getCountAllPostsByUsername(String username) {
+		log.debug("getCountAllPostsByUsername(username={})", username);
+		
+		Integer countPosts = postDao.countPostsByMeUsername(username);
+		log.debug("countPosts result = {}", countPosts);
+		
+		return countPosts;
+	}
+	
+//	희성 작성 끝
 
 }

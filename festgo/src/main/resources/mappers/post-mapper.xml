@@ -102,13 +102,54 @@
         </where>
         order by po_id desc
     </select>
-    
     <!-- resultType을 PostAttachment로 지정하여 PostAttachment 객체로 매핑하도록 설정 -->
     <select id="selectAttachmentsByPostIdWithObject" resultType="PostAttachment">
 	  SELECT PA_ID, PO_ID, PA_ATTACHMENTS
 	  FROM post_attachment
 	  WHERE po_id = #{poId}
 	</select>
+<!-- 희성 작성 시작 -->
 
+
+    <!-- 로그인된 아이디로 작성된 글 목록 조회 -->
+    <select id="readByMeUsername" resultType="Post">
+        select *
+		from post
+		where po_author = #{meUsername}
+    </select>
+    
+    <!-- 관리자용 전체글 목록 원하는 수대로 가져오기 -->
+    <select id="readVariable" resultType="Post">
+	    select po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views from
+	        (
+		    select rownum rno, po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views
+		    from (select * from post order by po_created_time desc)
+		    where po_id > 0 and rownum > 0 and rownum <![CDATA[<]]>= #{maxPostNum}
+	        )
+	    where rno >= #{minPostNum} and rno <![CDATA[<]]>= #{maxPostNum}
+    </select>
+    
+    <!-- 일반, 스폰서용 작성글 원하는 수대로 가져오기 -->
+    <select id="readVariableByMeUsername" resultType="Post">
+        select po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views from
+            (
+            select rownum rno, po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views
+            from (select * from post where po_author = #{meUsername} order by po_created_time desc)
+            where po_id > 0 and rownum > 0 and rownum <![CDATA[<]]>= #{maxPostNum}
+            )
+        where rno >= #{minPostNum} and rno <![CDATA[<]]>= #{maxPostNum}
+    </select>
+    
+    <!-- 전체 글 갯수 세기 -->
+    <select id="countAllPosts">
+        select count(*) from post
+    </select>
+    
+    <!-- 로그인한 아이디가 등록한 글 갯수 세기 -->
+    <select id="countPostsByMeUsername">
+        select count(*) from post where po_author = #{meUsername}
+    </select>
+    
+<!-- 희성 작성 끝 -->
 
 </mapper>

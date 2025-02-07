@@ -11,7 +11,7 @@ public interface SponRequestDao {
 //	희성 작성 시작 --------------------------------------------------------------------------------------------------------------------
 	
 	Integer approveSponsorMemberByMeId(Integer meId);
-	Integer refuseSponsorMemberByMeId(@Param("srCause") String srCause, @Param("meId") Integer meId);
+	Integer refuseSponsorMemberByMeId(String srCause, Integer meId);
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	

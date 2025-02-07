@@ -48,6 +48,22 @@
           AND fe_end_date &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
     </select>
     
+    <!-- 특정 기간 내 축제 데이터 조회 -->
+ 
+<select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
+    SELECT 
+        fe_id AS feId,
+        fe_name AS feName,
+        TO_CHAR(fe_start_date, 'YYYY-MM-DD') AS feStartDate,
+        TO_CHAR(fe_end_date, 'YYYY-MM-DD') AS feEndDate,
+        fe_contents AS feContents,
+        fe_image_main AS feImageMain,
+        fe_address AS feAddress
+    FROM festival
+    WHERE TRUNC(fe_start_date) &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
+      AND TRUNC(fe_end_date) &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+</select>
+    
     <!-- 희성 작성 시작 ================================================================================================== -->
     
     <!-- 전체 축제 리스트 불러오기 -->
@@ -90,17 +106,6 @@
     <delete id="deleteFestivalByFeId">
         delete from festival where fe_id = #{fe_id}
     </delete>
-    
-    <!-- 외래키때문에 삭제전 축제 등록 요청 삭제 sql -->
-    <delete id="deleteFestivalRequestByFeId">
-        delete from fest_request where fe_id = #{fe_id}
-    </delete>
-    
-    <!-- 외래키때문에 삭제전 축제 이미지 삭제 sql -->
-    <delete id="deleteFestivalImageByFeId">
-        delete from festival_image where fe_id = #{fe_id}
-    </delete>
-    
     <!-- 희성 작성 끝 ================================================================================================== -->
     
 </mapper>
