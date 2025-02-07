@@ -1,5 +1,6 @@
 package com.oplusz.festgo.web;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.core.io.FileSystemResource;
@@ -46,16 +47,22 @@ public class PostController {
 	// 게시글 목록 조회 (공지사항 먼저 가져오기)
 	@GetMapping("/list")
 	public String getPagedPosts(@RequestParam(defaultValue = "1") int page,
-	        @RequestParam(required = false) Integer pageSize, Model model) {
+	                            @RequestParam(required = false) Integer pageSize, 
+	                            Model model) {
 
 	    if (pageSize == null || pageSize <= 0) {
 	        pageSize = 5; // 기본값 설정
 	    }
 
+	    // 공지사항은 1페이지에서만 가져오도록 처리
+	    List<Post> notices = (page == 1) ? postService.getNotices() : Collections.emptyList();
+
+	    // 일반 게시글 페이징 처리
 	    Map<String, Object> result = postService.getPagedPosts(page, pageSize);
 
-	    model.addAttribute("notices", result.get("notices"));
-	    model.addAttribute("posts", result.get("posts"));
+	    // 모델에 데이터 추가
+	    model.addAttribute("notices", notices); // 공지사항 (1페이지에서만 추가)
+	    model.addAttribute("posts", result.get("posts")); // 일반 게시글
 	    model.addAttribute("currentPage", result.get("currentPage"));
 	    model.addAttribute("pageSize", result.get("pageSize"));
 	    model.addAttribute("totalPages", result.get("totalPages"));
@@ -63,12 +70,14 @@ public class PostController {
 	    return "post/list"; 
 	}
 
+
 	/**
 	 * 게시글 상세 조회 (조회수 증가)
 	 */
 	@GetMapping("/details")
 	public String details(@RequestParam("poId") Integer poId, Model model) {
 	    // 게시글 + 첨부파일 조회
+		postService.increaseViewCount(poId);
 	    PostWithAttachmentsDto postDto = postService.readById(poId);
 	    model.addAttribute("postWithAttachments", postDto); // 여기서 제대로 전달되고 있는지 확인
 	    model.addAttribute("imageAttachments", postDto.getAttachments()); // 첨부파일
