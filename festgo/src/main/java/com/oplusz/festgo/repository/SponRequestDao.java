@@ -1,6 +1,7 @@
 package com.oplusz.festgo.repository;
 
 import org.apache.ibatis.annotations.Param;
+
 import com.oplusz.festgo.domain.SponRequest;
 
 public interface SponRequestDao {
@@ -11,7 +12,7 @@ public interface SponRequestDao {
 //	희성 작성 시작 --------------------------------------------------------------------------------------------------------------------
 	
 	Integer approveSponsorMemberByMeId(Integer meId);
-	Integer refuseSponsorMemberByMeId(@Param("srCause") String srCause, @Param("meId") Integer meId);
+	Integer refuseSponsorMemberByMeId(String srCause, Integer meId);
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	

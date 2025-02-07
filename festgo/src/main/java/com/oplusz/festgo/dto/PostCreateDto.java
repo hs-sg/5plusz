@@ -12,7 +12,7 @@ public class PostCreateDto {
 	private String poTitle;
 	private String poContent;
 	private String poAuthor;
-	private Integer pcId;
+	private Integer pcId = 1;
 	private Integer poId;
 	private List<String> paAttachments;
 	

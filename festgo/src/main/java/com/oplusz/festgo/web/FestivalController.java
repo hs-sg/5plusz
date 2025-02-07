@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Theme;
 import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.repository.ThemeDao;
@@ -37,8 +38,25 @@ public class FestivalController {
 	private final FestivalService festivalService;
     // 테마 DAO를 직접 주입받음
     private final ThemeDao themeDao;
+    
+    // 해당 축제 상세보기 서비스
+    @GetMapping("/detail")
+    public String festivalDetails(@RequestParam("feId") Integer feId, Model model) {
+        log.debug("festivalDetails(feId={})", feId);
+
+        Festival festival = festivalService.read(feId);
+        if (festival == null) {
+            model.addAttribute("error", "해당 축제를 찾을 수 없습니다.");
+            return "error"; // 별도의 에러 페이지로 이동
+        }
+
+        model.addAttribute("festival", festival);
+        return "fest/detail"; // JSP로 이동
+    }
+
 
 	// GET 방식 매핑
+    // 새 축제 등록
 	@GetMapping("/create")
 	public String create(Model model) {
 		log.debug("GET create()");
@@ -49,13 +67,21 @@ public class FestivalController {
 	}
 
 	// POST 방식 매핑 저장 후 홈으로 리턴
+	// 새 축제 등록
 	@PostMapping("/create")
 	public String create(HttpServletRequest request,
 	        @RequestParam("feImageMainFile") MultipartFile feImageMainFile,
 	        @RequestParam("fePosterFile") MultipartFile fePosterFile,
 	        @RequestParam("fiImagesFiles") List<MultipartFile> fiImagesFiles,
+	        @RequestParam("feFeeType") String feFeeType,
 	        @ModelAttribute FestivalCreateDto dto,
 	        BindingResult result) {
+		
+		 if ("free".equals(feFeeType)) {
+	            dto.setFeFee("무료");
+	        } else {
+	        	dto.setFeFee("유료");
+	        }
 		
 		   // 테마 처리: 만약 "custom" 옵션이 선택되었으면, 
         // DTO의 customTheme 값으로 테마를 DB에 저장 후, 생성된 THE_ID를 DTO에 설정
