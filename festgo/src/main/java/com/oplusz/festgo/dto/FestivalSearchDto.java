@@ -8,4 +8,5 @@ public class FestivalSearchDto {
 	private Integer lcId;
 	private Integer theId;
 	private String keyword;
+	private Integer startIndexNum;
 }
