@@ -240,7 +240,7 @@
                                     '</div>';
                                 
                                 eventDiv.onclick = function() {
-                                    window.location.href = contextPath + '/fest/details?feId=' + fest.feId;
+                                    window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
                                 };
                                 
                                 eventCol.appendChild(eventDiv);
