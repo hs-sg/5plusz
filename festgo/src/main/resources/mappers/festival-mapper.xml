@@ -34,7 +34,7 @@
     </select>
     
       <!-- 특정 기간 내 축제 데이터 조회 -->
-  <select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
+    <select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
         SELECT 
             fe_id AS feId,
             fe_name AS feName,
@@ -44,8 +44,8 @@
             fe_image_main AS feImageMain,
             fe_address AS feAddress
         FROM festival
-        WHERE fe_start_date &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
-          AND fe_end_date &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+        WHERE TRUNC(fe_start_date) &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD')
+          AND TRUNC(fe_end_date) &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
     </select>
     
     <!-- 축제 검색 -->
