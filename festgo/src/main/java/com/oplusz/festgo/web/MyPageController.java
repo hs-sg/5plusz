@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -105,12 +106,35 @@ public class MyPageController {
 		return ResponseEntity.ok(festivals);
 	}
 	
+	// 마이페이지 상에 스폰서가 볼 축제상태로 분류된 축제 리스트 가져오기
+	@GetMapping("/scfestivals/{frApproval}")
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getChoiceFestivalsBySponsor
+		(@PathVariable("frApproval") Integer frApproval, HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
+		String sponsor = myPageService.readSponsorByUsername(username);
+		log.debug("getFestivalsBySponsorAndFrAppvoal(frApproval={}, sponsor={})", frApproval, sponsor);
+		
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readChoiceFestivalAdminInMyPageBySponsor(frApproval, sponsor);
+		
+		return ResponseEntity.ok(festivals);
+	}
+	
 	// 마이페이지 상에 관리자가 볼 모든 축제 리스트 가져오기
 	@GetMapping("/afestivals/")
 	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getAllFestivals() {
 		log.debug("getAllFestivals()");
 		
 		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
+		
+		return ResponseEntity.ok(festivals);
+	}
+	
+	// 마이페이지 상에 관리자가 볼 축제상태로 분류된 축제 리스트 가져오기
+	@GetMapping("/acfestivals/{frApproval}")
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getChoiceFestivals(@PathVariable("frApproval") Integer frApproval) {
+		log.debug("getFestivalsByFrAppvoal(frApproval = {})", frApproval);
+		
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readChoiceFestivalAdminInMyPage(frApproval);
 		
 		return ResponseEntity.ok(festivals);
 	}

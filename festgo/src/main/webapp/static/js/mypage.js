@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 let pageNum = pinputFirstPaging.value;
                 pbtnPrevious.disabled = true;
-                if(maxPage <= pageCount) pbtnNext.disabled = true;
+                if(maxPage <= 3) pbtnNext.disabled = true;
                 makeingPostList(pageNum);
                 
                 pinputFirstPaging.addEventListener('click', () => {
@@ -420,12 +420,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function getUFestivalList(data) {
         let today = new Date();
         let html = ""
-        let hostIndex = location.href.indexOf(location.host) + location.host.length;
-        let contextPath = location.href.substring(hostIndex, location.href.indexOf('/', hostIndex + 1));
-        console.log(hostIndex);
-        console.log(contextPath);
         if(data == "") {
-            html = `<h>좋아요한 축제가 없습니다<h>`
+            html += `<h>좋아요한 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
             return;
         }
@@ -435,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card my-3 me-4">
                 <div class="card-body d-flex">
                     <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                    alt="${festival.feImageMain}"/>
+                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -460,14 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             const startDate = new Date(festival.feStartDate[0], festival.feStartDate[1], festival.feStartDate[2]);
             const endDate = new Date(festival.feEndDate[0], festival.feEndDate[1], festival.feEndDate[2]);
-            console.log(startDate, endDate, today);
             if(today < startDate) addHtml += `<button class="btn btn-secondary disabled">축제종료</button>`;
             if(startDate <= today && today <= endDate) addHtml += `<button class="btn btn-primary disabled">개최중</button>`;
             if(today > endDate) addHtml += `<button class="btn btn-secondary disabled">개최예정</button>`;
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
-                        <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
+                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btn btn-outline-danger mx-2">좋아요 해제</button>
                     </div>
                 </div>
@@ -479,10 +474,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function getSFestivalList(data) {
-        let html = ""
+        let html = `
+            <input type="button" class="btnAllFestival btn" value="전체"/>
+            <input type="button" class="btnPostFestival btn" value="게시중"/>
+            <input type="button" class="btnWaitFestival btn" value="승인대기"/>
+            <input type="button" class="btnRefuseFestival btn" value="거절됨"/>
+        `;   
         console.log(data);
         if(data == "") {
-            html = `<h>등록한 축제가 없습니다<h>`
+            html += `<h>등록한 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
             return;
         }
@@ -534,7 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
-                    <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
+                    <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
                     </div>
                 </div>
@@ -543,16 +543,44 @@ document.addEventListener('DOMContentLoaded', () => {
             html += addHtml;
         }
         divFestivalList.innerHTML = html;
+        
+        const btnAllFestival = document.querySelector('input.btnAllFestival');
+        btnAllFestival.addEventListener('click', () => {
+            festivalList();
+        });
+        const btnPostFestival = document.querySelector('input.btnPostFestival');
+        btnPostFestival.addEventListener('click', () => {
+            sChoiceFestivalList(0);
+        });
+        const btnWaitFestival = document.querySelector('input.btnWaitFestival');
+        btnWaitFestival.addEventListener('click', () => {
+            sChoiceFestivalList(1);
+        });
+        const btnRefuseFestival = document.querySelector('input.btnRefuseFestival');
+        btnRefuseFestival.addEventListener('click', () => {
+            sChoiceFestivalList(2);
+        });
+    }
+    
+    function sChoiceFestivalList(frApproval) {
+        const SUri = `../api/mypage/scfestivals/${frApproval}`;
+                        
+        axios
+        .get(SUri)
+        .then((response) => { getSFestivalList(response.data); })
+        .catch((error) => { console.log(error); });
     }
     
     function getAFestivalList(data) {
         let html = `
             <input type="button" class="btnAllFestival btn" value="전체"/>
-            <input type="button" class="btnAllFestival btn" value="승인대기"/>
+            <input type="button" class="btnPostFestival btn" value="게시중"/>
+            <input type="button" class="btnWaitFestival btn" value="승인대기"/>
+            <input type="button" class="btnRefuseFestival btn" value="거절됨"/>
         `;     
                             
         if(data == "") {
-            html = `<h>등록된 축제가 없습니다<h>`
+            html += `<h>등록된 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
             return;
         }
@@ -601,7 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
-                        <a href="/festgo/fest/detail?feid=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
+                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
             `;
             if(festival.frApproval == 1) {
@@ -633,6 +661,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         divFestivalList.innerHTML = html;
         
+        const btnAllFestival = document.querySelector('input.btnAllFestival');
+        btnAllFestival.addEventListener('click', () => {
+            festivalList();
+        });
+        const btnPostFestival = document.querySelector('input.btnPostFestival');
+        btnPostFestival.addEventListener('click', () => {
+            aChoiceFestivalList(0);
+        });
+        const btnWaitFestival = document.querySelector('input.btnWaitFestival');
+        btnWaitFestival.addEventListener('click', () => {
+            aChoiceFestivalList(1);
+        });
+        const btnRefuseFestival = document.querySelector('input.btnRefuseFestival');
+        btnRefuseFestival.addEventListener('click', () => {
+            aChoiceFestivalList(2);
+        });
         const btnDeleteFestivals = document.querySelectorAll('button.btnDeleteFestival');
         for(const btn of btnDeleteFestivals) {
             btn.addEventListener('click', deleteFestival);
@@ -645,6 +689,15 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const btn of btnRefuseFestivals) {
             btn.addEventListener('click', refuseFestival);
         }
+    }
+    
+    function aChoiceFestivalList(frApproval) {
+        const AUri = `../api/mypage/acfestivals/${frApproval}`;
+                        
+        axios
+        .get(AUri)
+        .then((response) => { getAFestivalList(response.data); })
+        .catch((error) => { console.log(error); });
     }
     
     // 축제 승인 함수

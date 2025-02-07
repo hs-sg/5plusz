@@ -77,6 +77,15 @@
         inner join festival on fest_request.fe_id = festival.fe_id
     </select>
     
+    <!-- 관리자용에서 fr_approval로 선택된 축제 -->
+    <select id="selectFestivalJoinRequestByFrApproval">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+        where fr_approval = #{frApproval}
+    </select>
+    
     <!-- 사업자용은 me_sponsor로 찾음 -->
     <select id="selectFestivalJoinRequestBySponsor">
         select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
@@ -84,6 +93,15 @@
         from fest_request 
         inner join festival on fest_request.fe_id = festival.fe_id
         where me_sponsor = #{me_sponsor}
+    </select>
+    
+    <!-- 사업자용에서 me_sponsor로 찾고 fr_approval로 선택된 축제 -->
+    <select id="selectFestivalJoinRequestBySponsorAndFrApproval">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+        where fr_approval = #{frApproval} and me_sponsor = #{meSponsor}
     </select>
     
     <!-- 마이페이지에서 축제 삭제 -->

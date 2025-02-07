@@ -37,6 +37,12 @@ public interface FestivalDao {
 	// fest_request와 조인된 테이블 전체 축제 읽기 -> 마이페이지 관리자에서 사용
 	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestAll();
 	
+	// fest_request와 조인된 테이블 fr_approval로 분류된 축제 읽기 -> 마이페이지 관리자에서 사용
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestByFrApproval(Integer frApproval);
+	
+	// fest_request와 조인된 테이블 fr_approval로 분류된 축제 읽기 -> 마이페이지 사업자에서 사용
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsorAndFrApproval(Integer frApproval, String meSponsor);
+	
 	// fest_request와 조인된 테이블 중 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
 	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
 	

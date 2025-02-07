@@ -49,11 +49,31 @@ public class MyPageService {
 		return list;
 	}
 	
+	// fest_request와 조인된 fr_approval로 분류된 축제 읽기 -> 마이페이지 관리자에서 사용
+	public List<FestivalSelectJoinRequestDto> readChoiceFestivalAdminInMyPage(Integer frApproval) {
+		log.debug("readWaitFestivalAdminInMyPage()");
+		
+		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestByFrApproval(frApproval);
+		log.debug("result list={}", list);
+		
+		return list;
+	}
+	
 	// fest_request와 조인된 테이블에서 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
 	public List<FestivalSelectJoinRequestDto> readFestivalSponsorInMyPage(String meSponsor) {
-		log.debug("readFestivalSponsorInMyPage()");
+		log.debug("readFestivalSponsorInMyPage(meSponsor={})", meSponsor);
 		
 		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor(meSponsor);
+		log.debug("result list={}", list);
+		
+		return list;
+	}
+	
+	// fest_request와 조인된 테이블에서 사업자가 개최한 축제중 분류된 읽기 -> 마이페이지 사업자에서 사용
+	public List<FestivalSelectJoinRequestDto> readChoiceFestivalAdminInMyPageBySponsor(Integer frApproval, String meSponsor) {
+		log.debug("readChoiceFestivalAdminInMyPageBySponsor(frApproval={}, meSponsor={})", frApproval, meSponsor);
+		
+		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsorAndFrApproval(frApproval, meSponsor);
 		log.debug("result list={}", list);
 		
 		return list;
