@@ -74,7 +74,7 @@
         </if>
         offset #{startIndexNum} rows fetch first 12 rows only
     </select>
-    
+    <!--  -->
     <!-- 검색한 축제 개수 -->
     <select id="selectFestivalForReload" resultType="integer">
         <bind name="searchKeyword" value="'%' + keyword + '%'" />
