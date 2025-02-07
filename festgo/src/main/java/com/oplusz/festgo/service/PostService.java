@@ -394,4 +394,8 @@ public class PostService {
 	    return postDao.selectPagedPosts(params);
 	}
 
+	public void increaseViewCount(Integer poId) {
+		postDao.increaseViewCount(poId); // 조회수 증가 
+    }
+
 }
