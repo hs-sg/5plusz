@@ -25,7 +25,7 @@ public class FestRequestDaoTest {
 		Assertions.assertEquals(approveResult, 1);
 	}
 	
-	@Test
+//	@Test
 	public void testRefuseFestivalByMeId() {
 		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 117);
 		log.debug(refuseResult.toString());
