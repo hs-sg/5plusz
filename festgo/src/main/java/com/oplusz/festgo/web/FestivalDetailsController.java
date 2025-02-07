@@ -17,7 +17,7 @@ public class FestivalDetailsController {
     @GetMapping("/fest/details")
     public String festivalDetails() {
         log.debug("festivalDetails()");
-        // 뷰 리졸버가 "fest/details"를 /WEB-INF/views/fest/details.jsp로 포워딩하도록 설정되어 있다고 가정합니다.
+        
         return "fest/details";
     }
 }
