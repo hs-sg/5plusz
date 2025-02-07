@@ -66,6 +66,24 @@
         <if test="theId != null">
             and the_id = #{theId}
         </if>
+        offset #{startIndexNum} rows fetch first 12 rows only
+    </select>
+    
+    <!-- 검색한 축제 개수 -->
+    <select id="selectFestivalForReload" resultType="integer">
+        <bind name="searchKeyword" value="'%' + keyword + '%'" />
+        select count(*)
+        from festival
+        where upper(fe_name) like upper(#{searchKeyword})
+        <if test="month != null">
+            and to_char(fe_start_date, 'mm') = #{month} and to_char(fe_end_date, 'mm') = #{month}   
+        </if>
+        <if test="lcId != null">
+            and lc_id = #{lcId} 
+        </if>
+        <if test="theId != null">
+            and the_id = #{theId}
+        </if>
     </select>
     
     <!-- 희성 작성 시작 ================================================================================================== -->

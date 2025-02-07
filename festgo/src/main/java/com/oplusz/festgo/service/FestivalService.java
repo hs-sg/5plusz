@@ -77,6 +77,14 @@ public class FestivalService {
     	
     	return festivalsDao.selectFestivalForSearch(dto);
     }
+    
+    // 검색한 축제 개수
+    public int readForReload(FestivalSearchDto dto) {
+    	log.debug("readForReload(dto={})", dto);
+    	if(dto.getKeyword() == null) dto.setKeyword("");
+    	
+    	return festivalsDao.selectFestivalForReload(dto);
+    }
 
 
 

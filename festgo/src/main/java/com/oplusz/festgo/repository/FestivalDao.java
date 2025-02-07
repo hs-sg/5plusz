@@ -35,6 +35,9 @@ public interface FestivalDao {
 	// 축제 검색
     List<FestivalCalendarDto> selectFestivalForSearch(FestivalSearchDto dto);
     
+    // 검색한 축제 개수
+    int selectFestivalForReload(FestivalSearchDto dto);
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기

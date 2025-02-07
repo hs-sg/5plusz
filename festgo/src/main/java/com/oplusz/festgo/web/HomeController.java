@@ -57,4 +57,25 @@ public class HomeController {
 		return festivalService.read(dto);
 	}
 	
+	// 더보기 버튼 생성을 위해 검색한 축제 개수 확인
+	@ResponseBody
+	@PostMapping("/api/reloadData")
+	public ResponseEntity<Integer> countSearchFestival(@RequestBody FestivalSearchDto dto) {
+		log.debug("countSearchFestival(dto={})", dto);
+		
+		if(dto.getMonth().equals("")) {
+			dto.setMonth(null);
+		} else {
+			String monthFormatted = String.format("%02d", Integer.parseInt(dto.getMonth()));
+			dto.setMonth(monthFormatted);
+		}
+		
+		int totalFestivals = festivalService.readForReload(dto);
+		int festivals = dto.getStartIndexNum() + 12;
+		
+		int result = totalFestivals - festivals; //-> 페이지에 출력된 페이지들을 제외한 남은 축제 개수
+		
+		return ResponseEntity.ok(result);
+	}
+	
 }

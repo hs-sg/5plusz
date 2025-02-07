@@ -123,6 +123,10 @@
             <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
             <section>
                 <div id="eventDetails" class="my-4 text-center"></div>
+                <%-- 더보기 버튼용 div --%>
+                <div id="showMoreFestival" class="d-none mb-5 d-grid gap-2 col-6 mx-auto">
+                    <button id="btnShowMoreFestival" type="button" class="btn btn-outline-secondary">더보기 +</button>
+                </div>
             </section>
             <!--// AJAX로 불러온 축제 정보들이 표시될 영역 -->
             <!-- HOT & NEW 축제 -->
@@ -139,7 +143,6 @@
                             <div class="swiper-slide">Slide 1</div>
                             <div class="swiper-slide">Slide 2</div>
                             <div class="swiper-slide">Slide 3</div>
-                            ...
                         </div>
         
                         <!-- If we need navigation buttons -->
