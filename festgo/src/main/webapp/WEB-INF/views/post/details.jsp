@@ -43,7 +43,7 @@
 
 <body>
     <div class="container-fluid">
-        <c:set var="pageTitle" value="포스트 상세보기" />
+        <c:set var="pageTitle" value="상세보기" />
         <%@ include file="../fragments/header.jspf" %>
 
         <main class="mt-2">

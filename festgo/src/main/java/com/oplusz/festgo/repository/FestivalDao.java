@@ -2,19 +2,14 @@ package com.oplusz.festgo.repository;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
-import com.oplusz.festgo.domain.FestivalImage;
-import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
-import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
-import com.oplusz.festgo.dto.FestivalWithImagesDto;
-import com.oplusz.festgo.domain.Festival;
-
-import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.oplusz.festgo.dto.FestivalCalendarDto;
+
 import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.dto.FestivalCalendarDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
+import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 
 @Mapper
 public interface FestivalDao {
