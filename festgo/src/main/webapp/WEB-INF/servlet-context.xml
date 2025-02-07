@@ -19,10 +19,10 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    
     <!-- 정적 리소스 매핑 설정 -->
    <mvc:resources mapping="/uploads/**" 
-               location="file:C:\Users\asc19\eclipse-workspace\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads\"></mvc:resources>
+               location="file:C:/Users/asc19/eclipse-workspace/teamproject/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
+
 
 
     <!-- Spring MVC에서 dispatcherServlet이 처리하지 않는 정적 요청에 필요한 파일들
