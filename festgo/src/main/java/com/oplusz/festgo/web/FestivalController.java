@@ -40,7 +40,7 @@ public class FestivalController {
     private final ThemeDao themeDao;
     
     // 해당 축제 상세보기 서비스
-    @GetMapping("/details")
+    @GetMapping("/fest/details/{feId}")
     public void details(@RequestParam Integer feId, Model model) {
     	log.debug("details(id={})", feId);
     	
