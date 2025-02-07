@@ -32,7 +32,7 @@ public class PostDaoTest {
 	
 	// @Test
 	public void testreadTen() {
-		List<Post> list = postDao.readVariable(1, 10);
+		List<Post> list = postDao.readPostVariable(1, 10);
 		log.debug(list.toString());
 		Assertions.assertNotNull(list);
 	}

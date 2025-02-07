@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.domain.Post;
+import com.oplusz.festgo.domain.Review;
 import com.oplusz.festgo.dto.FestRequestRefuseDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
@@ -25,6 +26,7 @@ import com.oplusz.festgo.dto.MemberSignInDto;
 import com.oplusz.festgo.dto.SponRequestRefuseDto;
 import com.oplusz.festgo.service.MyPageService;
 import com.oplusz.festgo.service.PostService;
+import com.oplusz.festgo.service.ReviewService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,7 @@ public class MyPageController {
 
 	private final MyPageService myPageService;
 	private final PostService postService;
+	private final ReviewService reviewService;
 	
 	// 프로필 정보 가져오기
 	@GetMapping("/profile/{signedInUser}")
@@ -143,7 +146,7 @@ public class MyPageController {
 	
 	// 마이페이지 상에 유저, 스폰서가 볼 작성 글목록 페이지 마다 원하는 개수로 가져오기
 	@GetMapping("/usposts/{pagenum}")
-	public ResponseEntity<List<Post>> getVarialbePostsByPageNumAndUsername(@PathVariable("pagenum") String pageNum, HttpSession session) {
+	public ResponseEntity<List<Post>> getVariablePostsByPageNumAndUsername(@PathVariable("pagenum") String pageNum, HttpSession session) {
 		String username = session.getAttribute("signedInUser").toString();
 		log.debug("getVarialbePostsByPageNumAndUsername(pageNum={}, username={})", pageNum, username);
 		List<Post> posts = postService.readVariableByPageNumAndUsername(10, Integer.parseInt(pageNum), username);
@@ -160,13 +163,50 @@ public class MyPageController {
 		return ResponseEntity.ok(countPosts);
 	}
 	
-	//  마이페이지 상에 유저나 사업자가 등록한 갯수 가져오기
+	//  마이페이지 상에 유저나 사업자가 등록한 글 갯수 가져오기
 	@GetMapping("/cntaposts/{signedInUser}")
 	public ResponseEntity<Integer> getCountAllPostsByUsername(@PathVariable("signedInUser") String username) {
 		log.debug("getCountAllPostsByUsername()");
 		Integer countPosts = postService.getCountAllPostsByUsername(username);
 		
 		return ResponseEntity.ok(countPosts);
+	}
+	
+	// 마이페이지 상에 유저가 등록한 리뷰 갯수 가져오기
+	@GetMapping("/cntreviews/{signedInUser}")
+	public ResponseEntity<Integer> getCountAllReviewsByUsername(@PathVariable("signedInUser") String username) {
+		log.debug("getCountAllReviewsByUsername()");
+		Integer countReviews = reviewService.getCountAllReviewsByUsername(username);
+		
+		return ResponseEntity.ok(countReviews);
+	}
+	
+	// 마이페이지 상에 유저 볼 작성 리뷰목록 페이지 마다 원하는 개수로 가져오기
+	@GetMapping("/ureviews/{pageNum}")
+	public ResponseEntity<List<Review>> getVariableReviewsByPageNumAndUsername(@PathVariable("pageNum") String pageNum, HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
+		log.debug("getVariableReviewsByPageNumAndUsername(pageNum={}, username={})", pageNum, username);
+		List<Review> reviews = reviewService.readReviewVariableByPageNumAndUsername(10, Integer.parseInt(pageNum), username);
+		
+		return ResponseEntity.ok(reviews);
+	}
+	
+	// 마이페이지 상에 유저가 등록한 리뷰 갯수 가져오기
+	@GetMapping("/cntreviews/")
+	public ResponseEntity<Integer> getCountAllReviews() {
+		log.debug("getCountAllReviews()");
+		Integer countReviews = reviewService.getCountAllReviews();
+		
+		return ResponseEntity.ok(countReviews);
+	}
+
+	// 마이페이지 상에 관리자가 볼 전체 리뷰목록 페이지 마다 원하는 개수로 가져오기
+	@GetMapping("/areviews/{pageNum}")
+	public ResponseEntity<List<Review>> getVariableReviewsByPageNum(@PathVariable("pageNum") String pageNum) {
+		log.debug("getVariableReviewsByPageNum(pageNum={})", pageNum);
+		List<Review> reviews = reviewService.readReviewVariableByPageNum(10, Integer.parseInt(pageNum));
+		
+		return ResponseEntity.ok(reviews);
 	}
 	
 	// 마이페이지 상에 관리자가 볼 승인 대기중인 사업자 아이디 리스트 가져오기

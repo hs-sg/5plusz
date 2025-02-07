@@ -111,7 +111,7 @@
     </select>
     
     <!-- 관리자용 전체글 목록 원하는 수대로 가져오기 -->
-    <select id="readVariable" resultType="Post">
+    <select id="readPostVariable" resultType="Post">
 	    select po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views from
 	        (
 		    select rownum rno, po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views
@@ -122,7 +122,7 @@
     </select>
     
     <!-- 일반, 스폰서용 작성글 원하는 수대로 가져오기 -->
-    <select id="readVariableByMeUsername" resultType="Post">
+    <select id="readPostVariableByMeUsername" resultType="Post">
         select po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views from
             (
             select rownum rno, po_id, po_title, po_content, po_author, po_created_time, po_modified_time, pc_id, po_views
