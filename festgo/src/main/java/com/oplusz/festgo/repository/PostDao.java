@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.domain.PostAttachment;
 import com.oplusz.festgo.dto.PostCreateDto;
+import com.oplusz.festgo.dto.PostSearchDto;
 
 public interface PostDao {
 
@@ -32,15 +33,6 @@ public interface PostDao {
     // 기존 첨부파일 삭제
     void deleteAttachmentsByIds(@Param("ids") List<Integer> attachmentIds);
 
-    // 기존 첨부파일 목록
-    List<PostAttachment> selectAttachmentsByPostId(Integer poId);
-
-    // 게시글 삭제
-    void deleteById(@Param("poId") Integer poId);
-
-    // 특정 게시글의 모든 첨부파일 삭제
-    void deleteAttachmentsByPostId(@Param("poId") Integer poId);
-
     // 페이징 처리된 게시글 목록 조회
     List<Post> selectPagedPosts(Map<String, Object> params);
 
@@ -54,5 +46,29 @@ public interface PostDao {
     int countSearchResults(Map<String, Object> params);
 
 	List<Post> selectNotices();
+
+	// 기존 첨부파일 목록
+	List<PostAttachment> selectAttachmentsByPostId(Integer poId);
+	
+	// 게시글 삭제
+	void deleteById(@Param("poId") Integer poId);
+	
+	// 특정 게시글의 모든 첨부파일 삭제
+	void deleteAttachmentsByPostId(@Param("poId") Integer poId);
+	
+	// 검색
+	List<Post> search(PostSearchDto dto);
+	
+	
+//	희성 작성 시작
+	
+	List<Post> readByMeUsername(String meUsername);
+	List<Post> readVariable(Integer minPostNum, Integer maxPostNum);
+	List<Post> readVariableByMeUsername(Integer minPostNum, Integer maxPostNum, String meUsername);
+	Integer countAllPosts();
+	Integer countPostsByMeUsername(String meUsername);
+	
+//	희성 작성 끝
+
 
 }

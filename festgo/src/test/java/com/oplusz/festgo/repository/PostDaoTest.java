@@ -1,35 +1,40 @@
 package com.oplusz.festgo.repository;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import com.oplusz.festgo.domain.Post;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/application-context.xml" })
-public class FestRequestDaoTest {
+public class PostDaoTest {
 
 	@Autowired
-	private FestRequestDao festRequestDao;
-	
+	private PostDao postDao;
+
 //	희성 작성 시작 -------------------------------------------------------------------------------------------------
 	
 	// @Test
-	public void testApproveFestivalByMeId() {
-		Integer approveResult = festRequestDao.approveFestivalByFeId(117);
-		log.debug(approveResult.toString());
-		Assertions.assertEquals(approveResult, 1);
+	public void testreadByMeUsername() {
+		List<Post> list = postDao.readByMeUsername("ㅇ");
+		log.debug(list.toString());
+		Assertions.assertNotNull(list);
 	}
 	
-	@Test
-	public void testRefuseFestivalByMeId() {
-		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 117);
-		log.debug(refuseResult.toString());
-		Assertions.assertEquals(refuseResult, 1);
+	// @Test
+	public void testreadTen() {
+		List<Post> list = postDao.readVariable(1, 10);
+		log.debug(list.toString());
+		Assertions.assertNotNull(list);
 	}
 	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
