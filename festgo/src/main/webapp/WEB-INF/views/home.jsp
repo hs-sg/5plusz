@@ -32,7 +32,6 @@
             <!-- 쇼케이스 섹션: 최신 축제, 추천 축제 -->
             <section class="pt-3">
                 <div class="mainVisual">
-                    <!--<div class="bg-info" id="backgroundImage"></div>-->
                     <div class="innerVisual">
                         <div class="swiper mainVisualSwiper">
                             <div class="swiper-wrapper">
@@ -56,12 +55,12 @@
             <!--// 쇼케이스 섹션  -->
             <!-- 검색 -->
             <section class="pt-3">
-                <form class="row gx-3 gy-2 align-items-center">
+                <form class="row gx-3 gy-2 align-items-center" id="searchFestival">
                     <div class="col-sm-3">
                         <div class="input-group">
                             <div class="input-group-text">@</div>
                             <select class="form-select" id="selectTime" name="month">
-                                <option selected>시기</option>
+                                <option value="" selected>시기</option>
                                 <% // 드롭박스에 시기(1~12월)를 입력
                                 for (int i = 1; i <= 12; i++) { %>
                                 <option value="<%=i%>"><%=i%>월</option>
@@ -74,7 +73,7 @@
                         <div class="input-group">
                             <div class="input-group-text">@</div>
                             <select class="form-select" id="selectLocation" name="lcId">
-                                <option selected>지역</option>
+                                <option value="" selected>지역</option>
                                 <c:forEach var="lc" items="${ locations }">
                                     <option value="${ lc.lcId }">${ lc.lcName }</option>
                                 </c:forEach>
@@ -86,7 +85,7 @@
                         <div class="input-group">
                             <div class="input-group-text">@</div>
                             <select class="form-select" id="selectTheme" name="theId">
-                                <option selected>테마</option>
+                                <option value="" selected>테마</option>
                                 <c:forEach var="the" items="${ themes }">
                                     <option value="${ the.theId }">${ the.theName }</option>
                                 </c:forEach>
@@ -98,7 +97,7 @@
                         <div class="searchArea">
                             <input class="searchLine" id="searchText" name="keyword" title="검색"
                                 value placeholder="검색어를 입력해주세요."/>
-                            <button type="button" id="searchBtn"></button>
+                            <button type="submit" id="searchBtn"></button>
                         </div>
                     </div>
                 </form>
@@ -124,6 +123,10 @@
             <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
             <section>
                 <div id="eventDetails" class="my-4 text-center"></div>
+                <%-- 더보기 버튼용 div --%>
+                <div id="showMoreFestival" class="d-none mb-5 d-grid gap-2 col-6 mx-auto">
+                    <button id="btnShowMoreFestival" type="button" class="btn btn-outline-secondary">더보기 +</button>
+                </div>
             </section>
             <!--// AJAX로 불러온 축제 정보들이 표시될 영역 -->
             <!-- HOT & NEW 축제 -->
@@ -140,7 +143,6 @@
                             <div class="swiper-slide">Slide 1</div>
                             <div class="swiper-slide">Slide 2</div>
                             <div class="swiper-slide">Slide 3</div>
-                            ...
                         </div>
         
                         <!-- If we need navigation buttons -->

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.oplusz.festgo.domain.Review;
 import com.oplusz.festgo.repository.ReviewDao;
+import com.oplusz.festgo.dto.PostSearchDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
