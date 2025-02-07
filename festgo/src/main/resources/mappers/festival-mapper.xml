@@ -48,6 +48,48 @@
           AND fe_end_date &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
     </select>
     
+    <!-- 축제 검색 -->
+    <select id="selectFestivalForSearch" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
+        <bind name="searchKeyword" value="'%' + keyword + '%'" />
+        select 
+            fe_id AS feId,
+            fe_name AS feName,
+            TO_CHAR(fe_start_date, 'YYYY-MM-DD') AS feStartDate,
+            TO_CHAR(fe_end_date, 'YYYY-MM-DD') AS feEndDate,
+            fe_contents AS feContents,
+            fe_image_main AS feImageMain,
+            fe_address AS feAddress
+        from festival
+        where upper(fe_name) like upper(#{searchKeyword})
+        <if test="month != null">
+            and to_char(fe_start_date, 'mm') = #{month} and to_char(fe_end_date, 'mm') = #{month}   
+        </if>
+        <if test="lcId != null">
+            and lc_id = #{lcId} 
+        </if>
+        <if test="theId != null">
+            and the_id = #{theId}
+        </if>
+        offset #{startIndexNum} rows fetch first 12 rows only
+    </select>
+    
+    <!-- 검색한 축제 개수 -->
+    <select id="selectFestivalForReload" resultType="integer">
+        <bind name="searchKeyword" value="'%' + keyword + '%'" />
+        select count(*)
+        from festival
+        where upper(fe_name) like upper(#{searchKeyword})
+        <if test="month != null">
+            and to_char(fe_start_date, 'mm') = #{month} and to_char(fe_end_date, 'mm') = #{month}   
+        </if>
+        <if test="lcId != null">
+            and lc_id = #{lcId} 
+        </if>
+        <if test="theId != null">
+            and the_id = #{theId}
+        </if>
+    </select>
+    
     <!-- 희성 작성 시작 ================================================================================================== -->
     
     <!-- 전체 축제 리스트 불러오기 -->

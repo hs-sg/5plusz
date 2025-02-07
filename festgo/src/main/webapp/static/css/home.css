@@ -60,3 +60,31 @@
     height: 100%;
     object-fit: cover;
 }
+
+/* 축제 카드 스타일 - 연보라 테두리와 둥근 모서리, 마우스 오버 효과 추가 */
+.festival-card {
+    border: 2px solid #E6E6FA; /* 연보라 색 테두리 (lavender) */
+    border-radius: 10px; /* 둥근 모서리 */
+    cursor: pointer; /* 카드 전체 클릭 가능 */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.festival-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+/* 축제 이름(카드 제목) 글씨 굵게 */
+.card-title {
+    font-weight: bold;
+}
+/* 축제 리스트 텍스트 스타일 (두껍게) */
+.festival-list-title {
+    font-weight: bold;
+}
+/* hr 스타일 - 필요에 따라 여백 및 선 스타일 조정 */
+.custom-hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 0 auto 20px;
+    max-width: 90%;
+}
