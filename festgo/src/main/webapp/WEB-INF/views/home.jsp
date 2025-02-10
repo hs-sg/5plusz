@@ -33,23 +33,44 @@
             <section class="pt-3">
                 <div class="mainVisual">
                     <div class="innerVisual">
-                        <div class="swiper mainVisualSwiper">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide">Slide 1</div>
-                                <div class="swiper-slide">Slide 2</div>
-                                <div class="swiper-slide">Slide 3</div>
-                                <div class="swiper-slide">Slide 4</div>
-                                <div class="swiper-slide">Slide 5</div>
-                                <div class="swiper-slide">Slide 6</div>
-                                <div class="swiper-slide">Slide 7</div>
-                                <div class="swiper-slide">Slide 8</div>
-                                <div class="swiper-slide">Slide 9</div>
-                            </div>
-                            <div class="swiper-button-next"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-pagination"></div>
-                        </div>
-                    </div>                
+                        <swiper-container 
+                            class="mainSwiper" 
+                            pagination="true" 
+                            pagination-dynamic-bullets="true">
+                            <swiper-slide>
+                                <c:url var="linkMainVisual1" 
+                                    value="/fest/detail?feId=${ festivalsForMainVisual1.feId }"></c:url>
+                                <a href="${ linkMainVisual1 }">
+                                    <c:url var="mainVisual1Img" 
+                                        value="/uploads/${ festivalsForMainVisual1.feImageMain }"></c:url>
+                                    <img src="${ mainVisual1Img }" alt="">
+                                </a>
+                                <div
+                                    class="swiper-slide-container-box theme">
+                                    <div class="main-slide-title">
+                                        <span class="sort theme">NEW</span>
+                                        <h2>축제는 FestGo에서 찾아보세요!</h2>
+                                    </div>
+                                </div>
+                            </swiper-slide>
+                            <swiper-slide>
+                                <c:url var="linkMainVisual2" 
+                                    value="/fest/detail?feId=${ festivalsForMainVisual2.feId }"></c:url>
+                                <a href="${ linkMainVisual2 }">
+                                    <c:url var="mainVisual2Img" 
+                                        value="/uploads/${ festivalsForMainVisual2.feImageMain }"></c:url>
+                                    <img src="${ mainVisual2Img }" alt="">
+                                </a>
+                                <div
+                                    class="swiper-slide-container-box theme">
+                                    <div class="main-slide-title">
+                                        <span class="sort theme">공지</span>
+                                        <h2>FestGo 메인 비쥬얼 슬라이드 테스트</h2>
+                                    </div>
+                                </div>
+                            </swiper-slide>
+                        </swiper-container>                        
+                    </div>           
                 </div>
             </section>
             <!--// 쇼케이스 섹션  -->
@@ -107,15 +128,14 @@
             <section>
                 <div class="keyword mt-3">
                     <h2>
-                        <em>좋아요</em> 많은 키워드
+                        <em>추천</em> 키워드
                     </h2>
                     <ul>
-                        <li>
-                            <a href=#>눈꽃</a>
-                        </li>
-                        <li>
-                            <a href=#>산천어</a>
-                        </li>
+                        <c:forEach var="t" items="${ themesInFestival }">
+                            <li>
+                                <a href=# class="linkRecommendTheme" theme-id="${ t.theId }">${ t.theName }</a>
+                            </li>
+                        </c:forEach>
                     </ul>
                 </div>
             </section>
@@ -132,17 +152,22 @@
             <!-- HOT & NEW 축제 -->
             <section>
                 <div class="mt-3">
-                    <h2>
-                        <em>HOT & NEW</em> 축제
-                    </h2>
+                    <h2>새로 등록된 축제</h2>
                     <!-- Slider main container -->
                     <div class="swiper festivalSwiper">
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <!-- Slides -->
-                            <div class="swiper-slide">Slide 1</div>
-                            <div class="swiper-slide">Slide 2</div>
-                            <div class="swiper-slide">Slide 3</div>
+                            <c:forEach var="fn" items="${ festivalsForNewVisual }">
+                                <div class="swiper-slide">
+                                    <c:url var="linkNewFestival" value="/fest/detail?feId=${ fn.feId }"></c:url>
+                                    <a href="${ linkNewFestival }" class="d-flex">
+                                        <c:url var="linkNewFestivalImg" value="/uploads/${ fn.feImageMain }"></c:url>
+                                        <img src="${ linkNewFestivalImg }" alt="">
+                                        <div>${ fn.feName }</div>
+                                    </a>
+                                </div>
+                            </c:forEach>
                         </div>
         
                         <!-- If we need navigation buttons -->
@@ -168,6 +193,7 @@
         
         <!-- Swiper JS -->
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
         
         <!-- JSP 페이지 내 스크립트 부분 -->
         <script>
