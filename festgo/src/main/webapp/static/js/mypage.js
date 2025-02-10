@@ -66,34 +66,77 @@ document.addEventListener('DOMContentLoaded', () => {
     function festivalList() {
         btnToggleFestivalList.style.color = 'blue';
         divFestivalList.style.display = 'block';
+        let html = ``;
         switch(role) {
             case `1` : // 일반유저
-                const UUri = `../api/mypage/ufestivals/${signedInUser}`;
-                                        
-                axios
-                .get(UUri)
-                .then((response) => { getUFestivalList(response.data); })
-                .catch((error) => { console.log(error); });
-                
+                html = `<div id="divUFestivalList"></div>`;
+                divFestivalList.innerHTML = html;
+                getUFestivalEachNumber(5);
                 break;
                 
             case `2` :
-                const BUri = `../api/mypage/sfestivals/${signedInUser}`;
+                
+            html = `
+                        <input type="button" class="btnAllSFestival btn" value="전체"/>
+                        <input type="button" class="btnPostSFestival btn" value="게시중"/>
+                        <input type="button" class="btnWaitSFestival btn" value="승인대기"/>
+                        <input type="button" class="btnRefuseSFestival btn" value="거절됨"/>
+                        <div id="divSFestivalList"></div>
+            `;
 
-                axios
-                .get(BUri)
-                .then((response) => { getSFestivalList(response.data); })
-                .catch((error) => { console.log(error); });
+            divFestivalList.innerHTML = html;
 
-                break;
+            const btnAllSFestival = document.querySelector('input.btnAllSFestival');
+            const btnPostSFestival = document.querySelector('input.btnPostSFestival');
+            const btnWaitSFestival = document.querySelector('input.btnWaitSFestival');
+            const btnRefuseSFestival = document.querySelector('input.btnRefuseSFestival');
+
+            getSFestivalEachNumberAndCategory(5, -1);
+
+            btnAllSFestival.addEventListener('click', ()=>{
+                getSFestivalEachNumberAndCategory(5, -1);
+            });
+            btnPostSFestival.addEventListener('click', ()=>{
+                getSFestivalEachNumberAndCategory(5, 0);
+            });
+            btnWaitSFestival.addEventListener('click', ()=>{
+                getSFestivalEachNumberAndCategory(5, 1);
+            });
+            btnRefuseSFestival.addEventListener('click', ()=>{
+                getSFestivalEachNumberAndCategory(5, 2);
+            });
+            break;
                 
             case `3` :
-                const AUri = `../api/mypage/afestivals/`;
+                html = `
+                            <input type="button" class="btnAllAFestival btn" value="전체"/>
+                            <input type="button" class="btnPostAFestival btn" value="게시중"/>
+                            <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
+                            <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
+                            <div id="divAFestivalList"></div>
+                `;
                 
-                axios
-                .get(AUri)
-                .then((response) => { getAFestivalList(response.data); })
-                .catch((error) => { console.log(error); });
+                divFestivalList.innerHTML = html;
+                
+                const btnAllAFestival = document.querySelector('input.btnAllAFestival');
+                const btnPostAFestival = document.querySelector('input.btnPostAFestival');
+                const btnWaitAFestival = document.querySelector('input.btnWaitAFestival');
+                const btnRefuseAFestival = document.querySelector('input.btnRefuseAFestival');
+                
+                getAFestivalEachNumberAndCategory(5, -1);
+                
+                btnAllAFestival.addEventListener('click', ()=>{
+                    getAFestivalEachNumberAndCategory(5, -1);
+                });
+                btnPostAFestival.addEventListener('click', ()=>{
+                    getAFestivalEachNumberAndCategory(5, 0);
+                });
+                btnWaitAFestival.addEventListener('click', ()=>{
+                    getAFestivalEachNumberAndCategory(5, 1);
+                });
+                btnRefuseAFestival.addEventListener('click', ()=>{
+                    getAFestivalEachNumberAndCategory(5, 2);
+                });
                 break;
         }
     }
@@ -417,7 +460,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ---------------- 축제 기능 부분 시작 ---------------------------------------
 
-    function getUFestivalList(data) {
+    function getAFestivalEachNumberAndCategory(eachNumber, category) {
+        const aUri = `../api/mypage/afestivals/`;
+                        
+        axios
+        .get(aUri, { params:   
+            {category: category, eachNumber: eachNumber}})
+        .then((response) => { getAFestivalList(response.data, eachNumber, category); })
+        .catch((error) => { console.log(error); });
+    }
+    
+    function getSFestivalEachNumberAndCategory(eachNumber, category) {
+        const sUri = `../api/mypage/sfestivals/`;
+                        
+        axios
+        .get(sUri, { params:   
+            {category: category, eachNumber: eachNumber}})
+        .then((response) => { getSFestivalList(response.data, eachNumber, category); })
+        .catch((error) => { console.log(error); });
+    }
+    
+    function getUFestivalEachNumber(eachNumber) {
+        const uUri = `../api/mypage/ufestivals/`;
+                        
+        axios
+        .get(uUri, { params:   
+            {eachNumber: eachNumber}})
+        .then((response) => { getUFestivalList(response.data, eachNumber); })
+        .catch((error) => { console.log(error); });
+    }
+
+    function getUFestivalList(data, eachNumber) {
+        const divUFestivalList = document.querySelector("div#divUFestivalList");
+        eachNumber += 5;
         let today = new Date();
         let html = ""
         if(data == "") {
@@ -463,24 +538,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="justify-content-end d-inline">
                         <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
-                        <button data-id="${festival.feId}" class="btn btn-outline-danger mx-2">좋아요 해제</button>
+                        <button data-id="${festival.feId}" like-state="1" class="btnLikeFestival btn btn-outline-danger mx-2">좋아요 해제</button>
                     </div>
                 </div>
             </div>
             `;
             html += addHtml;
         }
-        divFestivalList.innerHTML = html;
+        html += `<button each-number="${eachNumber}" class="btnEachNumber btn">더보기</button>`;
+        divUFestivalList.innerHTML = html;
+
+        const btnEachNumber = document.querySelector('button.btnEachNumber');
+        btnEachNumber.addEventListener('click', () => {
+            const uUri = `../api/mypage/ufestivals/`;
+                                                
+            axios
+            .get(uUri, { params:   
+                {eachNumber: eachNumber}})
+            .then((response) => { getUFestivalList(response.data, eachNumber); })
+            .catch((error) => { console.log(error); });
+        });
+        
+        const btnLikeFestivals = document.querySelectorAll('button.btnLikeFestival');
+        for(const btn of btnLikeFestivals) {
+            btn.addEventListener('click', btnLikeFestival);
+        }
     }
     
-    function getSFestivalList(data) {
-        let html = `
-            <input type="button" class="btnAllFestival btn" value="전체"/>
-            <input type="button" class="btnPostFestival btn" value="게시중"/>
-            <input type="button" class="btnWaitFestival btn" value="승인대기"/>
-            <input type="button" class="btnRefuseFestival btn" value="거절됨"/>
-        `;   
-        console.log(data);
+    function btnLikeFestival(event) { 
+        const feId = event.target.getAttribute("data-id");
+        const likeState = event.target.getAttribute("like-state");
+        
+        if(likeState == 0) {
+            const uri = `../api/mypage/likefest/${feId}`;
+            axios
+            .get(uri)
+            .then(() => {
+                event.target.setAttribute("like-state", "1");
+                event.target.innerHTML = '좋아요 해제';
+            })
+            .catch((error) => { console.log(error); });
+        } else if(likeState == 1) {
+            const uri = `../api/mypage/nlikefest/${feId}`;
+            axios
+            .delete(uri)
+            .then(() => {
+                event.target.setAttribute("like-state", "0");
+                event.target.innerHTML = '좋아요';
+            })
+            .catch((error) => { console.log(error); });
+        }
+    }
+    
+    function getSFestivalList(data, eachNumber, category) {
+        const divSFestivalList = document.querySelector("div#divSFestivalList");
+        eachNumber += 5;
+        let html = "";
         if(data == "") {
             html += `<h>등록한 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
@@ -542,43 +655,25 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        divFestivalList.innerHTML = html;
+        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        divSFestivalList.innerHTML = html;
         
-        const btnAllFestival = document.querySelector('input.btnAllFestival');
-        btnAllFestival.addEventListener('click', () => {
-            festivalList();
-        });
-        const btnPostFestival = document.querySelector('input.btnPostFestival');
-        btnPostFestival.addEventListener('click', () => {
-            sChoiceFestivalList(0);
-        });
-        const btnWaitFestival = document.querySelector('input.btnWaitFestival');
-        btnWaitFestival.addEventListener('click', () => {
-            sChoiceFestivalList(1);
-        });
-        const btnRefuseFestival = document.querySelector('input.btnRefuseFestival');
-        btnRefuseFestival.addEventListener('click', () => {
-            sChoiceFestivalList(2);
+        const btnEachNumber = document.querySelector('button.btnEachNumber');
+        btnEachNumber.addEventListener('click', () => {
+            const sUri = `../api/mypage/sfestivals/`;
+                                                
+            axios
+            .get(sUri, { params:   
+                {category: category, eachNumber: eachNumber}})
+            .then((response) => { getSFestivalList(response.data, eachNumber, category); })
+            .catch((error) => { console.log(error); });
         });
     }
     
-    function sChoiceFestivalList(frApproval) {
-        const SUri = `../api/mypage/scfestivals/${frApproval}`;
-                        
-        axios
-        .get(SUri)
-        .then((response) => { getSFestivalList(response.data); })
-        .catch((error) => { console.log(error); });
-    }
-    
-    function getAFestivalList(data) {
-        let html = `
-            <input type="button" class="btnAllFestival btn" value="전체"/>
-            <input type="button" class="btnPostFestival btn" value="게시중"/>
-            <input type="button" class="btnWaitFestival btn" value="승인대기"/>
-            <input type="button" class="btnRefuseFestival btn" value="거절됨"/>
-        `;     
-                            
+    function getAFestivalList(data, eachNumber, category) {
+        const divAFestivalList = document.querySelector("div#divAFestivalList");
+        eachNumber += 5;    
+        let html = "";       
         if(data == "") {
             html += `<h>등록된 축제가 없습니다<h>`
             divFestivalList.innerHTML = html;
@@ -659,24 +754,8 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        divFestivalList.innerHTML = html;
-        
-        const btnAllFestival = document.querySelector('input.btnAllFestival');
-        btnAllFestival.addEventListener('click', () => {
-            festivalList();
-        });
-        const btnPostFestival = document.querySelector('input.btnPostFestival');
-        btnPostFestival.addEventListener('click', () => {
-            aChoiceFestivalList(0);
-        });
-        const btnWaitFestival = document.querySelector('input.btnWaitFestival');
-        btnWaitFestival.addEventListener('click', () => {
-            aChoiceFestivalList(1);
-        });
-        const btnRefuseFestival = document.querySelector('input.btnRefuseFestival');
-        btnRefuseFestival.addEventListener('click', () => {
-            aChoiceFestivalList(2);
-        });
+        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        divAFestivalList.innerHTML = html;
         const btnDeleteFestivals = document.querySelectorAll('button.btnDeleteFestival');
         for(const btn of btnDeleteFestivals) {
             btn.addEventListener('click', deleteFestival);
@@ -689,16 +768,18 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const btn of btnRefuseFestivals) {
             btn.addEventListener('click', refuseFestival);
         }
+        const btnEachNumber = document.querySelector('button.btnEachNumber');
+        btnEachNumber.addEventListener('click', () => {
+            const aUri = `../api/mypage/afestivals/`;
+                                                
+            axios
+            .get(aUri, { params:   
+                {category: category, eachNumber: eachNumber}})
+            .then((response) => { getAFestivalList(response.data, eachNumber, category); })
+            .catch((error) => { console.log(error); });
+        });
     }
-    
-    function aChoiceFestivalList(frApproval) {
-        const AUri = `../api/mypage/acfestivals/${frApproval}`;
-                        
-        axios
-        .get(AUri)
-        .then((response) => { getAFestivalList(response.data); })
-        .catch((error) => { console.log(error); });
-    }
+
     
     // 축제 승인 함수
     function approveFestival(event) {
@@ -750,6 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((error) => { console.log(error); });
     }
 
+    // 축제 삭제 함수
     function deleteFestival(event) {
         console.log(event.target);
         
@@ -859,7 +941,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `
             if(role == 1 || role == 2){
                 addHtml+= `
-                        <a href="/festgo/post/modify?poId=${post.poId}" onclick="return confirmDelete()">
+                        <a href="/festgo/post/modify?poId=${post.poId}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
@@ -868,11 +950,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 `
             }
             addHtml += `
-                        <a href="/festgo/post/delete?poId=${post.poId}" onclick="return confirmDelete()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                        <a data-id="${post.poId}" class="btnDeletePost" style="cursor: pointer;">
+                            <svg data-id="${post.poId}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                <path data-id="${post.poId}" d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path data-id="${post.poId}" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                             </svg>
                         </a>
                     </td>
@@ -884,6 +966,31 @@ document.addEventListener('DOMContentLoaded', () => {
             html += addHtml;
             }
         tbodyPostList.innerHTML = html;
+        
+        const btnDeletePosts = document.querySelectorAll('a.btnDeletePost');
+        for(const btn of btnDeletePosts) {
+            btn.addEventListener('click', (event) => {
+                deletePost(event);
+            });
+        } 
+    }
+    
+    function deletePost(event) {
+        const result = confirm("글을 삭제하시겠습니까?");
+        if(!result) {
+            return;
+        }
+        const poId = event.target.getAttribute("data-id");
+        const uri = `../api/mypage/delpost/${poId}`;
+        console.log(poId, uri);
+        
+        axios
+        .delete(uri)
+        .then(() => {
+            alert("삭제완료했습니다.")
+            postList();
+        })
+        .catch((error) => { console.log(error); });
     }
 
 // ---------------- 작성글 기능 부분 끝 ---------------------------------------

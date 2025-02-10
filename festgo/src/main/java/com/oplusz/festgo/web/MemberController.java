@@ -14,6 +14,7 @@ import com.oplusz.festgo.domain.SponRequest;
 import com.oplusz.festgo.dto.MemberSignInDto;
 import com.oplusz.festgo.dto.MemberSignUpDto;
 import com.oplusz.festgo.service.MemberService;
+import com.oplusz.festgo.service.MyPageService;
 import com.oplusz.festgo.service.SponRequestService;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 	private final MemberService memberService;
 	private final SponRequestService sponRequestService;
+	private final MyPageService mypageService;
 	
 	// 로그인
 	@PostMapping("/signin")
@@ -43,6 +45,7 @@ public class MemberController {
 				return ResponseEntity.ok(0);
 			} else {
 				session.setAttribute("signedInUser", member.getMeUsername());
+				session.setAttribute("memberRole", member.getMrId());
 				return ResponseEntity.ok(1);
 			}
 		} else { // srApproval의 값이 1(승인)이 아닌 경우 - 로그인 실패.
@@ -57,6 +60,7 @@ public class MemberController {
 		
 		// 로그아웃 - 세션에 저장된 로그인 정보를 지움. 세션을 무효화(invalidate).
 		session.removeAttribute("signedInUser");
+		session.removeAttribute("role");
 		session.invalidate();
 		
 		// 로그아웃 이후에 홈페이지로 이동(redirect)
