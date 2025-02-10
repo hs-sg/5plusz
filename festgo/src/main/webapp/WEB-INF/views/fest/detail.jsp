@@ -124,11 +124,11 @@
             });
         </script>
         
-        <h3 style="margin-top: 40px;">📖 축제 내용</h3>
-        <p>${festival.feContents}</p>
-
-        <h3 style="margin-top: 40px;">📍 축제 위치</h3>
-        <p>${festival.feAddress}</p>
+		<h3 style="margin-top: 40px;">📖 축제 내용</h3>
+		<p><strong>${festival.feContents}</strong></p>
+		
+		<h3 style="margin-top: 40px;">📍 축제 위치</h3>
+		<p><strong>${festival.feAddress}</strong></p>
 
 
         <!-- 카카오맵 표시 -->
@@ -142,52 +142,71 @@
 
 
 
-        <h3 class="mt-3">💰 참가비</h3>
-        <p>${festival.feFee}</p>
+		<h3 class="mt-3">💰 참가비</h3>
+		<p><strong>${festival.feFee}</strong></p>
     </main>
 
     <!-- 카카오맵 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
     
-     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const festivalAddress = "${festival.feAddress}"; // 축제 주소 가져오기
-            const mapContainer = document.getElementById("map"); // 지도 표시 div
-            const map = new kakao.maps.Map(mapContainer, {
-                center: new kakao.maps.LatLng(37.5665, 126.9780), // 초기 중심 좌표 (서울)
-                level: 3, // 지도 확대 수준
-            });
-    
-            const geocoder = new kakao.maps.services.Geocoder();
-    
-            // 주소를 좌표로 변환
-            geocoder.addressSearch(festivalAddress, function (result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-    
-                    // 지도에 마커 표시
-                    const marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords,
-                    });
-    
-                    // 지도 중심을 마커 위치로 이동
-                    map.setCenter(coords);
-    
-                    // 길찾기 버튼 클릭 이벤트
-                    const directionBtn = document.getElementById("direction-btn");
-                    directionBtn.addEventListener("click", function () {
-                        // 카카오 지도 길찾기 URL로 이동
-                        const url = `https://map.kakao.com/?target=car&ep=${result[0].y},${result[0].x}&name=${festivalAddress}`;
-                        window.open(url, "_blank"); // 새 창으로 열기
-                    });
-                } else {
-                    console.error("주소 변환 실패:", status);
-                    alert("축제 위치를 찾을 수 없습니다. 주소가 올바른지 확인하세요.");
-                }
-            });
-        });
-    </script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+		    const festivalAddress = "${festival.feAddress}"; // 축제 주소
+		    const festivalName = "${festival.feName}"; // 축제 이름
+		    let festivalLat = "${festival.feLat}"; // 위도
+		    let festivalLng = "${festival.feLong}"; // 경도
+		
+		    const mapContainer = document.getElementById("map"); // 지도 컨테이너
+		    const directionBtn = document.getElementById("direction-btn"); // 길찾기 버튼
+		
+		    const map = new kakao.maps.Map(mapContainer, {
+		        center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심 좌표 (서울)
+		        level: 3, // 확대 레벨
+		    });
+		
+		    const geocoder = new kakao.maps.services.Geocoder();
+		
+		    // 📌 위도, 경도가 `null`이면 주소 기반으로 변환
+		    if (!festivalLat || !festivalLng || festivalLat === "null" || festivalLng === "null") {
+		        geocoder.addressSearch(festivalAddress, function (result, status) {
+		            if (status === kakao.maps.services.Status.OK) {
+		                festivalLat = result[0].y;
+		                festivalLng = result[0].x;
+		
+		                console.log("변환된 위도:", festivalLat, "경도:", festivalLng);
+		
+		                setMapMarker(festivalLat, festivalLng);
+		            } else {
+		                console.error("주소를 위도·경도로 변환할 수 없습니다.");
+		            }
+		        });
+		    } else {
+		        // 이미 위도·경도가 있는 경우 그대로 사용
+		        setMapMarker(festivalLat, festivalLng);
+		    }
+		
+		    // 지도에 마커 표시 및 길찾기 버튼 기능 추가
+		    function setMapMarker(lat, lng) {
+		        const coords = new kakao.maps.LatLng(lat, lng);
+		
+		        // 지도 중심을 마커 위치로 설정
+		        map.setCenter(coords);
+		
+		        // 마커 추가
+		        const marker = new kakao.maps.Marker({
+		            map: map,
+		            position: coords,
+		        });
+		
+		        // 길찾기 버튼 클릭 시 실행
+		        directionBtn.addEventListener("click", function () {
+		        	const kakaoMapUrl = "https://map.kakao.com/link/to/" + encodeURIComponent(festivalAddress) + "," + lat + "," + lng;
+		            window.open(kakaoMapUrl, "_blank");
+		        });
+		    }
+		});
+	</script>
+
 
 
     

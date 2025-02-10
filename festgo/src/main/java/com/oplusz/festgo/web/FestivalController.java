@@ -78,6 +78,14 @@ public class FestivalController {
 	        BindingResult result) {
 		
 		 if ("free".equals(feFeeType)) {
+		        dto.setFeFee("무료");
+		    } else {
+		        dto.setFeFee("유료");
+		    }
+
+		    log.debug("위도: {}, 경도: {}", dto.getFeLat(), dto.getFeLong());
+		
+		 if ("free".equals(feFeeType)) {
 	            dto.setFeFee("무료");
 	        } else {
 	        	dto.setFeFee("유료");

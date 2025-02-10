@@ -156,6 +156,9 @@
                 <label for="sample6_extraAddress" class="form-label">참고항목</label>
                 <input type="text" class="form-control" id="sample6_extraAddress" name="feExtraAddress" placeholder="참고항목" readonly>
             </div>
+            
+            <input type="hidden" id="feLat" name="feLat">
+			<input type="hidden" id="feLong" name="feLong">
 
 
             <!-- 전화번호 -->
@@ -268,56 +271,91 @@
         crossorigin="anonymous"></script>
         
 
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script>
-            function sample6_execDaumPostcode() {
-                new daum.Postcode({
-                    oncomplete: function(data) {
-                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	    function sample6_execDaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function(data) {
+	                // 사용자가 선택한 주소 저장
+	                var addr = ''; // 주소 변수
+	                var extraAddr = ''; // 참고항목 변수
+	
+	                if (data.userSelectedType === 'R') { // 도로명 주소 선택
+	                    addr = data.roadAddress;
+	                } else { // 지번 주소 선택
+	                    addr = data.jibunAddress;
+	                }
+	
+	                // 참고항목 처리
+	                if (data.userSelectedType === 'R') {
+	                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	                        extraAddr += data.bname;
+	                    }
+	                    if (data.buildingName !== '' && data.apartment === 'Y') {
+	                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                    }
+	                    if (extraAddr !== '') {
+	                        extraAddr = ' (' + extraAddr + ')';
+	                    }
+	                    document.getElementById("sample6_extraAddress").value = extraAddr;
+	                } else {
+	                    document.getElementById("sample6_extraAddress").value = '';
+	                }
+	
+	                // 주소 입력 필드에 값 설정
+	                document.getElementById('sample6_postcode').value = data.zonecode;
+	                document.getElementById("sample6_address").value = addr;
+	                document.getElementById("sample6_detailAddress").focus();
+	
+	                // 📌 [수정] 위도·경도를 설정하는 Geocoder 추가
+	                const geocoder = new kakao.maps.services.Geocoder();
+	                geocoder.addressSearch(addr, function (result, status) {
+	                    if (status === kakao.maps.services.Status.OK) {
+	                        console.log("위도:", result[0].y, "경도:", result[0].x);
+	                        document.getElementById("feLat").value = result[0].y;
+	                        document.getElementById("feLong").value = result[0].x;
+	                    } else {
+	                        console.error("위도·경도를 찾을 수 없습니다.");
+	                        document.getElementById("feLat").value = "";
+	                        document.getElementById("feLong").value = "";
+	                    }
+	                });
+	            }
+	        }).open();
+	    }
+	</script>
+
         
-                        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                        var addr = ''; // 주소 변수
-                        var extraAddr = ''; // 참고항목 변수
+		<!-- 카카오맵 API 추가 -->
+		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+			    const addressInput = document.getElementById("sample6_address");
+			    const latitudeInput = document.getElementById("feLat");
+			    const longitudeInput = document.getElementById("feLong");
+			    const geocoder = new kakao.maps.services.Geocoder();
+	
+			    // 주소 입력이 변경될 때마다 실행
+			    addressInput.addEventListener("input", function () {  
+			        const address = addressInput.value;
+			        if (address.trim() !== "") {  // 빈 값이 아닐 경우 실행
+			            geocoder.addressSearch(address, function (result, status) {
+			                if (status === kakao.maps.services.Status.OK) {
+			                    console.log("위도:", result[0].y, "경도:", result[0].x);
+			                    latitudeInput.value = result[0].y;  // 위도 설정
+			                    longitudeInput.value = result[0].x;  // 경도 설정
+			                } else {
+			                    console.error("위도·경도를 찾을 수 없습니다.");
+			                    latitudeInput.value = "";
+			                    longitudeInput.value = "";
+			                }
+			            });
+			        }
+			    });
+			});
+		</script>
         
-                        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                            addr = data.roadAddress;
-                        } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                            addr = data.jibunAddress;
-                        }
-        
-                        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                        if(data.userSelectedType === 'R'){
-                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                                extraAddr += data.bname;
-                            }
-                            // 건물명이 있고, 공동주택일 경우 추가한다.
-                            if(data.buildingName !== '' && data.apartment === 'Y'){
-                                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                            }
-                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                            if(extraAddr !== ''){
-                                extraAddr = ' (' + extraAddr + ')';
-                            }
-                            // 조합된 참고항목을 해당 필드에 넣는다.
-                            document.getElementById("sample6_extraAddress").value = extraAddr;
-                        
-                        } else {
-                            document.getElementById("sample6_extraAddress").value = '';
-                        }
-        
-                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                        document.getElementById('sample6_postcode').value = data.zonecode;
-                        document.getElementById("sample6_address").value = addr;
-                        // 커서를 상세주소 필드로 이동한다.
-                        document.getElementById("sample6_detailAddress").focus();
-                    }
-                }).open();
-            }
-        </script>
         
         <!-- Axios Http JS -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
