@@ -18,7 +18,7 @@ import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
 import com.oplusz.festgo.repository.PostDao;
 import com.oplusz.festgo.repository.ReviewDao;
-import com.oplusz.festgo.web.PostSearchDto;
+import com.oplusz.festgo.dto.PostSearchDto;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
