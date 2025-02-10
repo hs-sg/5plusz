@@ -96,6 +96,9 @@
 
     <main class="container content">
     
+        <label class="form-label" for="id">번호</label>
+        	<input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
+    
         <h1 style="margin-bottom: 20px;">${festival.feName}</h1>
 
         <h3 style="margin-top: 40px;">📅 축제 날짜</h3>
@@ -145,6 +148,62 @@
 		<h3 class="mt-3">💰 참가비</h3>
 		<p><strong>${festival.feFee}</strong></p>
     </main>
+    
+    <section>
+    	<div class="mt-2 d-inline-flex gap-1">
+    		<button class="btn btn0outline-secondary"
+    		id = "btnToggleReview">리뷰 보기</button>
+    	</div>
+    	<!-- 댓글 보기/ 감추기 -->
+    	<div class="mt-2 collapse" id = "collapseReviews">
+    		<!-- 댓글 등록 UI -->
+		<div class="mt-2 card card-body">
+		    <div class="row">
+		        <div class="col-10">
+		            <input class="d-none" id="reAuthor" value="${signedInUser}" readonly />
+		            <input type="hidden" id="feId" value="${festival.feId}" readonly />
+		            <input type="text" class="form-control mt-2" id="reTitle" placeholder="리뷰 제목">
+		            <select class="form-select mt-2" id="reGrade">
+		                <option value="5">★★★★★</option>
+		                <option value="4">★★★★☆</option>
+		                <option value="3">★★★☆☆</option>
+		                <option value="2">★★☆☆☆</option>
+		                <option value="1">★☆☆☆☆</option>
+		            </select>
+		            <textarea class="form-control mt-2" rows="3" id="reContent" placeholder="리뷰 입력"></textarea>
+		        </div>
+		        <div class="col-2">
+		            <button class="btn btn-outline-success mt-2" id="btnRegisterReview">등록</button>
+		        </div>
+		    </div>
+		</div>
+
+    		<!-- 댓글 목록을 보여줄 UI -->
+    		<div class="my-2" id="divReviews"></div>
+    	</div>
+    </section>
+    
+    <!-- 댓글 업데이트 모달 -->
+    <div id="reviewModal" class="modal" tabindex="-`">
+    	<div class="modal-dialog">
+    		<div class="modal-content">
+    			<div class="modal-header">
+    				<h5 class="modal-title">리뷰 수정</h5>
+    				<button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    			</div>
+    			<div class="modal-body">
+    				<!-- 수정할 댓글 아이디(번호) -->
+    				<input class="d-none" id="modalReviewId" readonly />
+    				<!-- 수정할 댓글 내용 -->
+    				<textarea class="form-control" id="modalReviewText"></textarea>
+    			</div>
+    			<div class="modal-footer">
+    				<button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+    				<button class="btn btn-outline-success" id="btnUpdateRv">저장</button>
+    			</div>
+    		</div>
+    	</div>
+    </div>
 
     <!-- 카카오맵 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
@@ -212,6 +271,17 @@
     
     <!-- Axios Http JS -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <script>
+        // 세션에 저장된 로그인 사용자 아이디를 자바스크립트 변수에 저장
+        // -> comments.js 파일의 코드틀에서 그 변수를 사용할 수 있도록 하기 위해서 
+        // JSP 파일의 <script> 태그 안에서는 EL을 사용할 수 있음
+        // (주의) JS 파일에서는 EL을 사용할 수 없음
+    	const signedInUser = '${signedInUser}';
+    </script>
+    
+    <c:url var="reviewsJS" value="/js/reviews.js" /> 
+    <script src="${reviewsJS}"></script>
 
 
     <!-- Bootstrap JS -->

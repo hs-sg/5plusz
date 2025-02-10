@@ -16,6 +16,9 @@ import com.oplusz.festgo.domain.Review;
 import com.oplusz.festgo.dto.PostCreateDto;
 import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
+import com.oplusz.festgo.dto.ReviewCreateDto;
+import com.oplusz.festgo.dto.ReviewItemDto;
+import com.oplusz.festgo.dto.ReviewUpdateDto;
 import com.oplusz.festgo.repository.PostDao;
 import com.oplusz.festgo.repository.ReviewDao;
 import com.oplusz.festgo.dto.PostSearchDto;
@@ -87,5 +90,52 @@ public class ReviewService {
 	}
 	
 //	희성 작성 끝
+	
+	// 해당 아이디의 댓글 (1개)를 검색하는 서비스
+	public ReviewItemDto readById(Integer reId) {
+		log.debug("readById = {}", reId);
+		
+		// 영속성 계층의 메서드를 호출해서 select 쿼리를 실행
+		Review review = reviewDao.selectById(reId);
+		
+		return ReviewItemDto.fromEntity(review);
+	}
+	
+	// 특정 포스트에 달려 있는 모든 댓글을 검색하는 서비스
+	public List<ReviewItemDto> readByFestivalId(Integer feId) {
+		log.debug("readByPostId = {}", feId);
+		
+		List<Review> list = reviewDao.selectByFestivalId(feId);
+
+		return list.stream().map(ReviewItemDto::fromEntity).toList(); 
+		
+	}
+	
+	// 특정 포스트에 댓글을 추가하는 서비스
+	public int create(ReviewCreateDto dto) {
+		log.debug("create(dto={})", dto);
+		
+		int result = reviewDao.insertReview(dto.toEntity());
+		
+		return result;
+	}
+	
+	// 아이디가 일치하는 댓글을 삭제하는 서비스
+	public int deleteByReId(Integer reId) {
+		log.debug("delete(id={})", reId);
+		
+		return reviewDao.deleteByReId(reId);
+	}
+	
+	// 댓글 내용을 수정하는 서비스
+	public int update(ReviewUpdateDto dto) {
+		log.debug("update(dto={})", dto);
+		
+		int result = reviewDao.updateReview(dto.toEntity());
+		
+		return result;
+	}
+	
+	
 
 }
