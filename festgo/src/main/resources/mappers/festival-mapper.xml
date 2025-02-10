@@ -90,6 +90,12 @@
         </if>
     </select>
     
+    <!-- 최근에 등록된 축제 (5개) -->
+    <select id="selectFestivalByCreatedTime" resultType="Festival">
+        select * from festival order by fe_created_time desc
+        offset 0 rows fetch first 5 rows only
+    </select>
+    
     <!-- 희성 작성 시작 ================================================================================================== -->
     
     <!-- 전체 축제 리스트 불러오기 -->
