@@ -239,14 +239,30 @@ public class PostService {
 	// 삭제하기 서비스
 	@Transactional
 	public void delete(Integer poId) {
-		log.debug("delete(poId={})", poId);
+	    log.debug("delete(poId={})", poId);
 
-		// 1. 게시글에 연결된 첨부파일 먼저 삭제
-		postDao.deleteAttachmentsByPostId(poId);
+	    // 1. 게시글에 연결된 첨부파일 목록 조회
+	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
-		// 2. 게시글 삭제
-		postDao.deleteById(poId);
+	    // 2. DB에서 첨부파일 삭제
+	    postDao.deleteAttachmentsByPostId(poId);
+
+	    // 3. 실제 파일 삭제
+	    for (PostAttachment attachment : attachments) {
+	        File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+	        if (file.exists()) {
+	            if (file.delete()) {
+	                log.debug("파일 삭제 완료: {}", file.getAbsolutePath());
+	            } else {
+	                log.error("파일 삭제 실패: {}", file.getAbsolutePath());
+	            }
+	        }
+	    }
+
+	    // 4. 게시글 삭제
+	    postDao.deleteById(poId);
 	}
+
 
 	/**
 	 * 페이징 목록 조회

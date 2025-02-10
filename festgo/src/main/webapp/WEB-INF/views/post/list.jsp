@@ -148,7 +148,7 @@
                                                 <c:url var="postDetailsPage" value="/post/details">
                                                     <c:param name="poId" value="${notice.poId}"/>
                                                 </c:url>
-                                                <a href="${postDetailsPage}" class="notice-title">${notice.poTitle}</a>
+                                                <a href="${postDetailsPage}" class="notice-title post-link">${notice.poTitle}</a>
                                             </td>
                                             <td>${notice.poAuthor}</td>
                                             <td>${notice.poModifiedTime}</td>
@@ -165,7 +165,7 @@
                                             <c:url var="postDetailsPage" value="/post/details">
                                                 <c:param name="poId" value="${p.poId}"/>
                                             </c:url>
-                                            <a href="${postDetailsPage}"class="normal-title">${p.poTitle}</a>
+                                            <a href="${postDetailsPage}"class="normal-title post-link">${p.poTitle}</a>
                                         </td>
                                         <td>${p.poAuthor}</td>
                                         <td>${p.poModifiedTime}</td>

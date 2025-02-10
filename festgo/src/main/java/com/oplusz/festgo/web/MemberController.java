@@ -1,10 +1,15 @@
 package com.oplusz.festgo.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +54,30 @@ public class MemberController {
 			return ResponseEntity.ok(2);
 		}
 	}
+	// 추가 
+//	@GetMapping("/signin")
+//	@ResponseBody
+//	public ResponseEntity<Map<String, Object>> showSignInModal(
+//	        @RequestParam(value = "target", required = false) String target) {
+//
+//	    log.debug("로그인 모달 실행 요청, target={}", target);
+//
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("loginRequired", true);
+//	    response.put("target", target);
+//
+//	    return ResponseEntity.ok(response);
+//	}
+//	
 	
+	 @GetMapping(value = "/check-login", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> checkLogin(HttpSession session) {
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isLoggedIn", session.getAttribute("signedInUser") != null);
+        return ResponseEntity.ok(response);
+    }
+
 	// 로그아웃
 	@GetMapping("/signout")
 	public String signOut(HttpSession session) {

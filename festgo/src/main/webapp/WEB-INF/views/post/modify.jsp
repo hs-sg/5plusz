@@ -89,11 +89,13 @@
             
 									
 									<!-- 수정 & 삭제 버튼 -->
-									<div class="card-footer d-flex justify-content-end mt-3">
-									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
-									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
-									</div>
-
+                                    <%-- 로그인 사용자와 포스트 작성자가 같은 경우에만 삭제/업데이트 가능  --%>
+                                    <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
+    									<div class="card-footer d-flex justify-content-end mt-3">
+    									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
+    									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
+    									</div>
+                                    </c:if>
                                 </form>
                             </div>
                         </div>
