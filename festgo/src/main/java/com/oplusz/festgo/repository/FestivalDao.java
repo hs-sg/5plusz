@@ -34,6 +34,9 @@ public interface FestivalDao {
     // 검색한 축제 개수
     int selectFestivalForReload(FestivalSearchDto dto);
     
+    // 최근에 등록된 축제 (5개)
+    List<Festival> selectFestivalByCreatedTime();
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기

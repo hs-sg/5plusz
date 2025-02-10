@@ -32,10 +32,8 @@
     <select id="selectFestivalById" resultType="Festival">
         select * from festival where fe_id = #{feId}
     </select>
-    
 
-  <!-- 특정 기간 내 축제 데이터 조회 -->
- 
+    <!-- 특정 기간 내 축제 데이터 조회 --> 
 	<select id="findFestivalsBetween" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
 	    SELECT 
 	        fe_id AS feId,
@@ -50,8 +48,6 @@
 	      AND TRUNC(fe_end_date) &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
 	</select>
 
-
-    
     <!-- 축제 검색 -->
     <select id="selectFestivalForSearch" resultType="com.oplusz.festgo.dto.FestivalCalendarDto">
         <bind name="searchKeyword" value="'%' + keyword + '%'" />
@@ -94,6 +90,12 @@
         </if>
     </select>
 
+    
+    <!-- 최근에 등록된 축제 (5개) -->
+    <select id="selectFestivalByCreatedTime" resultType="Festival">
+        select * from festival order by fe_created_time desc
+        offset 0 rows fetch first 5 rows only
+    </select>
     
     <!-- 희성 작성 시작 ================================================================================================== -->
     
