@@ -64,6 +64,7 @@
     </div>
 </header>
 
+
 <!-- Offcanvas 메뉴 (오른쪽에서 슬라이드) -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
     <div class="offcanvas-header">
@@ -85,12 +86,15 @@
                 <c:url value="/post/list" var="postList"/>
                 <a class="nav-link" href="${postList}">커뮤니티</a>
             </li>
-            <li class="nav-item">
-                <c:url value="/fest/create" var="festCreate"/>
-                <a class="nav-link" href="${festCreate}">축제등록</a>
-            </li>
+                    <c:if test="${memberRole eq 2 || memberRole eq 3}">
+	            <li class="nav-item">
+                    <c:url value="/fest/create" var="festCreate"/>
+                    <a class="nav-link" href="${festCreate}">축제등록</a>
+	            </li>
+                </c:if>
             <!-- 로그인 상태에 따른 메뉴 항목 -->
             <c:if test="${ empty signedInUser }">
+
                 <li class="nav-item">
                     <a class="nav-link" href="" id="linkSignin">LOGIN</a>
                 </li>
@@ -160,10 +164,10 @@
 <!-- 로그인 모달 자동 실행 (로그인이 필요한 경우 글쓰기용) -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("loginRequired")) {
-        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: true });
-        signinModal.show();
+	const loginRequired = "<c:out value='${loginRequired}'/>";
+    if (loginRequired === "true") {
+        const linkSignin = document.getElementById("linkSignin");
+        linkSignin.click();
     }
 });
 </script>

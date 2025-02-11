@@ -205,5 +205,17 @@
         
         <c:url var="homeJS" value="/js/home.js"/>
         <script src="${ homeJS }"></script>
+
+        
+        <!-- 권한 없음 알림 표시용 -->
+		<script>
+		document.addEventListener("DOMContentLoaded", () => {
+		    const roleRequired = "<c:out value='${roleRequired}'/>";
+		    if (roleRequired === "true") {
+		        alert("권한이 없습니다.\n홈페이지로 이동합니다.")
+		    }
+		});
+		</script>
+
     </body>
 </html>

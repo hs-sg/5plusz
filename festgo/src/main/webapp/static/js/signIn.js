@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSignin.addEventListener('click', signin);
 	/* --------------------(추가된 부분)-------------------- */
 	/*  글쓰기 버튼 클릭 시 로그인 후 이동할 URL 저장 */
-	    const postCreateLink = document.querySelector("a.btn-primary[href*='post/create']");
+	    /*const postCreateLink = document.querySelector("a.btn-primary[href*='post/create']");
 	    if (postCreateLink) {
 	        postCreateLink.addEventListener("click", (event) => {
 	            if (!isUserLoggedIn()) {  // ⬅️ 유저 로그인 여부 체크하는 함수
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	                signinModal.show();
 	            }
 	        });
-	    }
+	    }*/
     
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 		/* --------------------(추가된 부분)-------------------- */
 		 /*  로그인 여부 확인 함수 */
-		    function isUserLoggedIn() {
+		    /*function isUserLoggedIn() {
 		        return document.cookie.includes("JSESSIONID");  // 세션 쿠키 기반 체크
-		    }
+		    }*/
 		});

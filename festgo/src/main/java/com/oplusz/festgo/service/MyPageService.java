@@ -1,5 +1,6 @@
 package com.oplusz.festgo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
+import com.oplusz.festgo.repository.LikesDao;
 import com.oplusz.festgo.repository.MemberDao;
 import com.oplusz.festgo.repository.MemberRoleDao;
 import com.oplusz.festgo.repository.SponRequestDao;
@@ -28,6 +30,7 @@ public class MyPageService {
 	private final MemberRoleDao memberRoleDao;
 	private final SponRequestDao sponRequestDao;
 	private final FestRequestDao festRequestDao;
+	private final LikesDao likesDao;
 	
 	//	전체 축제목록 읽기
 	public List<Festival> readFestivalInMyPage() {
@@ -49,24 +52,112 @@ public class MyPageService {
 		return list;
 	}
 	
-	// fest_request와 조인된 테이블에서 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
-	public List<FestivalSelectJoinRequestDto> readFestivalSponsorInMyPage(String meSponsor) {
-		log.debug("readFestivalSponsorInMyPage()");
-		
-		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor(meSponsor);
+	// fest_request와 조인된 전체 축제 eachNumber 만큼 읽기 -> 마이페이지 스폰서가 사용
+	// category = [-1:전체, 0:게시중, 1:승인대기, 2:거절됨], eachNumber = 가져올 갯수, meUsername = 로그인된 아이디
+	public List<FestivalSelectJoinRequestDto> readFestivalSponsorInMyPage
+	(Integer eachNumber, Integer category, String meUsername) {
+		log.debug("readFestivalAdminInMyPage(eachNumber={}, category={}, meUsername={})", eachNumber, category, meUsername);
+		String meSponsor = readSponsorByUsername(meUsername);
+		List<FestivalSelectJoinRequestDto> list = new ArrayList<>();
+		switch(category) {
+		case -1 :
+			list = festivalDao.selectAllFestivalJoinRequestBySponsorEachNumber(eachNumber, meSponsor);
+			break;
+		case 0, 1, 2 :
+			list = festivalDao.selectFestivalJoinRequestByFrApprovalAndSponsorEachNumber(category, eachNumber, meSponsor);
+		}
 		log.debug("result list={}", list);
 		
 		return list;
 	}
 	
-	// Likes와 조인된 테이블에서 일반유저가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
-	public List<FestivalSelectJoinLikesDto> readFestivalUserInMyPage(Integer meId) {
-		log.debug("readFestivalUserInMyPage(meId={})", meId);
-		
-		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberId(meId);
+	// fest_request와 조인된 전체 축제 eachNumber 만큼 읽기 -> 마이페이지 관리자에서 사용
+	// category = [-1:전체, 0:게시중, 1:승인대기, 2:거절됨], eachNumber = 가져올 갯수
+	public List<FestivalSelectJoinRequestDto> readFestivalAdminInMyPage(Integer eachNumber, Integer category) {
+		log.debug("readFestivalAdminInMyPage(eachNumber={}, category={})", eachNumber, category);
+		List<FestivalSelectJoinRequestDto> list = new ArrayList<>();
+		switch(category) {
+		case -1 :
+			list = festivalDao.selectAllFestivalJoinRequestEachNumber(eachNumber);
+			break;
+		case 0, 1, 2 :
+			list = festivalDao.selectFestivalJoinRequestByFrApprovalEachNumber(category, eachNumber);
+		}
 		log.debug("result list={}", list);
 		
 		return list;
+	}
+	
+	// fest_request와 조인된 fr_approval로 분류된 축제 읽기 -> 마이페이지 관리자에서 사용
+//	public List<FestivalSelectJoinRequestDto> readChoiceFestivalAdminInMyPage(Integer frApproval) {
+//		log.debug("readWaitFestivalAdminInMyPage()");
+//		
+//		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestByFrApproval(frApproval);
+//		log.debug("result list={}", list);
+//		
+//		return list;
+//	}
+	
+	// fest_request와 조인된 테이블에서 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
+//	public List<FestivalSelectJoinRequestDto> readFestivalSponsorInMyPage(String meSponsor) {
+//		log.debug("readFestivalSponsorInMyPage(meSponsor={})", meSponsor);
+//		
+//		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor(meSponsor);
+//		log.debug("result list={}", list);
+//		
+//		return list;
+//	}
+	
+	// fest_request와 조인된 테이블에서 사업자가 개최한 축제중 분류된 읽기 -> 마이페이지 사업자에서 사용
+	public List<FestivalSelectJoinRequestDto> readChoiceFestivalAdminInMyPageBySponsor(Integer frApproval, String meSponsor) {
+		log.debug("readChoiceFestivalAdminInMyPageBySponsor(frApproval={}, meSponsor={})", frApproval, meSponsor);
+		
+		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsorAndFrApproval(frApproval, meSponsor);
+		log.debug("result list={}", list);
+		
+		return list;
+	}
+	
+//	// Likes와 조인된 테이블에서 일반유저가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
+//	public List<FestivalSelectJoinLikesDto> readFestivalUserInMyPage(Integer meId) {
+//		log.debug("readFestivalUserInMyPage(meId={})", meId);
+//		
+//		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberId(meId);
+//		log.debug("result list={}", list);
+//		
+//		return list;
+//	}
+	
+	// Likes와 조인된 테이블에서 일반유저가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
+	public List<FestivalSelectJoinLikesDto> readFestivalUserInMyPage(Integer meId, Integer eachNumber) {
+		log.debug("readFestivalUserInMyPage(meId={}, eachNumber={})", meId, eachNumber);
+		
+		List<FestivalSelectJoinLikesDto> list = festivalDao.selectFestivalJoinLikesByMemberIdEachNumber(meId, eachNumber);
+		log.debug("result list={}", list);
+		
+		return list;
+	}
+	
+	// 좋아요 지우기
+	public Integer deleteLikeFestivalByFeId(Integer feId, String meUsername) {
+		Integer meId = memberDao.selectByUsername(meUsername).getMeId();
+		log.debug("deleteLikeFestivalByFeId(feId={}, meId={}", feId, meId);
+		
+		Integer delLikeResult = likesDao.deleteLikeByFeIdAndMeUsername(feId, meId);
+		log.debug("delete Like result={}", delLikeResult);
+		
+		return delLikeResult;
+	}
+	
+	// 좋아요 등록하기
+	public Integer insertLikeFestivalByFeId(Integer feId, String meUsername) {
+		Integer meId = memberDao.selectByUsername(meUsername).getMeId();
+		log.debug("insertLikeFestivalByFeId(feId={}, meId={}", feId, meId);
+		
+		Integer insLikeResult = likesDao.insertLikeByFeIdAndMeUsername(feId, meId);
+		log.debug("delete Like result={}", insLikeResult);
+		
+		return insLikeResult;
 	}
 	
 	// member_role과 조인된 테이블에서 로그인된 아이디의 정보 가져오기
@@ -154,7 +245,8 @@ public class MyPageService {
 		log.debug("approveSponsorMemberByMeId(meId={}", meId);
 		
 		Integer appSponsorResult = sponRequestDao.approveSponsorMemberByMeId(meId);
-		log.debug("result appSponsorResult = {}", appSponsorResult);
+		Integer updateSponsorRoleResult =  memberDao.updateSponsorRoleByMeId(meId);
+		log.debug("appSponsorResult = {}, updateSponsorRoleResult = {}", appSponsorResult, updateSponsorRoleResult);
 		
 		return appSponsorResult;
 	}
