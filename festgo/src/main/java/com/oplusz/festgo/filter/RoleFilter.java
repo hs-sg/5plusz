@@ -1,8 +1,8 @@
-
 package com.oplusz.festgo.filter;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -19,14 +19,14 @@ import lombok.extern.slf4j.Slf4j;
  * Servlet Filter implementation class AuthenticationFilter
  */
 @Slf4j
-public class AuthenticationFilter extends HttpFilter {
-
+public class RoleFilter extends HttpFilter {
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
      * @see HttpFilter#HttpFilter()
      */
-    public AuthenticationFilter() {}
+    public RoleFilter() {}
 
 	/**
 	 * @see Filter#destroy()
@@ -44,33 +44,26 @@ public class AuthenticationFilter extends HttpFilter {
 
     	HttpServletRequest httpReq = (HttpServletRequest)request;
     	HttpServletResponse httpResp = (HttpServletResponse)response;
-    	
     	HttpSession session = httpReq.getSession();
-    	Object signedInUser = session.getAttribute("signedInUser");
     	
-    	if(signedInUser != null && !signedInUser.equals("")) {
-    		log.debug("로그인 중 : {}", signedInUser);
-    		
+    	String memberRole = session.getAttribute("memberRole").toString();
+    	Enumeration<String> att = session.getAttributeNames();
+    	while(att.hasMoreElements()) {
+    		log.debug(att.nextElement());
+    	}
+    	
+    	log.debug("권한번호 : {}", memberRole);
+    	
+    	if(memberRole.equals("2") || memberRole.equals("3")) {
+    		log.debug("접근 가능한 권한입니다");
     		chain.doFilter(request, response);
     		return;
     	}
     	
-    	log.debug("로그아웃 상태 : 로그인 모달 띄우기!");
-    	// 로그인 필요 플래그 설정
-    	String contextpath = httpReq.getContextPath();
-    	String url = httpReq.getRequestURL().toString();
-    	String qs = httpReq.getQueryString();
-    	String redirectAfterLogin = null;
-    	log.debug("{}, {}, {}", url, contextpath, qs);
+    	log.debug("접근 불가능한 권한입니다 : 권한없을 알림 띄우기");
     	
-    	if(qs == null) redirectAfterLogin = URLEncoder.encode(url, "UTF-8");
-    	else redirectAfterLogin = URLEncoder.encode(url + "?" + qs, "UTF-8");
-    	
-        httpReq.setAttribute("loginRequired", true);
-        session.setAttribute("redirectAfterLogin", redirectAfterLogin);
-        httpReq.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
-        
-    		
+    	httpReq.setAttribute("roleRequired", true);
+    	httpReq.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
 	}
 
 	/**
@@ -79,5 +72,5 @@ public class AuthenticationFilter extends HttpFilter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		
 	}
-}
 
+}

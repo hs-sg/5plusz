@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.LikesDao">
+
+
+
+<!-- 희성 작성 시작 -->
+
+    <!-- 좋아요 삭제하기 -->
+    <delete id="deleteLikeByFeIdAndMeUsername">
+        delete from likes where fe_id = #{feId} and me_id = #{meId}
+    </delete>
+    
+    <!-- 좋아요 등록하기 -->
+    <insert id="insertLikeByFeIdAndMeUsername">
+        insert into likes (fe_id, me_id) values (#{feId}, #{meId})
+    </insert>
+    
+<!-- 희성 작성 끝 -->
+
+</mapper>

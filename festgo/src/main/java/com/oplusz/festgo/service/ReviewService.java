@@ -9,7 +9,7 @@ import com.oplusz.festgo.dto.ReviewCreateDto;
 import com.oplusz.festgo.dto.ReviewItemDto;
 import com.oplusz.festgo.dto.ReviewUpdateDto;
 import com.oplusz.festgo.repository.ReviewDao;
-
+import com.oplusz.festgo.dto.PostSearchDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

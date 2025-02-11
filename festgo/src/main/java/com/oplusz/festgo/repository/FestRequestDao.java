@@ -8,6 +8,7 @@ public interface FestRequestDao {
 	
 	int approveFestivalByFeId(int feId);
 	int refuseFestivalByMeId(String frCause, int feId);
+	int countFestivalByFrApproval(int frApproval);
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	

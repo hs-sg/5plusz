@@ -37,7 +37,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-        <!-- 인증(로그인 여부 체크) 필터 -->
+    <!-- 인증(로그인 여부 체크) 필터 -->
     <filter>
         <filter-name>authenticationFilter</filter-name>
         <filter-class>com.oplusz.festgo.filter.AuthenticationFilter</filter-class>
@@ -50,6 +50,18 @@
         <url-pattern>/post/update</url-pattern>
         <url-pattern>/post/delete</url-pattern>
         <url-pattern>/api/review/*</url-pattern>
+		<url-pattern>/user/mypage</url-pattern>
+        <url-pattern>/fest/create</url-pattern>
+    </filter-mapping>
+    
+    <!-- 권한(들어갈 수 있는 페이지) 필터 (사업자, 관리자용)-->
+	<filter>
+        <filter-name>roleFilter</filter-name>
+        <filter-class>com.oplusz.festgo.filter.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>roleFilter</filter-name>
+        <url-pattern>/fest/create</url-pattern>
     </filter-mapping>
     
     
