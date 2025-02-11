@@ -1,9 +1,7 @@
 package com.oplusz.festgo.web;
 
-import java.util.Enumeration;
 import java.util.List;
 
-import org.apache.logging.log4j.core.tools.picocli.CommandLine.Parameters;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.domain.Post;
 import com.oplusz.festgo.domain.Review;
 import com.oplusz.festgo.dto.FestRequestRefuseDto;
-
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;

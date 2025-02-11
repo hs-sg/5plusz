@@ -108,10 +108,10 @@
 <!-- 로그인 모달 자동 실행 (로그인이 필요한 경우 글쓰기용) -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("loginRequired")) {
-        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: true });
-        signinModal.show();
+	const loginRequired = "<c:out value='${loginRequired}'/>";
+    if (loginRequired === "true") {
+        const linkSignin = document.getElementById("linkSignin");
+        linkSignin.click();
     }
 });
 </script>
