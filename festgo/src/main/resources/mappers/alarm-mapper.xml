@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.AlarmDao">
+
+
+
+<!-- 희성 작성 시작 -->
+
+    <insert id="insertRequest">
+        insert into alarm (al_category, al_sfid, me_id, al_status, al_created_time)
+        values (0, #{alSfid}, #{meId}, #{alStatus}, systimestamp)
+    </insert>
+    
+    <update id="updateProcess">
+        update alarm set al_status = 1
+        where al_category = #{alCategory} and al_sfid = #{alSfid}
+    </update>
+    
+    <update id="updateCheck">
+        update alarm set al_status = 2
+        where al_category = #{alCategory} and al_sfid = #{alSfid}
+    </update>
+    
+<!-- 희성 작성 끝 -->
+
+</mapper>

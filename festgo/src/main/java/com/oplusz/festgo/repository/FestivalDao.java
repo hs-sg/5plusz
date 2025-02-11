@@ -34,6 +34,9 @@ public interface FestivalDao {
     // 검색한 축제 개수
     int selectFestivalForReload(FestivalSearchDto dto);
     
+    // 최근에 등록된 축제 (5개)
+    List<Festival> selectFestivalByCreatedTime();
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기
@@ -41,12 +44,25 @@ public interface FestivalDao {
 	
 	// fest_request와 조인된 테이블 전체 축제 읽기 -> 마이페이지 관리자에서 사용
 	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestAll();
+	List<FestivalSelectJoinRequestDto> selectAllFestivalJoinRequestEachNumber(Integer eachNumber); // eachNumber만큼
+	
+	// fest_request와 조인된 테이블 fr_approval로 분류된 축제 읽기 -> 마이페이지 관리자에서 사용
+//	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestByFrApproval(Integer frApproval);
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestByFrApprovalEachNumber(Integer frApproval, Integer eachNumber);
+	
+	// fest_request와 조인된 테이블 fr_approval로 분류된 축제 읽기 -> 마이페이지 사업자에서 사용
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsorAndFrApproval(Integer frApproval, String meSponsor);
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestByFrApprovalAndSponsorEachNumber
+		(Integer frApproval, Integer eachNumber, String meSponsor);
 	
 	// fest_request와 조인된 테이블 중 사업자가 개최한 축제 읽기 -> 마이페이지 사업자에서 사용
-	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
+//	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
+	List<FestivalSelectJoinRequestDto> selectAllFestivalJoinRequestBySponsorEachNumber(Integer eachNumber, String meSponsor);
+	
 	
 	// likes와 조인된 테이블 중 멤버가 좋아요한 축제 읽기 -> 마이페이지 일반유저에서 사용
 	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikesByMemberId(Integer meId);
+	List<FestivalSelectJoinLikesDto> selectFestivalJoinLikesByMemberIdEachNumber(Integer meId, Integer eachNumber);
 	
 	// fe_id로 축제 삭제
 	Integer deleteFestivalByFeId(Integer feId);

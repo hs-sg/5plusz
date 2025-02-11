@@ -22,8 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnSignin = document.querySelector('button#btnSignin');
     btnSignin.addEventListener('click', signin);
 
-
-
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
     function signin(event) {
@@ -75,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.log('로그인 요청 실패:', error));
     }
 
+
     /* --------------------(추가된 부분)-------------------- */
     /*  로그인 여부 확인 함수 */
     
@@ -118,3 +117,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+

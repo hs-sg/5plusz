@@ -1,5 +1,6 @@
 package com.oplusz.festgo.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Location;
 import com.oplusz.festgo.domain.Theme;
 import com.oplusz.festgo.dto.FestivalCalendarDto;
@@ -33,10 +35,29 @@ public class HomeController {
 	public String home(Model model) {
 		log.debug("home()");
 		
+		// 홈페이지 메인 비주얼 위치에 출력될 축제들의 feId
+		List<Integer> feIds = new ArrayList<Integer>();
+		feIds.add(184);
+		feIds.add(185);
+		// 홈페이지 메인 비주얼 위치에 출력될 축제
+		List<Festival> listFestivalForMainVisual = festivalService.read(feIds);
+		
+		// 콤보박스에 들어갈 데이터(지역, 테마)
 		List<Location> listLocation = locationService.read();
 		List<Theme> listTheme = themeService.read();
+		
+		// 추천 키워드란에 들어갈 테마
+		List<Theme> listThemesInFestival = themeService.readThemeInFestival();
+		
+		// 홈페이지 최신 축제 비주얼 위치에 출력될 축제
+		List<Festival> listFestivalForNewVisual = festivalService.readByCreatedTime();
+		
+		model.addAttribute("festivalsForMainVisual1", listFestivalForMainVisual.get(0));
+		model.addAttribute("festivalsForMainVisual2", listFestivalForMainVisual.get(1));
 		model.addAttribute("locations", listLocation);
 		model.addAttribute("themes", listTheme);
+		model.addAttribute("themesInFestival", listThemesInFestival);
+		model.addAttribute("festivalsForNewVisual", listFestivalForNewVisual);
 		
 		return "home";
 	}
@@ -77,5 +98,5 @@ public class HomeController {
 		
 		return ResponseEntity.ok(result);
 	}
-	
 }
+
