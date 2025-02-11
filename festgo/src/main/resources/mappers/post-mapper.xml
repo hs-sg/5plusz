@@ -154,6 +154,16 @@
 		        #{poId}
 		    </foreach>
 	</delete>
+	<!-- 특정 첨부파일 조회 -->
+	<select id="selectAttachmentById" parameterType="int" resultType="com.oplusz.festgo.domain.PostAttachment">
+	    SELECT * FROM post_attachment WHERE pa_id = #{fileId}
+	</select>
+
+	<!-- 특정 첨부파일 삭제 -->
+	<delete id="deleteAttachmentById" parameterType="int">
+	    DELETE FROM post_attachment WHERE pa_id = #{fileId}
+	</delete>
+
 	
 <!-- 희성 작성 시작 -->
 

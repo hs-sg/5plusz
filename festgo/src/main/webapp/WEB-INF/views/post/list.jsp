@@ -106,6 +106,18 @@
 		.delete-button:hover {
 		    background-color: #c82333;
 		}
+        
+		/* 일반 배지 스타일 (공지 배지와 동일한 형태, 연한 회색) */
+		.normal-label {
+		    background-color: #ddd; /* 연한 회색 배경 */
+		    color: #666; /* 부드러운 진회색 글씨 */
+		    font-weight: bold;
+		    padding: 5px 10px;
+		    border-radius: 12px; /* ✅ 둥근 모서리 */
+		    display: inline-block; /* ✅ 블록처럼 보이도록 */
+		    text-align: center;
+		}
+
 
 
     </style>
@@ -202,7 +214,9 @@
 						                        <input type="checkbox" name="deleteIds" value="${p.poId}">
 						                    </td>
 						                </c:if>
-                                        <td>${p.poId}</td>
+                                        <td>
+										   <span class="normal-label badge">일반</span> <!-- 일반 배지 -->
+										</td>
                                         <td>
                                             <c:url var="postDetailsPage" value="/post/details">
                                                 <c:param name="poId" value="${p.poId}"/>

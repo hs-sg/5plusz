@@ -77,10 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* --------------------(추가된 부분)-------------------- */
     /*  로그인 여부 확인 함수 */
-    function isUserLoggedIn() {
-        return sessionStorage.getItem("signedInUser") !== null;
-    }
-
+    
     function checkAndShowLoginModal(targetUrl) {
         sessionStorage.setItem("redirectAfterLogin", targetUrl);
 

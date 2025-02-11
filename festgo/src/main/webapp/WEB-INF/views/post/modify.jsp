@@ -65,15 +65,8 @@
 									                <span>${attachment.paAttachments}</span>
 									            </div>
 									
-									            <!-- 삭제 체크박스 -->
-									            <div class="form-check">
-									                <input type="checkbox" 
-									                       name="removeFiles" 
-									                       value="${attachment.paId}" 
-									                       class="form-check-input removeFileCheckbox"
-									                       id="removeFile${status.index}">
-									                <label class="form-check-label" for="removeFile${status.index}">삭제</label>
-									            </div>
+									            <!-- 삭제 버튼 추가 -->
+            									<button type="button" class="btn btn-danger btn-sm deleteFileBtn" data-file-id="${attachment.paId}">삭제</button>
 									        </li>
 									    </c:forEach>
 									</ul>

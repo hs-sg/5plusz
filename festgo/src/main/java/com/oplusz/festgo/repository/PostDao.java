@@ -63,6 +63,10 @@ public interface PostDao {
 	// 다중 게시글 삭제
 	void deleteMultipleById(List<Integer> postIds);
 	
+	PostAttachment selectAttachmentById(Integer fileId);
+
+	void deleteAttachmentById(Integer fileId);
+	
 //	희성 작성 시작
 	
 	List<Post> readByMeUsername(String meUsername);
@@ -70,6 +74,8 @@ public interface PostDao {
 	List<Post> readPostVariableByMeUsername(Integer minPostNum, Integer maxPostNum, String meUsername);
 	Integer countAllPosts();
 	Integer countPostsByMeUsername(String meUsername);
+
+	
 
 	
 	

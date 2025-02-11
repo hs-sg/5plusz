@@ -42,7 +42,7 @@ public class PostService {
 	private final MyPageService myPageService;
 	// 업로드된 파일을 저장할 기본 디렉토리
 	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
-	
+
 	/**
 	 * 모든 게시글 목록 조회( 페이징 없음 )
 	 */
@@ -57,45 +57,40 @@ public class PostService {
 	 * 게시글 상세 조회 (조회수 증가)
 	 */
 	public PostWithAttachmentsDto readById(Integer poId) {
-	    log.debug("readById(poId={})", poId);
+		log.debug("readById(poId={})", poId);
 
-	    Post post = postDao.selectById(poId);
-	    if (post == null) {
-	        log.error("게시글이 존재하지 않습니다.");
-	        throw new RuntimeException("게시글이 존재하지 않습니다.");
-	    }
+		Post post = postDao.selectById(poId);
+		if (post == null) {
+			log.error("게시글이 존재하지 않습니다.");
+			throw new RuntimeException("게시글이 존재하지 않습니다.");
+		}
 
-	    // 첨부파일 리스트 조회를 PostAttachment로 변경
-	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
+		// 첨부파일 리스트 조회를 PostAttachment로 변경
+		List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
-	    log.debug("게시글 정보: {}", post);
-	    log.debug("첨부파일 리스트: {}", attachments);
+		log.debug("게시글 정보: {}", post);
+		log.debug("첨부파일 리스트: {}", attachments);
 
-	    return new PostWithAttachmentsDto(post, attachments); // Attachments as List<PostAttachment>
+		return new PostWithAttachmentsDto(post, attachments); // Attachments as List<PostAttachment>
 	}
-
-
 
 	/**
 	 * 게시글 조회 (조회수 증가 X, 수정 페이지에서 사용)
 	 */
 	public PostWithAttachmentsDto getPostWithoutIncreasingViews(Integer poId) {
-	    log.debug("getPostWithoutIncreasingViews(poId={})", poId);
+		log.debug("getPostWithoutIncreasingViews(poId={})", poId);
 
-	    // 게시글 조회
-	    Post post = postDao.selectById(poId);
-	    if (post == null) {
-	        throw new RuntimeException("게시글이 존재하지 않습니다.");
-	    }
+		// 게시글 조회
+		Post post = postDao.selectById(poId);
+		if (post == null) {
+			throw new RuntimeException("게시글이 존재하지 않습니다.");
+		}
 
-	    // 첨부파일 조회를 PostAttachment 객체 리스트로 변경
-	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
+		// 첨부파일 조회를 PostAttachment 객체 리스트로 변경
+		List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
-	    return new PostWithAttachmentsDto(post, attachments);  // PostAttachment 리스트로 변경
+		return new PostWithAttachmentsDto(post, attachments); // PostAttachment 리스트로 변경
 	}
-
-
-
 
 	/**
 	 * 게시글 생성 (첨부파일 포함)
@@ -114,10 +109,10 @@ public class PostService {
 		 * 일반글(1) }
 		 */
 		// 게시글 저장 후 poId 가져오기
-	    int result = postDao.insert(dto);
-	    if (result == 0 || dto.getPoId() == null) {
-	        throw new RuntimeException("게시글 저장 실패");
-	    }
+		int result = postDao.insert(dto);
+		if (result == 0 || dto.getPoId() == null) {
+			throw new RuntimeException("게시글 저장 실패");
+		}
 
 		log.debug("게시글 생성 성공, ID: {}", dto.getPoId()); // poId 확인
 		if (dto.getPoId() == null) {
@@ -140,9 +135,9 @@ public class PostService {
 
 			// poId가 null이 아닌지 확인 후 저장
 			if (!attachments.isEmpty()) {
-			    for (PostAttachment attachment : attachments) {
-			        postDao.insertAttachment(Collections.singletonList(attachment)); 
-			    }
+				for (PostAttachment attachment : attachments) {
+					postDao.insertAttachment(Collections.singletonList(attachment));
+				}
 			}
 		}
 
@@ -153,16 +148,16 @@ public class PostService {
 	 * 파일 저장 처리
 	 */
 	private String saveFile(MultipartFile file) throws IllegalStateException, IOException {
-	    ensureUploadDirectoryExists(); // 디렉토리 존재 확인
-	    
-	    String originalFileName = file.getOriginalFilename();
-	    String savedFileName = UUID.randomUUID() + "_" + originalFileName;
-	    
-	    File saveFile = new File(UPLOAD_DIR, savedFileName);
-	    file.transferTo(saveFile);
-	    log.debug("파일 저장 완료: {}", saveFile.getAbsolutePath());
-	    
-	    return savedFileName;
+		ensureUploadDirectoryExists(); // 디렉토리 존재 확인
+
+		String originalFileName = file.getOriginalFilename();
+		String savedFileName = UUID.randomUUID() + "_" + originalFileName;
+
+		File saveFile = new File(UPLOAD_DIR, savedFileName);
+		file.transferTo(saveFile);
+		log.debug("파일 저장 완료: {}", saveFile.getAbsolutePath());
+
+		return savedFileName;
 	}
 
 	/**
@@ -181,267 +176,319 @@ public class PostService {
 
 	@Transactional
 	public void updatePost(PostUpdateDto dto, List<MultipartFile> newFiles) {
-	    log.debug("updatePost(dto={}, newFiles={})", dto, newFiles);
+		log.debug("updatePost(dto={}, newFiles={})", dto, newFiles);
 
-	    // 1. 게시글 내용 수정
-	    int result = postDao.update(dto.toEntity());
-	    if (result == 0) {
-	        throw new RuntimeException("게시글 수정 실패");
-	    }
+		// 1. 게시글 내용 수정
+		int result = postDao.update(dto.toEntity());
+		if (result == 0) {
+			throw new RuntimeException("게시글 수정 실패");
+		}
 
-	    // 2. 기존 첨부파일 삭제 (빈 리스트 및 null 제거 후 실행)
-	    List<Integer> removeAttachmentIds = dto.getRemoveAttachmentIds();
-	    if (removeAttachmentIds != null) {
-	        removeAttachmentIds = removeAttachmentIds.stream()
-	            .filter(Objects::nonNull) // null 값 제거
-	            .collect(Collectors.toList());
+		// 2. 기존 첨부파일 삭제 (파일도 삭제)
+		List<Integer> removeAttachmentIds = dto.getRemoveAttachmentIds();
+		if (removeAttachmentIds != null) {
+			removeAttachmentIds = removeAttachmentIds.stream().filter(Objects::nonNull) // null 값 제거
+					.collect(Collectors.toList());
 
-	        if (!removeAttachmentIds.isEmpty()) { // 리스트가 비어있지 않은 경우만 실행
-	            postDao.deleteAttachmentsByIds(removeAttachmentIds);
-	        }
-	    }
+			if (!removeAttachmentIds.isEmpty()) {
+				for (Integer fileId : removeAttachmentIds) {
+					PostAttachment attachment = postDao.selectAttachmentById(fileId);
+					if (attachment != null) {
+						File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+						if (file.exists()) {
+							if (file.delete()) {
+								log.debug("파일 삭제 완료: {}", file.getAbsolutePath());
+							} else {
+								log.error("파일 삭제 실패: {}", file.getAbsolutePath());
+							}
+						}
+						postDao.deleteAttachmentById(fileId); // DB에서 삭제
+					}
+				}
+			}
+		}
 
-	    // 3. 새로운 첨부파일 추가 (빈 파일 방지)
-	    if (newFiles != null && !newFiles.isEmpty()) {
-	        List<PostAttachment> attachments = new ArrayList<>();
-	        for (MultipartFile file : newFiles) {
-	            if (!file.isEmpty()) {
-	                try {
-	                    String savedFileName = saveFile(file);
-	                    attachments.add(PostAttachment.builder()
-	                            .poId(dto.getPoId())
-	                            .paAttachments(savedFileName)
-	                            .build());
-	                } catch (IOException e) {
-	                    log.error("파일 저장 실패", e);
-	                    throw new RuntimeException("파일 저장 실패: " + file.getOriginalFilename());
-	                }
-	            }
-	        }
+		// 3. 새로운 첨부파일 추가 (빈 파일 방지)
+		if (newFiles != null && !newFiles.isEmpty()) {
+			List<PostAttachment> attachments = new ArrayList<>();
+			for (MultipartFile file : newFiles) {
+				if (!file.isEmpty()) {
+					try {
+						String savedFileName = saveFile(file);
+						attachments
+								.add(PostAttachment.builder().poId(dto.getPoId()).paAttachments(savedFileName).build());
+					} catch (IOException e) {
+						log.error("파일 저장 실패", e);
+						throw new RuntimeException("파일 저장 실패: " + file.getOriginalFilename());
+					}
+				}
+			}
 
 			if (!attachments.isEmpty()) {
-			    for (PostAttachment attachment : attachments) {
-			        postDao.insertAttachment(Collections.singletonList(attachment)); 
-			    }
+				for (PostAttachment attachment : attachments) {
+					postDao.insertAttachment(Collections.singletonList(attachment));
+				}
 			}
-	    }
+		}
 	}
 
-	
 	// 파일 저장 시 디렉토리 존재 여부 확인 및 생성
 	private void ensureUploadDirectoryExists() {
-	    File directory = new File(UPLOAD_DIR);
-	    if (!directory.exists()) {
-	        directory.mkdirs();
-	    }
+		File directory = new File(UPLOAD_DIR);
+		if (!directory.exists()) {
+			directory.mkdirs();
+		}
 	}
-
 
 	// 삭제하기 서비스
 	@Transactional
 	public void delete(Integer poId) {
-	    log.debug("delete(poId={})", poId);
+		log.debug("delete(poId={})", poId);
 
-	    // 1. 게시글에 연결된 첨부파일 목록 조회
-	    List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
+		// 1. 게시글에 연결된 첨부파일 목록 조회
+		List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
 
-	    // 2. DB에서 첨부파일 삭제
-	    postDao.deleteAttachmentsByPostId(poId);
+		// 2. DB에서 첨부파일 삭제
+		postDao.deleteAttachmentsByPostId(poId);
 
-	    // 3. 실제 파일 삭제
-	    for (PostAttachment attachment : attachments) {
-	        File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
-	        if (file.exists()) {
-	            if (file.delete()) {
-	                log.debug("파일 삭제 완료: {}", file.getAbsolutePath());
-	            } else {
-	                log.error("파일 삭제 실패: {}", file.getAbsolutePath());
-	            }
-	        }
-	    }
+		// 3. 실제 파일 삭제
+		for (PostAttachment attachment : attachments) {
+			File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+			if (file.exists()) {
+				if (forceDeleteFile(file)) { // ✅ 강제 삭제 적용
+					log.debug("파일 삭제 완료: {}", file.getAbsolutePath());
+				} else {
+					log.error("파일 삭제 실패: {}", file.getAbsolutePath());
+				}
+			}
+		}
 
-	    // 4. 게시글 삭제
-	    postDao.deleteById(poId);
+		// 4. 게시글 삭제
+		postDao.deleteById(poId);
 	}
-
 
 	/**
 	 * 페이징 목록 조회
 	 */
 
 	public Map<String, Object> getPagedPosts(int page, Integer pageSize) {
-	    if (pageSize == null || pageSize <= 0) {
-	        pageSize = 5; // 기본값 설정
-	    }
+		if (pageSize == null || pageSize <= 0) {
+			pageSize = 5; // 기본값 설정
+		}
 
-	    // 공지사항은 항상 고정되도록 먼저 조회
-	    List<Post> notices = getNotices();
+		// 공지사항은 항상 고정되도록 먼저 조회
+		List<Post> notices = getNotices();
 
-	    int startRow = (page - 1) * pageSize + 1;
-	    int endRow = page * pageSize;
+		int startRow = (page - 1) * pageSize + 1;
+		int endRow = page * pageSize;
 
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("startRow", startRow);
-	    params.put("endRow", endRow);
+		Map<String, Object> params = new HashMap<>();
+		params.put("startRow", startRow);
+		params.put("endRow", endRow);
 
-	    // 일반 게시글 조회
-	    List<Post> posts = postDao.selectPagedPosts(params);
+		// 일반 게시글 조회
+		List<Post> posts = postDao.selectPagedPosts(params);
 
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("notices", notices);  // 공지사항은 무조건 포함
-	    result.put("posts", posts);
-	    result.put("currentPage", page);
-	    result.put("pageSize", pageSize);
-	    result.put("totalPages", calculateTotalPages(pageSize));
+		Map<String, Object> result = new HashMap<>();
+		result.put("notices", notices); // 공지사항은 무조건 포함
+		result.put("posts", posts);
+		result.put("currentPage", page);
+		result.put("pageSize", pageSize);
+		result.put("totalPages", calculateTotalPages(pageSize));
 
-	    return result;
+		return result;
 	}
-	
+
+	// 수정화면에서 첨부파일 삭제
+	public PostAttachment getAttachmentById(Integer fileId) {
+		log.debug("getAttachmentById(fileId={})", fileId);
+		PostAttachment attachment = postDao.selectAttachmentById(fileId);
+
+		if (attachment == null) {
+			log.error("파일이 DB에 존재하지 않음. fileId: {}", fileId);
+		} else {
+			log.debug("파일 정보: {}", attachment);
+		}
+
+		return attachment;
+	}
+
+	@Transactional
+	public void deleteAttachment(Integer fileId) {
+		PostAttachment attachment = postDao.selectAttachmentById(fileId);
+		if (attachment != null) {
+			File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+			if (file.exists()) {
+				if (forceDeleteFile(file)) { // ✅ 강제 삭제 적용
+					log.debug("파일 삭제 완료: {}", file.getAbsolutePath());
+				} else {
+					log.error("파일 삭제 실패: {}", file.getAbsolutePath());
+				}
+			}
+			postDao.deleteAttachmentById(fileId); // DB에서 삭제
+		}
+	}
+
+	// 열려있어도 강제삭제시도
+
+	private boolean forceDeleteFile(File file) {
+		if (file.exists()) {
+			try {
+				return file.delete(); // 기본 삭제 시도
+			} catch (Exception e) {
+				System.gc(); // 가비지 컬렉션 호출 (파일이 닫히도록 유도)
+				try {
+					Thread.sleep(100); // 잠시 대기 후 재시도
+					return file.delete();
+				} catch (InterruptedException ignored) {
+				}
+			}
+		}
+		return false;
+	}
+
 //	희성 작성 시작
-	
+
 	// 마이페이지 상에 로그인된 아이디가 작성한 글 목록 가져오기
 	public List<Post> readByMeUsername(String meUsername) {
 		log.debug("readByMeUsername(meUsername={})", meUsername);
-		
+
 		List<Post> list = postDao.readByMeUsername(meUsername);
 		log.debug("# of search result = {}", list.size());
-		
+
 		return list;
 	}
-	
+
 	// 마이페이지 상에 관리자가 모든글 원하는 갯수대로 가져오기
 	public List<Post> readVariableByPageNum(Integer postNumberInList, Integer pageNum) {
 		log.debug("readVariableByPageNum(postNumberInList={}, pageNum={})", postNumberInList, pageNum);
 		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
 		Integer maxPostNum = pageNum * postNumberInList;
-		
+
 		List<Post> list = postDao.readPostVariable(minPostNum, maxPostNum);
 		log.debug("# of search result = {}", list.size());
-		
+
 		return list;
 	}
-	
+
 	// 마이페이지 상에 유저, 스폰서가 작성한 글 원하는 갯수대로 가져오기
 	public List<Post> readVariableByPageNumAndUsername(Integer postNumberInList, Integer pageNum, String username) {
-		log.debug("readVariableByPageNum(postNumberInList={}, pageNum={}, username={})", postNumberInList, pageNum, username);
+		log.debug("readVariableByPageNum(postNumberInList={}, pageNum={}, username={})", postNumberInList, pageNum,
+				username);
 		Integer minPostNum = 1 + (postNumberInList * (pageNum - 1));
 		Integer maxPostNum = pageNum * postNumberInList;
-		
+
 		List<Post> list = postDao.readPostVariableByMeUsername(minPostNum, maxPostNum, username);
 		log.debug("# of search result = {}", list.size());
-		
+
 		return list;
 	}
-	
+
 	// 전체 글 갯수 가져오기
 	public Integer countAllPosts() {
 		log.debug("countAllPosts()");
-		
+
 		Integer countPosts = postDao.countAllPosts();
 		log.debug("countPosts result = {}", countPosts);
-		
+
 		return countPosts;
 	}
-	
+
 	// 아이디로 글 갯수 가져오기
 	public Integer getCountAllPostsByUsername(String username) {
 		log.debug("getCountAllPostsByUsername(username={})", username);
-		
+
 		Integer countPosts = postDao.countPostsByMeUsername(username);
 		log.debug("countPosts result = {}", countPosts);
-		
+
 		return countPosts;
 	}
-	
+
 //	희성 작성 끝
 
-
 	private int calculateTotalPages(int pageSize) {
-	    int totalCount = postDao.countPosts();
-	    return (int) Math.ceil((double) totalCount / pageSize);
+		int totalCount = postDao.countPosts();
+		return (int) Math.ceil((double) totalCount / pageSize);
 	}
 
-
-	
 	// 검색 & 페이징
 
 	public Map<String, Object> searchWithPaging(PostSearchDto dto) {
-	    log.debug("Executing search query with category: {}, keyword: {}", dto.getCategory(), dto.getKeyword());
+		log.debug("Executing search query with category: {}, keyword: {}", dto.getCategory(), dto.getKeyword());
 
-	    if (dto.getPageSize() == null || dto.getPageSize() <= 0) {
-	        dto.setPageSize(5); // 기본값 설정
-	    }
+		if (dto.getPageSize() == null || dto.getPageSize() <= 0) {
+			dto.setPageSize(5); // 기본값 설정
+		}
 
-	    int startRow = (dto.getPage() - 1) * dto.getPageSize();
+		int startRow = (dto.getPage() - 1) * dto.getPageSize();
 
-	    // 페이징 및 검색 조건을 매개변수로 전달
-	    Map<String, Object> params = new HashMap<>();
-	    params.put("category", dto.getCategory());
-	    params.put("keyword", dto.getKeyword());
-	    params.put("startRow", startRow);
-	    params.put("pageSize", dto.getPageSize());
+		// 페이징 및 검색 조건을 매개변수로 전달
+		Map<String, Object> params = new HashMap<>();
+		params.put("category", dto.getCategory());
+		params.put("keyword", dto.getKeyword());
+		params.put("startRow", startRow);
+		params.put("pageSize", dto.getPageSize());
 
-	    // 검색 쿼리 호출
-	    List<Post> posts = postDao.searchWithPaging(params);
-	    int totalResults = postDao.countSearchResults(params);
+		// 검색 쿼리 호출
+		List<Post> posts = postDao.searchWithPaging(params);
+		int totalResults = postDao.countSearchResults(params);
 
-	    // 전체 페이지 수 계산
-	    int totalPages = (int) Math.ceil((double) totalResults / dto.getPageSize());
-	    if (totalPages == 0) {
-	        totalPages = 1;
-	    }
-	    List<Post> notices = getNotices();
-	    // 결과 반환
-	    Map<String, Object> result = new HashMap<>();
-	    result.put("notices", notices); 
-	    result.put("posts", posts);
-	    result.put("currentPage", dto.getPage());
-	    result.put("totalPages", totalPages);
-	    result.put("pageSize", dto.getPageSize());
+		// 전체 페이지 수 계산
+		int totalPages = (int) Math.ceil((double) totalResults / dto.getPageSize());
+		if (totalPages == 0) {
+			totalPages = 1;
+		}
+		List<Post> notices = getNotices();
+		// 결과 반환
+		Map<String, Object> result = new HashMap<>();
+		result.put("notices", notices);
+		result.put("posts", posts);
+		result.put("currentPage", dto.getPage());
+		result.put("totalPages", totalPages);
+		result.put("pageSize", dto.getPageSize());
 
-	    return result;
+		return result;
 	}
 
 	public List<Post> getNotices() {
-    log.debug("Fetching notices");
-    return postDao.selectNotices(); // 공지사항만 가져오는 메서드
-}
-	
+		log.debug("Fetching notices");
+		return postDao.selectNotices(); // 공지사항만 가져오는 메서드
+	}
+
 	public List<Post> getPagedPosts(Map<String, Object> params) {
-	    return postDao.selectPagedPosts(params);
+		return postDao.selectPagedPosts(params);
 	}
 
 	public void increaseViewCount(Integer poId) {
-		postDao.increaseViewCount(poId); // 조회수 증가 
-    }
-	
-	// 다중 게시글 삭제 
-	@Transactional
-	public void deleteMultiple(List<Integer> postIds, HttpSession session) {
-	    String signedInUser = (String) session.getAttribute("signedInUser");
-	    Integer userRole = myPageService.readRoleIdByUsername(signedInUser);
-
-	    if (userRole != 3) {
-	        throw new RuntimeException("관리자만 다중 삭제가 가능합니다.");
-	    }
-
-	    for (Integer poId : postIds) {
-	        List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
-
-	        if (!attachments.isEmpty()) {
-	            postDao.deleteAttachmentsByPostId(poId);
-
-	            for (PostAttachment attachment : attachments) {
-	                File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
-	                if (file.exists() && !file.delete()) {
-	                    log.warn("파일 삭제 실패: {}", file.getAbsolutePath());
-	                }
-	            }
-	        }
-	    }
-
-	    postDao.deleteMultipleById(postIds);
+		postDao.increaseViewCount(poId); // 조회수 증가
 	}
 
+	// 다중 게시글 삭제
+	@Transactional
+	public void deleteMultiple(List<Integer> postIds, HttpSession session) {
+		String signedInUser = (String) session.getAttribute("signedInUser");
+		Integer userRole = myPageService.readRoleIdByUsername(signedInUser);
+
+		if (userRole != 3) {
+			throw new RuntimeException("관리자만 다중 삭제가 가능합니다.");
+		}
+
+		for (Integer poId : postIds) {
+			List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
+
+			if (!attachments.isEmpty()) {
+				postDao.deleteAttachmentsByPostId(poId);
+
+				for (PostAttachment attachment : attachments) {
+					File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+					if (file.exists() && !file.delete()) {
+						log.warn("파일 삭제 실패: {}", file.getAbsolutePath());
+					}
+				}
+			}
+		}
+
+		postDao.deleteMultipleById(postIds);
+	}
 
 }
