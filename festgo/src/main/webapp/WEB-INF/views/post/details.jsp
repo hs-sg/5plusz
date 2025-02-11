@@ -111,15 +111,17 @@
 
                     <%-- 수정 버튼 --%>
                     <%-- 로그인 사용자와 포스트 작성자가 같은 경우에만 수정하기 버튼 보여줌 --%>
-                    <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
 
                         <div class="card-footer d-flex justify-content-center">
+                    <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
                             <c:url var="postModifyPage" value="/post/modify">
                                 <c:param name="poId" value="${postWithAttachments.post.poId}" />
                             </c:url>
-                            <a class="btn btn-outline-primary" href="${postModifyPage}">수정하기</a>
-                        </div>
+                            <a class="btn btn-outline-primary me-3" href="${postModifyPage}">수정하기</a>
                     </c:if>
+	                    <c:url value="/post/list" var="postList"/>
+	                    <a class="btn btn-outline-secondary" href="${postList}">목록보기</a>
+                     </div>
                 </div>
             </div>
         </main>
