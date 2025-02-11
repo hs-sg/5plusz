@@ -5,7 +5,7 @@
     Integer userRole = (Integer) session.getAttribute("mr_id"); 
     request.setAttribute("userRole", userRole); // userRole을 request 속성으로 추가
 %>
-<p>현재 로그인된 사용자 역할: <%= userRole %></p>  <!-- 🌟 디버깅용 출력 -->
+
 <!DOCTYPE html>
 <html>
     <head>

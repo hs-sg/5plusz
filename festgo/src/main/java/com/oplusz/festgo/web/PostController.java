@@ -216,8 +216,7 @@ public class PostController {
 	@PostMapping("/delete-multiple")
 	@ResponseBody
 	public Map<String, Object> deleteMultiple(@RequestBody Map<String, List<Integer>> payload, HttpSession session) {
-	    System.out.println("🚀 [DELETE] delete-multiple 실행됨!");
-	    System.out.println("📌 삭제할 게시글 ID 목록: " + payload.get("postIds"));
+	    
 	    
 	    List<Integer> postIds = payload.get("postIds");
 	    Map<String, Object> response = new HashMap<>();
