@@ -36,8 +36,19 @@ public class MemberController {
 	public ResponseEntity<Integer> signIn(@RequestBody MemberSignInDto dto, HttpSession session) {
 		log.debug("signIn(dto={})", dto);
 		
+		Member member = memberService.read(dto);	
+		if (member == null) {
+			// username과 password가 일치하는 사용자가 DB에 없는 경우 - 로그인 실패.
+			return ResponseEntity.ok(0);
+		} else {
+			session.setAttribute("signedInUser", member.getMeUsername());
+			session.setAttribute("memberRole", member.getMrId());
+			return ResponseEntity.ok(1);
+		}
+		/*
 		Member memberForCheck = memberService.read(dto.getMeUsername());
 		SponRequest sr = sponRequestService.read(memberForCheck.getMeId());
+		
 		if (sr.getSrApproval() == 1) {
 			Member member = memberService.read(dto);	
 			if (member == null) {
@@ -51,6 +62,7 @@ public class MemberController {
 		} else { // srApproval의 값이 1(승인)이 아닌 경우 - 로그인 실패.
 			return ResponseEntity.ok(2);
 		}
+		*/
 	}
 	
 	// 로그아웃
@@ -79,7 +91,10 @@ public class MemberController {
 		log.debug("POST signUp(dto={})", dto);
 		int approval = 1;
 		// 사업자 계정 등록요청은 관리자의 승인 필요: 0(대기중)
-		if(dto.getMrId() == 2) approval = 0;
+		if(dto.getMrId() == 2) {
+			approval = 0;
+			dto.setMrId(1);
+		}
 		
 		memberService.create(dto, approval);
 		
