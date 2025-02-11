@@ -25,6 +25,9 @@
         where fe_id = #{feId}
     </update>
     
+    <select id="countFestivalByFrApproval">
+        select count(*) from fest_request where fr_approval = #{frApproval}
+    </select>
     
     <!-- 희성 작성 끝 -->
 
