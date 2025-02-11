@@ -245,7 +245,8 @@ public class MyPageService {
 		log.debug("approveSponsorMemberByMeId(meId={}", meId);
 		
 		Integer appSponsorResult = sponRequestDao.approveSponsorMemberByMeId(meId);
-		log.debug("result appSponsorResult = {}", appSponsorResult);
+		Integer updateSponsorRoleResult =  memberDao.updateSponsorRoleByMeId(meId);
+		log.debug("appSponsorResult = {}, updateSponsorRoleResult = {}", appSponsorResult, updateSponsorRoleResult);
 		
 		return appSponsorResult;
 	}
