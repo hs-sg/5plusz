@@ -1191,7 +1191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then((response) => {
             console.log(response);
             alert("업체 승인완료");
-            SponsorCheckList();
+            sponsorCheckList();
         })
         .catch((error) => { console.log(error) });
         console.log(result);
