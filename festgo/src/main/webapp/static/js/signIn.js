@@ -20,9 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const btnSignin = document.querySelector('button#btnSignin');
-    btnSignin.addEventListener('click', signin);
-
-
+   if (btnSignin) {
+           btnSignin.addEventListener('click', signin);
+       }
 
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.log('로그인 요청 실패:', error));
     }
 
+
     /* --------------------(추가된 부분)-------------------- */
     /*  로그인 여부 확인 함수 */
     
@@ -102,27 +103,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
+    /* 🔹 특정 페이지에서만 이벤트 리스너 등록 */
+       if (window.location.pathname.includes("/post")) {
+           document.addEventListener('click', (e) => {
+               const postLink = e.target.closest('.post-link');
+               if (postLink) {
+                   e.preventDefault();
+                   checkAndShowLoginModal(postLink.href);
+               }
 
-    // 이벤트 위임 방식 개선:
-    document.addEventListener('click', (e) => {
-        const postLink = e.target.closest('.post-link');
-        if (postLink) {
-            e.preventDefault();
-            checkAndShowLoginModal(postLink.href);
-        }
-
-        const createLink = e.target.closest('a[href*="/post/create"]');
-        if (createLink) {
-            e.preventDefault();
-            checkAndShowLoginModal(createLink.href);
-        }
-    });
-	
-	document.addEventListener("DOMContentLoaded", () => {
-	    const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
-	    if (redirectUrl) {
-	        sessionStorage.removeItem("redirectAfterLogin");
-	        window.location.href = redirectUrl;
-	    }
-	});
-});
+               const createLink = e.target.closest('a[href*="/post/create"]');
+               if (createLink) {
+                   e.preventDefault();
+                   checkAndShowLoginModal(createLink.href);
+               }
+           });
+       }
+   });
