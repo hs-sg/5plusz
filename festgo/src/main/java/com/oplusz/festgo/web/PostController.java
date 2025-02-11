@@ -123,10 +123,6 @@ public class PostController {
 	    // 로그인된 사용자 확인
 	    String signedInUser = (String) session.getAttribute("signedInUser");
 
-	    if (signedInUser == null) {
-	        return "redirect:/post/list?loginRequired=true"; // 로그인 요구 파라미터 추가
-	    }
-
 	    // 사용자 역할 가져오기 (DB 조회)
 	    Integer mrId = myPageService.readRoleIdByUsername(signedInUser);
 	    model.addAttribute("mrId", mrId);
