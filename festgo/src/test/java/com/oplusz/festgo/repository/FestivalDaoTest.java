@@ -110,14 +110,14 @@ public class FestivalDaoTest {
 	}
 	
 	// @Test
-	public void testSelectFestivalJoinRequestBySponsor() {
-		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor("서울");
-		for(FestivalSelectJoinRequestDto f : list) {
-			log.debug(f.toString());
-		}
-		
-		Assertions.assertNotNull(list);
-	}
+//	public void testSelectFestivalJoinRequestBySponsor() {
+//		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestBySponsor("서울");
+//		for(FestivalSelectJoinRequestDto f : list) {
+//			log.debug(f.toString());
+//		}
+//		
+//		Assertions.assertNotNull(list);
+//	}
 	
 	// @Test
 	public void testDeleteFestivalByFeId() {
