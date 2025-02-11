@@ -381,13 +381,14 @@ body {
 
 /* 축제 이름 스타일 */
 .swiper-slide .festival-name {
-   color: #87CEFA;  /* 연한 하늘색 (Light Sky Blue) */
+   color: #808080;  /* 회색 (Gray) */
    font-size: 1.2rem;
    font-weight: bold;
    margin-top: 15px;
    text-align: center;
    word-break: keep-all;
 }
+ㄴ
 
 /* Swiper 네비게이션 버튼 스타일 */
 .swiper-button-next,
