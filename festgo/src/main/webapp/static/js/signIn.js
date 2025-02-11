@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnSignin = document.querySelector('button#btnSignin');
     btnSignin.addEventListener('click', signin);
-	
+
+
+
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
     function signin(event) {

@@ -19,7 +19,6 @@ public interface MemberDao {
 	Integer deleteMemberByUsername(String meUsername);
 	List<MemberSelectJoinRequestDto> selectMemberJoinSponRequestBySrApproval();
 	Integer updatePasswordByUsername(String mePassword, String meUsername);
-	Integer updateSponsorRoleByMeId(Integer meId);
 	
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------

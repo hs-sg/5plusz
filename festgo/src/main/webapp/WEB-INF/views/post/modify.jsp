@@ -65,8 +65,15 @@
 									                <span>${attachment.paAttachments}</span>
 									            </div>
 									
-									            <!-- 삭제 버튼 추가 -->
-            									<button type="button" class="btn btn-danger btn-sm deleteFileBtn" data-file-id="${attachment.paId}">삭제</button>
+									            <!-- 삭제 체크박스 -->
+									            <div class="form-check">
+									                <input type="checkbox" 
+									                       name="removeFiles" 
+									                       value="${attachment.paId}" 
+									                       class="form-check-input removeFileCheckbox"
+									                       id="removeFile${status.index}">
+									                <label class="form-check-label" for="removeFile${status.index}">삭제</label>
+									            </div>
 									        </li>
 									    </c:forEach>
 									</ul>
@@ -82,13 +89,11 @@
             
 									
 									<!-- 수정 & 삭제 버튼 -->
-                                    <%-- 로그인 사용자와 포스트 작성자가 같은 경우에만 삭제/업데이트 가능  --%>
-                                    <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
-    									<div class="card-footer d-flex justify-content-end mt-3">
-    									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
-    									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
-    									</div>
-                                    </c:if>
+									<div class="card-footer d-flex justify-content-end mt-3">
+									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
+									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
+									</div>
+
                                 </form>
                             </div>
                         </div>

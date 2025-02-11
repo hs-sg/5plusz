@@ -3,10 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:context="http://www.springframework.org/schema/context" 
     xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
-        http://mybatis.org/schema/mybatis-spring https://mybatis.org/schema/mybatis-spring.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
+ 
     <!-- bean definitions here: 
         스프링 프레임워크에서 생성하고 관리할 자바 객체들을 선언.
     -->
@@ -16,12 +17,25 @@
         hikariConfig.setDriverClassName("oracle.jdbc.OracleDriver");
         ...
     -->
+    
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
-        <property name="jdbcUrl" value="jdbc:oracle:thin:@192.168.0.19:1521:xe" />
+
+
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@ 192.168.0.19:1521:xe" />
+
         <property name="username" value="splusz" />
         <property name="password" value="splusz" />
     </bean>
+    
+    <!--
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+        <property name="username" value="user3" />
+        <property name="password" value="user3" />
+    </bean>
+    -->
     
     <!-- HikariDataSource 빈 생성을 위한 설정 
         HikariDataSource ds = new HikariDataSource(hikariConfig);
@@ -61,5 +75,5 @@
         생성된 컴포넌트 빈들을 필요한 곳(예: 컨트롤러)에 주입할 수 있도록.
     -->
     <context:component-scan base-package="com.oplusz.festgo.service" />
-
+    
 </beans>

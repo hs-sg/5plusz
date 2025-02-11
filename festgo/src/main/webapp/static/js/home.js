@@ -6,24 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainVisualSwiper = new Swiper(".mainVisualSwiper", {
         spaceBetween: 30,
         centeredSlides: true,
-        loop: true, // 반복 재생 여부
-        autoplay: { // 자동 재생 여부
-            delay: 2500, // 2.5초마다 슬라이드 바뀜
-            disableOnInteraction: false, // 수동으로 슬라이드를 넘겼을 때 자동 재생 비활성화 여부
+        autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
         },
-        pagination: { // 페이지 번호 사용 여부
-            el: ".swiper-pagination", // 페이지 번호 요소 선택자
-            //clickable: true, // 사용자의 페이지 번호 요소 제어 가능 여부
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
         },
-        navigation: { // 슬라이드 이전/다음 버튼 사용 여부
-            nextEl: ".swiper-button-next", // 이전 버튼 선택자
-            prevEl: ".swiper-button-prev", // 다음 버튼 선택자
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
         },
     });
         
     const festivalSwiper = new Swiper('.festivalSwiper', {
         // Optional parameters
-        direction: 'horizontal', // 수평 슬라이드
+        direction: 'horizontal',
         loop: true,
 
         // If we need pagination
@@ -49,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const divShowMoreFestival = document.getElementById('showMoreFestival');
     const btnShowMoreFestival = document.getElementById('btnShowMoreFestival');
     let jsonDataForSearch;
-    let isBtnShowMoreFestivalHasEventListener = false;
+    let isBtnShowMoreFestivalHaveEventListener = false;
     
     // form 태그의 기본 동작 대신 fetch를 사용하여 서버로 AJAX요청을 보냄. 
     formSearchFestival.addEventListener('submit', function(event) {
@@ -138,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     // 카드 전체 클릭 시, 상세 페이지로 이동 (축제 ID를 쿼리 파라미터로 전달)
                     eventDiv.onclick = function() {
-                        window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
+                        window.location.href = contextPath + '/fest/details?feId=' + fest.feId;
                     };
                     
                     eventCol.appendChild(eventDiv);
@@ -153,12 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     '</div>';
             }
             
-            /*// ✅ (더보기 버튼이 없는 최초 클릭 시) 축제 리스트가 추가된 후 자동 스크롤 실행
-            setTimeout(() => {
-                eventDetailsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300); // 약간의 지연 시간 추가 (리스트 로딩 완료 후 스크롤)
-            */              
-            resolve(data);
+            resolve(data);  
         });
     }
 
@@ -177,9 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(plusIndex => { //
                 startIndexNum += plusIndex;
                 console.log("startIndexNum: ", startIndexNum); 
-                if (startIndexNum === 12 && isBtnShowMoreFestivalHasEventListener === false) {
+                if (startIndexNum === 12 && isBtnShowMoreFestivalHaveEventListener === false) {
                     jsonDataForSearch.startIndexNum = startIndexNum;
-                    isBtnShowMoreFestivalHasEventListener = true;
+                    isBtnShowMoreFestivalHaveEventListener = true;
                     btnShowMoreFestival.addEventListener('click', function(event) {    
                         showSearchResult();
                     });
@@ -212,29 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resolve(plusIndex);
         });
     }
-    
-    // 추천 축제 링크들을 찾아서 클릭 이벤트 리스너를 설정.
-    const linkRecommendThemes = document.querySelectorAll('a.linkRecommendTheme');
-    for (const link of linkRecommendThemes) {
-        link.addEventListener('click', searchRecommendThemes);
-    }        
-    
-    // 추천 축제 링크의 클릭 이벤트 리스너 콜백.
-    function searchRecommendThemes(event) {
-        event.preventDefault();
-        
-        const theId = event.target.getAttribute('theme-id');
-        const jsonData = {
-            month: '', 
-            lcId: '', 
-            theId: theId, 
-            keyword:'', 
-            startIndexNum: 0
-        };
-        
-        jsonDataForSearch = jsonData;
-        showSearchResult();
-    }
+            
 });
 
 
