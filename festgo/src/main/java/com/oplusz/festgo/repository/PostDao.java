@@ -60,6 +60,8 @@ public interface PostDao {
 	List<String> selectAttachmentsByPostId(@Param("poId") Integer poId);
 
 	List<PostAttachment> selectAttachmentsByPostIdWithObject(@Param("poId") Integer poId);
+	// 다중 게시글 삭제
+	void deleteMultipleById(List<Integer> postIds);
 	
 //	희성 작성 시작
 	
@@ -68,6 +70,8 @@ public interface PostDao {
 	List<Post> readPostVariableByMeUsername(Integer minPostNum, Integer maxPostNum, String meUsername);
 	Integer countAllPosts();
 	Integer countPostsByMeUsername(String meUsername);
+
+	
 	
 //	희성 작성 끝
 

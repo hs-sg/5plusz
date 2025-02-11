@@ -48,6 +48,7 @@ public class MemberController {
 				return ResponseEntity.ok(0);
 			} else {
 				session.setAttribute("signedInUser", member.getMeUsername());
+				session.setAttribute("mr_id", member.getMrId());  // 역할 ID 저장
 				return ResponseEntity.ok(1);
 			}
 		} else { // srApproval의 값이 1(승인)이 아닌 경우 - 로그인 실패.

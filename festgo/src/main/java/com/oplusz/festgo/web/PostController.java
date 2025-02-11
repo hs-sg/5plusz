@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,14 +76,21 @@ public class PostController {
 	 * 게시글 상세 조회 (조회수 증가)
 	 */
 	@GetMapping("/details")
-	public String details(@RequestParam("poId") Integer poId, Model model) {
-	    // 게시글 + 첨부파일 조회
-		postService.increaseViewCount(poId);
+	public String details(@RequestParam("poId") Integer poId, Model model, HttpSession session) {
+	    // 조회수 중복 증가 방지
+	    String viewedPostKey = "viewedPost_" + poId;
+	    if (session.getAttribute(viewedPostKey) == null) {
+	        postService.increaseViewCount(poId);
+	        session.setAttribute(viewedPostKey, true);
+	    }
+
 	    PostWithAttachmentsDto postDto = postService.readById(poId);
-	    model.addAttribute("postWithAttachments", postDto); // 여기서 제대로 전달되고 있는지 확인
-	    model.addAttribute("imageAttachments", postDto.getAttachments()); // 첨부파일
+	    model.addAttribute("postWithAttachments", postDto);
+	    model.addAttribute("imageAttachments", postDto.getAttachments());
+
 	    return "post/details";
 	}
+
 
 
 	// 이미지 미리보기 메서드
@@ -186,18 +194,51 @@ public class PostController {
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "poId") Integer poId) {
+	public String delete(@RequestParam(name = "poId") Integer poId, HttpSession session) {
+	    String signedInUser = (String) session.getAttribute("signedInUser");
 
-		log.debug("delete(id={})", poId);
-		if (poId == null) {
-			log.error("삭제할 게시글 ID가 없습니다.");
-			return "redirect:/post/list"; // 잘못된 요청 시 목록으로 이동
-		}
+	    if (signedInUser == null) {
+	        return "redirect:/post/list?error=notAuthorized";
+	    }
 
-		postService.delete(poId);
+	    Integer userRole = myPageService.readRoleIdByUsername(signedInUser);
+	    Post post = postService.readById(poId).getPost();
 
-		return "redirect:/post/list";
+	    // 관리자이거나 작성자 본인이어야 삭제 가능
+	    if (userRole == 3 || post.getPoAuthor().equals(signedInUser)) {
+	        postService.delete(poId);
+	        return "redirect:/post/list";
+	    }
+
+	    return "redirect:/post/list?error=notAuthorized";
 	}
+
+	@PostMapping("/delete-multiple")
+	@ResponseBody
+	public Map<String, Object> deleteMultiple(@RequestBody Map<String, List<Integer>> payload, HttpSession session) {
+	    System.out.println("🚀 [DELETE] delete-multiple 실행됨!");
+	    System.out.println("📌 삭제할 게시글 ID 목록: " + payload.get("postIds"));
+	    
+	    List<Integer> postIds = payload.get("postIds");
+	    Map<String, Object> response = new HashMap<>();
+
+	    if (postIds == null || postIds.isEmpty()) {
+	        response.put("success", false);
+	        response.put("message", "삭제할 게시글을 선택하세요.");
+	        return response;
+	    }
+
+	    try {
+	        postService.deleteMultiple(postIds, session);
+	        response.put("success", true);
+	    } catch (Exception e) {
+	        response.put("success", false);
+	        response.put("message", e.getMessage());
+	    }
+
+	    return response;
+	}
+
 
 	/**
 	 * 검색 및 페이징 처리된 게시글 목록 조회
@@ -245,5 +286,6 @@ public class PostController {
 
 		return "post/list";
 	}
+	
 
 }

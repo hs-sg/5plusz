@@ -29,6 +29,7 @@ import com.oplusz.festgo.dto.PostUpdateDto;
 import com.oplusz.festgo.dto.PostWithAttachmentsDto;
 import com.oplusz.festgo.repository.PostDao;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostService {
 
 	private final PostDao postDao;
-
+	private final MyPageService myPageService;
 	// 업로드된 파일을 저장할 기본 디렉토리
 	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
 	
@@ -413,5 +414,34 @@ public class PostService {
 	public void increaseViewCount(Integer poId) {
 		postDao.increaseViewCount(poId); // 조회수 증가 
     }
+	
+	// 다중 게시글 삭제 
+	@Transactional
+	public void deleteMultiple(List<Integer> postIds, HttpSession session) {
+	    String signedInUser = (String) session.getAttribute("signedInUser");
+	    Integer userRole = myPageService.readRoleIdByUsername(signedInUser);
+
+	    if (userRole != 3) {
+	        throw new RuntimeException("관리자만 다중 삭제가 가능합니다.");
+	    }
+
+	    for (Integer poId : postIds) {
+	        List<PostAttachment> attachments = postDao.selectAttachmentsByPostIdWithObject(poId);
+
+	        if (!attachments.isEmpty()) {
+	            postDao.deleteAttachmentsByPostId(poId);
+
+	            for (PostAttachment attachment : attachments) {
+	                File file = new File(UPLOAD_DIR, attachment.getPaAttachments());
+	                if (file.exists() && !file.delete()) {
+	                    log.warn("파일 삭제 실패: {}", file.getAbsolutePath());
+	                }
+	            }
+	        }
+	    }
+
+	    postDao.deleteMultipleById(postIds);
+	}
+
 
 }

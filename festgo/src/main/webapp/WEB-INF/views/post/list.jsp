@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%-- 로그인된 사용자의 역할 ID 가져오기 --%>
+<%
+    Integer userRole = (Integer) session.getAttribute("mr_id"); 
+    request.setAttribute("userRole", userRole); // userRole을 request 속성으로 추가
+%>
+<p>현재 로그인된 사용자 역할: <%= userRole %></p>  <!-- 🌟 디버깅용 출력 -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -81,6 +87,27 @@
         #toggleNotice {
             margin-right: 10px; /* 글쓰기 버튼과 간격 유지 */
         }
+        .delete-button-container {
+		    text-align: left; /* 버튼을 왼쪽 정렬 */
+		    margin-top: 5px; /* 체크박스와의 간격 */
+		}
+		
+		.delete-button {
+		    width: 80px; /* 버튼 크기 */
+		    padding: 5px 10px;
+		    font-size: 12px;
+		    background-color: #dc3545;
+		    color: white;
+		    border: none;
+		    border-radius: 5px;
+		    cursor: pointer;
+		}
+		
+		.delete-button:hover {
+		    background-color: #c82333;
+		}
+
+
     </style>
     
         
@@ -129,7 +156,12 @@
                         <table class="table table-striped table-hover">
                             <thead class="table-primary">
                                 <tr>
-                                    <th style="width: 10%;"></th>
+                                	<c:if test="${userRole == 3}">
+							            <th style="width: 5%;">
+							                <input type="checkbox" id="selectAll"> <!-- ✅ 헤더에 전체 선택 버튼 -->
+							            </th>
+							        </c:if>
+                                	<th style="width: 10%;"></th>
                                     <th>제목</th>
                                     <th>작성자</th>
                                     <th>작성날짜</th>
@@ -141,6 +173,11 @@
                                 <c:if test="${currentPage == 1}">
                                     <c:forEach var="notice" items="${notices}">
                                         <tr class="notice">
+                                        	<c:if test="${userRole == 3}">
+							                    <td>
+							                        <input type="checkbox" name="deleteIds" value="${notice.poId}"> <!-- ✅ 관리자만 체크박스 표시 -->
+							                    </td>
+							                </c:if>
                                             <td class="notice-label">
                                                 <span class="badge badge-danger">공지</span> <!-- 배지 스타일 -->
                                             </td>
@@ -160,6 +197,11 @@
                                 <!-- 일반 게시글 -->
                                 <c:forEach var="p" items="${posts}">
                                     <tr class="normal">
+                                    	<c:if test="${userRole == 3}">
+						                    <td>
+						                        <input type="checkbox" name="deleteIds" value="${p.poId}">
+						                    </td>
+						                </c:if>
                                         <td>${p.poId}</td>
                                         <td>
                                             <c:url var="postDetailsPage" value="/post/details">
@@ -174,6 +216,9 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <c:if test="${userRole == 3}">
+						    <button id="deleteSelected" class="delete-button">선택 삭제</button>
+						</c:if>
                     </div>
                     <!-- 페이징 네비게이션 -->
                     <nav class="pagination-container mt-auto">
@@ -212,6 +257,10 @@
                 </div>
             </div>
         </main>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+                    crossorigin="anonymous"></script>
         <script>
             document.getElementById('toggleNotice').addEventListener('click', function () {
                 const notices = document.querySelectorAll('.notice');
@@ -222,6 +271,52 @@
                 button.textContent = button.textContent === '공지 숨기기' ? '공지 보기' : '공지 숨기기';
             });
         </script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const deleteButton = document.getElementById('deleteSelected');
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('click', function () {
+                    document.querySelectorAll('input[name="deleteIds"]').forEach(cb => cb.checked = this.checked);
+                });
+            }
+
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function () {
+                    const selected = Array.from(document.querySelectorAll('input[name="deleteIds"]:checked'))
+                                        .map(cb => cb.value);
+
+                    if (selected.length === 0) {
+                        alert('삭제할 게시글을 선택하세요.');
+                        return;
+                    }
+
+                    if (confirm('선택한 게시글을 삭제하시겠습니까?')) {
+                    	fetch('${pageContext.request.contextPath}/post/delete-multiple', {  
+                    		//  JSP의 `contextPath`를 사용하여 동적으로 경로 설정
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ postIds: selected })  
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('삭제 완료!');
+                                location.reload(); 
+                            } else {
+                                alert('삭제 실패: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            alert('요청 중 오류 발생: ' + error);
+                        });
+                    }
+                });
+            }
+        });
+
+		</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>
