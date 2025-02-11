@@ -18,6 +18,14 @@
 
     <!-- Custom CSS -->
     <style>
+    
+		.modal {
+		    z-index: 1055 !important;
+		}
+		.modal-backdrop {
+		    z-index: 1050 !important;
+		}
+    
         /* 메인 배경 이미지 스타일 */
 		.main-visual {
 		    position: absolute;
@@ -295,7 +303,7 @@
     <script src="${reviewsJS}"></script>
     
     <c:url var="festivalMainImageScrollJS" value="/js/festival-mainimage-scroll.js" /> 
-    <script src="${festivalMainImageScrollJS}"></script>
+    <script src="${festivalMainImageScrollJS}"></script> 
     
     <c:url var="headerJspfScrollJS" value="/js/header-jspf-scroll.js" /> 
     <script src="${headerJspfScrollJS}"></script>

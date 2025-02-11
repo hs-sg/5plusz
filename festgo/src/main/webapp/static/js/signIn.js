@@ -1,10 +1,5 @@
-/**
- * header.jspf 파일에 포함
- */
-
 document.addEventListener("DOMContentLoaded", () => {
-    const signinModal = new bootstrap.Modal('div#signinModal', { backdrop: true });
-    // {backdrop: true} -> 모달이 실행됐을 때 백그라운드를 어둡게 만듬
+    const signinModal = new bootstrap.Modal(document.getElementById('signinModal'), { backdrop: true });
 
     const divWarningText = document.querySelector('div#warningText');
 
@@ -14,15 +9,23 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector('input#modalSigninUsername').value = '';
             document.querySelector('input#modalSigninPassword').value = '';
             divWarningText.innerHTML = '';
-            event.preventDefault(); //-> 하이퍼링크의 기본 동작(페이지 이동)을 막음.
+            event.preventDefault();
+
+            document.querySelectorAll(".modal-backdrop").forEach(el => el.remove()); // 기존 backdrop 제거
+            document.body.style.overflow = "hidden"; // 모달 열릴 때 스크롤 막음
             signinModal.show();
         });
     }
 
+    // 모달이 닫힐 때 `overflow: auto;`로 변경하여 스크롤 활성화
+    document.getElementById("signinModal").addEventListener("hidden.bs.modal", function () {
+        document.body.style.overflow = "auto"; // 스크롤 다시 활성화
+    });
+
     const btnSignin = document.querySelector('button#btnSignin');
-   if (btnSignin) {
-           btnSignin.addEventListener('click', signin);
-       }
+    if (btnSignin) {
+        btnSignin.addEventListener('click', signin);
+    }
 
     /* --------------------(콜백) 함수 선언-------------------- */
     // btnSignin 버튼의 클릭 이벤트 리스너 콜백
@@ -34,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 아이디, 패스워드 입력란이 비어있으면 함수 종료.
         if (meUsername === '' || mePassword === '') {
-            alert('아이디 또는 비밀번호를 입력해주세요.')
+            alert('아이디 또는 비밀번호를 입력해주세요.');
             return;
         }
 
@@ -47,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         console.log(uri);
         axios
-            .post(uri, data, { withCredentials: true })  // 쿠키 포함하여 요청)
+            .post(uri, data, { withCredentials: true })  // 쿠키 포함하여 요청
             .then((response) => {
                 if (response.data === 0) {
                     divWarningText.innerHTML = '아이디 또는 비밀번호를 확인하세요.';
@@ -75,9 +78,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => console.log('로그인 요청 실패:', error));
     }
 
-
     /* --------------------(추가된 부분)-------------------- */
-    /*  로그인 여부 확인 함수 */
+    /* 로그인 여부 확인 함수 */
     
     function checkAndShowLoginModal(targetUrl) {
         sessionStorage.setItem("redirectAfterLogin", targetUrl);
@@ -104,19 +106,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     /* 🔹 특정 페이지에서만 이벤트 리스너 등록 */
-       if (window.location.pathname.includes("/post")) {
-           document.addEventListener('click', (e) => {
-               const postLink = e.target.closest('.post-link');
-               if (postLink) {
-                   e.preventDefault();
-                   checkAndShowLoginModal(postLink.href);
-               }
+    if (window.location.pathname.includes("/post")) {
+        document.addEventListener('click', (e) => {
+            const postLink = e.target.closest('.post-link');
+            if (postLink) {
+                e.preventDefault();
+                checkAndShowLoginModal(postLink.href);
+            }
 
-               const createLink = e.target.closest('a[href*="/post/create"]');
-               if (createLink) {
-                   e.preventDefault();
-                   checkAndShowLoginModal(createLink.href);
-               }
-           });
-       }
-   });
+            const createLink = e.target.closest('a[href*="/post/create"]');
+            if (createLink) {
+                e.preventDefault();
+                checkAndShowLoginModal(createLink.href);
+            }
+        });
+    }
+});
