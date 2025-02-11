@@ -3,6 +3,7 @@ package com.oplusz.festgo.web;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.logging.log4j.core.tools.picocli.CommandLine.Parameters;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -80,40 +82,123 @@ public class MyPageController {
 	}
 	
 	// 마이페이지 상에 유저가 좋아요한 축제 리스트 가져오기
-	@GetMapping("/ufestivals/{signedInUser}")
-	public ResponseEntity<List<FestivalSelectJoinLikesDto>> getFestivalsByUsername(@PathVariable("signedInUser") String username) {
-		log.debug("getFestivalsByUsername(username={}", username);
-		
+//	@GetMapping("/ufestivals/{signedInUser}")
+//	public ResponseEntity<List<FestivalSelectJoinLikesDto>> getFestivalsByUsername
+//	(@PathVariable("signedInUser") String username) {
+//		log.debug("getFestivalsByUsername(username={}", username);
+//		
+//		Integer meId = myPageService.readMeIdByUsername(username);
+//		log.debug("getFestivalsByUsername(meId={}", meId);
+//		
+//		List<FestivalSelectJoinLikesDto> festivals = myPageService.readFestivalUserInMyPage(meId);
+//		
+//		return ResponseEntity.ok(festivals);
+//	}
+	
+	// 마이페이지 상에 유저가 볼 좋아요한 축제 리스트 가져오기
+	// eachNumber 만큼 가져옴
+	@GetMapping("/ufestivals/")
+	public ResponseEntity<List<FestivalSelectJoinLikesDto>> getUFestivals(
+			@RequestParam("eachNumber") Integer eachNumber,	HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
 		Integer meId = myPageService.readMeIdByUsername(username);
-		log.debug("getFestivalsByUsername(meId={}", meId);
-		
-		List<FestivalSelectJoinLikesDto> festivals = myPageService.readFestivalUserInMyPage(meId);
+		log.debug("getSFestivals(eachNumber={}, username={})", eachNumber, username);
+		List<FestivalSelectJoinLikesDto> festivals = myPageService.readFestivalUserInMyPage(meId, eachNumber);
 		
 		return ResponseEntity.ok(festivals);
 	}
 	
-	// 마이페이지 상에 스폰서가 등록한 축제 리스트 가져오기
-	@GetMapping("/sfestivals/{signedInUser}")
-	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getFestivalsBySponsor(@PathVariable("signedInUser") String username) {
-		log.debug("getFestivalsByUsername(username={}", username);
+	// 마이페이지 상에 축제의 좋아요 등록
+	@GetMapping("/likefest/{feId}")
+	public ResponseEntity<Integer> insertLikeFestivalByFeId(@PathVariable("feId") Integer feId, HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
+		log.debug("insertLikeFestivalByFeId(feId={}, username={})", feId, username);
 		
-		String sponsor = myPageService.readSponsorByUsername(username);
-		log.debug("getFestivalsByUsername(sponsor={}", sponsor);
+		Integer insLikeResult = myPageService.insertLikeFestivalByFeId(feId, username);
 		
-		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalSponsorInMyPage(sponsor);
+		return ResponseEntity.ok(insLikeResult);
+	}
+	
+	// 마이페이지 상에 축제의 좋아요 해제
+	@DeleteMapping("/nlikefest/{feId}")
+	public ResponseEntity<Integer> deleteLikeFestivalByFeId(@PathVariable("feId") Integer feId, HttpSession session) {
+		String username = session.getAttribute("signedInUser").toString();
+		log.debug("updateLikeFestivalByFeId(feId={}, username={})", feId, username);
+		
+		Integer delLikeResult = myPageService.deleteLikeFestivalByFeId(feId, username);
+		
+		return ResponseEntity.ok(delLikeResult);
+	}
+	
+	// 마이페이지 상에 스폰서가 볼 모든 축제 리스트 가져오기
+	// categoty에 따라 분류되며 eachNumber 만큼 가져옴
+	@GetMapping("/sfestivals/")
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getSFestivals(
+			@RequestParam("category") Integer category, @RequestParam("eachNumber") Integer eachNumber,
+			HttpSession session) {
+		String meUsername = session.getAttribute("signedInUser").toString();
+		log.debug("getSFestivals(category={}, eachNumber={}, meUsername={})", category, eachNumber, meUsername);
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalSponsorInMyPage(eachNumber, category, meUsername);
 		
 		return ResponseEntity.ok(festivals);
 	}
+	
+//	// 마이페이지 상에 스폰서가 등록한 축제 리스트 가져오기
+//	@GetMapping("/sfestivals/{signedInUser}")
+//	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getFestivalsBySponsor(@PathVariable("signedInUser") String username) {
+//		log.debug("getFestivalsByUsername(username={}", username);
+//		
+//		String sponsor = myPageService.readSponsorByUsername(username);
+//		log.debug("getFestivalsByUsername(sponsor={}", sponsor);
+//		
+//		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalSponsorInMyPage(sponsor);
+//		
+//		return ResponseEntity.ok(festivals);
+//	}
+//	
+//	// 마이페이지 상에 스폰서가 볼 축제상태로 분류된 축제 리스트 가져오기
+//	@GetMapping("/scfestivals/{frApproval}")
+//	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getChoiceFestivalsBySponsor
+//		(@PathVariable("frApproval") Integer frApproval, HttpSession session) {
+//		String username = session.getAttribute("signedInUser").toString();
+//		String sponsor = myPageService.readSponsorByUsername(username);
+//		log.debug("getFestivalsBySponsorAndFrAppvoal(frApproval={}, sponsor={})", frApproval, sponsor);
+//		
+//		List<FestivalSelectJoinRequestDto> festivals = myPageService.readChoiceFestivalAdminInMyPageBySponsor(frApproval, sponsor);
+//		
+//		return ResponseEntity.ok(festivals);
+//	}
 	
 	// 마이페이지 상에 관리자가 볼 모든 축제 리스트 가져오기
+//	@GetMapping("/afestivals/")
+//	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getAllFestivals() {
+//		log.debug("getAllFestivals()");
+//		
+//		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
+//		
+//		return ResponseEntity.ok(festivals);
+//	}
+	
+	// 마이페이지 상에 관리자가 볼 모든 축제 리스트 가져오기
+	// categoty에 따라 분류되며 eachNumber 만큼 가져옴
 	@GetMapping("/afestivals/")
-	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getAllFestivals() {
-		log.debug("getAllFestivals()");
-		
-		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage();
+	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getAFestivals(
+			@RequestParam("category") Integer category, @RequestParam("eachNumber") Integer eachNumber) {
+		log.debug("getAFestivals(category={}, eachNumber={})", category, eachNumber);
+		List<FestivalSelectJoinRequestDto> festivals = myPageService.readFestivalAdminInMyPage(eachNumber, category);
 		
 		return ResponseEntity.ok(festivals);
 	}
+	
+//	// 마이페이지 상에 관리자가 볼 축제상태로 분류된 축제 리스트 가져오기
+//	@GetMapping("/acfestivals/{frApproval}")
+//	public ResponseEntity<List<FestivalSelectJoinRequestDto>> getChoiceFestivals(@PathVariable("frApproval") Integer frApproval) {
+//		log.debug("getFestivalsByFrAppvoal(frApproval = {})", frApproval);
+//		
+//		List<FestivalSelectJoinRequestDto> festivals = myPageService.readChoiceFestivalAdminInMyPage(frApproval);
+//		
+//		return ResponseEntity.ok(festivals);
+//	}
 	
 	// 마이페이지 상에 로그인한 유저, 스폰서가 등록한 글 목록 가져오기
 //	@GetMapping("/usposts/{signedInUser}")
@@ -171,6 +256,14 @@ public class MyPageController {
 		Integer countPosts = postService.getCountAllPostsByUsername(username);
 		
 		return ResponseEntity.ok(countPosts);
+	}
+	
+	//  마이페이지 상에 글 삭제하기
+	@DeleteMapping("/delpost/{poId}")
+	public void deletePostByPoId(@PathVariable("poId") String poId) {
+		Integer intPoId = Integer.parseInt(poId);
+		log.debug("deletePostByPoId()");
+		postService.delete(intPoId);
 	}
 	
 	// 마이페이지 상에 유저가 등록한 리뷰 갯수 가져오기

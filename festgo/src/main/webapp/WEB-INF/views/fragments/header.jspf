@@ -30,11 +30,12 @@
                     <c:url value="/post/list" var="postList"/>
                     <a class="nav-link" href="${postList}">커뮤니티</a>
                 </li>
-                <li class="nav-item">
+                <c:if test="${memberRole eq 2 || memberRole eq 3}">
+	            <li class="nav-item">
                     <c:url value="/fest/create" var="festCreate"/>
                     <a class="nav-link" href="${festCreate}">축제등록</a>
-                </li>
-                
+	            </li>
+                </c:if>
                 <%-- 세션에 로그인 사용자 정보가 없는 경우 --%>
                 <c:if test="${ empty signedInUser }">
                 <li class="nav-item">

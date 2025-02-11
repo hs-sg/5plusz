@@ -99,10 +99,10 @@
     
     <!-- 희성 작성 시작 ================================================================================================== -->
     
-    <!-- 전체 축제 리스트 불러오기 -->
+<!--     전체 축제 리스트 불러오기
     <select id="selectFestivalAll">
         select * from festival 
-    </select>
+    </select> -->
     
     <!-- likes랑 조인된 축제리스트 불러오기 -->
     <!-- 축제id, 축제명, 시작일, 종료일, 개최지, 연락처, 주최자, 메인이미지, 좋아요id, 멤버id -->
@@ -115,24 +115,95 @@
         where me_id = #{me_id}
     </select>
     
+    <select id="selectFestivalJoinLikesByMemberIdEachNumber">
+        select festival.fe_id, fe_name, fe_start_date, fe_end_date, 
+            fe_address, fe_phone, me_sponsor, fe_image_main, li_id, me_id
+        from festival
+        inner join likes on likes.fe_id = festival.fe_id
+        where me_id = #{meId}
+        order by fe_created_time desc
+        fetch next #{eachNumber} rows only
+    </select>
+    
     <!-- fest_request랑 조인된 축제리스트 불러오기 -->
     <!-- 축제id, 승인분류번호, 거절사유, 축제명, 시작일, 종료일, 개최지, 연락처, 주최자, 메인이미지 -->
     
-    <!-- 관리자용은 전체축제 -->
+<!--     관리자용은 전체축제
     <select id="selectFestivalJoinRequestAll">
         select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
             fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
         from fest_request 
         inner join festival on fest_request.fe_id = festival.fe_id
+    </select> -->
+    
+    <!-- 관리자용 전체 축제 갯수만큼 불러오기 -->
+    <select id="selectAllFestivalJoinRequestEachNumber">
+	    select festival.fe_id, fr_approval, fr_cause, fe_name, fe_phone, fe_start_date, 
+	       fe_end_date, fe_address, me_sponsor, fe_image_main
+		from festival 
+		inner join fest_request on fest_request.fe_id = festival.fe_id
+		order by fe_created_time desc
+		fetch next #{eachNumber} rows only
     </select>
     
-    <!-- 사업자용은 me_sponsor로 찾음 -->
+<!--     관리자용에서 fr_approval로 선택된 축제
+    <select id="selectFestivalJoinRequestByFrApproval">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+        where fr_approval = #{frApproval}
+    </select> -->
+    
+    <!-- 관리자용에서 fr_approval로 선택된 축제 갯수만큼 불러오기-->
+    <select id="selectFestivalJoinRequestByFrApprovalEachNumber">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from festival 
+        inner join fest_request on fest_request.fe_id = festival.fe_id
+        where fr_approval = #{frApproval}
+        order by fe_created_time desc
+        fetch next #{eachNumber} rows only
+    </select>
+    
+<!--     사업자용은 me_sponsor로 찾음
     <select id="selectFestivalJoinRequestBySponsor">
         select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
             fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
         from fest_request 
         inner join festival on fest_request.fe_id = festival.fe_id
         where me_sponsor = #{me_sponsor}
+    </select> -->
+    
+    <!-- 사업자용은 me_sponsor로 찾음 선택된 갯수만큼 불러오기-->
+    <select id="selectAllFestivalJoinRequestBySponsorEachNumber">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from festival 
+        inner join fest_request on fest_request.fe_id = festival.fe_id
+        where me_sponsor = #{meSponsor}
+        order by fe_created_time desc
+        fetch next #{eachNumber} rows only
+    </select>
+    
+    <!-- 사업자용은 me_sponsor로 찾고 fr_approval로 선택된 축제 갯수만큼 불러오기-->
+    <select id="selectFestivalJoinRequestByFrApprovalAndSponsorEachNumber">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from festival 
+        inner join fest_request on fest_request.fe_id = festival.fe_id
+        where me_sponsor = #{meSponsor} and fr_approval = #{frApproval}
+        order by fe_created_time desc
+        fetch next #{eachNumber} rows only
+    </select>
+    
+    <!-- 사업자용에서 me_sponsor로 찾고 fr_approval로 선택된 축제 -->
+    <select id="selectFestivalJoinRequestBySponsorAndFrApproval">
+        select festival.fe_id, fr_approval, fr_cause, fe_name, fe_start_date, 
+            fe_end_date, fe_address, fe_phone, me_sponsor, fe_image_main 
+        from fest_request 
+        inner join festival on fest_request.fe_id = festival.fe_id
+        where fr_approval = #{frApproval} and me_sponsor = #{meSponsor}
     </select>
     
     <!-- 마이페이지에서 축제 삭제 -->
