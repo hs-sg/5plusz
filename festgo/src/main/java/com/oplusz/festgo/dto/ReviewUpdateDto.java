@@ -8,12 +8,13 @@ import lombok.Data;
 public class ReviewUpdateDto {
 
 	private Integer reId;
+	private String reTitle;
 	private String reContent;
 	private Integer reGrade;
 	
 	public Review toEntity() {
 		
-		return Review.builder().reId(reId).reContent(reContent).reGrade(reGrade).build();
+		return Review.builder().reId(reId).reTitle(reTitle).reContent(reContent).reGrade(reGrade).build();
 	}
 	
 }

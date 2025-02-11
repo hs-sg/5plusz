@@ -28,6 +28,14 @@ public class MemberController {
 	private final MemberService memberService;
 	private final SponRequestService sponRequestService;
 	
+	@GetMapping("/check-login")
+	@ResponseBody
+	public ResponseEntity<Boolean> checkLoginStatus(HttpSession session) {
+	    String signedInUser = (String) session.getAttribute("signedInUser");
+	    log.debug("checkLoginStatus: signedInUser={}", signedInUser);
+	    return ResponseEntity.ok(signedInUser != null);
+	}
+	
 	// 로그인
 	@PostMapping("/signin")
 	@ResponseBody
@@ -43,6 +51,7 @@ public class MemberController {
 				return ResponseEntity.ok(0);
 			} else {
 				session.setAttribute("signedInUser", member.getMeUsername());
+				log.debug("로그인 성공: signedInUser={}", session.getAttribute("signedInUser")); // 추가된 로그
 				return ResponseEntity.ok(1);
 			}
 		} else { // srApproval의 값이 1(승인)이 아닌 경우 - 로그인 실패.

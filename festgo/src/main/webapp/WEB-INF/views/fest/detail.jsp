@@ -19,35 +19,44 @@
     <!-- Custom CSS -->
     <style>
         /* 메인 배경 이미지 스타일 */
-        .main-visual {
-            background: url(${festival.feImageMain}) no-repeat center center;
-            background-size: cover;
-            background-attachment: fixed;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            position: relative;
-        }
+		.main-visual {
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100vh; /* 화면 전체 */
+		    background: url('<c:url value="/uploads/${festival.feImageMain}"/>') no-repeat center center;
+		    background-size: cover;
+		    transition: opacity 0.5s ease-in-out;
+		}
+        
+		/* 메인이미지가 사라질 때 */
+		.main-visual.hidden {
+		    opacity: 0;
+		}
+        
 
-        /* 투명 오버레이 효과 */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-        }
-
-        /* 본문 컨텐츠 */
-        .content {
-            padding: 50px 0;
-        }
+	    /* 본문 컨텐츠 (고정된 이미지 위로 지나가게 함) */
+		.content {
+		    margin-top: 100vh; /* 메인 이미지 높이만큼 여백 추가 */
+		    padding: 50px 0;
+		    background-color: white;
+		}
+		
+		.header-fixed {
+		    position: fixed;
+		    top: -100px; /* 화면 위쪽에 숨김 */
+		    width: 100%;
+		    background-color: rgba(255, 255, 255, 0.9);
+		    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+		    transition: top 0.3s ease-in-out; /* 위아래 움직임만 부드럽게 */
+		    z-index: 999;
+		}
+		
+		/* 스크롤이 일정 이상 내려가면 즉시 헤더 보이기 */
+		.header-fixed.visible {
+		    top: 0; /* 화면 상단에 고정 */
+		}
 
         /* 맵 & 정보 컨테이너 */
         .map-info-container {
@@ -83,25 +92,20 @@
 </head>
 <body>
 
-    <div class="container-fluid">
+    <div class="header-fixed hidden">
         <c:set var="pageTitle" value="축제 상세 정보" />
         <%@ include file="../fragments/header.jspf" %>
     </div>
 
-    <!-- 메인 비주얼 -->
-    <div class="main-visual">
-        <div class="overlay"></div>
-        <div>${festival.feName}</div>
-    </div>
+	<div class="main-visual"></div>
 
     <main class="container content">
     
-        <label class="form-label" for="id">번호</label>
         	<input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
     
-        <h1 style="margin-bottom: 20px;">${festival.feName}</h1>
+        <h1 style="margin-bottom: 20px;">🎆 ${festival.feName}</h1>
 
-        <h3 style="margin-top: 40px;">📅 축제 날짜</h3>
+        <h3 style="margin-top: 40px;">📅</h3>
         
         <div id="festival-dday" class="mt-3"></div>
         <div id="festival-date" class="mt-2"></div>
@@ -147,20 +151,18 @@
 
 		<h3 class="mt-3">💰 참가비</h3>
 		<p><strong>${festival.feFee}</strong></p>
+		<button class="btn btn-outline-secondary mt-2" id="btnToggleReview">리뷰 보기</button>
     </main>
     
+    
     <section>
-    	<div class="mt-2 d-inline-flex gap-1">
-    		<button class="btn btn0outline-secondary"
-    		id = "btnToggleReview">리뷰 보기</button>
-    	</div>
     	<!-- 댓글 보기/ 감추기 -->
     	<div class="mt-2 collapse" id = "collapseReviews">
     		<!-- 댓글 등록 UI -->
 		<div class="mt-2 card card-body">
 		    <div class="row">
 		        <div class="col-10">
-		            <input class="d-none" id="reAuthor" value="${signedInUser}" readonly />
+		            <input type="hidden" id="signedInUser" value="${signedInUser != null ? signedInUser : ''}" readonly />
 		            <input type="hidden" id="feId" value="${festival.feId}" readonly />
 		            <input type="text" class="form-control mt-2" id="reTitle" placeholder="리뷰 제목">
 		            <select class="form-select mt-2" id="reGrade">
@@ -184,26 +186,35 @@
     </section>
     
     <!-- 댓글 업데이트 모달 -->
-    <div id="reviewModal" class="modal" tabindex="-`">
-    	<div class="modal-dialog">
-    		<div class="modal-content">
-    			<div class="modal-header">
-    				<h5 class="modal-title">리뷰 수정</h5>
-    				<button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    			</div>
-    			<div class="modal-body">
-    				<!-- 수정할 댓글 아이디(번호) -->
-    				<input class="d-none" id="modalReviewId" readonly />
-    				<!-- 수정할 댓글 내용 -->
-    				<textarea class="form-control" id="modalReviewText"></textarea>
-    			</div>
-    			<div class="modal-footer">
-    				<button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
-    				<button class="btn btn-outline-success" id="btnUpdateRv">저장</button>
-    			</div>
-    		</div>
-    	</div>
-    </div>
+	<div id="reviewModal" class="modal fade" tabindex="-1">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title">리뷰 수정</h5>
+	                <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	            </div>
+	            <div class="modal-body">
+	                <input type="hidden" id="modalReviewId">
+	                <label>제목</label>
+	                <input type="text" class="form-control" id="modalReviewTitle">
+	                <label>별점</label>
+	                <select class="form-select" id="modalReviewGrade">
+	                    <option value="5">★★★★★</option>
+	                    <option value="4">★★★★☆</option>
+	                    <option value="3">★★★☆☆</option>
+	                    <option value="2">★★☆☆☆</option>
+	                    <option value="1">★☆☆☆☆</option>
+	                </select>
+	                <label>내용</label>
+	                <textarea class="form-control" id="modalReviewText"></textarea>
+	            </div>
+	            <div class="modal-footer">
+	                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+	                <button class="btn btn-outline-success" id="btnUpdateRv">저장</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 
     <!-- 카카오맵 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
@@ -282,7 +293,12 @@
     
     <c:url var="reviewsJS" value="/js/reviews.js" /> 
     <script src="${reviewsJS}"></script>
-
+    
+    <c:url var="festivalMainImageScrollJS" value="/js/festival-mainimage-scroll.js" /> 
+    <script src="${festivalMainImageScrollJS}"></script>
+    
+    <c:url var="headerJspfScrollJS" value="/js/header-jspf-scroll.js" /> 
+    <script src="${headerJspfScrollJS}"></script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 

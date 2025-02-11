@@ -40,44 +40,51 @@ document.addEventListener('DOMContentLoaded', () => {
     if (userElement) {
         signedInUser = userElement.value;
     }
+	console.log("현재 로그인한 사용자:", signedInUser);
 
     // 리뷰 등록 함수
-    function registerReview() {
-        const feIdElement = document.querySelector('#feId');
-        const usernameElement = document.querySelector('#reAuthor');
-        const reTitleElement = document.querySelector('#reTitle');
-        const reGradeElement = document.querySelector('#reGrade');
-        const ctextElement = document.querySelector('#reContent');
+	function registerReview() {
+	    const feId = document.querySelector('#feId').value;
+	    const reTitle = document.querySelector('#reTitle').value.trim();
+	    const reGrade = parseInt(document.querySelector('#reGrade').value) || 3;
+	    const reContent = document.querySelector('#reContent').value.trim();
 
-        if (!feIdElement || !usernameElement || !reTitleElement || !reGradeElement || !ctextElement) {
-            alert('필수 입력 요소가 없습니다.');
-            return;
-        }
+	    if (!reTitle || !reContent) {
+	        alert('제목과 내용을 입력하세요!');
+	        return;
+	    }
 
-        const feId = feIdElement.value;
-        const username = usernameElement.value;
-        const reTitle = reTitleElement.value.trim();
-        const reGrade = parseInt(reGradeElement.value) || 3;
-        const ctext = ctextElement.value.trim();
+	    // 서버에 로그인 상태 체크
+	    fetch('/festgo/user/check-login')
+	        .then(response => response.json())
+	        .then(isLoggedIn => {
+	            if (!isLoggedIn) {
+	                alert('로그인이 필요합니다.');
+	                sessionStorage.setItem("redirectAfterLogin", window.location.href);
+	                const signinModal = new bootstrap.Modal(document.querySelector('#signinModal'));
+	                signinModal.show();
+	                return;
+	            }
 
-        if (!reTitle || !ctext) {
-            alert('제목과 내용을 입력하세요!');
-            return;
-        }
+	            // 로그인 상태이면 리뷰 등록
+	            const data = { feId, reTitle, reContent, reGrade };
+	            axios.post('../api/review', data, { withCredentials: true })
+	                .then(response => {
+	                    if (response.data === 1) {
+	                        alert('리뷰가 성공적으로 등록되었습니다.');
+	                        document.querySelector('#reTitle').value = '';
+	                        document.querySelector('#reContent').value = '';
+	                        getAllReviews();
+	                    }
+	                })
+	                .catch(error => console.error('리뷰 등록 오류:', error));
+	        })
+	        .catch(error => {
+	            console.error('로그인 상태 확인 오류:', error);
+	            alert('로그인 상태를 확인할 수 없습니다.');
+	        });
+	}
 
-        const data = { feId, username, reTitle, reGrade, ctext };
-
-        axios.post('../api/review', data)
-            .then(response => {
-                if (response.data === 1) {
-                    alert('리뷰가 성공적으로 등록되었습니다.');
-                    reTitleElement.value = '';
-                    ctextElement.value = '';
-                    getAllReviews();
-                }
-            })
-            .catch(error => console.error('리뷰 등록 오류:', error.response ? error.response.data : error));
-    }
 
     // 모든 리뷰를 가져오는 함수
     function getAllReviews() {
@@ -119,12 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <button class="btnDeleteReview btn btn-outline-danger btn-sm"
                             data-id="${review.reId}">삭제</button>
-                    <button class="btnUpdateReview btn btn-outline-primary btn-sm"
-                            data-id="${review.reId}">수정</button>
+							<button class="btnUpdateReview btn btn-outline-primary btn-sm" data-id="${review.reId}">
+							    수정
+							</button>
                 </div>`;
             }
 
-            html += `</li>`;
+            html += `</li>`; 
         });
 
         html += `</ul>`;
@@ -154,10 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 리뷰 수정 모달을 띄우는 함수
     function showCommentModal(event) {
-        const reviewId = event.target.getAttribute('data-id');
+		const reviewId = event.target.getAttribute('data-id');
+
+		if (!reviewId) {
+		    console.error("리뷰 ID가 없습니다!");
+		    return;
+		}
+
+		console.log("수정할 리뷰 ID:", reviewId);
 
         axios.get(`../api/review/${reviewId}`)
             .then(response => {
+				console.log("불러온 리뷰 데이터:", response.data);
                 const modalReviewId = document.querySelector('#modalReviewId');
                 const modalReviewTitle = document.querySelector('#modalReviewTitle');
                 const modalReviewGrade = document.querySelector('#modalReviewGrade');
@@ -168,6 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     modalReviewTitle.value = response.data.reTitle;
                     modalReviewGrade.value = response.data.reGrade;
                     modalReviewText.value = response.data.reContent;
+					
+					console.log("불러온 리뷰 데이터:", response.data);
+					
                     if (reviewModal) reviewModal.show();
                 }
             })
@@ -181,19 +200,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalReviewGrade = document.querySelector('#modalReviewGrade');
         const modalReviewText = document.querySelector('#modalReviewText');
 
-        if (!modalReviewId || !modalReviewTitle || !modalReviewGrade || !modalReviewText) return;
+		if (!modalReviewId || !modalReviewTitle || !modalReviewGrade || !modalReviewText) {
+		        console.error("수정할 입력 요소가 없습니다!");
+		        return;
+		    }
 
         const reviewId = modalReviewId.value;
         const reTitle = modalReviewTitle.value.trim();
         const reGrade = parseInt(modalReviewGrade.value) || 3;
-        const ctext = modalReviewText.value.trim();
+        const reContent = modalReviewText.value.trim();
 
-        if (!reTitle || !ctext) {
+        if (!reTitle || !reContent) {
             alert('제목과 내용을 입력하세요!');
             return;
         }
 
-        const data = { reTitle, reGrade, ctext };
+        const data = { reTitle, reGrade, reContent };
+		
+		console.log("수정 요청 데이터:", data);
 
         axios.put(`../api/review/${reviewId}`, data)
             .then(() => {

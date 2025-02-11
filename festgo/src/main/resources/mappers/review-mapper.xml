@@ -33,6 +33,7 @@
 	<update id="updateReview">
 	    UPDATE review
 	    SET re_content = #{reContent},
+	    	re_title = #{reTitle},
 	    	re_grade = #{reGrade}, 
 	        re_modified_time = SYSTIMESTAMP
 	    WHERE re_id = #{reId}

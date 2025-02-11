@@ -22,8 +22,8 @@
 
     <!-- 정적 리소스 매핑 설정 -->
 
-   <mvc:resources mapping="/uploads/**" 
-               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
+	<mvc:resources mapping="/uploads/**" 
+	    location="/uploads/"/>
 
     <!-- Spring MVC에서 dispatcherServlet이 처리하지 않는 정적 요청에 필요한 파일들
     (이미지, CSS, JavaScript, ...)이 있는 폴더 위치를 설정.
