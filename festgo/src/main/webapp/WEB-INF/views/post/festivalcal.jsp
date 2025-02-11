@@ -12,7 +12,6 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
-        
         /* 달력 테두리 영역 스타일 */
 		#calendar {
 		    max-width: 90%;
