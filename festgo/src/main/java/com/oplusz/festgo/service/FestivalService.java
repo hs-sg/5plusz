@@ -1,5 +1,6 @@
 package com.oplusz.festgo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -93,6 +94,23 @@ public class FestivalService {
     	return festivalsDao.selectFestivalForReload(dto);
     }
 
+    // 홈페이지 메인 화면에 띄울 축제 검색
+    public List<Festival> read(List<Integer> ListFeId) {
+    	log.debug("read(ListFeId={})", ListFeId);
+    	List<Festival> festivals = new ArrayList<Festival>();
+    	for (int id : ListFeId) {
+    		festivals.add(festivalsDao.selectFestivalById(id));
+    	}
+    	
+    	return festivals;
+    }
+    
+    // 홈페이지 New 축제 화면에 띄울 축제 검색
+    public List<Festival> readByCreatedTime() {
+    	log.debug("readByCreatedTime()");
+    	
+    	return festivalsDao.selectFestivalByCreatedTime();
+    }
 
 
 }
