@@ -18,6 +18,7 @@
 
     <!-- Custom CSS -->
     <style>
+<<<<<<< HEAD
     
 		.modal {
 		    z-index: 1055 !important;
@@ -28,8 +29,19 @@
 		    z-index: 1050 !important; /* 모달보다 낮게 */
 		    pointer-events: none; /* 백드롭이 클릭 이벤트를 차단하지 않도록 */
 		}
+=======
+        /*
+        .modal {
+            z-index: 1055 !important;
+        }
+        .modal-backdrop {
+            z-index: 1050 !important;
+        }
+        */
+>>>>>>> refs/heads/master
     
         /* 메인 배경 이미지 스타일 */
+<<<<<<< HEAD
 		.main-visual {
 		    position: absolute;
 		    top: 0;
@@ -68,6 +80,46 @@
 		.header-fixed.visible {
 		    top: 0; /* 화면 상단에 고정 */
 		}
+=======
+        .main-visual {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh; /* 화면 전체 */
+            background: url('<c:url value="/uploads/${festival.feImageMain}"/>') no-repeat center center;
+            background-size: cover;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        /* 메인이미지가 사라질 때 */
+        .main-visual.hidden {
+            opacity: 0;
+        }
+        
+
+        /* 본문 컨텐츠 (고정된 이미지 위로 지나가게 함) */
+        .content {
+            margin-top: 100vh; /* 메인 이미지 높이만큼 여백 추가 */
+            padding: 50px 0;
+            background-color: white;
+        }
+        
+        .header-fixed {
+            position: fixed;
+            top: -100px; /* 화면 위쪽에 숨김 */
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            transition: top 0.3s ease-in-out; /* 위아래 움직임만 부드럽게 */
+            z-index: 999;
+        }
+        
+        /* 스크롤이 일정 이상 내려가면 즉시 헤더 보이기 */
+        .header-fixed.visible {
+            top: 0; /* 화면 상단에 고정 */
+        }
+>>>>>>> refs/heads/master
 
         /* 맵 & 정보 컨테이너 */
         .map-info-container {
@@ -108,11 +160,19 @@
         <%@ include file="../fragments/header.jspf" %>
     </div>
 
+<<<<<<< HEAD
 	<div class="main-visual"></div>
+=======
+    <div class="main-visual"></div>
+>>>>>>> refs/heads/master
 
     <main class="container content">
     
+<<<<<<< HEAD
         	<input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
+=======
+            <input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
+>>>>>>> refs/heads/master
     
         <h1 style="margin-bottom: 20px;">🎆 ${festival.feName}</h1>
 
@@ -142,11 +202,19 @@
             });
         </script>
         
+<<<<<<< HEAD
 		<h3 style="margin-top: 40px;">📖 축제 내용</h3>
 		<p><strong>${festival.feContents}</strong></p>
 		
 		<h3 style="margin-top: 40px;">📍 축제 위치</h3>
 		<p><strong>${festival.feAddress}</strong></p>
+=======
+        <h3 style="margin-top: 40px;">📖 축제 내용</h3>
+        <p><strong>${festival.feContents}</strong></p>
+        
+        <h3 style="margin-top: 40px;">📍 축제 위치</h3>
+        <p><strong>${festival.feAddress}</strong></p>
+>>>>>>> refs/heads/master
 
 
         <!-- 카카오맵 표시 -->
@@ -160,13 +228,20 @@
 
 
 
+<<<<<<< HEAD
 		<h3 class="mt-3">💰 참가비</h3>
 		<p><strong>${festival.feFee}</strong></p>
 		<button class="btn btn-outline-secondary mt-2" id="btnToggleReview">리뷰 보기</button>
+=======
+        <h3 class="mt-3">💰 참가비</h3>
+        <p><strong>${festival.feFee}</strong></p>
+        <button class="btn btn-outline-secondary mt-2" id="btnToggleReview">리뷰 보기</button>
+>>>>>>> refs/heads/master
     </main>
     
     
     <section>
+<<<<<<< HEAD
     	<!-- 댓글 보기/ 감추기 -->
     	<div class="mt-2 collapse" id = "collapseReviews">
     		<!-- 댓글 등록 UI -->
@@ -226,10 +301,72 @@
 	        </div>
 	    </div>
 	</div>
+=======
+        <!-- 댓글 보기/ 감추기 -->
+        <div class="mt-2 collapse" id = "collapseReviews">
+            <!-- 댓글 등록 UI -->
+        <div class="mt-2 card card-body">
+            <div class="row">
+                <div class="col-10">
+                    <input type="hidden" id="signedInUser" value="${signedInUser != null ? signedInUser : ''}" readonly />
+                    <input type="hidden" id="feId" value="${festival.feId}" readonly />
+                    <input type="text" class="form-control mt-2" id="reTitle" placeholder="리뷰 제목">
+                    <select class="form-select mt-2" id="reGrade">
+                        <option value="5">★★★★★</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="1">★☆☆☆☆</option>
+                    </select>
+                    <textarea class="form-control mt-2" rows="3" id="reContent" placeholder="리뷰 입력"></textarea>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-outline-success mt-2" id="btnRegisterReview">등록</button>
+                </div>
+            </div>
+        </div>
+
+            <!-- 댓글 목록을 보여줄 UI -->
+            <div class="my-2" id="divReviews"></div>
+        </div>
+    </section>
+    
+    <!-- 댓글 업데이트 모달 -->
+    <div id="reviewModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">리뷰 수정</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="modalReviewId">
+                    <label>제목</label>
+                    <input type="text" class="form-control" id="modalReviewTitle">
+                    <label>별점</label>
+                    <select class="form-select" id="modalReviewGrade">
+                        <option value="5">★★★★★</option>
+                        <option value="4">★★★★☆</option>
+                        <option value="3">★★★☆☆</option>
+                        <option value="2">★★☆☆☆</option>
+                        <option value="1">★☆☆☆☆</option>
+                    </select>
+                    <label>내용</label>
+                    <textarea class="form-control" id="modalReviewText"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                    <button class="btn btn-outline-success" id="btnUpdateRv">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> refs/heads/master
 
     <!-- 카카오맵 API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
     
+<<<<<<< HEAD
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 		    const festivalAddress = "${festival.feAddress}"; // 축제 주소
@@ -288,6 +425,66 @@
 		});
 	</script>
 
+=======
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const festivalAddress = "${festival.feAddress}"; // 축제 주소
+            const festivalName = "${festival.feName}"; // 축제 이름
+            let festivalLat = "${festival.feLat}"; // 위도
+            let festivalLng = "${festival.feLong}"; // 경도
+        
+            const mapContainer = document.getElementById("map"); // 지도 컨테이너
+            const directionBtn = document.getElementById("direction-btn"); // 길찾기 버튼
+        
+            const map = new kakao.maps.Map(mapContainer, {
+                center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심 좌표 (서울)
+                level: 3, // 확대 레벨
+            });
+        
+            const geocoder = new kakao.maps.services.Geocoder();
+        
+            // 📌 위도, 경도가 `null`이면 주소 기반으로 변환
+            if (!festivalLat || !festivalLng || festivalLat === "null" || festivalLng === "null") {
+                geocoder.addressSearch(festivalAddress, function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        festivalLat = result[0].y;
+                        festivalLng = result[0].x;
+        
+                        console.log("변환된 위도:", festivalLat, "경도:", festivalLng);
+        
+                        setMapMarker(festivalLat, festivalLng);
+                    } else {
+                        console.error("주소를 위도·경도로 변환할 수 없습니다.");
+                    }
+                });
+            } else {
+                // 이미 위도·경도가 있는 경우 그대로 사용
+                setMapMarker(festivalLat, festivalLng);
+            }
+        
+            // 지도에 마커 표시 및 길찾기 버튼 기능 추가
+            function setMapMarker(lat, lng) {
+                const coords = new kakao.maps.LatLng(lat, lng);
+        
+                // 지도 중심을 마커 위치로 설정
+                map.setCenter(coords);
+        
+                // 마커 추가
+                const marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                });
+        
+                // 길찾기 버튼 클릭 시 실행
+                directionBtn.addEventListener("click", function () {
+                    const kakaoMapUrl = "https://map.kakao.com/link/to/" + encodeURIComponent(festivalAddress) + "," + lat + "," + lng;
+                    window.open(kakaoMapUrl, "_blank");
+                });
+            }
+        });
+    </script>
+>>>>>>> refs/heads/master
+
 
 
     
@@ -299,7 +496,11 @@
         // -> comments.js 파일의 코드틀에서 그 변수를 사용할 수 있도록 하기 위해서 
         // JSP 파일의 <script> 태그 안에서는 EL을 사용할 수 있음
         // (주의) JS 파일에서는 EL을 사용할 수 없음
+<<<<<<< HEAD
     	const signedInUser = '${signedInUser}';
+=======
+        const signedInUser = '${signedInUser}';
+>>>>>>> refs/heads/master
     </script>
     
     <c:url var="reviewsJS" value="/js/reviews.js" /> 

@@ -43,7 +43,7 @@ public class MemberController {
 		log.debug("signIn(dto={})", dto);
 		
 		Member memberForCheck = memberService.read(dto.getMeUsername());
-		SponRequest sr = sponRequestService.read(memberForCheck.getMeId());
+		SponRequest sr = sponRequestService.read(memberForCheck.getMeId());	
 		if (sr.getSrApproval() == 1) {
 			Member member = memberService.read(dto);	
 			if (member == null) {
@@ -84,8 +84,11 @@ public class MemberController {
 		log.debug("POST signUp(dto={})", dto);
 		int approval = 1;
 		// 사업자 계정 등록요청은 관리자의 승인 필요: 0(대기중)
-		if(dto.getMrId() == 2) approval = 0;
-		
+		if(dto.getMrId() == 2) {
+			approval = 0;
+			dto.setMrId(1);
+		}
+
 		memberService.create(dto, approval);
 		
 		// 회원가입 성공 후 홈페이지로 redirect

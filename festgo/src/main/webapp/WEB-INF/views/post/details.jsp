@@ -15,30 +15,30 @@
           crossorigin="anonymous" />
           
           <style>
-			/* 썸네일 이미지 크기 고정 */
-			.preview-img {
-			    width: 200px;  /* 일정한 너비 */
-			    height: 200px; /* 일정한 높이 */
-			    object-fit: cover; /* 이미지가 깨지지 않게 자동 조정 */
-			    cursor: pointer; /* 클릭 가능 */
-			    border-radius: 8px; /* 둥근 모서리 */
-			    transition: transform 0.2s ease-in-out;
-			}
-			
-			.preview-img:hover {
-			    transform: scale(1.05); /* 마우스 호버 시 확대 효과 */
-			}
-			
-			/* 모달 내 이미지 크기 조정 */
-			.modal-img {
-			    max-width: 100%;
-			    max-height: 600px; /* 최대 높이 설정 */
-			    width: auto;
-			    height: auto;
-			    display: block;
-			    margin: auto;
-			}
-			</style>
+            /* 썸네일 이미지 크기 고정 */
+            .preview-img {
+                width: 200px;  /* 일정한 너비 */
+                height: 200px; /* 일정한 높이 */
+                object-fit: cover; /* 이미지가 깨지지 않게 자동 조정 */
+                cursor: pointer; /* 클릭 가능 */
+                border-radius: 8px; /* 둥근 모서리 */
+                transition: transform 0.2s ease-in-out;
+            }
+            
+            .preview-img:hover {
+                transform: scale(1.05); /* 마우스 호버 시 확대 효과 */
+            }
+            
+            /* 모달 내 이미지 크기 조정 */
+            .modal-img {
+                max-width: 100%;
+                max-height: 600px; /* 최대 높이 설정 */
+                width: auto;
+                height: auto;
+                display: block;
+                margin: auto;
+            }
+            </style>
 </head>
 
 <body>
@@ -67,31 +67,31 @@
                         </div>
 
                         <!-- 이미지 미리보기 영역 -->
-						<div class="mt-2">
-						    <label class="form-label">첨부 이미지</label>
-						    <div class="d-flex flex-wrap gap-2">
-						        <c:forEach var="attachment" items="${postWithAttachments.attachments}">
-						            <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
-						            <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
-						            
-						            <c:choose>
-						                <c:when test="${fileExt eq 'jpg' || fileExt eq 'jpeg' || fileExt eq 'png' || fileExt eq 'gif'}">
-						                    <img src="${pageContext.request.contextPath}/post/uploads/${attachment.paAttachments}"
-						                         alt="첨부 이미지"
-						                         class="img-thumbnail preview-img"
-						                         data-bs-toggle="modal"
-						                         data-bs-target="#imageModal"
-						                         onclick="showModal(this)" />
-						                </c:when>
-						                <c:otherwise>
-						                    <!-- 비 이미지 파일의 경우 -->
-						                    <span class="material-icons">attachment</span>
-						                    <span>${attachment.paAttachments}</span>
-						                </c:otherwise>
-						            </c:choose>
-						        </c:forEach>
-						    </div>
-						</div>
+                        <div class="mt-2">
+                            <label class="form-label">첨부 이미지</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <c:forEach var="attachment" items="${postWithAttachments.attachments}">
+                                    <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
+                                    <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
+                                    
+                                    <c:choose>
+                                        <c:when test="${fileExt eq 'jpg' || fileExt eq 'jpeg' || fileExt eq 'png' || fileExt eq 'gif'}">
+                                            <img src="${pageContext.request.contextPath}/post/uploads/${attachment.paAttachments}"
+                                                 alt="첨부 이미지"
+                                                 class="img-thumbnail preview-img"
+                                                 data-bs-toggle="modal"
+                                                 data-bs-target="#imageModal"
+                                                 onclick="showModal(this)" />
+                                        </c:when>
+                                        <c:otherwise>
+                                            <!-- 비 이미지 파일의 경우 -->
+                                            <span class="material-icons">attachment</span>
+                                            <span>${attachment.paAttachments}</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
+                            </div>
+                        </div>
 
                         <div class="mt-2">
                             <label class="form-label" for="author">작성자</label>
@@ -110,12 +110,18 @@
                     </form>
 
                     <%-- 수정 버튼 --%>
-                    <div class="card-footer d-flex justify-content-center">
-                        <c:url var="postModifyPage" value="/post/modify">
-                            <c:param name="poId" value="${postWithAttachments.post.poId}" />
-                        </c:url>
-                        <a class="btn btn-outline-primary" href="${postModifyPage}">수정하기</a>
-                    </div>
+                    <%-- 로그인 사용자와 포스트 작성자가 같은 경우에만 수정하기 버튼 보여줌 --%>
+
+                        <div class="card-footer d-flex justify-content-center">
+                    <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
+                            <c:url var="postModifyPage" value="/post/modify">
+                                <c:param name="poId" value="${postWithAttachments.post.poId}" />
+                            </c:url>
+                            <a class="btn btn-outline-primary me-3" href="${postModifyPage}">수정하기</a>
+                    </c:if>
+                        <c:url value="/post/list" var="postList"/>
+                        <a class="btn btn-outline-secondary" href="${postList}">목록보기</a>
+                     </div>
                 </div>
             </div>
         </main>
@@ -123,19 +129,19 @@
 
 
 
-	<!-- 모달 (클릭하면 크게 보기) -->
-	<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-	    <div class="modal-dialog modal-lg modal-dialog-centered">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title" id="imageModalLabel">이미지 미리보기</h5>
-	            </div>
-	            <div class="modal-body text-center">
-	                <img id="modalImage" src="" class="modal-img" />
-	            </div>
-	        </div>
-	    </div>
-	</div>
+    <!-- 모달 (클릭하면 크게 보기) -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">이미지 미리보기</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" class="modal-img" />
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -143,27 +149,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- JavaScript 코드 -->
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
-		    // 모든 이미지 요소 가져오기
-		    document.querySelectorAll(".img-thumbnail").forEach(img => {
-		        img.addEventListener("click", function () {
-		            const modalImage = document.getElementById("modalImage"); // 모달 내부 이미지
-		            modalImage.src = this.src; // 클릭한 이미지의 src 적용
-		            const imageModal = new bootstrap.Modal(document.getElementById("imageModal")); // 부트스트랩 모달 객체 생성
-		            imageModal.show(); // 모달 표시
-		        });
-		    });
-		});
-	</script>
-	
-	<script>
-		function showModal(imgElement) {
-		    const modalImage = document.getElementById("modalImage"); // 모달 내부 이미지
-		    modalImage.src = imgElement.src; // 클릭한 이미지의 src 적용
-		    modalImage.alt = "첨부 이미지 미리보기"; // 접근성 향상
-		}
-	</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 모든 이미지 요소 가져오기
+            document.querySelectorAll(".img-thumbnail").forEach(img => {
+                img.addEventListener("click", function () {
+                    const modalImage = document.getElementById("modalImage"); // 모달 내부 이미지
+                    modalImage.src = this.src; // 클릭한 이미지의 src 적용
+                    const imageModal = new bootstrap.Modal(document.getElementById("imageModal")); // 부트스트랩 모달 객체 생성
+                    imageModal.show(); // 모달 표시
+                });
+            });
+        });
+    </script>
+    
+    <script>
+        function showModal(imgElement) {
+            const modalImage = document.getElementById("modalImage"); // 모달 내부 이미지
+            modalImage.src = imgElement.src; // 클릭한 이미지의 src 적용
+            modalImage.alt = "첨부 이미지 미리보기"; // 접근성 향상
+        }
+    </script>
 
 </body>
 </html>

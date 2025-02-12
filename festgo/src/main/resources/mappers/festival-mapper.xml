@@ -96,6 +96,19 @@
             and the_id = #{theId}
         </if>
     </select>
+
+    
+    <!-- 최근에 등록된 축제 (5개) -->
+    <select id="selectFestivalByCreatedTime" resultType="Festival">
+        select * from festival order by fe_created_time desc
+        offset 0 rows fetch first 5 rows only
+    </select>
+
+    
+    <!-- 축제 이름으로 축제 id 검색 -->
+    <select id="selectFeIdByName" resultType="integer">
+        select fe_id from festival where upper(fe_name) = upper(#{feName})
+    </select>
     
     <!-- 희성 작성 시작 ================================================================================================== -->
     

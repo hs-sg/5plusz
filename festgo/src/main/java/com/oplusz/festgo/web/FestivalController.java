@@ -29,9 +29,11 @@ import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Theme;
 import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.repository.ThemeDao;
+import com.oplusz.festgo.service.AlarmService;
 import com.oplusz.festgo.service.FestivalService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +45,8 @@ public class FestivalController {
 
 	// 축제 서비스 생성
 	private final FestivalService festivalService;
-    // 테마 DAO를 직접 주입받음
+    private final AlarmService alarmService;
+	// 테마 DAO를 직접 주입받음
     private final ThemeDao themeDao;
     
     // 해당 축제 상세보기 서비스
@@ -106,6 +109,7 @@ public class FestivalController {
 	        @RequestParam("fiImagesFiles") List<MultipartFile> fiImagesFiles,
 	        @RequestParam("feFeeType") String feFeeType,
 	        @ModelAttribute FestivalCreateDto dto,
+	        HttpSession session,
 	        BindingResult result) {
 		
 		 if ("free".equals(feFeeType)) {
@@ -192,6 +196,9 @@ public class FestivalController {
 
 	    // DTO 저장
 	    festivalService.create(dto);
+	    
+	    alarmService.create(dto.getFeName(), session.getAttribute("signedInUser").toString()); //-> 알람 추가
+	    
 	    return "redirect:/";
 	}
 
