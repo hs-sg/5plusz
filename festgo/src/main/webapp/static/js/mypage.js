@@ -52,7 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // 로그인된 아이디 프로필 가져오기
     function myProfile() {
-        btnToggleMyProfile.style.color = 'blue';
+        btnToggleMyProfile.style.textDecoration = 'underline';
+        btnToggleMyProfile.style.fontWeight = 'bold';
         divMyProfile.style.display = 'block';
         const uri = `../api/mypage/profile/${signedInUser}`;
                     
@@ -64,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 로그인된 아이디 권한별 축제 리스트 가져오기
     function festivalList() {
-        btnToggleFestivalList.style.color = 'blue';
+        btnToggleFestivalList.style.textDecoration = 'underline';
+        btnToggleFestivalList.style.fontWeight = 'bold';
         divFestivalList.style.display = 'block';
         let html = ``;
         switch(role) {
@@ -143,7 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 로그인된 아이디 권한별 작성글 가져오기
     function postList() {
-        btnTogglePostList.style.color = 'blue';
+        btnTogglePostList.style.textDecoration = 'underline';
+        btnTogglePostList.style.fontWeight = 'bold';
         divPostList.style.display = 'block';
         let html = '';
         let pageCount = 1;
@@ -153,8 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const maxPage = Math.ceil(totalPostNum / 10);
                 console.log(`maxPage=${maxPage}`);
                 html = `
-                    <a>전체글</a>
-                    <a>공지글</a>
                     <div class="table-responsive m-2">
                         <table class="table table-striped table-hover">
                             <thead class="table-primary">
@@ -218,7 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 로그인 아이디 권한별 리뷰 목록 가져오기
     function reviewList() {
-        btnToggleReviewList.style.color = 'blue';
+        btnToggleReviewList.style.textDecoration = 'underline';
+        btnToggleReviewList.style.fontWeight = 'bold';
         divReviewList.style.display = 'block';
         let html = '';
         let pageCount = 1;
@@ -289,7 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 사업자 아이디 승인목록 불러오기
     function sponsorCheckList() {
-        btnToggleSponsorCheckList.style.color = 'blue';
+        btnToggleSponsorCheckList.style.textDecoration = 'underline';
+        btnToggleSponsorCheckList.style.fontWeight = 'bold';
         divSponsorCheckList.style.display = 'block';
         const uri = `../api/mypage/sponcheck/`;
                 
@@ -301,18 +304,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 모든 버튼을 검정으로 모든 리스트를 안보이게 함!
     function allBtnAndDivDisable() {
-        btnToggleMyProfile.style.color = 'black';
+        btnToggleMyProfile.style.textDecoration = 'none';
+        btnToggleFestivalList.style.textDecoration = 'none';
+        btnTogglePostList.style.textDecoration = 'none';
+        btnToggleMyProfile.style.fontWeight = 'normal';
+        btnToggleFestivalList.style.fontWeight = 'normal';
+        btnTogglePostList.style.fontWeight = 'normal';
         divMyProfile.style.display = 'none';
-        btnToggleFestivalList.style.color = 'black';
         divFestivalList.style.display = 'none';
-        btnTogglePostList.style.color = 'black';
         divPostList.style.display = 'none';
         if(role == 1 || role == 3) {
-            btnToggleReviewList.style.color = 'black';
+            btnToggleReviewList.style.textDecoration = 'none';
+            btnToggleReviewList.style.fontWeight = 'normal';
             divReviewList.style.display = 'none';
         }
         if(role == 3) {
-            btnToggleSponsorCheckList.style.color = 'black';
+            btnToggleSponsorCheckList.style.textDecoration = 'none';
+            btnToggleSponsorCheckList.style.fontWeight = 'normal';
             divSponsorCheckList.style.display = 'none';
         }
     }
@@ -1078,7 +1086,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `
             if(role == 1){
                 addHtml+= `
-                        <a href="/festgo/review/modify?reId=${review.reId}" onclick="return confirmDelete()">
+                        <a href="/festgo/fest/detail?feId=${review.feId}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>

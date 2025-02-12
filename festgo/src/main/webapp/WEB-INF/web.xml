@@ -55,14 +55,13 @@
     </filter-mapping>
     
     <!-- 권한(들어갈 수 있는 페이지) 필터 (사업자, 관리자용)-->
-<filter>
+    <filter>
         <filter-name>roleFilter</filter-name>
         <filter-class>com.oplusz.festgo.filter.RoleFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>roleFilter</filter-name>
         <url-pattern>/fest/create</url-pattern>
->>>>>>> refs/heads/master
     </filter-mapping>
     
     
