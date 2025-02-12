@@ -22,6 +22,7 @@ import com.oplusz.festgo.dto.MemberSelectJoinRequestDto;
 import com.oplusz.festgo.dto.MemberSelectJoinRoleDto;
 import com.oplusz.festgo.dto.MemberSignInDto;
 import com.oplusz.festgo.dto.SponRequestRefuseDto;
+import com.oplusz.festgo.service.AlarmService;
 import com.oplusz.festgo.service.MyPageService;
 import com.oplusz.festgo.service.PostService;
 import com.oplusz.festgo.service.ReviewService;
@@ -39,6 +40,7 @@ public class MyPageController {
 	private final MyPageService myPageService;
 	private final PostService postService;
 	private final ReviewService reviewService;
+	private final AlarmService alarmService;
 	
 	// 프로필 정보 가져오기
 	@GetMapping("/profile/{signedInUser}")
@@ -324,6 +326,8 @@ public class MyPageController {
 		Integer approveResult = myPageService.approveFestivalByFeId(feId);
 		log.debug("approveResult = {}", approveResult);
 		
+		alarmService.update(2, feId); //-> 알람 처리 상태 수정
+		
 		return ResponseEntity.ok(approveResult);
 	}
 	
@@ -339,6 +343,8 @@ public class MyPageController {
 		
 		Integer refuseResult = myPageService.refuseFestivalByFeId(feId, frCause);
 		log.debug("refuseResult = {}", refuseResult);
+		
+		alarmService.update(2, feId); //-> 알람 처리 상태 수정
 		
 		return ResponseEntity.ok(refuseResult);
 	}
@@ -362,6 +368,8 @@ public class MyPageController {
 		Integer approveResult = myPageService.approveSponsorMemberByMeId(meId);
 		log.debug("approveResult = {}", approveResult);
 		
+		alarmService.update(1, meId); //-> 알람 처리 상태 수정
+		
 		return ResponseEntity.ok(approveResult);
 	}
 	
@@ -377,6 +385,8 @@ public class MyPageController {
 		
 		Integer refuseResult = myPageService.refuseSponsorMemberByMeId(meId, srCause);
 		log.debug("refuseResult = {}", refuseResult);
+		
+		alarmService.update(1, meId); //-> 알람 처리 상태 수정
 		
 		return ResponseEntity.ok(refuseResult);
 	}
