@@ -94,3 +94,5 @@ document.addEventListener("DOMContentLoaded", () => {
 		        return document.cookie.includes("JSESSIONID");  // 세션 쿠키 기반 체크
 		    }*/
 		});
+		
+		/* */
