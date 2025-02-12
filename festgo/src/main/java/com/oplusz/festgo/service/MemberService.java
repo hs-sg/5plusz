@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberService {
 	private final MemberDao memberDao;
 	private final SponRequestDao sponRequestDao;
+	private final AlarmService alarmService;
 	
 	// 입력한 아이디(username), 비밀번호(password)와 동일한 값을 갖는 행이 
 	// DB의 Member 테이블에 존재한다면 Member 객체로 리턴.
@@ -49,6 +50,8 @@ public class MemberService {
 		int srApproval = approval;
 		log.debug("insertSponRequest(meId={}, srApproval={})", meId, srApproval);
 		sponRequestDao.insertSponRequest(meId, srApproval);
+		
+		alarmService.create(dto.getMeUsername()); //-> 알람 추가
 		
 		return result;
 	}
