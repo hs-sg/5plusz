@@ -68,7 +68,12 @@
 <!-- Offcanvas 메뉴 (오른쪽에서 슬라이드) -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        <c:if test="${ empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        </c:if>
+        <c:if test="${ not empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuId">안녕하세요! ${signedInUser }님</h5>
+        </c:if>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -161,7 +166,7 @@
 <c:url var="signInJS" value="/js/signIn.js" />
 <script src="${ signInJS }"></script>
 
-<!-- 로그인 모달 자동 실행 (로그인이 필요한 경우 글쓰기용) -->
+<!-- 로그인 모달 자동 실행 (로그인이 필요한 경우 글쓰기용) 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 	const loginRequired = "<c:out value='${loginRequired}'/>";
@@ -169,5 +174,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const linkSignin = document.getElementById("linkSignin");
         linkSignin.click();
     }
+});
+</script>-->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 로그인 모달 자동 실행 여부 확인
+    <c:if test="${not empty loginRequired}">
+        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: true });
+        signinModal.show();
+    </c:if>
 });
 </script>
