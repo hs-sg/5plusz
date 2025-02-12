@@ -48,3 +48,83 @@ body {
     border-radius: 10px; /* 테두리 둥글게 설정 */
     background-color: rgba(255, 255, 255, 0.6);
 }
+.myprofile_row {
+    padding: 5px 20px;
+    border-radius: 12px;
+    box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
+    border: solid 1px #e3e9ed;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.subindex_row .row_item {
+    padding: 12px 0px 12px 0px;
+}
+
+ul {
+	list-style: none;
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    unicode-bidi: isolate;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+    list-style: none;
+}
+
+.row_item {
+    position: relative;
+}
+
+.row_item .item_text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -.8px;
+    color: #2e2e2e;
+    word-break: break-all;
+}
+
+.row_item .middle_data {
+    position: relative;
+    display: inline-block;
+    margin: 5px 0 0 12px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.8px;
+    color: #646871;
+    vertical-align: top;
+}
+
+.row_item .middle280 {
+    display: none;
+}
+
+.row_item .middle_data::before, .row_item .middle_text::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -8px;
+    width: 1px;
+    height: 20px;
+    background-color: #e4e5eb;
+}
+
+.div-buttons {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 하단으로 정렬 */
+    margin-top: 20px;
+}
+
+.div-buttons .btn {
+    margin-left: 10px;
+    padding: 8px 12px; /* 버튼 크기 줄이기 */
+}

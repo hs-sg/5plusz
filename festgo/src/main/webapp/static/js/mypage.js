@@ -332,68 +332,102 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 로그인한 프로필 출력 */
     function getMyProfile(data) {
         const createdDate = getDate(data.meCreatedTime);
-        let html = `
-            <table>
-                <tr>
-                    <th>아이디</th>
-                    <td>${data.meUsername}</td> 
-                </tr>
-                <tr>
-                    <th>이메일</th>
-                    <td>${data.meEmail}</td> 
-                </tr>
+        let html =  `
+        <div class="subindex_row">
+            <div class="myprofile_box">
+                <ul class="myprofile_row">
+                    <li>
+                        <div class="row_item id">
+                            <span class="item_text">아이디</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.meUsername}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row_item email">
+                            <span class="item_text">이메일</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.meEmail}</span>
+                        </div>
+                    </li>
+                    `
+                    if(role == `2`) {
+                        html += `
+                        <li>
+                            <div class="row_item sponsor">
+                                <span class="item_text">업체명</span>
+                                <br class="middle280">
+                                <span class="middle_data">${data.meSponsor}</span>
+                            </div>
+                        </li>
+                        `    
+                    }
+                    html += `
+                    <li>
+                        <div class="row_item createdtime">
+                            <span class="item_text">가입일</span>
+                            <br class="middle280">
+                            <span class="middle_data">${createdDate}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row_item authority">
+                            <span class="item_text">&nbsp;권&nbsp;한&nbsp;</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.mrRoles}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="div-buttons">
+            <button class="btnTogglePasswordChange btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">비밀번호 변경</button>
+            <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
+        </div>
+        <div class=divPasswordChange my-2 d-flex">
+        </div>
         `
-        if(role == `2`) {
-            html += `
-                <tr>
-                    <th>업체명</th>
-                    <td>${data.meSponsor}</td> 
-                </tr>
-            `    
-        }
-        html += `
-                <tr>
-                    <th>아이디생성날짜</th>
-                    <td>${createdDate}</td> 
-                </tr>
-                <tr>
-                    <th>권한명</th>
-                    <td>${data.mrRoles}</td> 
-                </tr>
-            </table>
-            <div>
-                <button class="btnTogglePasswordChange btn btn-outline-primary">비밀번호 변경</button>
-                <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
-            </div>
-            <div class=divPasswordChange my-2 d-flex">
-            </div>
-        `;
         divMyProfile.innerHTML = html;
         
         const btnTogglePasswordChange = document.querySelector('button.btnTogglePasswordChange');
         const btnMemberWithdraw = document.querySelector('button.btnMemberWithdraw');
         const divPasswordChange = document.querySelector('div.divPasswordChange');
+        divPasswordChange.innerHTML == ''
         
         btnTogglePasswordChange.addEventListener('click', () => {
-            if(divPasswordChange.innerHTML !== '') {
-                divPasswordChange.innerHTML = '';
-                return;
-            } else {
+            if(divPasswordChange.innerHTML == '') {
                 let html = `
-                    <div>
-                        <input id="inputPassword" type="password" placeholder="비밀번호 입력"/>
-                        <input id="inputPasswordCheck" type="password" placeholder="비밀번호 확인"/>
+                <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
+                                    <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
+                                </div>
+                                <div class="divPasswordCheckMessage my-2"></div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="divPasswordCheckMessage"></div>
-                    <button id="btnPasswordChange" class="btn btn-outline-secondary">변경하기</button>
+                </div>
                 `
-                divPasswordChange.innerHTML = html;
-                
+                divPasswordChange.innerHTML += html;
+
                 const btnPasswordChange = document.querySelector('button#btnPasswordChange');
-                
+
                 btnPasswordChange.addEventListener('click', () => {
                     passwordChange();
                 });
+            } else {
+
+                divPasswordChange.innerHTML = '';
             }
         });
         
