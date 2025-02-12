@@ -68,21 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
         btnToggleFestivalList.style.textDecoration = 'underline';
         btnToggleFestivalList.style.fontWeight = 'bold';
         divFestivalList.style.display = 'block';
+        const eachNumber = 6;
         let html = ``;
         switch(role) {
             case `1` : // 일반유저
-                html = `<div id="divUFestivalList"></div>`;
+                html = `
+                <div id="divUFestivalList"></div>`
                 divFestivalList.innerHTML = html;
-                getUFestivalEachNumber(5);
+                getUFestivalEachNumber(eachNumber);
                 break;
                 
             case `2` :
                 
             html = `
+            <div class="divFestivalbtn">
                         <input type="button" class="btnAllSFestival btn" value="전체"/>
                         <input type="button" class="btnPostSFestival btn" value="게시중"/>
                         <input type="button" class="btnWaitSFestival btn" value="승인대기"/>
                         <input type="button" class="btnRefuseSFestival btn" value="거절됨"/>
+            </div>
                         <div id="divSFestivalList"></div>
             `;
 
@@ -93,29 +97,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnWaitSFestival = document.querySelector('input.btnWaitSFestival');
             const btnRefuseSFestival = document.querySelector('input.btnRefuseSFestival');
 
-            getSFestivalEachNumberAndCategory(5, -1);
+            getSFestivalEachNumberAndCategory(eachNumber, -1);
 
             btnAllSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, -1);
+                getSFestivalEachNumberAndCategory(eachNumber, -1);
             });
             btnPostSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 0);
+                getSFestivalEachNumberAndCategory(eachNumber, 0);
             });
             btnWaitSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 1);
+                getSFestivalEachNumberAndCategory(eachNumber, 1);
             });
             btnRefuseSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 2);
+                getSFestivalEachNumberAndCategory(eachNumber, 2);
             });
             break;
                 
             case `3` :
                 html = `
+                <div class="divFestivalbtn">
                             <input type="button" class="btnAllAFestival btn" value="전체"/>
                             <input type="button" class="btnPostAFestival btn" value="게시중"/>
                             <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
                             <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
-                            <div id="divAFestivalList"></div>
+                </div>
+                <div class="container">     
+                        <div id="divAFestivalList" class="row"></div>
+                </div>
                 `;
                 
                 divFestivalList.innerHTML = html;
@@ -125,19 +133,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const btnWaitAFestival = document.querySelector('input.btnWaitAFestival');
                 const btnRefuseAFestival = document.querySelector('input.btnRefuseAFestival');
                 
-                getAFestivalEachNumberAndCategory(5, -1);
+                getAFestivalEachNumberAndCategory(eachNumber, -1);
                 
                 btnAllAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, -1);
+                    getAFestivalEachNumberAndCategory(eachNumber, -1);
                 });
                 btnPostAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 0);
+                    getAFestivalEachNumberAndCategory(eachNumber, 0);
                 });
                 btnWaitAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 1);
+                    getAFestivalEachNumberAndCategory(eachNumber, 1);
                 });
                 btnRefuseAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 2);
+                    getAFestivalEachNumberAndCategory(eachNumber, 2);
                 });
                 break;
         }
@@ -380,11 +388,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ul>
             </div>
         </div>
+        <div class="divPasswordChange my-2 d-flex">
+            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
+                                <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
+                            </div>
+                            <div class="divPasswordCheckMessage my-2"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="div-buttons">
             <button class="btnTogglePasswordChange btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">비밀번호 변경</button>
             <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
-        </div>
-        <div class=divPasswordChange my-2 d-flex">
         </div>
         `
         divMyProfile.innerHTML = html;
@@ -392,44 +420,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnTogglePasswordChange = document.querySelector('button.btnTogglePasswordChange');
         const btnMemberWithdraw = document.querySelector('button.btnMemberWithdraw');
         const divPasswordChange = document.querySelector('div.divPasswordChange');
-        divPasswordChange.innerHTML == ''
         
+        btnPasswordChange.addEventListener('click', () => {
+            passwordChange();
+        });
+        
+        /*console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
         btnTogglePasswordChange.addEventListener('click', () => {
+            console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
             if(divPasswordChange.innerHTML == '') {
-                let html = `
-                <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div>
-                                    <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
-                                    <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
-                                </div>
-                                <div class="divPasswordCheckMessage my-2"></div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `
-                divPasswordChange.innerHTML += html;
+                console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
+                let addHtml = `
+                
+                `;
+                divPasswordChange.innerHTML += addtml;
 
                 const btnPasswordChange = document.querySelector('button#btnPasswordChange');
 
-                btnPasswordChange.addEventListener('click', () => {
-                    passwordChange();
-                });
+
             } else {
 
                 divPasswordChange.innerHTML = '';
             }
-        });
+        });*/
         
         btnMemberWithdraw.addEventListener('click', () => {
             memberWithdraw();
@@ -534,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getUFestivalList(data, eachNumber) {
         const divUFestivalList = document.querySelector("div#divUFestivalList");
-        eachNumber += 5;
+        eachNumber += 6;
         let today = new Date();
         let html = ""
         if(data == "") {
@@ -634,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function getSFestivalList(data, eachNumber, category) {
         const divSFestivalList = document.querySelector("div#divSFestivalList");
-        eachNumber += 5;
+        eachNumber += 6;
         let html = "";
         if(data == "") {
             html += `<h>등록한 축제가 없습니다<h>`
@@ -714,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function getAFestivalList(data, eachNumber, category) {
         const divAFestivalList = document.querySelector("div#divAFestivalList");
-        eachNumber += 5;    
+        eachNumber += 6;    
         let html = "";       
         if(data == "") {
             html += `<h>등록된 축제가 없습니다<h>`
@@ -724,10 +737,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                        alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card col-6 mt-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -1187,35 +1200,47 @@ document.addEventListener('DOMContentLoaded', () => {
                                  + requestSponsor.meCreatedTime[2] + "일 " + requestSponsor.meCreatedTime[4] + "시 "
                                  + requestSponsor.meCreatedTime[5] + "분";
             let addHtml = `
-                <div class="card my-3 me-4">
-                    <div class="card-body d-flex">
-                        <table>
-                            <tr>
-                                <th>아이디</th>
-                                <td>${requestSponsor.meUsername}</td> 
-                            </tr>
-                            <tr>
-                                <th>이메일</th>
-                                <td>${requestSponsor.meEmail}</td> 
-                            </tr>
-                            <tr>
-                                <th>업체명</th>
-                                <td>${requestSponsor.meSponsor}</td> 
-                            </tr>
-                            <tr>
-                                <th>생성날짜</th>
-                                <td>${createdTime}</td> 
-                            </tr>
-                            
-                        </table>
+                <div class="subindex_row card">
+                    <div class="sponrequest_box">
+                        <ul class="sponrequest_row" style="margin-bottom: 0">
+                            <li>
+                                <div class="row_item id">
+                                    <span class="item_text">아이디</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meUsername}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item email">
+                                    <span class="item_text">이메일</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meEmail}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item sponsor">
+                                    <span class="item_text">업체명</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meSponsor}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item createdtime">
+                                    <span class="item_text">가입일</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${createdTime}</span>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="card-footer d-flex justify-content-end">
-                        <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
-                        <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
-                        data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
-                            거절
-                        </button>
-                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-end my-3">
+                    <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
+                    <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
+                        거절
+                    </button>
+                </div>
                     <div class="collapse" id="collapseRefuseSponsor${requestSponsor.meId}">
                         <div class="card card-body">
                             <div class="input-group mb-3">
@@ -1228,6 +1253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
+        
         divSponsorCheckList.innerHTML = html;
         
         const btnApproveSponsors = document.querySelectorAll('button.btnApproveSponsor');
