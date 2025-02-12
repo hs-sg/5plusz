@@ -3,9 +3,22 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-    const signinModal = new bootstrap.Modal('div#signinModal', { backdrop: true });
+    
+    const modalElement = document.getElementById("signinModal");
+    const signinModal = new bootstrap.Modal(modalElement, { backdrop: false });
     // {backdrop: true} -> 모달이 실행됐을 때 백그라운드를 어둡게 만듬
+    // 모달 내부 클릭 이벤트 전파 중단 추가 (충돌방지)
+        document.querySelector('.modal-content').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
 
+        const modalInputs = document.querySelectorAll('.modal input');
+        modalInputs.forEach(input => {
+            input.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        });
+        
     const divWarningText = document.querySelector('div#warningText');
 
     const linkSignin = document.querySelector('a#linkSignin');
@@ -61,13 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.querySelectorAll(".modal-backdrop").forEach(el => el.remove());
 
                     const redirectUrl = sessionStorage.getItem("redirectAfterLogin");
-                    sessionStorage.removeItem("redirectAfterLogin");
+                    
 
                     if (redirectUrl && redirectUrl !== window.location.pathname) {
                         window.location.href = redirectUrl;
                     } else {
                         window.location.reload();
                     }
+                    sessionStorage.removeItem("redirectAfterLogin");
                 }
             })
             .catch(error => console.log('로그인 요청 실패:', error));
@@ -118,4 +132,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         }
+        
     });
