@@ -92,5 +92,7 @@
 
         <c:url var="mypageJS" value="/js/mypage.js" />
         <script src="${mypageJS}"></script>
+       
     </body>
 </html>
+<!-- Bootstrap JS -->
