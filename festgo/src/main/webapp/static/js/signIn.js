@@ -106,20 +106,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    /* 🔹 특정 페이지에서만 이벤트 리스너 등록 */
-    if (window.location.pathname.includes("/post")) {
-        document.addEventListener('click', (e) => {
-            const postLink = e.target.closest('.post-link');
-            if (postLink) {
-                e.preventDefault();
-                checkAndShowLoginModal(postLink.href);
-            }
+     /*  특정 페이지 이벤트 리스너 등록 */
+        if (window.location.pathname.includes("/post")) {
+            document.addEventListener('click', (e) => {
+                const postLink = e.target.closest('.post-link');
+                if (postLink) {
+                    e.preventDefault();
+                    checkAndShowLoginModal(postLink.href);
+                }
 
-            const createLink = e.target.closest('a[href*="/post/create"]');
-            if (createLink) {
-                e.preventDefault();
-                checkAndShowLoginModal(createLink.href);
-            }
-        });
-    }
-});
+                const createLink = e.target.closest('a[href*="/post/create"]');
+                if (createLink) {
+                    e.preventDefault();
+                    checkAndShowLoginModal(createLink.href);
+                }
+            });
+        }
+    });
