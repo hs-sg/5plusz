@@ -460,42 +460,4 @@ body {
             font-weight: bold;
         }
         
-        /* 공통 리본 스타일 */
-		.ongoing-badge, .upcoming-badge, .ended-badge {
-		    position: absolute;
-		    top: 10px;
-		    left: -30px;
-		    color: white;
-		    padding: 5px 30px;
-		    font-size: 0.8rem;
-		    font-weight: bold;
-		    transform: rotate(-45deg);
-		    z-index: 2;
-		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-		    width: 100px; /* 리본 길이 고정 */
-		    height: 25px; /* 리본 높이 고정 */
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-		    text-align: center;
-		    line-height: 25px;
-		    white-space: nowrap;
-		}
-		
-		/* 개최중 배지 (녹색) */
-		.ongoing-badge {
-		    background-color: #28a745;
-		}
-		
-		/* 예정 배지 (파란색) */
-		.upcoming-badge {
-		    background-color: #007bff;
-		}
-		
-		/* 종료 배지 (빨간색) */
-		.ended-badge {
-		    background-color: #dc3545;
-		}
-
-
-
+        
