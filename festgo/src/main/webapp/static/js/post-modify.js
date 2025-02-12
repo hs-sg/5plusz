@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const deleteButtons = document.querySelectorAll(".deleteFileBtn");
 
@@ -81,3 +83,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+

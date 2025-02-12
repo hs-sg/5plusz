@@ -7,3 +7,4 @@ import com.oplusz.festgo.domain.Location;
 public interface LocationDao {
 	List<Location> selectAll();
 }
+//

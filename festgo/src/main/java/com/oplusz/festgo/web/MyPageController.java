@@ -383,3 +383,5 @@ public class MyPageController {
 		return ResponseEntity.ok(refuseResult);
 	}
 }
+
+//
