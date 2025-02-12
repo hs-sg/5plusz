@@ -1,5 +1,7 @@
 package com.oplusz.festgo.repository;
 
+import com.oplusz.festgo.domain.FestRequest;
+
 public interface FestRequestDao {
 	
 	int insertFestRequest(int feId, int frApproval);
@@ -13,4 +15,5 @@ public interface FestRequestDao {
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	
 	int selectFrIdByFeId(int feId);
+	FestRequest selectFestRequestByFeId(int feId);
 }
