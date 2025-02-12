@@ -16,7 +16,7 @@ public interface AlarmDao {
 		// each : 가져올 갯수, number : 몇번째
 		// ex) number 2, each 5 이면 11~15번 가져오기
 		List<Alarm> selectEachByMeId(Integer number, Integer each, Integer meId);
-		Integer countByMeId(Integer meId);
+		Integer countStatus1ByMeId(Integer meId);
 		
 		
 	// 희성 작성 끝

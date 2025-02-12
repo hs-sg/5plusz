@@ -9,8 +9,8 @@
 <!-- 희성 작성 시작 -->
 
     <insert id="insertRequest">
-        insert into alarm (al_category, al_sfid, me_id, al_status, al_created_time)
-        values (0, #{alSfid}, #{meId}, #{alStatus}, systimestamp)
+        insert into alarm (al_category, al_sfid, me_id, al_created_time)
+        values (0, #{alSfid}, #{meId}, systimestamp)
     </insert>
     
     <update id="updateProcess">
@@ -38,8 +38,8 @@
         offset #{number} * #{each} row fetch next #{each} rows only
     </select>
     
-    <select id="countByMeId">
-        select count(*) from alarm where me_id = #{meId}
+    <select id="countStatus1ByMeId">
+        select count(*) from alarm where me_id = #{meId} and al_status = 1
     </select>
 <!-- 희성 작성 끝 -->
 

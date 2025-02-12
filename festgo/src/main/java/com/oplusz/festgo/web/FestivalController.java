@@ -158,7 +158,8 @@ public class FestivalController {
 	    // DTO 저장
 	    festivalService.create(dto);
 	    
-	    alarmService.create(dto.getFeName(), session.getAttribute("signedInUser").toString()); //-> 알람 추가
+	    // 알람 추가
+	    alarmService.create(dto.getFeName(), session.getAttribute("signedInUser").toString());
 	    
 	    return "redirect:/";
 	}

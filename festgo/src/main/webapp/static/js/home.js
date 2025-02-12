@@ -189,7 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
             axios
             .post(uri, jsonData)
             .then(response => handleReloadData(response)) // 더보기 버튼이 필요한지 판단
-            .then(plusIndex => { //
+            .then(plusIndex => {
+                if (plusIndex === 0) { // 더 추가할 축제가 없으면 더보기 버튼을 숨김
+                    divShowMoreFestival.classList.add('d-none');
+                    return;
+                }
                 startIndexNum += plusIndex;
                 console.log("startIndexNum: ", startIndexNum); 
                 if (startIndexNum === 12 && isBtnShowMoreFestivalHasEventListener === false) {

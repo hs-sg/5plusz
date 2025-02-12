@@ -84,11 +84,11 @@ public class AlarmService {
 	
 	// 사용자에게 표시가 필요한 알람(al_status: 1)들을 불러와서 종류(계정/축제)별로 데이터를 dto 객체에 입력하고
 	// dto 객체들의 리스트를 리턴.
-	public List<AlarmResponseDto> read(int meId) {
-		log.debug("read(meId={})", meId);
+	public List<AlarmResponseDto> read(String meUsername) {
+		log.debug("read(meUsername={})", meUsername);
 		
 		List<AlarmResponseDto> listDtos = new ArrayList<AlarmResponseDto>();
-		
+		int meId = memberDao.selectByUsername(meUsername).getMeId();
 		List<Alarm> alarms = alarmDao.selectStatus1ByMeId(meId);
 		for(Alarm a : alarms) {
 			String alarmType = "";
@@ -138,7 +138,7 @@ public class AlarmService {
 			log.debug("관리자, 알람 개수: {}", result);
 		} else { //-> 일반, 사업자 계정인 경우
 			int meId = memberDao.selectByUsername(dto.getMeUsername()).getMeId();
-			result = alarmDao.countByMeId(meId);
+			result = alarmDao.countStatus1ByMeId(meId);
 			log.debug("meId: {}, 알람 개수: {}", meId, result);
 		}
 		
