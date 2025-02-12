@@ -23,6 +23,22 @@
         where al_category = #{alCategory} and al_sfid = #{alSfid}
     </update>
     
+    <select id="selectAllByMeId">
+        select * from alarm 
+        where me_id = #{meId} 
+        order by al_created_time desc
+    </select>
+    
+    <select id="selectEachByMeId">
+        select * from alarm
+        where me_id = #{meId}
+		order by al_created_time desc
+		offset #{number} * #{each} row fetch next #{each} rows only
+    </select>
+    
+    <select id="countByMeId">
+        select count(*) from alarm where me_id = #{meId}
+    </select>
 <!-- 희성 작성 끝 -->
 
 </mapper>
