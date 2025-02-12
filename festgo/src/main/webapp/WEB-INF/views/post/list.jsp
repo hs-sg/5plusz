@@ -5,6 +5,7 @@
     Integer userRole = (Integer) session.getAttribute("mr_id"); 
     request.setAttribute("userRole", userRole); // userRole을 request 속성으로 추가
 %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %> 
 
 <!DOCTYPE html>
 <html>
@@ -117,8 +118,81 @@
 		    display: inline-block; /* ✅ 블록처럼 보이도록 */
 		    text-align: center;
 		}
+        /* 스위치 버튼 색상 변경 */
+        .form-check-input:checked {
+            background-color: #479bde !important; 
+            border-color: #479bde !important;
+        }
+        
+        .form-check-input {
+            background-color: #ffffff; 
+            border-color: #6c757d;
+        }
+        /* ✅ 테이블 컨테이너 */
+.table-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+}
 
+/* ✅ 테이블 기본 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+/* ✅ 테이블 헤더 (위, 아래 굵은 줄) */
+th {
+    background-color: #ffffff; /* 화이트 배경 */
+    font-weight: bold;
+    padding: 14px;
+    border-top: 2px solid #333; /* 위쪽 굵은 줄 */
+    border-bottom: 2px solid #333; /* 아래쪽 굵은 줄 */
+    text-align: center;
+}
+
+/* ✅ 일반 행 스타일 */
+td {
+    text-align: center;
+    padding: 14px;
+    border-bottom: 1px solid #ddd; /* 기본 구분선 */
+}
+
+/* ✅ 마지막 행 아래쪽에도 굵은 줄 추가 */
+tbody tr:last-child td {
+    border-bottom: 2px solid #333 !important; /* ✅ 테이블 아래 굵은 줄 */
+}
+
+/* ✅ 행 hover 효과 */
+.table-hover tbody tr:hover {
+    background-color: #f9f9f9;
+    transition: background 0.3s ease-in-out;
+}
+
+/* ✅ 페이징 스타일 */
+.pagination-container {
+    margin-top: 30px;
+}
+
+.pagination .page-link {
+    border-radius: 6px;
+    margin: 0 4px;
+    color: #333;
+    border: 1px solid #ddd;
+    transition: 0.3s ease-in-out;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #333;
+    border-color: #333;
+    color: #fff;
+}
+
+.pagination .page-link:hover {
+    background-color: #f0f0f0;
+}
 
     </style>
     
@@ -135,38 +209,23 @@
                     <div class="d-flex justify-content-between">
                         <!-- 공지사항 숨기기 버튼 (1페이지에서만 표시) -->
                         <c:if test="${currentPage == 1}">
-                            <button id="toggleNotice" class="btn btn-outline-primary mb-3">공지 숨기기</button>
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                              <label class="form-check-label" for="flexSwitchCheckDefault">공지 숨기기</label>
+                            </div>
+                            <!--  <button id="toggleNotice" class="btn btn-outline-primary mb-3">공지 숨기기</button>-->
                         </c:if>
                         <div class="ms-auto">
                             <c:url var="postCreatePage" value="/post/create"/>
                             <a href="${postCreatePage}" class="btn btn-primary mb-3 ">글쓰기</a>
                         </div>
                     </div>
-                    <!-- 검색 폼 -->
-                    <c:url var="postSearchPage" value="/post/search"/>
-                    <form action="${postSearchPage}" method="get" class="mt-2">
-                        <div class="row">
-                            <div class="col-3">
-                                <select class="form-control" name="category">
-                                    <option value="t" ${category == 't' ? 'selected' : ''}>제목</option>
-                                    <option value="c" ${category == 'c' ? 'selected' : ''}>내용</option>
-                                    <option value="tc" ${category == 'tc' ? 'selected' : ''}>제목+내용</option>
-                                    <option value="a" ${category == 'a' ? 'selected' : ''}>작성자</option>
-                                </select>
-                            </div>
-                            <div class="col-7">
-                                <input class="form-control" type="text" name="keyword" value="${keyword}" placeholder="검색어 입력" required/>
-                            </div>
-                            <div class="col-2">
-                                <input type="submit" value="검색" class="btn btn-outline-secondary"/>
-                            </div>
-                        </div>
-                    </form>
+                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive d-flex flex-column" style="min-height: 400px;">
                         <table class="table table-striped table-hover">
-                            <thead class="table-primary">
+                            <thead>
                                 <tr>
                                 	<c:if test="${userRole == 3}">
 							            <th style="width: 5%;">
@@ -200,7 +259,7 @@
                                                 <a href="${postDetailsPage}" class="notice-title post-link">${notice.poTitle}</a>
                                             </td>
                                             <td>${notice.poAuthor}</td>
-                                            <td>${notice.poModifiedTime}</td>
+                                            <td>${notice.formattedDate}</td>
                                             <td>${notice.poViews}</td>
                                         </tr>
                                     </c:forEach>
@@ -224,7 +283,7 @@
                                             <a href="${postDetailsPage}"class="normal-title post-link">${p.poTitle}</a>
                                         </td>
                                         <td>${p.poAuthor}</td>
-                                        <td>${p.poModifiedTime}</td>
+                                        <td>${p.formattedDate}</td>
                                         <td>${p.poViews}</td>
                                     </tr>
                                 </c:forEach>
@@ -233,6 +292,27 @@
                         <c:if test="${userRole == 3}">
 						    <button id="deleteSelected" class="delete-button">선택 삭제</button>
 						</c:if>
+                        <!-- 검색 폼 -->
+                        <c:url var="postSearchPage" value="/post/search"/>
+                        <form action="${postSearchPage}" method="get" class="mt-2 mb-3 d-flex justify-content-center">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <select class="form-control form-control-sm" name="category">
+                                        <option value="t" ${category == 't' ? 'selected' : ''}>제목</option>
+                                        <option value="c" ${category == 'c' ? 'selected' : ''}>내용</option>
+                                        <option value="tc" ${category == 'tc' ? 'selected' : ''}>제목+내용</option>
+                                        <option value="a" ${category == 'a' ? 'selected' : ''}>작성자</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <input class="form-control form-control-sm" type="text" name="keyword" value="${keyword}" placeholder="검색어 입력" required/>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="submit" value="검색" class="btn btn-outline-secondary btn-sm"/>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
                     <!-- 페이징 네비게이션 -->
                     <nav class="pagination-container mt-auto">
@@ -276,14 +356,23 @@
                     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
                     crossorigin="anonymous"></script>
         <script>
-            document.getElementById('toggleNotice').addEventListener('click', function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleSwitch = document.getElementById('flexSwitchCheckDefault');
+            const toggleLabel = document.querySelector('label[for="flexSwitchCheckDefault"]');
+
+            toggleSwitch.addEventListener('change', function () {
                 const notices = document.querySelectorAll('.notice');
-                const button = this;
-                notices.forEach(function (notice) {
-                    notice.style.display = notice.style.display === 'none' ? '' : 'none';
+                
+                // 공지사항 숨기기 / 보이기
+                notices.forEach(notice => {
+                    notice.style.display = this.checked ? 'none' : '';
                 });
-                button.textContent = button.textContent === '공지 숨기기' ? '공지 보기' : '공지 숨기기';
+
+                // 글씨 변경
+                toggleLabel.textContent = this.checked ? '공지 보기' : '공지 숨기기';
             });
+        });
+
         </script>
         <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -88,6 +88,7 @@ public class PostController {
 		PostWithAttachmentsDto postDto = postService.readById(poId);
 		model.addAttribute("postWithAttachments", postDto);
 		model.addAttribute("imageAttachments", postDto.getAttachments());
+		model.addAttribute("formattedDate", postDto.getFormattedDate()); // 변환된 날짜 추가
 
 		return "post/details";
 	}
