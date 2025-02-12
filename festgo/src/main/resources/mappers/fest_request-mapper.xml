@@ -25,9 +25,25 @@
         where fe_id = #{feId}
     </update>
     
+    <select id="countFestivalByFrApproval">
+        select count(*) from fest_request where fr_approval = #{frApproval}
+    </select>
     
     <!-- 희성 작성 끝 -->
 
+
+
+
+
+    
+    <!-- feId로 frId를 검색 -->
+    <select id="selectFrIdByFeId" resultType="integer">
+        select fr_id from fest_request where fe_id = #{feId}
+    </select>
+    
+    <!-- feId로 검색 -->
+    <select id="selectFestRequestByFeId" resultType="FestRequest">
+        select * from fest_request where fe_id = #{feId}
+    </select>
 </mapper>
 
-<!-- -->

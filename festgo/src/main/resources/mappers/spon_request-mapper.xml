@@ -29,6 +29,10 @@
         where me_id = #{meId}
     </update>
     
+    <select id="countSponsorBySrApproval">
+        select count(*) from spon_request where sr_approval = #{srApproval}
+    </select>
+    
     <!-- 희성 작성 끝 -->
 </mapper>
 

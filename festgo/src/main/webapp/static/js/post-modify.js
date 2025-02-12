@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+	
 
     // 업데이트 버튼 클릭 이벤트
     if (btnUpdate) {
@@ -55,4 +56,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/* */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll(".deleteFileBtn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            const fileId = this.getAttribute("data-file-id");
+            const listItem = this.closest(".list-group-item");
+
+            if (confirm("이 파일을 삭제하시겠습니까?")) {
+                axios.post(`/festgo/post/delete-attachment`, { fileId: fileId })
+                    .then(response => {
+                        if (response.data.success) {
+                            alert("파일이 삭제되었습니다.");
+                            listItem.remove(); // 삭제된 파일을 리스트에서 즉시 제거
+                        } else {
+                            alert("파일 삭제 실패: " + response.data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("파일 삭제 중 오류 발생", error);
+                        alert("파일 삭제 중 오류가 발생했습니다.");
+                    });
+            }
+        });
+    });
+});
+
