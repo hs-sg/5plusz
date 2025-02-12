@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     /* --------------------(추가된 부분)-------------------- */
     /*  로그인 여부 확인 함수 */
     
@@ -135,4 +134,3 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
     });
-

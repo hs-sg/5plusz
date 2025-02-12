@@ -74,5 +74,3 @@ public class RoleFilter extends HttpFilter {
 	}
 
 }
-
-//

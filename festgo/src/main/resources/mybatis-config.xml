@@ -25,7 +25,7 @@
         <typeAlias type="com.oplusz.festgo.domain.PostCategory" alias="PostCategory" />
         <typeAlias type="com.oplusz.festgo.domain.SponRequest" alias="SponRequest" />
         <typeAlias type="com.oplusz.festgo.domain.Theme" alias="Theme" />
-        <typeAlias type="com.oplusz.festgo.domain.Alarm" alias="Alarm" />
+        <typeAlias type="com.oplusz.festgo.domain.Post" alias="Post" />
         <typeAlias type="com.oplusz.festgo.dto.PostCreateDto" alias="PostCreateDto" />
         <typeAlias type="com.oplusz.festgo.domain.PostAttachment" alias="PostAttachment"/>
         <typeAlias type="com.oplusz.festgo.dto.PostUpdateDto" alias="PostUpdateDto" />
@@ -36,5 +36,3 @@
 
 
 </configuration>
-
-<!-- -->

@@ -87,6 +87,3 @@
        
     </body>
 </html>
-<!-- Bootstrap JS -->
-
-<!--  -->

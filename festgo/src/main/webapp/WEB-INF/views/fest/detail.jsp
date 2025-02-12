@@ -18,14 +18,16 @@
 
     <!-- Custom CSS -->
     <style>
-        /*
+    
         .modal {
             z-index: 1055 !important;
+            pointer-events: auto; /* 클릭 가능하도록 설정 */
         }
+        
         .modal-backdrop {
-            z-index: 1050 !important;
+            z-index: 1050 !important; /* 모달보다 낮게 */
+            pointer-events: none; /* 백드롭이 클릭 이벤트를 차단하지 않도록 */
         }
-        */
     
         /* 메인 배경 이미지 스타일 */
         .main-visual {
@@ -317,8 +319,6 @@
 </body>
 
 </html>
-
-<!--  -->
 
 
 

@@ -69,9 +69,10 @@ public interface FestivalDao {
 	
 	// fe_id로 축제 삭제
 	Integer deleteFestivalByFeId(Integer feId);
+
+	List<FestivalSelectJoinRequestDto> selectFestivalJoinRequestBySponsor(String meSponsor);
 	
 //	희성 작성 끝 ------------------------------------------------------------------------------------------------------------------
 
 }
 
-//

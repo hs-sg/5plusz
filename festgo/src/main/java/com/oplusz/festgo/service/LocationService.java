@@ -23,4 +23,3 @@ public class LocationService {
 		return locationDao.selectAll();
 	}
 }
-//

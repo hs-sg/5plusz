@@ -13,30 +13,30 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
         /* 달력 테두리 영역 스타일 */
-		#calendar {
-		    max-width: 90%;
-		    margin: 20px auto;
-		    border: 6px solid skyblue; /* 두께를 6px로 변경 */
-		    border-radius: 15px;
-		    padding: 10px;
-		}
+        #calendar {
+            max-width: 90%;
+            margin: 20px auto;
+            border: 6px solid skyblue; /* 두께를 6px로 변경 */
+            border-radius: 15px;
+            padding: 10px;
+        }
 
-		.fc-toolbar-title {
-    		font-weight: bold !important;
-   			color: skyblue !important;
-		}
-		
-		/* 년/월 타이틀 왼쪽으로 이동 */
-		.fc-toolbar-title {
-		    text-align: center !important;
-		    font-size: 1.6rem !important;
-		    font-weight: bold !important;
-		    width: 100% !important;
-		    display: block !important;
-		    position: relative !important;
-		    transform: translateX(-85px) !important;  
-		}
-				
+        .fc-toolbar-title {
+            font-weight: bold !important;
+            color: skyblue !important;
+        }
+        
+        /* 년/월 타이틀 왼쪽으로 이동 */
+        .fc-toolbar-title {
+            text-align: center !important;
+            font-size: 1.6rem !important;
+            font-weight: bold !important;
+            width: 100% !important;
+            display: block !important;
+            position: relative !important;
+            transform: translateX(-85px) !important;  
+        }
+                
         /* 클릭한 날짜 강조 스타일 */
         .fc-daygrid-day.fc-highlighted {
             background-color: #ffecd1 !important;
@@ -99,27 +99,27 @@
             margin-top: 2px !important;
         }
 
-		 /* 축제 카드 스타일 */
-		.festival-card {
-		    border: 2px solid #E6E6FA;
-		    border-radius: 10px;
-		    cursor: pointer;
-		    transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
-		    position: relative;
-		    overflow: hidden;
-		}
-		
-		/* 마우스를 올렸을 때 효과 */
-		.festival-card:hover {
-		    transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
-		    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
-		}
-		
-		/* 카드 클릭 시 약간 줄어드는 효과 */
-		.festival-card:active {
-		    transform: translateY(-5px) scale(0.97);
-		    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-		}
+         /* 축제 카드 스타일 */
+        .festival-card {
+            border: 2px solid #E6E6FA;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 마우스를 올렸을 때 효과 */
+        .festival-card:hover {
+            transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
+        }
+        
+        /* 카드 클릭 시 약간 줄어드는 효과 */
+        .festival-card:active {
+            transform: translateY(-5px) scale(0.97);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+        }
 
 
 
@@ -162,133 +162,133 @@
         }
        
        .fc-event-title {
-    		font-size: 18px !important;
-		}
-		
-		.fc-event-title {
-   			 font-size: 18px !important;
-    		 display: flex !important;
-   			 justify-content: center !important;
-    		 align-items: center !important;
-    		 height: 100% !important;
-		}
+            font-size: 18px !important;
+        }
+        
+        .fc-event-title {
+             font-size: 18px !important;
+             display: flex !important;
+             justify-content: center !important;
+             align-items: center !important;
+             height: 100% !important;
+        }
 
-		.fc-daygrid-event {
-    		text-align: center !important;
-    		margin-top: 10px !important;
-		}
-		
-		.fc-button-primary {
-    		background-color: transparent !important;
-    		border-color: transparent !important;
-    		color: #000 !important;
-		}
+        .fc-daygrid-event {
+            text-align: center !important;
+            margin-top: 10px !important;
+        }
+        
+        .fc-button-primary {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            color: #000 !important;
+        }
 
-		.fc-button-primary:hover {
-   			 background-color: transparent !important;
-    		 border-color: transparent !important;
-		}
+        .fc-button-primary:hover {
+             background-color: transparent !important;
+             border-color: transparent !important;
+        }
 
-		.fc-button-primary:disabled {
-    		background-color: transparent !important;
-   			border-color: transparent !important;
-		}
+        .fc-button-primary:disabled {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
 
-		.fc-button-primary:not(:disabled):active,
-		.fc-button-primary:not(:disabled).fc-button-active {
-    		background-color: transparent !important;
-    		border-color: transparent !important;
-		}
-		
-		.custom-event {
-   			 white-space: pre-line !important;
-   			 text-align: center;
-   			 line-height: 0.8;
-   			 font-size: 0.9em;
-   			 display: flex;
-    		 flex-direction: column;
-   			 align-items: center;
-   			 gap: 0px;
-   			 padding: 0;
-   			 margin: 0;
-		}
+        .fc-button-primary:not(:disabled):active,
+        .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+        
+        .custom-event {
+             white-space: pre-line !important;
+             text-align: center;
+             line-height: 0.8;
+             font-size: 0.9em;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 0px;
+             padding: 0;
+             margin: 0;
+        }
 
-		.custom-event::before {
-    		content: attr(data-title);
-    		font-weight: bold;
-    		font-size: 1em;
-    		margin-bottom: -4px;
-		}
-		
-		.custom-event {
-		    position: absolute !important;
-		    top: 50% !important;
-		    left: 50% !important;
-		    transform: translate(-50%, -50%) !important;
-		    font-size: 1rem !important;
-		    font-weight: bold !important;
-		    text-align: center !important;
-		    display: flex !important;
-		    flex-direction: column !important;
-		    align-items: center !important;
-		    justify-content: center !important;
-		    gap: 2px !important;
-		    white-space: nowrap !important;
-		    color: gray !important;
-		}
-		
-		.fc-daygrid-day {
-		    position: relative !important;
-		}
-		
-		.fc-daygrid-day-events {
-		    position: absolute !important;
-		    top: 50% !important;
-		    left: 50% !important;
-		    transform: translate(-50%, -50%) !important;
-		    width: 100% !important;
-		}
+        .custom-event::before {
+            content: attr(data-title);
+            font-weight: bold;
+            font-size: 1em;
+            margin-bottom: -4px;
+        }
+        
+        .custom-event {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            font-size: 1rem !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 2px !important;
+            white-space: nowrap !important;
+            color: gray !important;
+        }
+        
+        .fc-daygrid-day {
+            position: relative !important;
+        }
+        
+        .fc-daygrid-day-events {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 100% !important;
+        }
 
-		.fc-day-other .custom-event {
-		    opacity: 0.3 !important;
-		}
-		
-		/* 공통 리본 스타일 */
-		.ongoing-badge, .upcoming-badge, .ended-badge {
-		    position: absolute;
-		    top: 10px;
-		    left: -30px;
-		    color: white;
-		    padding: 5px 30px;
-		    font-size: 0.8rem;
-		    font-weight: bold;
-		    transform: rotate(-45deg);
-		    z-index: 2;
-		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-		    width: 100px; /* 리본 길이 고정 */
-		    height: 25px; /* 리본 높이 고정 */
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-		    text-align: center;
-		    line-height: 25px;
-		    white-space: nowrap;
-		}
-		
-		/* 개최중 배지 (녹색) */
-		.ongoing-badge {
-		    background-color: #28a745;
-		}
-		
-		/* 예정 배지 (파란색) */
-		.upcoming-badge {
-		    background-color: #007bff;
-		}
-		
-		/* 종료 배지 (빨간색) */
-		.ended-badge {
-		    background-color: #dc3545;
-		}
+        .fc-day-other .custom-event {
+            opacity: 0.3 !important;
+        }
+        
+        /* 공통 리본 스타일 */
+        .ongoing-badge, .upcoming-badge, .ended-badge {
+            position: absolute;
+            top: 10px;
+            left: -30px;
+            color: white;
+            padding: 5px 30px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(-45deg);
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 100px; /* 리본 길이 고정 */
+            height: 25px; /* 리본 높이 고정 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            line-height: 25px;
+            white-space: nowrap;
+        }
+        
+        /* 개최중 배지 (녹색) */
+        .ongoing-badge {
+            background-color: #28a745;
+        }
+        
+        /* 예정 배지 (파란색) */
+        .upcoming-badge {
+            background-color: #007bff;
+        }
+        
+        /* 종료 배지 (빨간색) */
+        .ended-badge {
+            background-color: #dc3545;
+        }
 
 
     </style>
@@ -510,5 +510,3 @@
     </script>
 </body>
 </html>
-
-<!--  -->

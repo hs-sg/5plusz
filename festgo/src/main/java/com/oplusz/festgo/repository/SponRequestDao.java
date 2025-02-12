@@ -14,6 +14,6 @@ public interface SponRequestDao {
 	Integer countSponsorBySrApproval(Integer srApproval);
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
-	
+
 }
-//
+

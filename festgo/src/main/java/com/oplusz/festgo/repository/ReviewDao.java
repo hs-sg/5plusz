@@ -16,5 +16,11 @@ public interface ReviewDao {
 	
 // 희성 작성 끝
 	
+	List<Review> selectByFestivalId(Integer feId);
+	int insertReview(Review Review);
+	int deleteByReId(Integer reId);
+	int deleteByFestivalId(Integer feId);
+	int updateReview(Review Review);
+	Review selectById(Integer reId);
+	Integer selectReviewCount (Integer feId);
 }
-//

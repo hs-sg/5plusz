@@ -32,6 +32,7 @@
             <param-value>UTF-8</param-value>
         </init-param>
     </filter>
+    
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -42,6 +43,7 @@
         <filter-name>authenticationFilter</filter-name>
         <filter-class>com.oplusz.festgo.filter.AuthenticationFilter</filter-class>
     </filter>
+    
     <filter-mapping>
         <filter-name>authenticationFilter</filter-name>
         <url-pattern>/post/create</url-pattern>
@@ -50,7 +52,7 @@
         <url-pattern>/post/update</url-pattern>
         <url-pattern>/post/delete</url-pattern>
         <url-pattern>/api/review/*</url-pattern>
-		<url-pattern>/user/mypage</url-pattern>
+        <url-pattern>/user/mypage</url-pattern>
         <url-pattern>/fest/create</url-pattern>
     </filter-mapping>
     
@@ -62,7 +64,6 @@
     <filter-mapping>
         <filter-name>roleFilter</filter-name>
         <url-pattern>/fest/create</url-pattern>
->>>>>>> refs/heads/master
     </filter-mapping>
     
     
@@ -90,7 +91,4 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    
 </web-app>
-
-<!--  -->
