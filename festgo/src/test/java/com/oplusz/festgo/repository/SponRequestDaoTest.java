@@ -1,6 +1,7 @@
 package com.oplusz.festgo.repository;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +31,13 @@ public class SponRequestDaoTest {
 		Integer refuseResult = sponRequestDao.refuseSponsorMemberByMeId("거절됐습니다", 61);
 		log.debug(refuseResult.toString());
 		Assertions.assertEquals(refuseResult, 1);
+	}
+	
+//	@Test
+	public void testcountSponsorBySrApproval() {
+		Integer countResult = sponRequestDao.countSponsorBySrApproval(1);
+		log.debug(countResult.toString());
+		Assertions.assertEquals(countResult, 16);
 	}
 	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
