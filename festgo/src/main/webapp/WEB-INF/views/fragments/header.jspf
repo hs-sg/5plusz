@@ -316,7 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
     </c:if>
 });
 </script>
-
 <script>
 document.querySelector('.modal-content').addEventListener('click', function(e) {
     e.stopPropagation();
@@ -328,6 +327,5 @@ modalInputs.forEach(input => {
         e.stopPropagation();
     });
 });
-
 </script>
 

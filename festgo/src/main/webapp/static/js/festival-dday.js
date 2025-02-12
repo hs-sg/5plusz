@@ -53,3 +53,5 @@ const FestivalDate = {
 
 window.updateFestivalDate = FestivalDate.updateFestivalDate;
 console.log("festival-dday.js 초기화 완료");
+
+/* */

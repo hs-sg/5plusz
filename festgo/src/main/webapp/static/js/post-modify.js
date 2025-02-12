@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+   
 
     // 업데이트 버튼 클릭 이벤트
     if (btnUpdate) {

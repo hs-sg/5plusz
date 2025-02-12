@@ -2,7 +2,8 @@
  * header.jspf 파일에 포함
  */
 
-document.addEventListener("DOMContentLoaded", () => {    
+document.addEventListener("DOMContentLoaded", () => {
+    
     const modalElement = document.getElementById("signinModal");
     const signinModal = new bootstrap.Modal(modalElement, { backdrop: false });
     // {backdrop: true} -> 모달이 실행됐을 때 백그라운드를 어둡게 만듬
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector('.modal-content').addEventListener('click', function(e) {
             e.stopPropagation();
         });
+
         const modalInputs = document.querySelectorAll('.modal input');
         modalInputs.forEach(input => {
             input.addEventListener('click', function(e) {
@@ -130,5 +132,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
         }
+        
     });
-
