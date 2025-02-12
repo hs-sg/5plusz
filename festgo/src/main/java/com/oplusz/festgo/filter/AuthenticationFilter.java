@@ -1,3 +1,4 @@
+
 package com.oplusz.festgo.filter;
 
 import java.io.IOException;
@@ -78,5 +79,5 @@ public class AuthenticationFilter extends HttpFilter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		
 	}
-
 }
+

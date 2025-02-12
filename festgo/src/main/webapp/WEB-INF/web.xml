@@ -49,7 +49,8 @@
         <url-pattern>/post/modify</url-pattern>
         <url-pattern>/post/update</url-pattern>
         <url-pattern>/post/delete</url-pattern>
-        <url-pattern>/user/mypage</url-pattern>
+        <url-pattern>/api/review/*</url-pattern>
+		<url-pattern>/user/mypage</url-pattern>
         <url-pattern>/fest/create</url-pattern>
     </filter-mapping>
     
@@ -61,6 +62,7 @@
     <filter-mapping>
         <filter-name>roleFilter</filter-name>
         <url-pattern>/fest/create</url-pattern>
+>>>>>>> refs/heads/master
     </filter-mapping>
     
     
