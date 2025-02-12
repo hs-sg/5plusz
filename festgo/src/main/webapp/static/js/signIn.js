@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const signinModal = new bootstrap.Modal(document.getElementById('signinModal'), { backdrop: true });
+	const modalElement = document.getElementById("signinModal");
+	const signinModal = new bootstrap.Modal(modalElement, { backdrop: false });
 
     const divWarningText = document.querySelector('div#warningText');
 
@@ -90,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     throw new Error(`HTTP error! status: ${response.status}`); // 더 자세한 에러 메시지
                 }
                 return response.json();
-            })
+            })	
             .then(data => {
                 if (!data.isLoggedIn) {
                     signinModal.show(); // 로그인 안 되어 있으면 모달 표시

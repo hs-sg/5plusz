@@ -54,14 +54,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	        return;
 	    }
 
-	    // 서버에 로그인 상태 체크
 	    fetch('/festgo/user/check-login')
 	        .then(response => response.json())
 	        .then(isLoggedIn => {
 	            if (!isLoggedIn) {
-	                alert('로그인이 필요합니다.');
+	                // 기존 backdrop 제거
+	                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+	                
+	                // body 스타일 초기화
+	                document.body.style.removeProperty('overflow');
+	                document.body.classList.remove('modal-open');
+	                
+	                // 현재 페이지 URL 저장
 	                sessionStorage.setItem("redirectAfterLogin", window.location.href);
-	                const signinModal = new bootstrap.Modal(document.querySelector('#signinModal'));
+	                
+	                // 로그인 모달 표시
+					const modalElement = document.getElementById("signinModal");
+	                const signinModal = new bootstrap.Modal(modalElement, { backdrop: false });
 	                signinModal.show();
 	                return;
 	            }
