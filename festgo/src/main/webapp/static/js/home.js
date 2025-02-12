@@ -6,23 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainVisualSwiper = new Swiper(".mainVisualSwiper", {
         spaceBetween: 30,
         centeredSlides: true,
-        autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
+        loop: true, // 반복 재생 여부
+        autoplay: { // 자동 재생 여부
+            delay: 2500, // 2.5초마다 슬라이드 바뀜
+            disableOnInteraction: false, // 수동으로 슬라이드를 넘겼을 때 자동 재생 비활성화 여부
         },
-        pagination: {
-            el: ".swiper-pagination",
-            clickable: true,
+        pagination: { // 페이지 번호 사용 여부
+            el: ".swiper-pagination", // 페이지 번호 요소 선택자
+            //clickable: true, // 사용자의 페이지 번호 요소 제어 가능 여부
         },
-        navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+        navigation: { // 슬라이드 이전/다음 버튼 사용 여부
+            nextEl: ".swiper-button-next", // 이전 버튼 선택자
+            prevEl: ".swiper-button-prev", // 다음 버튼 선택자
         },
     });
         
     const festivalSwiper = new Swiper('.festivalSwiper', {
         // Optional parameters
-        direction: 'horizontal',
+        direction: 'horizontal', // 수평 슬라이드
         loop: true,
 
         // If we need pagination
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const divShowMoreFestival = document.getElementById('showMoreFestival');
     const btnShowMoreFestival = document.getElementById('btnShowMoreFestival');
     let jsonDataForSearch;
-    let isBtnShowMoreFestivalHaveEventListener = false;
+    let isBtnShowMoreFestivalHasEventListener = false;
     
     // form 태그의 기본 동작 대신 fetch를 사용하여 서버로 AJAX요청을 보냄. 
     formSearchFestival.addEventListener('submit', function(event) {
@@ -101,60 +102,80 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
             
-    // fetch로 불러온 축제 상세정보(json 객체)을 이용해서 축제 카드를 추가하는 메서드
-    function festivalDataToCard(data) {
-        return new Promise(function(resolve, reject) {
-            console.log("받은 데이터:", data);
-                    
-            if (jsonDataForSearch.startIndexNum === 0) eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
+   // fetch로 불러온 축제 상세정보(json 객체)을 이용해서 축제 카드를 추가하는 메서드
+   function festivalDataToCard(data) {
+       return new Promise(function(resolve, reject) {
+           console.log("받은 데이터:", data);
+           
+           if (jsonDataForSearch.startIndexNum === 0) eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
 
-            if (data && data.length > 0) {
-                const rowDiv = document.createElement('div');
-                rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
-                
-                data.forEach(function(fest) {
-                    var eventCol = document.createElement('div');
-                    eventCol.classList.add('col');
-                    
-                    var eventDiv = document.createElement('div');
-                    // "festival-card" 클래스에 연보라 테두리와 둥근 모서리, 마우스 오버 효과 적용됨
-                    eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-                    
-                    // 이미지 URL: 업로드 폴더에 있는 파일을 가리킴
-                    var imageUrl = fest.feImageMain 
-                        ? contextPath + '/uploads/' + fest.feImageMain 
-                        : contextPath + '/resources/images/default-festival.jpg';
-                    console.log("생성된 이미지 URL:", imageUrl);
-                    
-                    eventDiv.innerHTML = 
-                        '<img src="' + imageUrl + '" alt="" ' +
-                        'class="card-img-top" style="height: 200px; object-fit: cover;">' +
-                        '<div class="card-body">' +
-                            '<h5 class="card-title">' + fest.feName + '</h5>' +
-                            '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-                            '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
-                        '</div>';
-                    
-                    // 카드 전체 클릭 시, 상세 페이지로 이동 (축제 ID를 쿼리 파라미터로 전달)
-                    eventDiv.onclick = function() {
-                        window.location.href = contextPath + '/fest/details?feId=' + fest.feId;
-                    };
-                    
-                    eventCol.appendChild(eventDiv);
-                    rowDiv.appendChild(eventCol);
-                });
-                
-                eventDetailsEl.appendChild(rowDiv);
-            } else {
-                eventDetailsEl.innerHTML = 
-                    '<div class="alert alert-info" role="alert">' +
-                    '해당 날짜에 진행하는 축제가 없습니다.' +
-                    '</div>';
-            }
-            
-            resolve(data);  
-        });
-    }
+           if (data && data.length > 0) {
+               const rowDiv = document.createElement('div');
+               rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
+               
+               const today = new Date(); // 오늘 날짜
+               today.setHours(0, 0, 0, 0); // 시간 정보 초기화
+               
+               data.forEach(function(fest) {
+                   var eventCol = document.createElement('div');
+                   eventCol.classList.add('col');
+                   
+                   var eventDiv = document.createElement('div');
+                   eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
+                   
+                   // 축제 시작 및 종료 날짜 변환
+                   const startDate = new Date(fest.feStartDate);
+                   const endDate = new Date(fest.feEndDate);
+                   
+                   // 상태 배지 추가
+                   let badgeHTML = '';
+                   if (today >= startDate && today <= endDate) {
+                       badgeHTML = '<span class="badge ongoing-badge">개최중</span>';
+                   } else if (today < startDate) {
+                       badgeHTML = '<span class="badge upcoming-badge">예정</span>';
+                   } else if (today > endDate) {
+                       badgeHTML = '<span class="badge ended-badge">종료</span>';
+                   }
+
+                   // 이미지 URL 설정
+                   var imageUrl = fest.feImageMain
+                       ? contextPath + '/uploads/' + fest.feImageMain
+                       : contextPath + '/resources/images/default-festival.jpg';
+
+                   // 카드 내용 설정
+                   eventDiv.innerHTML =
+                       '<div class="position-relative">' +
+                           badgeHTML +
+                           '<img src="' + imageUrl + '" alt="" ' +
+                           'class="card-img-top" style="height: 200px; object-fit: cover;">' +
+                       '</div>' +
+                       '<div class="card-body">' +
+                           '<h5 class="card-title">' + fest.feName + '</h5>' +
+                           '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                           '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
+                       '</div>';
+
+                   // 카드 클릭 시 상세 페이지 이동
+                   eventDiv.onclick = function () {
+                       window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
+                   };
+
+                   eventCol.appendChild(eventDiv);
+                   rowDiv.appendChild(eventCol);
+               });
+               
+               eventDetailsEl.appendChild(rowDiv);
+           } else {
+               eventDetailsEl.innerHTML = 
+                   '<div class="alert alert-info" role="alert">' +
+                   '해당 날짜에 진행하는 축제가 없습니다.' +
+                   '</div>';
+           }
+           
+           resolve(data);
+       });
+   }
+
 
     // 더보기 버튼을 만들지 판단하는 메서드
     function showMoreFestival(dataLength) {
@@ -171,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(plusIndex => { //
                 startIndexNum += plusIndex;
                 console.log("startIndexNum: ", startIndexNum); 
-                if (startIndexNum === 12 && isBtnShowMoreFestivalHaveEventListener === false) {
+                if (startIndexNum === 12 && isBtnShowMoreFestivalHasEventListener === false) {
                     jsonDataForSearch.startIndexNum = startIndexNum;
-                    isBtnShowMoreFestivalHaveEventListener = true;
+                    isBtnShowMoreFestivalHasEventListener = true;
                     btnShowMoreFestival.addEventListener('click', function(event) {    
                         showSearchResult();
                     });
@@ -206,8 +227,32 @@ document.addEventListener('DOMContentLoaded', () => {
             resolve(plusIndex);
         });
     }
-            
+    
+    // 추천 축제 링크들을 찾아서 클릭 이벤트 리스너를 설정.
+    const linkRecommendThemes = document.querySelectorAll('a.linkRecommendTheme');
+    for (const link of linkRecommendThemes) {
+        link.addEventListener('click', searchRecommendThemes);
+    }        
+    
+    // 추천 축제 링크의 클릭 이벤트 리스너 콜백.
+    function searchRecommendThemes(event) {
+        event.preventDefault();
+        
+        const theId = event.target.getAttribute('theme-id');
+        const jsonData = {
+            month: '', 
+            lcId: '', 
+            theId: theId, 
+            keyword:'', 
+            startIndexNum: 0
+        };
+        
+        jsonDataForSearch = jsonData;
+        showSearchResult();
+    }
 });
+
+
 
 
 

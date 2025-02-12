@@ -432,5 +432,29 @@ body {
     font-weight: bold !important;
 }
 
+/* 축제 카드 스타일 */
+		.festival-card {
+		    border: 2px solid #E6E6FA;
+		    border-radius: 10px;
+		    cursor: pointer;
+		    transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
+		    position: relative;
+		    overflow: hidden;
+		}
+		
+		/* 마우스를 올렸을 때 효과 */
+		.festival-card:hover {
+		    transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
+		    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
+		}
+		
+		/* 카드 클릭 시 약간 줄어드는 효과 */
+		.festival-card:active {
+		    transform: translateY(-5px) scale(0.97);
+		    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+		}
 
-
+        .card-title {
+            font-weight: bold;
+        }
+        
