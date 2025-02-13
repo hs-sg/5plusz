@@ -118,7 +118,7 @@
                         data-bs-toggle="modal" data-bs-target="#notificationModal"
                         id="btnAlarm">
                     <i class="bi bi-bell fs-4"></i>
-                    <span class="notification-badge" id="notificationBadge" style="display: block;">
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">
                     </span>
                 </button>
             </c:if>
@@ -198,7 +198,7 @@
             <div class="modal-body">
                 <!-- 알림 필터 -->
                 <div class="notification-filters">
-                    <button class="filter-btn active" data-filter="all">전체</button>
+                    <button class="filter-btn active" id="defaultAlarmFilter" data-filter="all">전체</button>
                     <button class="filter-btn" data-filter="festival">🎉 축제</button>
                     <button class="filter-btn" data-filter="community">👥 계정</button>
                </div>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.oplusz.festgo.domain.Alarm;
 import com.oplusz.festgo.domain.FestRequest;
+import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.Member;
 import com.oplusz.festgo.domain.SponRequest;
 import com.oplusz.festgo.dto.AlarmCreateDto;
@@ -38,6 +39,7 @@ public class AlarmService {
 		Map<String, Integer> map = new HashMap<>();
 		map.put("frNumbers", frDao.countFestivalByFrApproval(1)); // 승인대기 축제 개수
 		map.put("srNumbers", srDao.countSponsorBySrApproval(0)); // 사업자 회원가입 승인 요청 개수
+		log.debug("관리자 알람 출력용 Map: ", map);
 		
 		return map;
 	}
@@ -106,11 +108,12 @@ public class AlarmService {
 				break;
 			case 2: //-> 축제 등록 관련 알람인 경우
 				FestRequest fr = frDao.selectFestRequestByFeId(a.getAlSfid());
+				String feName = festivalDao.selectFestivalById(a.getAlSfid()).getFeName();
 				approval = fr.getFrApproval();
 				if(approval == 0) {
-					message = "축제 등록이 승인되었습니다.";
+					message = "'" + feName + "' 축제 등록이 승인되었습니다.";
 				} else {
-					message = "축제 등록이 반려되었습니다.";
+					message = "'" + feName + "' 축제 등록이 반려되었습니다.";
 				}
 				break;
 			}
@@ -134,7 +137,9 @@ public class AlarmService {
 		
 		int result = 0;
 		if(dto.getMrId() == 3) { //-> 관리자 계정인 경우
-			result = read().size();
+			Map map = read();
+			result = Integer.parseInt(map.get("frNumbers").toString()) 
+					+ Integer.parseInt(map.get("srNumbers").toString());
 			log.debug("관리자, 알람 개수: {}", result);
 		} else { //-> 일반, 사업자 계정인 경우
 			int meId = memberDao.selectByUsername(dto.getMeUsername()).getMeId();

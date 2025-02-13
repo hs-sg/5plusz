@@ -58,20 +58,20 @@ public class AlarmController {
 	@ResponseBody
 	@GetMapping("/api/alarms")
 	public ResponseEntity<List<AlarmResponseDto>> read(@RequestParam String meUsername) {
-		log.debug("POST read() 일반/사업자용");
+		log.debug("GET read() 일반/사업자용");
 		List<AlarmResponseDto> listAlarms = alarmService.read(meUsername);
 		
 		return ResponseEntity.ok(listAlarms);
 	}
 	
 	// 일반/사업자 회원이 알람을 클릭하면 al_status의 값이 2로 바뀜.
-	@PostMapping("/api/alarmcheck")
-	public int update(int alId) {
-		log.debug("POST update(alId={})", alId);
+	@GetMapping("/api/alarmcheck")
+	public ResponseEntity<Integer> update(@RequestParam int alId) {
+		log.debug("GET update(alId={})", alId);
 		
 		int result = alarmService.update(alId);
 		log.debug("update 결과: {}", result);
 		
-		return result;
+		return ResponseEntity.ok(result);
 	}
 }
