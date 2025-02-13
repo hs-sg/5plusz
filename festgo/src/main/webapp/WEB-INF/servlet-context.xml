@@ -21,14 +21,15 @@
     </mvc:annotation-driven>
 
     <!-- 정적 리소스 매핑 설정 -->
-   <!-- <mvc:resources mapping="/uploads/**" 
-               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/> -->
+   <mvc:resources mapping="/uploads/**" 
+               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
    <!-- 하신
    <mvc:resources mapping="/uploads/**" 
                location="file:C:\java157\workspaces\first-team\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
 
+   <!-- 희성
    <mvc:resources mapping="/uploads/**" 
-               location="file:C:\java157\workspaces\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads\"/>
+               location="file:C:\java157\workspaces\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
 
     <!-- Spring MVC에서 dispatcherServlet이 처리하지 않는 정적 요청에 필요한 파일들
     (이미지, CSS, JavaScript, ...)이 있는 폴더 위치를 설정.

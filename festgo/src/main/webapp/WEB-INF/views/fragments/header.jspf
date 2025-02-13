@@ -115,10 +115,10 @@
             <!-- 알림 버튼 -->
             <c:if test="${not empty signedInUser}">
                 <button class="btn btn-notification me-3" type="button"
-                        data-bs-toggle="modal" data-bs-target="#notificationModal">
+                        data-bs-toggle="modal" data-bs-target="#notificationModal"
+                        id="btnAlarm">
                     <i class="bi bi-bell fs-4"></i>
-                    <span class="notification-badge" id="notificationBadge" style="display: block;">
-                        <c:out value="${notificationCount}" default="0"/>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">
                     </span>
                 </button>
             </c:if>
@@ -203,12 +203,12 @@
             <div class="modal-body">
                 <!-- 알림 필터 -->
                 <div class="notification-filters">
-                    <button class="filter-btn active" data-filter="all">전체</button>
-                     <button class="filter-btn" data-filter="festival">🎉 축제</button>
+                    <button class="filter-btn active" id="defaultAlarmFilter" data-filter="all">전체</button>
+                    <button class="filter-btn" data-filter="festival">🎉 축제</button>
                     <button class="filter-btn" data-filter="community">👥 계정</button>
                </div>
                 
-                <!-- 빈 상태 표시 -->
+                <!-- 빈 상태 표시 
                 <div class="empty-state">
                     <div class="empty-state-icon">
                         <i class="bi bi-bell-slash"></i>
@@ -216,10 +216,11 @@
                     <h6>알림이 없습니다</h6>
                     <p class="text-muted">새로운 알림이 오면 여기에 표시됩니다</p>
                 </div>
+                -->
 
                 <!-- 알림 목록 컨테이너 (현재는 숨김) -->
-                <div class="list-group" id="notificationList" style="display: none;">
-                </div>
+                <div class="list-group" id="notificationList"></div>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
@@ -270,57 +271,15 @@
 <c:url var="signInJS" value="/js/signIn.js" />
 <script src="${ signInJS }"></script>
 
+<script>
+    const alMeUsername = `${ signedInUser }`;
+    const alMrId = Number(${ memberRole });
+</script>
+
 <!-- 알림 관련 JavaScript -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // 필터 버튼 이벤트
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // 활성 필터 변경
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            // TODO: 필터링 로직 구현
-        });
-    });
+<c:url var="alarmJS" value="/js/alarm.js" />
+<script src="${ alarmJS }"></script>
 
-    // 알림 배지 상태 관리
-    function updateNotificationBadge(count) {
-        const badge = document.getElementById('notificationBadge');
-        if (count > 0) {
-            badge.style.display = 'block';
-            badge.textContent = count;
-            document.getElementById('markAllRead').disabled = false;
-        } else {
-            badge.style.display = 'none';
-            document.getElementById('markAllRead').disabled = true;
-        }
-    }
-
-    // 모든 알림 읽음 처리
-    document.getElementById('markAllRead')?.addEventListener('click', function() {
-        // TODO: 서버에 읽음 처리 요청
-        updateNotificationBadge(0);
-    });
-
-    // 알림 모달이 열릴 때 이벤트
-    const notificationModal = document.getElementById('notificationModal');
-    notificationModal?.addEventListener('show.bs.modal', function() {
-        // TODO: 서버에서 최신 알림 데이터 가져오기
-    });
-
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    // 로그인 모달 자동 실행 여부 확인
-    <c:if test="${not empty loginRequired}">
-        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: false });
-        signinModal.show();
-    </c:if>
-});
-</script>
 <script>
 document.querySelector('.modal-content').addEventListener('click', function(e) {
     e.stopPropagation();
@@ -333,4 +292,3 @@ modalInputs.forEach(input => {
     });
 });
 </script>
-
