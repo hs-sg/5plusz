@@ -79,9 +79,16 @@ public class AlarmService {
 		log.debug("update(alCategory={}, sfid={})", alCategory, sfid);
 		
 		Integer alSfid = sfid;
-		// 사업자 회원가입요청(alCategory: 1)인 경우 파라미터 sfid에 meId 값이 입력됨
-		// -> meId로 srId를 불러와서 alSfid 변수에 저장.
-		if (alCategory == 1) alSfid = srDao.selectByMeId(sfid).getSrId();
+		switch(alCategory) {
+		case 1: // 사업자 회원가입요청(alCategory: 1)인 경우 파라미터 sfid에 meId 값이 입력됨
+			alSfid = srDao.selectByMeId(sfid).getSrId(); // -> meId로 srId를 불러와서 alSfid 변수에 저장.
+			log.debug("alSfid={}", alSfid);
+			break;
+		case 2: // 축제 등록 요청(alCategory: 2)인 경우 파라미터 sfid에 feId 값이 입력됨
+			alSfid = frDao.selectFrIdByFeId(sfid); // -> feId로 frId를 불러와서 alSfid 변수에 저장.
+			log.debug("alSfid={}", alSfid);
+			break;
+		}
 		
 		return alarmDao.updateProcess(alCategory, alSfid);		
 	}
