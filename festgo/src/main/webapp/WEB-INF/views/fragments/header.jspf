@@ -8,6 +8,11 @@
 <!-- 사용자 정의 햄버거 아이콘 및 버튼 스타일 -->
 <style>
     /* 버튼 자체의 배경과 테두리를 제거 */
+    body {
+        width: 1200px;
+        margin: 0 auto;
+    }
+    
     .btn-hamburger {
         background-color: transparent !important;
         border: none !important;
