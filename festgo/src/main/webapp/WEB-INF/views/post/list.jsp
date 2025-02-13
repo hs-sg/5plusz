@@ -14,187 +14,200 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Fest Go</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
-        /* 테이블 스타일 */
+        /* Font Faces */
+        @font-face {        
+            font-family: 'sansMedium';      
+            src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+        }       
+        @font-face {        
+            font-family: 'sansLight';       
+            src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+        }       
+        
+        /* Base Styles */
+        body {
+            font-family: 'sansMedium';
+        }
+        
+        tbody {
+            font-family: 'sansLight';
+        }
+        
+        /* Layout Components */
+        .search-container {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            padding: 10px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Table Styles */
+        .table-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        
         table {
             table-layout: fixed;
             width: 100%;
             border-collapse: collapse;
         }
-    
+        
         th, td {
             text-align: center;
             word-wrap: break-word;
-            padding: 10px;
+            padding: 14px;
         }
-    
+        
         th {
-            background-color: #f2f2f2;
+            background-color: #ffffff;
             font-weight: bold;
+            border-top: 2px solid #333;
+            border-bottom: 2px solid #333;
         }
-    
-        /* 공지사항 제목 스타일 */
+        
+        td {
+            border-bottom: 1px solid #ddd;
+        }
+        
+        /* Table Column Widths */
+        th:nth-child(3) { width: 60%; }
+        th:nth-child(4) { width: 20%; }
+        th:nth-child(5) { width: 10%; }
+        th:nth-child(6) { width: 8%; }
+        
+        /* Table Bottom Border */
+        tbody tr:last-child td {
+            border-bottom: 2px solid #333 !important;
+        }
+        
+        /* Table Hover Effect */
+        .table-hover tbody tr:hover {
+            background-color: #f9f9f9;
+            transition: background 0.3s ease-in-out;
+        }
+        
+        /* Notice Styles */
         .notice-title {
-            color: #d9534f; /* 빨간색 */
-            font-weight: bold; /* 볼드 처리 */
-            text-decoration: none; /* 밑줄 제거 */
-        }
-    
-        .notice-title:hover {
-            text-decoration: underline; /* 마우스를 올렸을 때 밑줄 */
-        }
-    
-        /* 일반 게시글 제목 스타일 */
-        .normal-title {
-            color: #000; /* 검정색 텍스트 */
-            font-weight: normal; /* 일반 텍스트 */
-            text-decoration: none; /* 밑줄 제거 */
-        }
-    
-        .normal-title:hover {
-            text-decoration: underline; /* 마우스를 올렸을 때 밑줄 */
-        }
-    
-        /* 공지사항 배지 스타일 */
-        .notice-label {
-            background-color: #efd1d1; /* 연한 빨간색 배경 */
-            color: #f07e7e; /* 텍스트 색상 */
+            color: #d9534f;
             font-weight: bold;
-            padding: 5px;
-            border-radius: 4px; /* 둥근 모서리 */
-            text-align: center;
+            text-decoration: none;
         }
-    
-        /* 배지 스타일 */
-        .badge-danger {
+        
+        .notice-title:hover {
+            text-decoration: underline;
+        }
+        
+        .notice-label {
             background-color: #efd1d1;
             color: #d9534f;
-            font-size: 12px;
+            font-weight: bold;
             padding: 5px 10px;
             border-radius: 12px;
-        }
-    
-        /* 테이블 행 hover 효과 */
-        .table-hover tbody tr:hover {
-            background-color: #f1f1f1; /* 행 hover 배경색 */
+            display: inline-block;
+            text-align: center;
+            font-size: 12px;
         }
         
-        /* 버튼 고정 위치 */
+        /* Normal Post Styles */
+        .normal-title {
+            color: #000;
+            font-weight: normal;
+            text-decoration: none;
+        }
+        
+        .normal-title:hover {
+            text-decoration: underline;
+        }
+        
+        .normal-label {
+            background-color: #ddd;
+            color: #666;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        /* Button Styles */
         .card-header .ms-auto {
-            margin-left: auto; /* 글쓰기 버튼을 항상 오른쪽으로 정렬 */
+            margin-left: auto;
         }
-    
-        /* 숨기기 버튼 간격 조정 */
-        #toggleNotice {
-            margin-right: 10px; /* 글쓰기 버튼과 간격 유지 */
-        }
-        .delete-button-container {
-		    text-align: left; /* 버튼을 왼쪽 정렬 */
-		    margin-top: 5px; /* 체크박스와의 간격 */
-		}
-		
-		.delete-button {
-		    width: 80px; /* 버튼 크기 */
-		    padding: 5px 10px;
-		    font-size: 12px;
-		    background-color: #dc3545;
-		    color: white;
-		    border: none;
-		    border-radius: 5px;
-		    cursor: pointer;
-		}
-		
-		.delete-button:hover {
-		    background-color: #c82333;
-		}
         
-		/* 일반 배지 스타일 (공지 배지와 동일한 형태, 연한 회색) */
-		.normal-label {
-		    background-color: #ddd; /* 연한 회색 배경 */
-		    color: #666; /* 부드러운 진회색 글씨 */
-		    font-weight: bold;
-		    padding: 5px 10px;
-		    border-radius: 12px; /* ✅ 둥근 모서리 */
-		    display: inline-block; /* ✅ 블록처럼 보이도록 */
-		    text-align: center;
-		}
-        /* 스위치 버튼 색상 변경 */
+        #toggleNotice {
+            margin-right: 10px;
+        }
+        
+        .delete-button-container {
+            text-align: left;
+            margin-top: 5px;
+        }
+        
+        .delete-button {
+            width: 80px;
+            padding: 5px 10px;
+            font-size: 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+        
+        /* Switch Button Styles */
         .form-check-input:checked {
-            background-color: #479bde !important; 
+            background-color: #479bde !important;
             border-color: #479bde !important;
         }
         
         .form-check-input {
-            background-color: #ffffff; 
+            background-color: #ffffff;
             border-color: #6c757d;
         }
-        /* ✅ 테이블 컨테이너 */
-.table-container {
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 20px;
-}
-
-/* ✅ 테이블 기본 스타일 */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-/* ✅ 테이블 헤더 (위, 아래 굵은 줄) */
-th {
-    background-color: #ffffff; /* 화이트 배경 */
-    font-weight: bold;
-    padding: 14px;
-    border-top: 2px solid #333; /* 위쪽 굵은 줄 */
-    border-bottom: 2px solid #333; /* 아래쪽 굵은 줄 */
-    text-align: center;
-}
-
-/* ✅ 일반 행 스타일 */
-td {
-    text-align: center;
-    padding: 14px;
-    border-bottom: 1px solid #ddd; /* 기본 구분선 */
-}
-
-/* ✅ 마지막 행 아래쪽에도 굵은 줄 추가 */
-tbody tr:last-child td {
-    border-bottom: 2px solid #333 !important; /* ✅ 테이블 아래 굵은 줄 */
-}
-
-/* ✅ 행 hover 효과 */
-.table-hover tbody tr:hover {
-    background-color: #f9f9f9;
-    transition: background 0.3s ease-in-out;
-}
-
-/* ✅ 페이징 스타일 */
-.pagination-container {
-    margin-top: 30px;
-}
-
-.pagination .page-link {
-    border-radius: 6px;
-    margin: 0 4px;
-    color: #333;
-    border: 1px solid #ddd;
-    transition: 0.3s ease-in-out;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #333;
-    border-color: #333;
-    color: #fff;
-}
-
-.pagination .page-link:hover {
-    background-color: #f0f0f0;
-}
-
-    </style>
+        
+        /* Pagination Styles */
+        .pagination-container {
+            margin-top: 30px;
+        }
+        
+        .pagination .page-link {
+            border-radius: 6px;
+            margin: 0 4px;
+            color: #333;
+            border: 1px solid #ddd;
+            transition: 0.3s ease-in-out;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: #fff;
+            border-color: #97d5f4;
+            
+            
+        }
+        
+        .pagination .page-link:hover {
+            background-color: #d5e9f3;
+        }
+       
+        .btn1 {
+            height: 36px;  /* 버튼 높이 */
+            line-height: 36px;  /* 버튼 높이와 동일한 line-height 설정 */
+            text-align: center;
+            padding: 0 16px;
+        }
+        </style>
     
         
     </head>
@@ -209,7 +222,7 @@ tbody tr:last-child td {
                     <div class="d-flex justify-content-between">
                         <!-- 공지사항 숨기기 버튼 (1페이지에서만 표시) -->
                         <c:if test="${currentPage == 1}">
-                            <div class="form-check form-switch">
+                            <div class="form-check form-switch mt-2" >
                               <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                               <label class="form-check-label" for="flexSwitchCheckDefault">공지 숨기기</label>
                             </div>
@@ -217,7 +230,7 @@ tbody tr:last-child td {
                         </c:if>
                         <div class="ms-auto">
                             <c:url var="postCreatePage" value="/post/create"/>
-                            <a href="${postCreatePage}" class="btn btn-primary mb-3 ">글쓰기</a>
+                            <a href="${postCreatePage}" class="btn1 btn btn-primary">글쓰기</a>
                         </div>
                     </div>
                     
@@ -233,8 +246,8 @@ tbody tr:last-child td {
 							            </th>
 							        </c:if>
                                 	<th style="width: 10%;"></th>
-                                    <th>제목</th>
-                                    <th>작성자</th>
+                                    <th style="width: 60%;">제목</th>
+                                    <th style="width: 20%;">작성자</th>
                                     <th>작성날짜</th>
                                     <th>조회수</th>
                                 </tr>
@@ -249,16 +262,16 @@ tbody tr:last-child td {
 							                        <input type="checkbox" name="deleteIds" value="${notice.poId}"> <!-- ✅ 관리자만 체크박스 표시 -->
 							                    </td>
 							                </c:if>
-                                            <td class="notice-label">
-                                                <span class="badge badge-danger">공지</span> <!-- 배지 스타일 -->
-                                            </td>
                                             <td>
+                                                <span class="notice-label badge">공지</span> <!-- 배지 스타일 -->
+                                            </td>
+                                            <td style="text-align: left; padding-left: 15px; width: 60%;">
                                                 <c:url var="postDetailsPage" value="/post/details">
                                                     <c:param name="poId" value="${notice.poId}"/>
                                                 </c:url>
-                                                <a href="${postDetailsPage}" class="notice-title post-link">${notice.poTitle}</a>
+                                                <a href="${postDetailsPage}" class="notice-title post-link" style="font-family:'sansMedium'">${notice.poTitle}</a>
                                             </td>
-                                            <td>${notice.poAuthor}</td>
+                                            <td style="width: 20%;">${notice.poAuthor}</td>
                                             <td>${notice.formattedDate}</td>
                                             <td>${notice.poViews}</td>
                                         </tr>
@@ -276,13 +289,13 @@ tbody tr:last-child td {
                                         <td>
 										   <span class="normal-label badge">일반</span> <!-- 일반 배지 -->
 										</td>
-                                        <td>
+                                        <td style="text-align: left; padding-left: 15px; width: 60%;">
                                             <c:url var="postDetailsPage" value="/post/details">
                                                 <c:param name="poId" value="${p.poId}"/>
                                             </c:url>
-                                            <a href="${postDetailsPage}"class="normal-title post-link">${p.poTitle}</a>
+                                            <a href="${postDetailsPage}"class="normal-title post-link" style="font-family:'sansMedium'">${p.poTitle}</a>
                                         </td>
-                                        <td>${p.poAuthor}</td>
+                                        <td style="width: 20%;">${p.poAuthor}</td>
                                         <td>${p.formattedDate}</td>
                                         <td>${p.poViews}</td>
                                     </tr>
@@ -292,6 +305,8 @@ tbody tr:last-child td {
                         <c:if test="${userRole == 3}">
 						    <button id="deleteSelected" class="delete-button">선택 삭제</button>
 						</c:if>
+
+                    </div>
                         <!-- 검색 폼 -->
                         <c:url var="postSearchPage" value="/post/search"/>
                         <form action="${postSearchPage}" method="get" class="mt-2 mb-3 d-flex justify-content-center">
@@ -307,13 +322,14 @@ tbody tr:last-child td {
                                 <div class="col-auto">
                                     <input class="form-control form-control-sm" type="text" name="keyword" value="${keyword}" placeholder="검색어 입력" required/>
                                 </div>
-                                <div class="col-auto">
-                                    <input type="submit" value="검색" class="btn btn-outline-secondary btn-sm"/>
-                                </div>
+                               <div class="col-auto">
+                                            <!-- ✅ 버튼 크기 조정 -->
+                                 <button type="submit" class="btn btn-outline-primary px-2 py-2 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-search fs-6"></i> <!-- ✅ 돋보기 아이콘 크기 조정 -->
+                                </button>
+                            </div>
                             </div>
                         </form>
-
-                    </div>
                     <!-- 페이징 네비게이션 -->
                     <nav class="pagination-container mt-auto">
                         <ul class="pagination justify-content-center">
