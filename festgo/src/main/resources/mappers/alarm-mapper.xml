@@ -8,7 +8,7 @@
 
     <insert id="insertRequest">
         insert into alarm (al_category, al_sfid, me_id, al_created_time)
-        values (0, #{alSfid}, #{meId}, systimestamp)
+        values (#{alCategory}, #{alSfid}, #{meId}, systimestamp)
     </insert>
     
     <update id="updateProcess">

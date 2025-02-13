@@ -170,7 +170,7 @@
             <!-- 후원자 -->
             <div class="mb-3">
                 <label for="meSponsor" class="form-label">주최자명</label>
-                <input type="text" class="form-control" id="meSponsor" name="meSponsor" placeholder="주최자명" required>
+                <input type="text" class="form-control" id="meSponsor" value="${memberSponsor}" name="meSponsor" placeholder="주최자명" required>
             </div>
 
             <!-- 참가비 -->

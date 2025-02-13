@@ -40,7 +40,7 @@ public class AlarmDaoTest {
 	
 	// @Test
 	public void testCheckProcess() {
-		Integer updateResult = alarmDao.updateCheck(1, 1);
+		Integer updateResult = alarmDao.updateCheck(1);
 		Assertions.assertEquals(updateResult, 1);
 	}
 	
@@ -64,7 +64,7 @@ public class AlarmDaoTest {
 	
 	@Test
 	public void testCountByMeId() {
-		Integer count = alarmDao.countByMeId(41);
+		Integer count = alarmDao.countStatus1ByMeId(41);
 		Assertions.assertEquals(count, 12);
 	}
 
