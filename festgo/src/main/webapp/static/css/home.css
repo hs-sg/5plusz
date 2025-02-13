@@ -7,10 +7,6 @@
     src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
 }
 
-body {
-    font-family: 'dohyeon', sans-serif;
-}
-
 .keyword-title, 
 .search-title  {
     font-family: 'dohyeon', sans-serif;
@@ -531,6 +527,7 @@ input.searchLine::placeholder {
     overflow: hidden;
 }
 
+
 /* 마우스를 올렸을 때 효과 */
 .festival-card:hover {
     transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
@@ -584,3 +581,51 @@ input.searchLine::placeholder {
     background-color: #dc3545;
 }
 /* 기존 CSS 코드 끝 */
+
+        .card-title {
+            font-weight: bold;
+        }
+	
+		@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+.festival-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: skyblue;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.festival-list-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: purple;
+    text-align: center;
+    margin: 15px 0;
+}
+
+@font-face {		
+    font-family: 'sansMedium';		
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 축제 카드 제목 (sansMedium 폰트 적용) */
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+
+

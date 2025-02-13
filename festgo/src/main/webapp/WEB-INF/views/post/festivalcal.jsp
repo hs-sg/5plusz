@@ -202,18 +202,32 @@
             border-color: transparent !important;
         }
         
-        .custom-event {
-             white-space: pre-line !important;
-             text-align: center;
-             line-height: 0.8;
-             font-size: 0.9em;
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             gap: 0px;
-             padding: 0;
-             margin: 0;
-        }
+       @font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 날짜 셀 안의 축제 개수 표시 스타일 */
+.custom-event {
+    font-family: 'sansLight', sans-serif !important;
+    font-size: 0.9em;
+    color: gray !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    flex-wrap: wrap !important; /* 텍스트가 넘칠 경우 자동 줄바꿈 */
+    padding: 5px !important; /* 여백 추가 */
+    max-width: 90% !important; /* 셀 안에서 너무 커지지 않도록 제한 */
+    line-height: 1.2 !important; /* 줄 간격 조정 */
+    word-break: break-word !important; /* 긴 단어 자동 줄바꿈 */
+}
+
+
 
         .custom-event::before {
             content: attr(data-title);
@@ -251,7 +265,7 @@
             width: 100% !important;
         }
 
-<<<<<<< HEAD
+
 		.fc-day-other .custom-event {
 		    opacity: 0.3 !important;
 		}
@@ -342,7 +356,7 @@
 }
 
 		
-=======
+
         .fc-day-other .custom-event {
             opacity: 0.3 !important;
         }
