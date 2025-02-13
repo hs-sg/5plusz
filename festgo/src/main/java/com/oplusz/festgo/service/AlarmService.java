@@ -50,10 +50,10 @@ public class AlarmService {
 		
 		int meId = memberDao.selectByUsername(meUsername).getMeId();
 		int srId = srDao.selectByMeId(meId).getSrId();
-		int alCategory = 1;
 		AlarmCreateDto dto = AlarmCreateDto.builder()
-					.alCategory(alCategory).alSfid(srId).meId(meId)
+					.alCategory(1).alSfid(srId).meId(meId)
 					.build();
+		log.debug("사업자 가입 알람 등록 dto: {}", dto);
 		
 		return alarmDao.insertRequest(dto.toAlarmEntity());
 	}
@@ -66,10 +66,10 @@ public class AlarmService {
 		log.debug("알람이 등록된 축제: {}", festivalDao.selectFastestFestByFeNameAndMeSponsor(feName, meSponsor));
 		int feId = festivalDao.selectFastestFestByFeNameAndMeSponsor(feName, meSponsor).getFeId();
 		int frId = frDao.selectFrIdByFeId(feId);
-		int alCategory = 2;
 		AlarmCreateDto dto = AlarmCreateDto.builder()
-				.alCategory(alCategory).alSfid(frId).meId(meId)
+				.alCategory(2).alSfid(frId).meId(meId)
 				.build();
+		log.debug("축제 알람 등록 dto: {}", dto);
 	
 		return alarmDao.insertRequest(dto.toAlarmEntity());
 	}
@@ -79,6 +79,7 @@ public class AlarmService {
 		log.debug("update(alCategory={}, sfid={})", alCategory, sfid);
 		
 		Integer alSfid = sfid;
+
 		switch(alCategory) {
 		case 1: // 사업자 회원가입요청(alCategory: 1)인 경우 파라미터 sfid에 meId 값이 입력됨
 			alSfid = srDao.selectByMeId(sfid).getSrId(); // -> meId로 srId를 불러와서 alSfid 변수에 저장.
@@ -116,8 +117,8 @@ public class AlarmService {
 				}
 				break;
 			case 2: //-> 축제 등록 관련 알람인 경우
-				FestRequest fr = frDao.selectFestRequestByFeId(a.getAlSfid());
-				String feName = festivalDao.selectFestivalById(a.getAlSfid()).getFeName();
+				FestRequest fr = frDao.selectFestRequestByFrId(a.getAlSfid());
+				String feName = festivalDao.selectFestivalById(fr.getFeId()).getFeName();
 				approval = fr.getFrApproval();
 				if(approval == 0) {
 					message = "'" + feName + "' 축제 등록이 승인되었습니다.";

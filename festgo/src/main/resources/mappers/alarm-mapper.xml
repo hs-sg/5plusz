@@ -4,13 +4,11 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oplusz.festgo.repository.AlarmDao">
 
-
-
 <!-- 희성 작성 시작 -->
 
     <insert id="insertRequest">
         insert into alarm (al_category, al_sfid, me_id, al_created_time)
-        values (0, #{alSfid}, #{meId}, systimestamp)
+        values (#{alCategory}, #{alSfid}, #{meId}, systimestamp)
     </insert>
     
     <update id="updateProcess">
