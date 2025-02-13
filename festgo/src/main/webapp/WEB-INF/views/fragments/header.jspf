@@ -43,12 +43,12 @@
 <header class="p-3" style="background-color: transparent;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <!-- 왼쪽: 로고 텍스트 -->
-        <div>
+         <div>
             <c:url value="/" var="homePage"/>
-            <a href="${homePage}" class="text-dark text-decoration-none" 
-               style="font-size: 2.5rem; font-weight: bold;">
-                🅵🅴🆂🆃 🅶🅾
-            </a>
+            <a href="${pageContext.request.contextPath}/" class="text-dark text-decoration-none">
+                <img src="${pageContext.request.contextPath}/static/images/logo5.PNG" alt="Logo" style="height: 100px;">
+
+            </a> 
         </div>
         <!-- 오른쪽: 사용자 정의 햄버거 메뉴 버튼 -->
         <div>

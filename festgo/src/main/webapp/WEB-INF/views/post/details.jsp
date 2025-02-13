@@ -14,7 +14,24 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
           crossorigin="anonymous" />
           
-          <style>
+            <style>
+            /* Font Faces */
+            @font-face {        
+                font-family: 'sansMedium';      
+                src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+            }       
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }       
+            
+            main {
+                font-family: 'sansMedium';
+            }
+            div {
+                font-family: 'sansMedium';
+            }
+          
 			/* 썸네일 이미지 크기 고정 */
 			.preview-img {
 			    width: 200px;  /* 일정한 너비 */
@@ -38,6 +55,12 @@
 			    display: block;
 			    margin: auto;
 			}
+            .btn {
+            height: 36px;  /* 버튼 높이 */
+            line-height: 36px;  /* 버튼 높이와 동일한 line-height 설정 */
+            text-align: center;
+            padding: 0 16px;
+             }
 			</style>
 </head>
 
@@ -53,15 +76,15 @@
                     <form>
                         <div class="mt-2">
                             <label class="form-label" for="id">번호</label>
-                            <input class="form-control" id="id" type="text" value="${postWithAttachments.post.poId}" readonly />
+                            <input style="font-family:'sansLight" class="form-control" id="id" type="text" value="${postWithAttachments.post.poId}" readonly />
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="title">제목</label>
-                            <input class="form-control" id="title" type="text" value="${postWithAttachments.post.poTitle}" readonly />
+                            <input style="font-family:'sansLight" class="form-control" id="title" type="text" value="${postWithAttachments.post.poTitle}" readonly />
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="content">내용</label>
-                            <div class="form-control" id="content" style="min-height: 200px; overflow-y: auto;">
+                            <div  style="font-family:'sansLight" class="form-control" id="content" style="min-height: 200px; overflow-y: auto;">
                                 <c:out value="${fn:trim(postWithAttachments.post.poContent)}"/>
                             </div>
                         </div>
@@ -95,17 +118,17 @@
 
                         <div class="mt-2">
                             <label class="form-label" for="author">작성자</label>
-                            <input class="form-control" id="author" type="text" value="${postWithAttachments.post.poAuthor}" readonly />
+                            <input style="font-family:'sansLight" class="form-control" id="author" type="text" value="${postWithAttachments.post.poAuthor}" readonly />
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="createdTime">작성시간</label>
-                            <input class="form-control" id="createdTime" type="text" value="${postWithAttachments.post.poCreatedTime}" readonly/>
+                            <input style="font-family:'sansLight" class="form-control" id="createdTime" type="text" value="${postWithAttachments.post.poCreatedTime}" readonly/>
                             <label class="form-label" for="modifiedTime">최종수정시간</label>
-                            <input class="form-control" id="modifiedTime" type="text" value="${postWithAttachments.post.poModifiedTime}" readonly/>
+                            <input style="font-family:'sansLight" class="form-control" id="modifiedTime" type="text" value="${postWithAttachments.post.poModifiedTime}" readonly/>
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="views">조회수</label>
-                            <input class="form-control" id="views" type="text" value="${postWithAttachments.post.poViews}" readonly />
+                            <input style="font-family:'sansLight"class="form-control" id="views" type="text" value="${postWithAttachments.post.poViews}" readonly />
                         </div>
                     </form>
 

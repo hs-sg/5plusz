@@ -62,7 +62,6 @@
     <filter-mapping>
         <filter-name>roleFilter</filter-name>
         <url-pattern>/fest/create</url-pattern>
->>>>>>> refs/heads/master
     </filter-mapping>
     
     
@@ -88,6 +87,11 @@
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
     </servlet-mapping>
 
     

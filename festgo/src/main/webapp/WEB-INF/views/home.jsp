@@ -22,6 +22,9 @@
             
         <c:url var="homeCSS" value="/css/home.css"/>
         <link href="${ homeCSS }" rel="stylesheet"/>
+        
+        <!-- ✅ 추가된 CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -205,6 +208,9 @@
         
         <c:url var="homeJS" value="/js/home.js"/>
         <script src="${ homeJS }"></script>
+        
+        <!-- ✅ 추가된 signIn.js -->
+        <script src="${pageContext.request.contextPath}/static/js/signIn.js"></script>
 
         
         <!-- 권한 없음 알림 표시용 -->

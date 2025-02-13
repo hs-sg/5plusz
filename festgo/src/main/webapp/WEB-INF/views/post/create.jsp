@@ -13,6 +13,27 @@
               rel="stylesheet" 
               integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
               crossorigin="anonymous">
+    <style>
+    /* Font Faces */
+        @font-face {        
+            font-family: 'sansMedium';      
+            src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+        }       
+        @font-face {        
+            font-family: 'sansLight';       
+            src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+        }       
+        
+        div {
+            font-family: 'sansMedium';
+        }
+        .btn {
+            height: 36px;  /* 버튼 높이 */
+            line-height: 36px;  /* 버튼 높이와 동일한 line-height 설정 */
+            text-align: center;
+            padding: 0 16px;
+        }
+    </style>
     </head>
     <body>
         <div class="container-fluid">
