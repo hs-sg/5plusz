@@ -280,5 +280,5 @@ public class MyPageService {
 		
 		return deleteMemberResult;
 	}
-	
 }
+

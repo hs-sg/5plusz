@@ -21,3 +21,5 @@ document.addEventListener("DOMContentLoaded", function () {
         console.warn("No images data found in preview image element!");
     }
 });
+
+/* */

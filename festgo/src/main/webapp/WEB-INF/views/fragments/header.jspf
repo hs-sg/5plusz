@@ -310,11 +310,27 @@ document.addEventListener('DOMContentLoaded', function() {
         // TODO: 서버에서 최신 알림 데이터 가져오기
     });
 
-    // 로그인 모달 자동 실행
-    const loginRequired = "<c:out value='${loginRequired}'/>";
-    if (loginRequired === "true") {
-        const linkSignin = document.getElementById("linkSignin");
-        linkSignin.click();
-    }
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 로그인 모달 자동 실행 여부 확인
+    <c:if test="${not empty loginRequired}">
+        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: false });
+        signinModal.show();
+    </c:if>
 });
 </script>
+<script>
+document.querySelector('.modal-content').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+const modalInputs = document.querySelectorAll('.modal input');
+modalInputs.forEach(input => {
+    input.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
+</script>
+
