@@ -21,20 +21,21 @@
     src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');
 }
 
-.modal-backdrop {
-    z-index: 1040; /* 모달보다 낮은 z-index 설정 */
-}
-
-.modal {
-    z-index: 1050; /* 백드롭보다 높은 z-index 설정 */
+html {
+    height: 100%;
 }
 
 body {
+    min-height: 100vh;
     background: linear-gradient(to bottom, #EAF6FF, #FFFFFF); /* 연한 하늘색 → 흰색 */
     background-repeat: no-repeat;
     background-size: cover; /* 배경 이미지가 화면에 맞게 늘어납니다 */
     font-family: 'sansMedium'
 }
+
+.mypage-container .row {
+    display: flex;
+  }
 
 .mypage-container {
     padding-left: 52px;  /* 왼쪽 여백 */
@@ -48,8 +49,9 @@ body {
 
 .sticky-sidebar {
     position: sticky; /* 스크롤 시 고정 */
-    top: 50px; /* 상단에서의 거리 */
-    height: 100vh; /* 전체 화면 높이 */
+    top: 0; /* 상단에서의 거리 */
+    height: 40vh; /* 전체 화면 높이 */
+    width: 11rem;
     padding: 20px; /* 여백 설정 */
     background-color: rgba(0, 0, 0, 0.03); /* 배경색 설정 */
     border-radius: 10px; /* 테두리 둥글게 설정 */
@@ -60,7 +62,7 @@ body {
 /* 버튼 스타일 추가 */
 .sticky-sidebar .btn {
     margin-bottom: 10px; /* 버튼 간 여백 */
-    width: 100%; /* 버튼 너비를 100%로 설정 */
+    width: 8rem; /* 버튼 너비를 100%로 설정 */
     padding: 10px 20px; /* 버튼 패딩 조정 */
     color: black; /* 버튼 텍스트 색상 */
     border-radius: 5px; /* 버튼 테두리 둥글게 설정 */
@@ -72,18 +74,20 @@ body {
 }
 
 .sticky-div {
+	padding-top: 10px;
+	padding-bottom: 10px;
     position: sticky; /* 스크롤 시 고정 */
+    flex: 1;
     top: 30px; /* 상단에서의 거리 */
     height: 100vh; /* 전체 화면 높이 */
     overflow-y: auto; /* 내용이 많을 경우 스크롤 가능하게 설정 */
     margin-left: 20px;
-    padding: 20px; /* 여백 설정 */
     border-radius: 10px; /* 테두리 둥글게 설정 */
     background-color: rgba(255, 255, 255, 0.6);
 }
 
 .myprofile_row, .sponrequest_row {
-    padding: 5px 20px;
+    padding: 10px 20px;
     border-radius: 12px;
     box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
     border: solid 1px #e3e9ed;
@@ -171,6 +175,53 @@ li {
 
 .divFestivalbtn .btn {
     flex: 1; /* 버튼이 공간을 균등하게 차지하도록 설정 */
-    margin: 0 5px; /* 버튼 간 여백 설정 */
+    margin: 5px; /* 버튼 간 여백 설정 */
     padding: 10px 20px; /* 버튼 크기 설정 */
+    width: 150px;
+}
+
+.cardfestival {
+	padding-right: 0;
+	padding-left: 0;
+	margin: 20px 5px 0 5px;
+	width: 430px;
+}
+
+.card-img-top {
+    width: 430px;
+    height: 430px;
+}
+
+.thPostId, .thPostTitle, .thPostAuthor, .thPostCreatedTime, .thPostViews
+.thReviewId, .thReviewTitle, .thReviewAuthor, .thReviewCreatedTime, .thReviewGrade
+{
+	text-align: center;
+}
+
+.tdPostId, .tdPostAuthor, .tdPostViews, .tdPostNotice,
+.tdReviewId, .tdReviewAuthor, .tdReviewGrade
+{
+    text-align: center;
+}
+
+.tdPostNotice {
+	font-weight: bold;
+	color: #dd3333 !important;
+}
+
+.tdPostTitle a, .tdReviewTitle a{
+	color: #000000 !important;
+	text-decoration-line: none;
+}
+
+.thPostId, .thPostViews, .thReviewId, .thReviewGrade {
+	width: 10%;
+}
+
+.thPostTitle, thReviewTitle {
+	width: 40%;
+}
+
+.thPostAuthor, .thPostCreatedTime, .thReviewAuthor, .thReviewCreatedTime {
+	width: 20%;
 }

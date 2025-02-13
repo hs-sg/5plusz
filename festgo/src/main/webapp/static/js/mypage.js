@@ -69,25 +69,25 @@ document.addEventListener('DOMContentLoaded', () => {
         btnToggleFestivalList.style.fontWeight = 'bold';
         divFestivalList.style.display = 'block';
         const eachNumber = 6;
-        let html = ``;
+        let html = `<a id="festTop"></a>`;
         switch(role) {
             case `1` : // 일반유저
-                html = `
-                <div id="divUFestivalList"></div>`
+                html += `
+                <div id="divUFestivalList" class="row justify-content-center"></div>`
                 divFestivalList.innerHTML = html;
                 getUFestivalEachNumber(eachNumber);
                 break;
                 
             case `2` :
                 
-            html = `
+            html += `
             <div class="divFestivalbtn">
                         <input type="button" class="btnAllSFestival btn" value="전체"/>
                         <input type="button" class="btnPostSFestival btn" value="게시중"/>
                         <input type="button" class="btnWaitSFestival btn" value="승인대기"/>
                         <input type="button" class="btnRefuseSFestival btn" value="거절됨"/>
             </div>
-                        <div id="divSFestivalList"></div>
+                        <div id="divSFestivalList" class="row justify-content-center"></div>
             `;
 
             divFestivalList.innerHTML = html;
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             break;
                 
             case `3` :
-                html = `
+                html += `
                 <div class="divFestivalbtn">
                             <input type="button" class="btnAllAFestival btn" value="전체"/>
                             <input type="button" class="btnPostAFestival btn" value="게시중"/>
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
                 </div>
                 <div class="container">     
-                        <div id="divAFestivalList" class="row"></div>
+                        <div id="divAFestivalList" class="row justify-content-center"></div>
                 </div>
                 `;
                 
@@ -168,23 +168,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         <table class="table table-striped table-hover">
                             <thead class="table-primary">
                                 <tr>
-                                    <th>번호</th>
-                                    <th>제목</th>
-                                    <th>작성자</th>
-                                    <th>작성날짜</th>
-                                    <th>조회수</th>
+                                    <th class="thPostId">번호</th>
+                                    <th class="thPostTitle">제목</th>
+                                    <th class="thPostAuthor">작성자</th>
+                                    <th class="thPostCreatedTime">작성날짜</th>
+                                    <th class="thPostViews">조회수</th>
                                 </tr>
                             </thead>
                             <tbody class="tbodyPostList">
                             </tbody>
                         </table>
                     </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="pbtnPrevious btn btn-outline-dark">Previous</button>
-                        <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
-                        <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
-                        <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
-                        <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
+                    <div class="divNotPost text-center"></div>
+                    <div class="row justify-content-center">
+                        <div class="btn-group col-2 mt-3" role="group">
+                            <button type="button" class="pbtnPrevious btn btn-outline-dark">Previous</button>
+                            <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                            <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                            <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                            <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
+                        </div>
                     </div>
                 `;
                 
@@ -241,23 +244,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     <table class="table table-striped table-hover">
                         <thead class="table-primary">
                             <tr>
-                                <th>번호</th>
-                                <th>제목</th>
-                                <th>작성자</th>
-                                <th>작성날짜</th>
-                                <th>평점</th>
+                                <th class="thReviewId">번호</th>
+                                <th class="thReviewTitle">제목</th>
+                                <th class="thReviewAuthor">작성자</th>
+                                <th class="thReviewCreatedTime">작성날짜</th>
+                                <th class="thReviewGrade">평점</th>
                             </tr>
                         </thead>
-                        <tbody class="tbodyReviewList">
-                        </tbody>
+                        <tbody class="tbodyReviewList"></tbody>
                     </table>
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="rbtnPrevious btn btn-outline-dark">Previous</button>
-                    <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
-                    <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
-                    <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
-                    <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
+                <div class="divNotReview text-center"></div>
+                <div class="row justify-content-center">
+                    <div class="btn-group col-2 mt-3" role="group">
+                        <button type="button" class="rbtnPrevious btn btn-outline-dark">Prev</button>
+                        <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                        <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                        <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                        <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
+                    </div>
                 </div>
             `;
             
@@ -388,30 +393,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ul>
             </div>
         </div>
-        <div class="divPasswordChange my-2 d-flex">
-            <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
+                            <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
                         </div>
-                        <div class="modal-body">
-                            <div>
-                                <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
-                                <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
-                            </div>
-                            <div class="divPasswordCheckMessage my-2"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
-                        </div>
+                        <div class="divPasswordCheckMessage my-2"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="div-buttons">
-            <button class="btnTogglePasswordChange btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">비밀번호 변경</button>
+            <button class="btnTogglePasswordChange btn btn-outline-primary" data-bs-toggle="modal" 
+                data-bs-target="#passwordChangeModal">비밀번호 변경</button>
             <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
         </div>
         `
@@ -419,30 +423,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const btnTogglePasswordChange = document.querySelector('button.btnTogglePasswordChange');
         const btnMemberWithdraw = document.querySelector('button.btnMemberWithdraw');
-        const divPasswordChange = document.querySelector('div.divPasswordChange');
+        const modalElement = document.getElementById('passwordChangeModal');
+        const passwordChangeModal = new bootstrap.Modal(modalElement, { backdrop: false });
+        const divPasswordCheckMessage = document.querySelector('div.divPasswordCheckMessage');
+        
+        btnTogglePasswordChange.addEventListener('click', () => {
+            document.getElementById('inputPassword').value = '';
+            document.getElementById('inputPasswordCheck').value = '';
+            divPasswordCheckMessage.innerHTML = ``;
+            passwordChangeModal.show();
+        });
         
         btnPasswordChange.addEventListener('click', () => {
             passwordChange();
         });
-        
-        /*console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
-        btnTogglePasswordChange.addEventListener('click', () => {
-            console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
-            if(divPasswordChange.innerHTML == '') {
-                console.log('divPasswordChange.innerHTML: '+divPasswordChange.innerHTML);
-                let addHtml = `
-                
-                `;
-                divPasswordChange.innerHTML += addtml;
-
-                const btnPasswordChange = document.querySelector('button#btnPasswordChange');
-
-
-            } else {
-
-                divPasswordChange.innerHTML = '';
-            }
-        });*/
         
         btnMemberWithdraw.addEventListener('click', () => {
             memberWithdraw();
@@ -558,10 +552,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card cardfestival col-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -600,7 +594,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" class="btnEachNumber btn">더보기</button>`;
+        html += `
+            <div class="divEndBtn row">
+                <button each-number="${eachNumber}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+                <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
+            </div>
+        `;
         divUFestivalList.innerHTML = html;
 
         const btnEachNumber = document.querySelector('button.btnEachNumber');
@@ -657,10 +656,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card cardfestival col-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}" style="width: 450px; height: 450px;"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -710,7 +709,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        html += `
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
+        </div>
+        `;
         divSFestivalList.innerHTML = html;
         
         const btnEachNumber = document.querySelector('button.btnEachNumber');
@@ -737,9 +741,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card col-6 mt-4">
+            <div class="card cardfestival col-4">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
-                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+                    alt="${festival.feImageMain}"/>
                 <div class="card-body">
                     <table class="inline">
                         <tr>
@@ -779,13 +783,13 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
-                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
-                        <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
+                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-1">상세보기</button></a>
+                        <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-1">삭제</button>
             `;
             if(festival.frApproval == 1) {
                 addHtml += `
-                <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-2">승인</button>
-                <button data-id="${festival.feId}" class="btnToggleRefuseFestival btn btn-outline-secondary mx-2"
+                <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-1">승인</button>
+                <button data-id="${festival.feId}" class="btnToggleRefuseFestival btn btn-outline-secondary mx-1"
                     data-bs-toggle="collapse" data-bs-target="#collapseRefuseFestival${festival.feId}" aria-expanded="false" aria-controls="collapseRefuseFestival${festival.feId}">
                         거절
                     </button>
@@ -809,7 +813,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        html += `
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
+        </div>
+        `;
         divAFestivalList.innerHTML = html;
         const btnDeleteFestivals = document.querySelectorAll('button.btnDeleteFestival');
         for(const btn of btnDeleteFestivals) {
@@ -976,22 +985,26 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function notPostList() {
         const tbodyPostList = document.querySelector('tbody.tbodyPostList');
-        tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
+        const divNotPost = document.querySelector('div.divNotPost');
+        divNotPost.innerHTML = '작성한 게시글이 없습니다.'
+        tbodyPostList.innerHTML = '';
     }
     
     function getPostList(data)
     {
         let html = ``
         const tbodyPostList = document.querySelector("tbody.tbodyPostList");
+        const divNotPost = document.querySelector('div.divNotPost');
+        divNotPost.innerHTML = '';
         for(const post of data) {
             const date = getDateTime(post.poModifiedTime);
             let addHtml = `
                 <tr>
             `
-            if(post.pcId == 1) addHtml += `<td>${post.poId}</td>`
-            else if(post.pcId == 2) addHtml += `<td>공지</td>`
+            if(post.pcId == 1) addHtml += `<td class="tdPostId">${post.poId}</td>`
+            else if(post.pcId == 2) addHtml += `<td class="tdPostNotice">공지</td>`
             addHtml += `  
-                    <td>
+                    <td class="tdPostTitle">
                         <a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a>
             `
             if(role == 1 || role == 2){
@@ -1013,9 +1026,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             </svg>
                         </a>
                     </td>
-                    <td>${post.poAuthor}</td>
-                    <td>${date}</td>
-                    <td>${post.poViews}</td>
+                    <td class="tdPostAuthor">${post.poAuthor}</td>
+                    <td class="tdPostDate">${date}</td>
+                    <td class="tdPostViews">${post.poViews}</td>
                 </tr>
             `
             html += addHtml;
@@ -1115,25 +1128,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
         
     function notReviewList() {
+        const divNotReview = document.querySelector('div.divNotReview');
         const tbodyReviewList = document.querySelector('tbody.tbodyReviewList');
-        tbodyReviewList.innerHTML = '<p>작성한 리뷰가 없습니다.</p>'
+        tbodyReviewList.innerHTML = '';
+        divNotReview.innerHTML = '작성한 리뷰가 없습니다.';
     }
     
     function getReviewList(data)
     {
         let html = ``
         const tbodyReviewList = document.querySelector("tbody.tbodyReviewList");
+        const divNotReview = document.querySelector('div.divNotReview');
+        divNotReview.innerHTML = '';
         for(const review of data) {
             const date = getDateTime(review.reModifiedTime);
             let addHtml = `
                 <tr>
-                    <td>${review.reId}</td>
-                    <td>
+                    <td class="tdReviewId">${review.reId}</td>
+                    <td class="tdReviewTitle">
                         <a href="/festgo/fest/detail?feId=${review.feId}">${review.reTitle}</a>
             `
             if(role == 1){
                 addHtml+= `
-                        <a href="/festgo/fest/detail?feId=${review.feId}">
+                        <a href="/festgo/fest/detail?feId=${review.feId}#btnToggleReview">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
@@ -1150,9 +1167,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             </svg>
                         </a>
                     </td>
-                    <td>${review.reAuthor}</td>
-                    <td>${date}</td>
-                    <td>${review.reGrade}</td>
+                    <td class="tdReviewAuthor">${review.reAuthor}</td>
+                    <td class="tdReviewCreatedTime">${date}</td>
+                    <td class="tdReviewGrade">${review.reGrade}</td>
                 </tr>
             `
             html += addHtml;

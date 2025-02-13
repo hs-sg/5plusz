@@ -30,7 +30,7 @@
         <main>
             <div class="mypage-container">
 	            <div class="row">
-					<div class="col-2 sticky-sidebar d-flex flex-column align-item-center">
+					<div class="col-auto sticky-sidebar d-flex flex-column align-item-center">
 						<button class="btn" id="btnToggleMyProfile">내 프로필</button>
 						<br />
 						<c:if test="${member.mrId eq 1 }">
