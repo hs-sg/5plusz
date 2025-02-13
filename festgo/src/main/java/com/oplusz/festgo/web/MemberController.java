@@ -52,8 +52,12 @@ public class MemberController {
 				session.setAttribute("signedInUser", member.getMeUsername());
 
 				session.setAttribute("mr_id", member.getMrId()); // 역할 ID 저장
-
+				
 				session.setAttribute("memberRole", member.getMrId());
+				
+				if (member.getMeSponsor() != null) {
+					session.setAttribute("memberSponsor", member.getMeSponsor());
+				}
 
 				return ResponseEntity.ok(1);
 			}

@@ -59,11 +59,13 @@ public class AlarmService {
 	}
 	
 	// [사업자용] 축제를 등록할 때 알람 테이블에 데이터 추가
-	public int create(String feName, String meUsername) {
-		log.debug("create(feName={})", feName);
+	public int create(String feName, String meSponsor, String meUsername) {
+		log.debug("create(feName={}, meSponsor={}, meUsername={})", feName, meSponsor, meUsername);
 		
 		int meId = memberDao.selectByUsername(meUsername).getMeId();
-		int frId = frDao.selectFrIdByFeId(festivalDao.selectFeIdByName(feName));
+		log.debug("알람이 등록된 축제: {}", festivalDao.selectFastestFestByFeNameAndMeSponsor(feName, meSponsor));
+		int feId = festivalDao.selectFastestFestByFeNameAndMeSponsor(feName, meSponsor).getFeId();
+		int frId = frDao.selectFrIdByFeId(feId);
 		int alCategory = 2;
 		AlarmCreateDto dto = AlarmCreateDto.builder()
 				.alCategory(alCategory).alSfid(frId).meId(meId)
