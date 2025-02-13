@@ -25,7 +25,7 @@
     </head>
     <body>
         <div class="container-fluid">
-            <c:set var="pageTitle" value="홈 페이지" />
+            <c:set var="pageTitle" value="Fest Go" />
             <%@ include file="./fragments/header.jspf" %>
         </div>
         <main>
@@ -48,10 +48,7 @@
                         <img src="${ mainVisual1Img }" alt="">
                     </a>
                     <div class="swiper-slide-container-box theme">
-					    <div class="main-slide-title">
-					        <span class="sort theme">NEW</span>
-					        <h2>축제는 FestGo에서 찾아보세요!</h2>
-					    </div>
+					    
 					</div>
 
                 </swiper-slide>
@@ -65,9 +62,8 @@
                         <img src="${ mainVisual2Img }" alt="">
                     </a>
                     <div class="swiper-slide-container-box theme">
-					    <div class="main-slide-title">
-					        <span class="sort theme">NEW</span>
-					        <h2>축제는 FestGo에서 찾아보세요!</h2>
+					    
+					        
 					    </div>
 					</div>
 
@@ -87,7 +83,7 @@
         <h2 class="mb-3 text-center keyword-title">
             <em>추천 축제</em> 키워드
         </h2>
-        <ul class="d-flex flex-wrap justify-content-center">
+        <ul class="d-flex flex-wrap justify-content-start">
             <c:forEach var="t" items="${themesInFestival}">
                 <li class="mx-2 my-2">
                     <a href="#" class="linkRecommendTheme px-3 py-2 theme-button">
@@ -98,6 +94,7 @@
         </ul>
     </div>
 </section>
+
 
 
     
@@ -219,5 +216,3 @@
 
     </body>
 </html>
-
-<!--  -->

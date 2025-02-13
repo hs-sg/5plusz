@@ -251,5 +251,3 @@ document.addEventListener('DOMContentLoaded', () => {
         showSearchResult();
     }
 });
-
-/* */

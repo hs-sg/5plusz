@@ -110,5 +110,3 @@
         <script src="${ signUpJS }"></script>
 	</body>
 </html>
-
-<!--  -->

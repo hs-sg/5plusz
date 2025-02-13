@@ -29,4 +29,3 @@ public class UserController {
 		model.addAttribute("member", member);
 	}
 }
-//

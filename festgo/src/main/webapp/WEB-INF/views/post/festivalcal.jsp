@@ -12,6 +12,8 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
+    
+    
         /* 달력 테두리 영역 스타일 */
 		#calendar {
 		    max-width: 90%;
@@ -289,6 +291,56 @@
 		.ended-badge {
 		    background-color: #dc3545;
 		}
+		
+		@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+.festival-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: skyblue;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.festival-list-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: purple;
+    text-align: center;
+    margin: 15px 0;
+}
+
+@font-face {		
+    font-family: 'sansMedium';		
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 축제 카드 제목 (sansMedium 폰트 적용) */
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 축제 카드 세부 정보 (sansLight 폰트 적용) */
+.card-text {
+    font-family: 'sansLight', sans-serif;
+    font-size: 1rem;
+    color: #666;
+}
+
+		
 
 
     </style>
@@ -298,12 +350,14 @@
         <c:set var="pageTitle" value="축제 달력" />
         <%@ include file="/WEB-INF/views/fragments/header.jspf" %>
     </div>
-    <main>
-        <div id="calendar"></div>
-        <h3 class="text-center my-3 festival-list-title">축제 리스트</h3>
-        <hr class="custom-hr">
-        <div id="eventDetails" class="my-4 text-center"></div>
-    </main>
+   <main>
+    <h2 class="festival-title">월간 축제 달력</h2>
+    <div id="calendar"></div>
+    <h3 class="festival-list-title">축제 리스트</h3>
+    <hr class="custom-hr">
+    <div id="eventDetails" class="my-4 text-center"></div>
+</main>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -510,5 +564,3 @@
     </script>
 </body>
 </html>
-
-<!--  -->
