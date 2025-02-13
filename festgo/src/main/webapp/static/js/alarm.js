@@ -228,16 +228,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('markAllRead').disabled = true;
         }
     }
-
-    // 모든 알림 읽음 처리
-    document.getElementById('markAllRead')?.addEventListener('click', function() {
-        // TODO: 서버에 읽음 처리 요청
-        updateNotificationBadge(0);
-    });
-
+    
     // 알림 모달이 열릴 때 이벤트
     const notificationModal = document.getElementById('notificationModal');
-    notificationModal?.addEventListener('show.bs.modal', function() {
+    notificationModal.addEventListener('show.bs.modal', function() {
         // 활성 필터를 기본값(전체)로 변경
         filterButtons.forEach(btn => btn.classList.remove('active'));
         document.getElementById('defaultAlarmFilter').classList.add('active');
