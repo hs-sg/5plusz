@@ -40,6 +40,9 @@ public interface FestivalDao {
     // 축제 이름으로 축제 id 검색
     int selectFeIdByName(String feName);
     
+    public List<FestivalImage> selectFestivalImagesByFeId(Integer feId);
+
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기

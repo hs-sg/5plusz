@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.domain.Theme;
 import com.oplusz.festgo.dto.FestivalCreateDto;
 import com.oplusz.festgo.repository.ThemeDao;
@@ -63,6 +64,14 @@ public class FestivalController {
         model.addAttribute("festival", festival);
         return "fest/detail"; // JSP로 이동
     }
+    
+    @GetMapping("/fest/detail")
+    public String festivalDetail(@RequestParam("feId") Integer feId, Model model) {
+        List<FestivalImage> festivalImages = festivalService.getFestivalImages(feId);
+        model.addAttribute("festivalImages", festivalImages);
+        return "fest/detail";
+    }
+
     
     @Controller
     @RequestMapping("/uploads")

@@ -60,6 +60,10 @@ public class FestivalService {
 		return FestivalWithImagesDto.builder().festival(festival).images(images).build();
 	}
 	
+	public List<FestivalImage> getFestivalImages(Integer feId) {
+	    return festivalsDao.selectFestivalImagesByFeId(feId);
+	}
+	
 	// 상세보기 서비스
 	public Festival read(Integer feId) {
 		log.debug("read = {}", feId);

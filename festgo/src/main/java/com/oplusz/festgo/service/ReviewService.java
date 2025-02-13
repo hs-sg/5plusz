@@ -79,6 +79,10 @@ public class ReviewService {
 	}
 
 //	희성 작성 끝
+	
+	 public double getAverageGrade(Integer feId) {
+	        return reviewDao.selectAverageGrade(feId);
+	    }
 
 	// 해당 아이디의 댓글 (1개)를 검색하는 서비스
 	public ReviewItemDto readById(Integer reId) {
