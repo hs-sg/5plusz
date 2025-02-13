@@ -275,3 +275,15 @@
 <c:url var="alarmJS" value="/js/alarm.js" />
 <script src="${ alarmJS }"></script>
 
+<script>
+document.querySelector('.modal-content').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+const modalInputs = document.querySelectorAll('.modal input');
+modalInputs.forEach(input => {
+    input.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
+</script>

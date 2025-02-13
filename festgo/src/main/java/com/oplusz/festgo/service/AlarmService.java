@@ -130,7 +130,7 @@ public class AlarmService {
 		
 		return listDtos;
 	}
-	
+
 	// 로그인된 사용자의 알람 개수를 불러옴
 	public int read(AlarmNumberDto dto) {
 		log.debug("read(dto={})", dto);
@@ -157,3 +157,4 @@ public class AlarmService {
 		return alarmDao.updateCheck(alId);
 	}
 }
+
