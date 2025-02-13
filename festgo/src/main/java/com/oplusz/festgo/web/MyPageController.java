@@ -259,8 +259,16 @@ public class MyPageController {
 	@DeleteMapping("/delpost/{poId}")
 	public void deletePostByPoId(@PathVariable("poId") String poId) {
 		Integer intPoId = Integer.parseInt(poId);
-		log.debug("deletePostByPoId()");
+		log.debug("deletePostByPoId(poId={})", poId);
 		postService.delete(intPoId);
+	}
+	
+	//  마이페이지 상에 리뷰 삭제하기
+	@DeleteMapping("/delreview/{reId}")
+	public void deleteReviewByReId(@PathVariable("reId") String reId) {
+		Integer intReId = Integer.parseInt(reId);
+		log.debug("deleteReviewByReId(reId={})", reId);
+		reviewService.delete(intReId);
 	}
 	
 	// 마이페이지 상에 유저가 등록한 리뷰 갯수 가져오기

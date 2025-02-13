@@ -4,8 +4,6 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oplusz.festgo.repository.AlarmDao">
 
-
-
 <!-- 희성 작성 시작 -->
 
     <insert id="insertRequest">
