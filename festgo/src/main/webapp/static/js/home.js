@@ -102,79 +102,79 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
             
-	// fetch로 불러온 축제 상세정보(json 객체)을 이용해서 축제 카드를 추가하는 메서드
-	function festivalDataToCard(data) {
-	    return new Promise(function(resolve, reject) {
-	        console.log("받은 데이터:", data);
-	        
-	        if (jsonDataForSearch.startIndexNum === 0) eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
+   // fetch로 불러온 축제 상세정보(json 객체)을 이용해서 축제 카드를 추가하는 메서드
+   function festivalDataToCard(data) {
+       return new Promise(function(resolve, reject) {
+           console.log("받은 데이터:", data);
+           
+           if (jsonDataForSearch.startIndexNum === 0) eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
 
-	        if (data && data.length > 0) {
-	            const rowDiv = document.createElement('div');
-	            rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
-	            
-	            const today = new Date(); // 오늘 날짜
-	            today.setHours(0, 0, 0, 0); // 시간 정보 초기화
-	            
-	            data.forEach(function(fest) {
-	                var eventCol = document.createElement('div');
-	                eventCol.classList.add('col');
-	                
-	                var eventDiv = document.createElement('div');
-	                eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-	                
-	                // 축제 시작 및 종료 날짜 변환
-	                const startDate = new Date(fest.feStartDate);
-	                const endDate = new Date(fest.feEndDate);
-	                
-	                // 상태 배지 추가
-	                let badgeHTML = '';
-	                if (today >= startDate && today <= endDate) {
-	                    badgeHTML = '<span class="badge ongoing-badge">개최중</span>';
-	                } else if (today < startDate) {
-	                    badgeHTML = '<span class="badge upcoming-badge">예정</span>';
-	                } else if (today > endDate) {
-	                    badgeHTML = '<span class="badge ended-badge">종료</span>';
-	                }
+           if (data && data.length > 0) {
+               const rowDiv = document.createElement('div');
+               rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
+               
+               const today = new Date(); // 오늘 날짜
+               today.setHours(0, 0, 0, 0); // 시간 정보 초기화
+               
+               data.forEach(function(fest) {
+                   var eventCol = document.createElement('div');
+                   eventCol.classList.add('col');
+                   
+                   var eventDiv = document.createElement('div');
+                   eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
+                   
+                   // 축제 시작 및 종료 날짜 변환
+                   const startDate = new Date(fest.feStartDate);
+                   const endDate = new Date(fest.feEndDate);
+                   
+                   // 상태 배지 추가
+                   let badgeHTML = '';
+                   if (today >= startDate && today <= endDate) {
+                       badgeHTML = '<span class="badge ongoing-badge">개최중</span>';
+                   } else if (today < startDate) {
+                       badgeHTML = '<span class="badge upcoming-badge">예정</span>';
+                   } else if (today > endDate) {
+                       badgeHTML = '<span class="badge ended-badge">종료</span>';
+                   }
 
-	                // 이미지 URL 설정
-	                var imageUrl = fest.feImageMain
-	                    ? contextPath + '/uploads/' + fest.feImageMain
-	                    : contextPath + '/resources/images/default-festival.jpg';
+                   // 이미지 URL 설정
+                   var imageUrl = fest.feImageMain
+                       ? contextPath + '/uploads/' + fest.feImageMain
+                       : contextPath + '/resources/images/default-festival.jpg';
 
-	                // 카드 내용 설정
-	                eventDiv.innerHTML =
-	                    '<div class="position-relative">' +
-	                        badgeHTML +
-	                        '<img src="' + imageUrl + '" alt="" ' +
-	                        'class="card-img-top" style="height: 200px; object-fit: cover;">' +
-	                    '</div>' +
-	                    '<div class="card-body">' +
-	                        '<h5 class="card-title">' + fest.feName + '</h5>' +
-	                        '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-	                        '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
-	                    '</div>';
+                   // 카드 내용 설정
+                   eventDiv.innerHTML =
+                       '<div class="position-relative">' +
+                           badgeHTML +
+                           '<img src="' + imageUrl + '" alt="" ' +
+                           'class="card-img-top" style="height: 200px; object-fit: cover;">' +
+                       '</div>' +
+                       '<div class="card-body">' +
+                           '<h5 class="card-title">' + fest.feName + '</h5>' +
+                           '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                           '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
+                       '</div>';
 
-	                // 카드 클릭 시 상세 페이지 이동
-	                eventDiv.onclick = function () {
-	                    window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
-	                };
+                   // 카드 클릭 시 상세 페이지 이동
+                   eventDiv.onclick = function () {
+                       window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
+                   };
 
-	                eventCol.appendChild(eventDiv);
-	                rowDiv.appendChild(eventCol);
-	            });
-	            
-	            eventDetailsEl.appendChild(rowDiv);
-	        } else {
-	            eventDetailsEl.innerHTML = 
-	                '<div class="alert alert-info" role="alert">' +
-	                '해당 날짜에 진행하는 축제가 없습니다.' +
-	                '</div>';
-	        }
-	        
-	        resolve(data);
-	    });
-	}
+                   eventCol.appendChild(eventDiv);
+                   rowDiv.appendChild(eventCol);
+               });
+               
+               eventDetailsEl.appendChild(rowDiv);
+           } else {
+               eventDetailsEl.innerHTML = 
+                   '<div class="alert alert-info" role="alert">' +
+                   '해당 날짜에 진행하는 축제가 없습니다.' +
+                   '</div>';
+           }
+           
+           resolve(data);
+       });
+   }
 
 
     // 더보기 버튼을 만들지 판단하는 메서드
@@ -189,7 +189,11 @@ document.addEventListener('DOMContentLoaded', () => {
             axios
             .post(uri, jsonData)
             .then(response => handleReloadData(response)) // 더보기 버튼이 필요한지 판단
-            .then(plusIndex => { //
+            .then(plusIndex => {
+                if (plusIndex === 0) { // 더 추가할 축제가 없으면 더보기 버튼을 숨김
+                    divShowMoreFestival.classList.add('d-none');
+                    return;
+                }
                 startIndexNum += plusIndex;
                 console.log("startIndexNum: ", startIndexNum); 
                 if (startIndexNum === 12 && isBtnShowMoreFestivalHasEventListener === false) {

@@ -16,4 +16,5 @@ public interface FestRequestDao {
 	
 	int selectFrIdByFeId(int feId);
 	FestRequest selectFestRequestByFeId(int feId);
+
 }

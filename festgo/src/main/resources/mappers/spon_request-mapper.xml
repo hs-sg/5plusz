@@ -28,7 +28,7 @@
         set sr_approval = 2, sr_cause = #{srCause}
         where me_id = #{meId}
     </update>
-    
+        
     <select id="countSponsorBySrApproval">
         select count(*) from spon_request where sr_approval = #{srApproval}
     </select>

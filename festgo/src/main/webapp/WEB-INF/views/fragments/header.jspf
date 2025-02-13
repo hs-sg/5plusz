@@ -212,17 +212,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="notification-filters">
-                        <button class="filter-btn active" data-filter="all">전체</button>
+                    <button class="filter-btn active" id="defaultAlarmFilter" data-filter="all">전체</button>
                         <button class="filter-btn" data-filter="festival">🎉 축제</button>
                         <button class="filter-btn" data-filter="community">👥 계정</button>
                     </div>
-                    <div class="empty-state">
-                        <div class="empty-state-icon">
-                            <i class="bi bi-bell-slash"></i>
-                        </div>
-                        <h6>알림이 없습니다</h6>
-                        <p class="text-muted">새로운 알림이 오면 여기에 표시됩니다</p>
-                    </div>
+                    
                     <div class="list-group" id="notificationList" style="display: none;">
                         <!-- 동적으로 알림 항목이 추가됩니다 -->
                     </div>
@@ -269,54 +263,28 @@
     <!-- signIn.js 파일 (로그인 기능 관련 스크립트) -->
     <c:url var="signInJS" value="/js/signIn.js" />
     <script src="${ signInJS }"></script>
+	<script>
+    const alMeUsername = `${ signedInUser }`;
+    const alMrId = Number(${ memberRole });
+</script>
 
-    <!-- 알림 관련 JavaScript -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 초기 알림 개수 설정 (테스트용)
-        updateNotificationBadge(3);
-        // 필터 버튼 이벤트
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-        // 알림 배지 상태 관리 함수
-        function updateNotificationBadge(count) {
-            const badge = document.getElementById('notificationBadge');
-            if (badge) {
-                if (count > 0) {
-                    badge.style.display = 'block';
-                    badge.textContent = count;
-                    document.getElementById('markAllRead')?.removeAttribute('disabled');
-                } else {
-                    badge.style.display = 'none';
-                    document.getElementById('markAllRead')?.setAttribute('disabled', 'disabled');
-                }
-            }
-        }
-        document.getElementById('markAllRead')?.addEventListener('click', function() {
-            updateNotificationBadge(0);
-        });
-        const notificationModal = document.getElementById('notificationModal');
-        notificationModal?.addEventListener('show.bs.modal', function() {
-            loadNotifications();
-        });
-        function loadNotifications() {
-            console.log("알림 데이터를 불러옵니다.");
-            updateNotificationBadge(3);
-        }
-        const loginRequired = "<c:out value='${loginRequired}'/>";
-        if (loginRequired === "true") {
-            const linkSignin = document.getElementById("linkSignin");
-            if (linkSignin) {
-                linkSignin.click();
-            }
-        }
+<!-- 알림 관련 JavaScript -->
+<c:url var="alarmJS" value="/js/alarm.js" />
+<script src="${ alarmJS }"></script>
+
+<script>
+document.querySelector('.modal-content').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+const modalInputs = document.querySelectorAll('.modal input');
+modalInputs.forEach(input => {
+    input.addEventListener('click', function(e) {
+        e.stopPropagation();
     });
-    </script>
+});
+</script>
+    
 
     <!-- Bootstrap JS Bundle (Popper 포함) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

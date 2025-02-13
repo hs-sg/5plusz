@@ -74,10 +74,12 @@ public interface PostDao {
 	List<Post> readPostVariableByMeUsername(Integer minPostNum, Integer maxPostNum, String meUsername);
 	Integer countAllPosts();
 	Integer countPostsByMeUsername(String meUsername);
-
 	
+//	희성 작성 끝
+
 
 	
 	
 //	희성 작성 끝
 }
+

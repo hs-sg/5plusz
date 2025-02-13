@@ -57,6 +57,8 @@ public class FestivalCreateDto {
     private LocalDateTime feCreatedTime;
     private LocalDateTime feModifiedTime;
     private List<String> fiImages;
+    private String feLat;  // 위도
+    private String feLong; // 경도
 
     // Festivals DTO를 Model로 변환
     public Festival toFestivalEntity() {
@@ -106,6 +108,8 @@ public class FestivalCreateDto {
                 .feHomepage(feHomepage)
                 .feImageMain(feImageMain)
                 .fePoster(fePoster)
+                .feLat(feLat)  // 위도 추가
+                .feLong(feLong) // 경도 추가
                 .feCreatedTime(feCreatedTime)
                 .feModifiedTime(feModifiedTime)
                 .build();
@@ -133,6 +137,8 @@ public class FestivalCreateDto {
                 ", feEndDate=" + feEndDate +
                 ", feAddress='" + feAddress + '\'' +
                 ", lcId=" + lcId +
+                ", feLat=" + feLat +  // 확인!
+                ", feLong=" + feLong + // 확인!
                 '}';
     }
 
