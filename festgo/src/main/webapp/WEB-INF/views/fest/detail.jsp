@@ -2,6 +2,7 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -134,6 +135,48 @@
                 max-width: 100%;
             }
         }
+        
+        /* 캐러셀 화살표 스타일 조정 */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            filter: invert(100%); /* 화살표 색상을 흰색으로 변경 */
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 추가 */
+            border-radius: 50%; /* 동그란 버튼 모양 */
+            width: 50px;
+            height: 50px;
+        }
+        
+        /* 화살표 버튼 크기 조정 */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 8%; /* 버튼 크기 키우기 */
+        }
+        
+        .festival-img {
+            width: 100%; /* 반응형 크기 자동 조정 */
+            max-width: 180px;  /* 최대 너비 설정 */
+            height: auto; /* 비율 유지 */
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        
+        .row-cols-3 .col {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        
+        .image-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 200px;
+            margin: 10px;
+        }
+
         </style>
     </head>
     <body>
@@ -141,8 +184,10 @@
             <c:set var="pageTitle" value="축제 상세 정보" />
             <%@ include file="../fragments/header.jspf" %>
         </div>
+        
+        <input type="hidden" id="festivalId" value="${festival.feId}" />
 
-        <div class="main-visual"></div>
+        <div class="main-visual" style="background-image: url('${pageContext.request.contextPath}/uploads/${festival.feImageMain}')"></div>
 
         <main class="container content">
             <input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
@@ -174,18 +219,39 @@
                 });
             </script>
             
+            <script>
+                const contextPath = '${pageContext.request.contextPath}';
+            </script>
+
             <h3 style="margin-top: 40px;">📖 축제 내용</h3>
-            <div class="row">
-                <c:if test="${not empty festivalImages}">
-                    <c:forEach var="image" items="${festivalImages}">
-                        <div class="row" id="festivalImagesContainer">
-                            <div class="col-md-4 mb-3">
-                                <img src="/festgo/uploads/${image.fiImages}" alt="Festival Image" class="img-fluid">
-                            </div>
+            <c:if test="${not empty festivalImages}">
+                <div id="festivalImagesContainer" class="container">
+                    <div class="row g-3">
+                        <c:forEach var="image" items="${festivalImages}" varStatus="status">
+                            <c:if test="${status.index < 3}">
+                                <!-- ✅ 첫 3개 이미지만 표시 -->
+                                <div class="col-md-4 text-center">
+                                    <img src="${pageContext.request.contextPath}/uploads/${image.fiImages}" 
+                                         class="festival-img img-fluid"
+                                         alt="축제 이미지"
+                                         onclick="openImageModal(3)"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#imageModal">
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+            
+                    <!-- ✅ 4개 이상일 경우 '더 많은 사진 보기' 버튼 추가 -->
+                    <c:if test="${festivalImages.size() > 3}">
+                        <div class="text-center mt-3">
+                            <button class="btn btn-outline-primary" onclick="openImageModal(3)">
+                                더 많은 사진 보기
+                            </button>
                         </div>
-                    </c:forEach>
-                </c:if>
-            </div>
+                    </c:if>
+                </div>
+            </c:if>
             <p><strong>${festival.feContents}</strong></p>
             
             <h3 style="margin-top: 40px;">📍 축제 위치</h3>
@@ -202,7 +268,7 @@
 
             <!-- 이미지 모달 -->
             <div class="modal fade" id="imageModal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">축제 이미지</h5>
@@ -212,14 +278,14 @@
                             <!-- 캐러셀 -->
                             <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner" id="carouselInner">
-                                    <!-- 동적으로 이미지 삽입 -->
+                                    <!-- 동적으로 이미지가 추가될 자리 -->
                                 </div>
-                                <!-- 이전 / 다음 버튼 -->
+                                <!-- 이전/다음 버튼 -->
                                 <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-prev-icon"></span>
                                 </button>
                                 <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-next-icon"></span>
                                 </button>
                             </div>
                         </div>
@@ -390,7 +456,7 @@
     <c:url var="festivalImageModalJS" value="/js/festival-image-modal.js" /> 
     <script src="${festivalImageModalJS}"></script>
     
-    <c:url var="openFestivalImageModalJS" value="/js/open-fesival-image-modal.js" /> 
+    <c:url var="openFestivalImageModalJS" value="/js/open-festival-image-modal.js" /> 
     <script src="${openFestivalImageModalJS}"></script>
 
     <!-- Bootstrap JS -->

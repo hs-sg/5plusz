@@ -36,7 +36,7 @@ public interface FestivalDao {
     
     // 최근에 등록된 축제 (5개)
     List<Festival> selectFestivalByCreatedTime();
-    
+     
     // 축제 이름으로 축제 id 검색
     int selectFeIdByName(String feName);
     

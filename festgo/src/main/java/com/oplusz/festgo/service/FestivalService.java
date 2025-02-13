@@ -61,7 +61,13 @@ public class FestivalService {
 	}
 	
 	public List<FestivalImage> getFestivalImages(Integer feId) {
-	    return festivalsDao.selectFestivalImagesByFeId(feId);
+	    List<FestivalImage> images = festivalsDao.selectFestivalImagesByFeId(feId);
+	    if (images == null || images.isEmpty()) {
+	        log.warn("⚠️ festivalImages 테이블에서 feId={}의 데이터를 찾을 수 없음", feId);
+	    } else {
+	        log.debug("✅ festivalImages 조회 성공: {}", images);
+	    }
+	    return images;
 	}
 	
 	// 상세보기 서비스

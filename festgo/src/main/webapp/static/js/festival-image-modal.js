@@ -1,29 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const festivalId = document.getElementById("festivalId").value; // JSP에서 hidden input으로 전달받기
+    const festivalIdElement = document.getElementById("festivalId");
 
-    fetch(`/festival/${festivalId}/images`)
-        .then(response => response.json())
-        .then(data => {
-            console.log("이미지 리스트:", data);
-            window.festivalImages = data; // 전역 변수에 저장
+    if (!festivalIdElement) {
+        console.error("❌ festivalId 요소를 찾을 수 없습니다.");
+        return;
+    }
 
-            // 이미지 리스트를 동적으로 삽입
-            const imageContainer = document.getElementById("festivalImagesContainer");
-            if (imageContainer) {
-                imageContainer.innerHTML = ""; // 기존 이미지 초기화
-                data.forEach((image) => {
-                    imageContainer.innerHTML += `
-                        <div class="col-md-4 mb-3">
-                            <img src="/uploads/${image.fiImages}" 
-                                 class="img-thumbnail festival-img"
-                                 alt="축제 이미지"
-                                 data-bs-toggle="modal" 
-                                 data-bs-target="#imageModal"
-                                 onclick="openImageModal('${image.fiImages}')">
-                        </div>
-                    `;
-                });
+    const festivalId = festivalIdElement.value;
+    console.log(`🔍 요청할 festivalId: ${festivalId}`);
+
+    // 서버에서 축제 이미지 리스트 가져오기
+    fetch(`/festgo/fest/detail/images/${festivalId}`)
+        .then(response => {
+            console.log(`📢 서버 응답 상태: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
+            return response.json();
         })
-        .catch(error => console.error("이미지를 불러오는 중 오류 발생:", error));
+        .then(data => {
+            if (!Array.isArray(data)) {
+                throw new Error("❌ Invalid JSON format received");
+            }
+            console.log("🎉 성공적으로 받은 이미지 리스트:", data);
+
+            const imageContainer = document.getElementById("festivalImagesContainer");
+            if (!imageContainer) {
+                console.error("❌ 이미지 컨테이너를 찾을 수 없습니다.");
+                return;
+            }
+
+            imageContainer.innerHTML = ""; // 기존 내용 초기화
+            data.forEach((image) => {
+                imageContainer.innerHTML += `
+                    <div class="col-md-4 mb-3">
+                        <img src="${contextPath}/uploads/${image.fiImages}" 
+                             class="img-thumbnail festival-img"
+                             alt="축제 이미지"
+                             data-bs-toggle="modal" 
+                             data-bs-target="#imageModal"
+                             onclick="openImageModal('${image.fiImages}')">
+                    </div>
+                `;
+
+            });
+        })
+        .catch(error => console.error("❌ 이미지를 불러오는 중 오류 발생:", error));
 });
