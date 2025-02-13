@@ -9,8 +9,8 @@
 <!-- 희성 작성 시작 -->
 
     <insert id="insertRequest">
-        insert into alarm (al_category, al_sfid, me_id, al_status, al_created_time)
-        values (0, #{alSfid}, #{meId}, #{alStatus}, systimestamp)
+        insert into alarm (al_category, al_sfid, me_id, al_created_time)
+        values (0, #{alSfid}, #{meId}, systimestamp)
     </insert>
     
     <update id="updateProcess">
@@ -20,9 +20,35 @@
     
     <update id="updateCheck">
         update alarm set al_status = 2
-        where al_category = #{alCategory} and al_sfid = #{alSfid}
+        <!-- 수정 by 하신 : 검색조건을 al_id로 변경 -->
+        where al_id = #{alId}
+        <!--  where al_category = #{alCategory} and al_sfid = #{alSfid} -->
     </update>
     
+    <select id="selectAllByMeId" resultType="Alarm">
+        select * from alarm 
+        where me_id = #{meId} 
+        order by al_created_time desc
+    </select>
+    
+    <select id="selectEachByMeId" resultType="Alarm">
+        select * from alarm
+        where me_id = #{meId}
+        order by al_created_time desc
+        offset #{number} * #{each} row fetch next #{each} rows only
+    </select>
+    
+    <select id="countStatus1ByMeId">
+        select count(*) from alarm where me_id = #{meId} and al_status = 1
+    </select>
 <!-- 희성 작성 끝 -->
 
+    <select id="selectStatus1ByMeId" resultType="Alarm">
+        select *
+        from alarm 
+        where me_id = #{meId} 
+            and al_status = 1
+        order by al_created_time desc
+    </select>
+    
 </mapper>

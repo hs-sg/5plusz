@@ -1,6 +1,6 @@
 /**
  * signinpage.jsp 파일에 포함
- */
+
 
 document.addEventListener("DOMContentLoaded", () => {
     // 로그인에 사용하는 form 태그 요소
@@ -25,3 +25,4 @@ document.addEventListener("DOMContentLoaded", () => {
         formSignIn.submit;
     }
 })
+*/
