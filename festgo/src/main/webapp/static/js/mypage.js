@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const divReviewList = document.getElementById('divReviewList');
     const divSponsorCheckList = document.getElementById('divSponsorCheckList');
     
+    divFestivalList.style.overflow = 'hidden';
+    
     myProfile();
     
     btnToggleMyProfile.addEventListener('click', () => {
@@ -114,21 +116,27 @@ document.addEventListener('DOMContentLoaded', () => {
             break;
                 
             case `3` :
+/*                const uri = `../api/mypage/festcnt`
+                axios
+                .get(uri)
+                .then((response) => {
+                    
+                })
+                .error((error) => { console.log(error);
+                });*/
                 html += `
                 <div class="divFestivalbtn">
-                            <input type="button" class="btnAllAFestival btn" value="전체"/>
-                            <input type="button" class="btnPostAFestival btn" value="게시중"/>
-                            <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
-                            <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
-                </div>
-                <div class="container">     
+                        <button class="btnAllAFestival btn">전체</button>
+                        <input type="button" class="btnPostAFestival btn" value="게시중"/>
+                        <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
+                        <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
+                </div>    
                         <div id="divAFestivalList" class="row justify-content-center"></div>
-                </div>
                 `;
                 
                 divFestivalList.innerHTML = html;
                 
-                const btnAllAFestival = document.querySelector('input.btnAllAFestival');
+                const btnAllAFestival = document.querySelector('button.btnAllAFestival');
                 const btnPostAFestival = document.querySelector('input.btnPostAFestival');
                 const btnWaitAFestival = document.querySelector('input.btnWaitAFestival');
                 const btnRefuseAFestival = document.querySelector('input.btnRefuseAFestival');
@@ -179,10 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             </tbody>
                         </table>
                     </div>
-                    <div class="divNotPost text-center"></div>
+                    <div class="divNotPost text-center m-3"></div>
                     <div class="row justify-content-center">
-                        <div class="btn-group col-2 mt-3" role="group">
-                            <button type="button" class="pbtnPrevious btn btn-outline-dark">Previous</button>
+                        <div class="btn-group col-2 m-3 translate-middle" role="group">
+                            <button type="button" class="pbtnPrevious btn btn-outline-dark">Prev</button>
                             <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
                             <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
                             <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
@@ -254,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tbody class="tbodyReviewList"></tbody>
                     </table>
                 </div>
-                <div class="divNotReview text-center"></div>
+                <div class="divNotReview text-center m-3"></div>
                 <div class="row justify-content-center">
-                    <div class="btn-group col-2 mt-3" role="group">
+                    <div class="btn-group col-2 mt-3 translate-middle" role="group">
                         <button type="button" class="rbtnPrevious btn btn-outline-dark">Prev</button>
                         <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
                         <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
@@ -595,10 +603,10 @@ document.addEventListener('DOMContentLoaded', () => {
             html += addHtml;
         }
         html += `
-            <div class="divEndBtn row">
-                <button each-number="${eachNumber}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
-                <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
-            </div>
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
+        </div>
         `;
         divUFestivalList.innerHTML = html;
 
@@ -712,7 +720,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
         <div class="divEndBtn row">
             <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
-            <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
         </div>
         `;
         divSFestivalList.innerHTML = html;
@@ -816,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
         <div class="divEndBtn row">
             <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
-            <a href="#festTop" class="d-inline-flex justify-content-end"><input type="button" class="btn btnTop my-3" value="▲ 맨위로"/></a>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
         </div>
         `;
         divAFestivalList.innerHTML = html;

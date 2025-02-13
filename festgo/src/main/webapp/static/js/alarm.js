@@ -222,10 +222,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (count > 0) {
             badge.style.display = 'block';
             badge.textContent = count;
-            document.getElementById('markAllRead').disabled = false;
         } else {
             badge.style.display = 'none';
-            document.getElementById('markAllRead').disabled = true;
         }
     }
     
