@@ -37,8 +37,8 @@ public class HomeController {
 		
 		// 홈페이지 메인 비주얼 위치에 출력될 축제들의 feId
 		List<Integer> feIds = new ArrayList<Integer>();
-		feIds.add(184);
-		feIds.add(185);
+		feIds.add(253);
+		feIds.add(252);
 		// 홈페이지 메인 비주얼 위치에 출력될 축제
 		List<Festival> listFestivalForMainVisual = festivalService.read(feIds);
 		

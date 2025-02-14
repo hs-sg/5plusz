@@ -1,3 +1,5 @@
+@create
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>   
@@ -63,7 +65,9 @@
                 </div>
                 <div class="mb-3">
                     <label for="poAuthor" class="form-label">작성자</label>
+
                     <input type="text" id="poAuthor" name="poAuthor" class="form-control" value="${signedInUser}"required>
+
                 </div>
     
                 <div class="mb-3">
