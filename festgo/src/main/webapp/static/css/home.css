@@ -84,12 +84,13 @@ input.searchLine::placeholder {
     color: gray;
 }
 
-/* 예시: Bootstrap의 네비게이션 바(menu) 적용 */
+/* 예시: Bootstrap의 네비게이션 바(menu) 적용 
 .navbar, 
 .navbar-brand, 
 .navbar-nav .nav-link {
     font-family: 'sansMedium', sans-serif;
 }
+*/
 /* ------------------------ 추가된 폰트 및 스타일 끝 ------------------------ */
 
 
@@ -566,4 +567,27 @@ input.searchLine::placeholder {
     font-size: 1.4rem;
     font-weight: 300;
     color: #333;
+}
+
+/*----*/
+/* 쇼케이스 섹션 이미지 스타일 */
+.mainVisual {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.mainVisual img {
+    width: 100%;
+    height: 500px; /* 원하는 높이로 조정 가능 */
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.mainVisual img:hover {
+    transform: scale(1.05);
+}
+
+.mainSlide{
+    border-radius: 20px;
 }

@@ -16,6 +16,21 @@
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
             crossorigin="anonymous" />
         <style>
+            @font-face {
+                font-family: 'dohyeon';
+                src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+            }
+            
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }
+            
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }
+            
             div#signup {
                 max-width: 450px;
             }
@@ -23,10 +38,11 @@
             input.dangerBorder {
                 border-color:red;
             }
+            
         </style>
 	</head>
 	<body>
-		<div class="container-fluid">
+		<div class="container-fluid" style="font-family: 'sansMedium';">
             <c:set var = "pageTitle" value = "회원가입" />
             <%@ include file="../fragments/header.jspf" %>
         </div>
@@ -108,5 +124,10 @@
             
         <c:url var="signUpJS" value="/js/signUp.js"/>
         <script src="${ signUpJS }"></script>
+        
+        <script>
+            const navbar = document.querySelector('nav.navbar');
+            navbar.classList.add('d-none');
+        </script>
 	</body>
 </html>

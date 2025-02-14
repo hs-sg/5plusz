@@ -30,7 +30,7 @@ const FestivalDate = {
             buttonClass = "btn-secondary";
         }
 
-        return `<button class="btn ${buttonClass} btn-sm" style="font-weight:bold;">${ddayText}</button>`;
+        return `<button class="btn ${buttonClass} btn-sm">${ddayText}</button>`;
     },
 
     updateFestivalDate: (startDateStr, endDateStr) => {

@@ -92,6 +92,14 @@
                 display: block;
                 margin: auto;
             }
+            
+            .form-control {
+                white-space: pre-wrap;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+                display: inline-block;
+            }
             </style>
 
 </head>
@@ -116,9 +124,7 @@
                         </div>
                         <div class="mt-2">
                             <label class="form-label" for="content">내용</label>
-                            <div  style="font-family:'sansLight" class="form-control" id="content" style="min-height: 200px; overflow-y: auto;">
-                                <c:out value="${fn:trim(postWithAttachments.post.poContent)}"/>
-                            </div>
+                            <div  style="font-family:'sansLight" class="form-control" id="content" style="min-height: 200px; overflow-y: auto;"><c:out value="${fn:trim(postWithAttachments.post.poContent)}"/></div>
                         </div>
 
                         <!-- 이미지 미리보기 영역 -->

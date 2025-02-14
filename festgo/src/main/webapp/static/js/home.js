@@ -117,51 +117,53 @@ document.addEventListener('DOMContentLoaded', () => {
                today.setHours(0, 0, 0, 0); // 시간 정보 초기화
                
                data.forEach(function(fest) {
-                   var eventCol = document.createElement('div');
-                   eventCol.classList.add('col');
-                   
-                   var eventDiv = document.createElement('div');
-                   eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-                   
-                   // 축제 시작 및 종료 날짜 변환
-                   const startDate = new Date(fest.feStartDate);
-                   const endDate = new Date(fest.feEndDate);
-                   
-                   // 상태 배지 추가
-                   let badgeHTML = '';
-                   if (today >= startDate && today <= endDate) {
-                       badgeHTML = '<span class="badge ongoing-badge">개최중</span>';
-                   } else if (today < startDate) {
-                       badgeHTML = '<span class="badge upcoming-badge">예정</span>';
-                   } else if (today > endDate) {
-                       badgeHTML = '<span class="badge ended-badge">종료</span>';
-                   }
+                var eventCol = document.createElement('div');
+                eventCol.classList.add('col');
 
-                   // 이미지 URL 설정
-                   var imageUrl = fest.feImageMain
-                       ? contextPath + '/uploads/' + fest.feImageMain
-                       : contextPath + '/resources/images/default-festival.jpg';
+                var eventDiv = document.createElement('div');
+                eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
 
-                   // 카드 내용 설정
-                   eventDiv.innerHTML =
-                       '<div class="position-relative">' +
-                           badgeHTML +
-                           '<img src="' + imageUrl + '" alt="" ' +
-                           'class="card-img-top" style="height: 200px; object-fit: cover;">' +
-                       '</div>' +
-                       '<div class="card-body">' +
-                           '<h5 class="card-title">' + fest.feName + '</h5>' +
-                           '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-                           '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
-                       '</div>';
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
 
-                   // 카드 클릭 시 상세 페이지 이동
-                   eventDiv.onclick = function () {
-                       window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
-                   };
+                const startDate = new Date(fest.feStartDate);
+                startDate.setHours(0, 0, 0, 0);
 
-                   eventCol.appendChild(eventDiv);
-                   rowDiv.appendChild(eventCol);
+                const endDate = new Date(fest.feEndDate);
+                endDate.setHours(0, 0, 0, 0);
+
+                // 상태 배지 추가
+                let badgeHTML = '';
+                if (today >= startDate && today <= endDate) {
+                    badgeHTML = '<span class="ongoing-badge">개최중</span>';
+                } else if (today < startDate) {
+                    badgeHTML = '<span class="upcoming-badge">예정</span>';
+                } else if (today > endDate) {
+                    badgeHTML = '<span class="ended-badge">종료</span>';
+                }
+
+                var imageUrl = fest.feImageMain
+                    ? contextPath + '/uploads/' + fest.feImageMain
+                    : contextPath + '/resources/images/default-festival.jpg';
+
+                eventDiv.innerHTML =
+                    '<div class="position-relative">' +
+                    badgeHTML +
+                    '<img src="' + imageUrl + '" alt="" ' +
+                    'class="card-img-top" style="height: 200px; object-fit: cover;">' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<h5 class="card-title">' + fest.feName + '</h5>' +
+                    '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                    '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
+                    '</div>';
+
+                eventDiv.onclick = function () {
+                    window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
+                };
+
+                eventCol.appendChild(eventDiv);
+                rowDiv.appendChild(eventCol);
                });
                
                eventDetailsEl.appendChild(rowDiv);

@@ -59,6 +59,14 @@
                 transition: opacity 0.5s ease-in-out;
             }
             
+            .festival-contents {
+                white-space: pre-wrap;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+                display: inline-block;
+            }
+            
             .festival-poster-container {
                 display: flex;
                 justify-content: flex-start; /* 왼쪽 정렬 */
@@ -82,7 +90,6 @@
             .homepage-link {
                 color: #007bff; /* 파란색 */
                 text-decoration: none; /* 밑줄 제거 */
-                font-weight: bold; /* 굵게 표시 */
             }
             
             .homepage-link:hover {
@@ -177,7 +184,6 @@
         
         .additional-images-count {
             font-size: 16px;
-            font-weight: bold;
             color: white;
             background: rgba(0, 0, 0, 0.7); /* 반투명 검정 배경 */
             border-radius: 10px;
@@ -239,7 +245,7 @@
         
             <h1 style="margin-bottom: 20px; margin-top: 40px;">🎆 ${festival.feName}</h1>
 
-            <h3 style="margin-top: 40px;">📅</h3>
+            <h3 style="margin-top: 40px;">📅 일정</h3>
             
             <div id="festival-dday" class="mt-3"></div>
             <div id="festival-date" class="mt-2"></div>
@@ -268,7 +274,7 @@
                 const contextPath = '${pageContext.request.contextPath}';
             </script>
 
-            <h3 style="margin-top: 40px;">🖼️</h3>
+            <h3 style="margin-top: 40px;">🖼️ 축제 상세 이미지</h3>
             <c:if test="${not empty festivalImages}">
                 <div class="container mt-4 mb-4">
                     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -342,7 +348,8 @@
             
             <hr style="border: 1px solid #ddd; width: 100%;">
             
-            <p><h3>📄 </h3><strong "style="margin-top: 20px;">${festival.feContents}</strong></p>
+            <h3 class="mb-3">📄 상세 내용</h3>
+            <p class="festival-contents">${festival.feContents}</p>
             
             <hr style="border: 1px solid #ddd; width: 100%;">
             
@@ -354,19 +361,19 @@
             
             <div class="row">
                 <div class="festival-info">
-                    <p><strong><span class="icon">📍</span> ${festival.feAddress}</strong></p>
-                    <p><strong><span class="icon">💰</span> ${festival.feFee}</strong></p>
-                    <p><strong><span class="icon">📢</span> ${festival.meSponsor}</strong></p>
-                    <p><strong><span class="icon">📞</span> ${festival.fePhone}</strong></p>
-                    <p><strong><span class="icon">🌐</span> 
+                    <p><span class="icon">📍</span> ${festival.feAddress}</p>
+                    <p><span class="icon">💰</span> ${festival.feFee}</p>
+                    <p><span class="icon">📢</span> ${festival.meSponsor}</p>
+                    <p><span class="icon">📞</span> ${festival.fePhone}</p>
+                    <p><span class="icon">🌐</span> 
                         <a href="${festival.feHomepage}" target="_blank" class="homepage-link">${festival.feHomepage}</a>
-                    </strong></p>
+                    </p>
                 </div>
             </div>
             
             <hr style="border: 1px solid #ddd; width: 100%;">
             
-            <h3 style="margin-top: 40px;">🗺️</h3>
+            <h3 style="margin-top: 40px;">🗺️ 찾아오시는 길</h3>
 
             <!-- 카카오맵 표시 -->
             <div id="map" class="mb-3" style="position: relative;">
@@ -385,7 +392,7 @@
                 <div class="col-md-8">  
                     <div class="collapse" id="collapseReviews">
                         <!-- 평균 별점 -->
-                        <p class="text-warning fw-bold text-start"><strong id="avgGrade">축제 한줄평 ⭐</strong></p>
+                        <p class="text-warning text-start"><strong id="avgGrade">축제 한줄평 ⭐</strong></p>
         
                         <!-- 리뷰 등록 UI -->
                         <div class="card card-body review-card text-start">

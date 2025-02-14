@@ -86,7 +86,7 @@
         from festival
         where upper(fe_name) like upper(#{searchKeyword})
         <if test="month != null">
-            and to_char(fe_start_date, 'mm') = #{month} and to_char(fe_end_date, 'mm') = #{month}   
+            and to_char(fe_start_date, 'mm') = #{month} or to_char(fe_end_date, 'mm') = #{month}   
         </if>
         <if test="lcId != null">
             and lc_id = #{lcId} 
