@@ -74,6 +74,14 @@
                 box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
             }
             
+            .festival-contents {
+                white-space: pre-wrap;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+                display: inline-block;
+            }
+            
             .icon {
                 font-size: 30px; /* 아이콘 크기 조정 */
                 margin-right: 5px; /* 텍스트와 간격 조정 */
@@ -342,7 +350,8 @@
             
             <hr style="border: 1px solid #ddd; width: 100%;">
             
-            <p><h3>📄 </h3><strong "style="margin-top: 20px;">${festival.feContents}</strong></p>
+            <h3>📄</h3> 
+            <p class="festival-contents"><strong>${festival.feContents}</strong></p>
             
             <hr style="border: 1px solid #ddd; width: 100%;">
             
@@ -540,12 +549,6 @@
         crossorigin="anonymous"></script>
 
 </body>
-
-
-
-
-
-
 
 </html>
 
