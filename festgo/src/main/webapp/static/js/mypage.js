@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`maxPage=${maxPage}`);
                 html = `
                     <div class="table-responsive m-2">
-                        <table class="table table-striped table-hover">
+                        <table class="table table-hover">
                             <thead class="table-primary">
                                 <tr>
                                     <th class="thPostId">번호</th>
@@ -189,9 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="divNotPost text-center m-3"></div>
                     <div class="row justify-content-center">
-                        <div class="btn-group col-2 m-3 translate-middle" role="group">
+                        <div class="col-3 btn-group m-3 " role="group">
                             <button type="button" class="pbtnPrevious btn btn-outline-dark">Prev</button>
-                            <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                            <input type="button" class="pbtnFirstPaging btn btn-outline-dark active" value="${pageCount}"/>
                             <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
                             <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
                             <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
@@ -214,14 +214,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 pinputFirstPaging.addEventListener('click', () => {
                     pageNum = pinputFirstPaging.value;
+                    pinputFirstPaging.classList.add('active');
+                    pinputSecondPaging.classList.remove('active');
+                    pinputThirdPaging.classList.remove('active');
                     makeingPostList(pageNum);
                 });
                 pinputSecondPaging.addEventListener('click', () => {
                     pageNum = pinputSecondPaging.value;
+                    pinputFirstPaging.classList.remove('active');
+                    pinputSecondPaging.classList.add('active');
+                    pinputThirdPaging.classList.remove('active');
                     makeingPostList(pageNum);
                 });
                 pinputThirdPaging.addEventListener('click', () => {
                     pageNum = pinputThirdPaging.value;
+                    pinputFirstPaging.classList.remove('active');
+                    pinputSecondPaging.classList.remove('active');
+                    pinputThirdPaging.classList.add('active');
                     makeingPostList(pageNum);
                 });
                 pbtnPrevious.addEventListener('click', () => {
@@ -249,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`maxPage=${maxPage}`);
             html = `
                 <div class="table-responsive m-2">
-                    <table class="table table-striped table-hover">
+                    <table class="table table-hover">
                         <thead class="table-primary">
                             <tr>
                                 <th class="thReviewId">번호</th>
@@ -264,9 +273,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="divNotReview text-center m-3"></div>
                 <div class="row justify-content-center">
-                    <div class="btn-group col-2 mt-3 translate-middle" role="group">
+                    <div class="col-3 btn-group m-3 " role="group">
                         <button type="button" class="rbtnPrevious btn btn-outline-dark">Prev</button>
-                        <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                        <input type="button" class="rbtnFirstPaging btn btn-outline-dark active" value="${pageCount}"/>
                         <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
                         <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
                         <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
@@ -289,14 +298,23 @@ document.addEventListener('DOMContentLoaded', () => {
             
             rinputFirstPaging.addEventListener('click', () => {
                 pageNum = rinputFirstPaging.value;
+                rinputFirstPaging.classList.add('active');
+                rinputSecondPaging.classList.remove('active');
+                rinputThirdPaging.classList.remove('active');
                 makeingReviewList(pageNum);
             });
             rinputSecondPaging.addEventListener('click', () => {
                 pageNum = rinputSecondPaging.value;
+                rinputFirstPaging.classList.remove('active');
+                rinputSecondPaging.classList.add('active');
+                rinputThirdPaging.classList.remove('active');
                 makeingReviewList(pageNum);
             });
             rinputThirdPaging.addEventListener('click', () => {
                 pageNum = rinputThirdPaging.value;
+                rinputFirstPaging.classList.remove('active');
+                rinputSecondPaging.classList.remove('active');
+                rinputThirdPaging.classList.add('active');
                 makeingReviewList(pageNum);
             });
             rbtnPrevious.addEventListener('click', () => {
@@ -359,14 +377,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <ul class="myprofile_row">
                     <li>
                         <div class="row_item id">
-                            <span class="item_text">아이디</span>
+                            <span class="item_text">&#128187;&nbsp;아이디</span>
                             <br class="middle280">
                             <span class="middle_data">${data.meUsername}</span>
                         </div>
                     </li>
                     <li>
                         <div class="row_item email">
-                            <span class="item_text">이메일</span>
+                            <span class="item_text">&#128231;&nbsp;이메일</span>
                             <br class="middle280">
                             <span class="middle_data">${data.meEmail}</span>
                         </div>
@@ -376,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         html += `
                         <li>
                             <div class="row_item sponsor">
-                                <span class="item_text">업체명</span>
+                                <span class="item_text">&#127970;&nbsp;업체명</span>
                                 <br class="middle280">
                                 <span class="middle_data">${data.meSponsor}</span>
                             </div>
@@ -386,14 +404,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     html += `
                     <li>
                         <div class="row_item createdtime">
-                            <span class="item_text">가입일</span>
+                            <span class="item_text">&#128221;&nbsp;가입일</span>
                             <br class="middle280">
                             <span class="middle_data">${createdDate}</span>
                         </div>
                     </li>
                     <li>
                         <div class="row_item authority">
-                            <span class="item_text">&nbsp;권&nbsp;한&nbsp;</span>
+                            <span class="item_text">&#128273;&nbsp;&nbsp;권&nbsp;한&nbsp;</span>
                             <br class="middle280">
                             <span class="middle_data">${data.mrRoles}</span>
                         </div>
@@ -725,6 +743,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         divSFestivalList.innerHTML = html;
         
+        const btnDeleteFestivals = document.querySelectorAll('button.btnDeleteFestival');
+        for(const btn of btnDeleteFestivals) {
+            btn.addEventListener('click', deleteFestival);
+        }
+        
         const btnEachNumber = document.querySelector('button.btnEachNumber');
         btnEachNumber.addEventListener('click', () => {
             const sUri = `../api/mypage/sfestivals/`;
@@ -749,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card cardfestival col-4">
+            <div class="card cardfestival col-6">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
                     alt="${festival.feImageMain}"/>
                 <div class="card-body">
@@ -1010,12 +1033,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr>
             `
             if(post.pcId == 1) addHtml += `<td class="tdPostId">${post.poId}</td>`
-            else if(post.pcId == 2) addHtml += `<td class="tdPostNotice">공지</td>`
+            else if(post.pcId == 2) addHtml += `<td class="tdPostNotice">&#128226;공지</td>`
             addHtml += `  
                     <td class="tdPostTitle">
                         <a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a>
             `
-            if(role == 1 || role == 2){
+            if(role == 1 || role == 2 || (role == 3 && signedInUser == post.poAuthor)){
                 addHtml+= `
                         <a href="/festgo/post/modify?poId=${post.poId}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
@@ -1156,7 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="tdReviewTitle">
                         <a href="/festgo/fest/detail?feId=${review.feId}">${review.reTitle}</a>
             `
-            if(role == 1){
+            if(role == 1 || (role == 3 && signedInUser == review.reAuthor)){
                 addHtml+= `
                         <a href="/festgo/fest/detail?feId=${review.feId}#btnToggleReview">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
@@ -1230,28 +1253,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         <ul class="sponrequest_row" style="margin-bottom: 0">
                             <li>
                                 <div class="row_item id">
-                                    <span class="item_text">아이디</span>
+                                    <span class="item_text">&#128187;&nbsp;아이디</span>
                                     <br class="middle280">
                                     <span class="middle_data">${requestSponsor.meUsername}</span>
                                 </div>
                             </li>
                             <li>
                                 <div class="row_item email">
-                                    <span class="item_text">이메일</span>
+                                    <span class="item_text">&#128231;&nbsp;이메일</span>
                                     <br class="middle280">
                                     <span class="middle_data">${requestSponsor.meEmail}</span>
                                 </div>
                             </li>
                             <li>
                                 <div class="row_item sponsor">
-                                    <span class="item_text">업체명</span>
+                                    <span class="item_text">&#127970;&nbsp;업체명</span>
                                     <br class="middle280">
                                     <span class="middle_data">${requestSponsor.meSponsor}</span>
                                 </div>
                             </li>
                             <li>
                                 <div class="row_item createdtime">
-                                    <span class="item_text">가입일</span>
+                                    <span class="item_text">&#128221;&nbsp;가입일</span>
                                     <br class="middle280">
                                     <span class="middle_data">${createdTime}</span>
                                 </div>
@@ -1281,6 +1304,22 @@ document.addEventListener('DOMContentLoaded', () => {
         
         divSponsorCheckList.innerHTML = html;
         
+        const btnToggleRefuseSponsors = document.querySelectorAll('button.btnToggleRefuseSponsor');
+        for(const btn of btnToggleRefuseSponsors) {
+            btn.addEventListener('click', (event) => {
+                const targetId = btn.getAttribute('data-bs-target');
+                const collapseElement = document.querySelector(targetId);
+                const bsCollapse = new bootstrap.Collapse(collapseElement, {
+                    toggle: false
+                });
+                if (collapseElement.classList.contains('show')) {
+                    bsCollapse.hide();
+                } else {
+                    bsCollapse.show();
+                }
+            });
+        }
+        
         const btnApproveSponsors = document.querySelectorAll('button.btnApproveSponsor');
         for(const btn of btnApproveSponsors) {
             btn.addEventListener('click', approveSponsor);
@@ -1288,7 +1327,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const btnRefuseSponsors = document.querySelectorAll('button.btnRefuseSponsor');
         for(const btn of btnRefuseSponsors) {
-            btn.addEventListener('click', RefuseSponsor);
+            btn.addEventListener('click', (event) => {
+                RefuseSponsor(event);
+            });
         }
     }
     

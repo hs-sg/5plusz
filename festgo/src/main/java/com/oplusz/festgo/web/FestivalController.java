@@ -88,7 +88,7 @@ public class FestivalController {
 	@RequestMapping("/uploads")
 	public class FileController {
 	    
-	    private static final String UPLOAD_DIR = "C:/apache-tomcat-11.0.2/webapps/festgo/uploads/";
+	    private static final String UPLOAD_DIR = "C:\\java157\\workspaces\\first-team\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\festgo\\uploads";
 
 	    @GetMapping("/{filename:.+}")
 	    @ResponseBody
