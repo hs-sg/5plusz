@@ -39,6 +39,9 @@
                 border-color:red;
             }
             
+            #signup input {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+            }
         </style>
 	</head>
 	<body>
