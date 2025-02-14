@@ -42,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PostController {
 
 	private final PostService postService;
-	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
+	private static final String UPLOAD_DIR = "C:/java157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
 	private final MyPageService myPageService;
 
 	/**
