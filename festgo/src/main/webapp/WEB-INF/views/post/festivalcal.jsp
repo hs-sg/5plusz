@@ -12,8 +12,6 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
-    
-    
         /* 달력 테두리 영역 스타일 */
         #calendar {
             max-width: 90%;
@@ -24,7 +22,7 @@
         }
 
         .fc-toolbar-title {
-            font-weight: bold !important;
+            font-weight: normal !important;
             color: skyblue !important;
         }
         
@@ -32,7 +30,7 @@
         .fc-toolbar-title {
             text-align: center !important;
             font-size: 1.6rem !important;
-            font-weight: bold !important;
+            font-weight: normal !important;
             width: 100% !important;
             display: block !important;
             position: relative !important;
@@ -61,7 +59,7 @@
 
         /* 호버 시 날짜 텍스트 강조 */
         .fc .fc-daygrid-day:hover .fc-daygrid-day-number {
-            font-weight: bold;
+            font-weight: normal;
             transform: scale(1.1);
         }
 
@@ -106,15 +104,15 @@
             border: 2px solid #E6E6FA;
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
+            transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1);
             position: relative;
             overflow: hidden;
         }
         
         /* 마우스를 올렸을 때 효과 */
         .festival-card:hover {
-            transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
-            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
         }
         
         /* 카드 클릭 시 약간 줄어드는 효과 */
@@ -123,14 +121,12 @@
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
         }
 
-
-
         .card-title {
-            font-weight: bold;
+            font-weight: normal;
         }
 
         .festival-list-title {
-            font-weight: bold;
+            font-weight: normal;
             color: purple !important;
         }
 
@@ -202,69 +198,63 @@
             border-color: transparent !important;
         }
         
-       @font-face {		
-    font-family: 'sansLight';		
-    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
-}
+      
 
-/* 날짜 셀 안의 축제 개수 표시 스타일 */
-.custom-event {
-    font-family: 'sansLight', sans-serif !important;
-    font-size: 0.9em;
-    color: gray !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    flex-wrap: wrap !important; /* 텍스트가 넘칠 경우 자동 줄바꿈 */
-    padding: 5px !important; /* 여백 추가 */
-    max-width: 90% !important; /* 셀 안에서 너무 커지지 않도록 제한 */
-    line-height: 1.2 !important; /* 줄 간격 조정 */
-    word-break: break-word !important; /* 긴 단어 자동 줄바꿈 */
-}
+       /* 날짜 셀 안의 축제 개수 표시 스타일 */
+       .custom-event {
+           font-family: 'sansLight', sans-serif !important;
+           font-size: 0.9em;
+           color: gray !important;
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           display: flex !important;
+           align-items: center !important;
+           justify-content: center !important;
+           text-align: center !important;
+           flex-wrap: wrap !important;
+           padding: 5px !important;
+           max-width: 90% !important;
+           line-height: 1.2 !important;
+           word-break: break-word !important;
+       }
 
-
-
-        .custom-event::before {
-            content: attr(data-title);
-            font-weight: bold;
-            font-size: 1em;
-            margin-bottom: -4px;
-        }
+       .custom-event::before {
+           content: attr(data-title);
+           font-weight: normal;
+           font-size: 1em;
+           margin-bottom: -4px;
+       }
         
-        .custom-event {
-            position: absolute !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            font-size: 1rem !important;
-            font-weight: bold !important;
-            text-align: center !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 2px !important;
-            white-space: nowrap !important;
-            color: gray !important;
-        }
+       .custom-event {
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           font-size: 1rem !important;
+           font-weight: normal !important;
+           text-align: center !important;
+           display: flex !important;
+           flex-direction: column !important;
+           align-items: center !important;
+           justify-content: center !important;
+           gap: 2px !important;
+           white-space: nowrap !important;
+           color: gray !important;
+       }
         
-        .fc-daygrid-day {
-            position: relative !important;
-        }
+       .fc-daygrid-day {
+           position: relative !important;
+       }
         
-        .fc-daygrid-day-events {
-            position: absolute !important;
-            top: 50% !important;
-            left: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            width: 100% !important;
-        }
-
+       .fc-daygrid-day-events {
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           width: 100% !important;
+       }
 
 		.fc-day-other .custom-event {
 		    opacity: 0.3 !important;
@@ -278,12 +268,12 @@
 		    color: white;
 		    padding: 5px 30px;
 		    font-size: 0.8rem;
-		    font-weight: bold;
+		    font-weight: normal;
 		    transform: rotate(-45deg);
 		    z-index: 2;
 		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-		    width: 100px; /* 리본 길이 고정 */
-		    height: 25px; /* 리본 높이 고정 */
+		    width: 100px;
+		    height: 25px;
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
@@ -308,96 +298,95 @@
 		}
 		
 		@font-face {
-    font-family: 'dohyeon';
-    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
-}
+		    font-family: 'dohyeon';
+		    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+		    font-weight: normal;
+		    font-style: normal;
+		}
 
-.festival-title {
-    font-family: 'dohyeon', sans-serif;
-    font-size: 2rem;
-    font-weight: bold;
-    color: skyblue;
-    text-align: center;
-    margin: 20px 0;
-}
+		.festival-title {
+		    font-family: 'dohyeon', sans-serif;
+		    font-size: 2rem;
+		    font-weight: normal;
+		    color: skyblue;
+		    text-align: center;
+		    margin: 20px 0;
+		}
 
-.festival-list-title {
-    font-family: 'dohyeon', sans-serif;
-    font-size: 1.8rem;
-    font-weight: bold;
-    color: purple;
-    text-align: center;
-    margin: 15px 0;
-}
+		.festival-list-title {
+		    font-family: 'dohyeon', sans-serif;
+		    font-size: 1.8rem;
+		    font-weight: normal;
+		    color: purple;
+		    text-align: center;
+		    margin: 15px 0;
+		}
 
-@font-face {		
-    font-family: 'sansMedium';		
-    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
-}
+		@font-face {		
+		    font-family: 'sansMedium';		
+		    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+		}
 
-@font-face {		
-    font-family: 'sansLight';		
-    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
-}
+		@font-face {		
+		    font-family: 'sansLight';		
+		    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+		}
 
-/* 축제 카드 제목 (sansMedium 폰트 적용) */
-.card-title {
-    font-family: 'sansMedium', sans-serif;
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
-}
+		/* 축제 카드 제목 (sansMedium 폰트 적용) */
+		.card-title {
+		    font-family: 'sansMedium', sans-serif;
+		    font-size: 1.4rem;
+		    font-weight: normal;
+		    color: #333;
+		}
 
-/* 축제 카드 세부 정보 (sansLight 폰트 적용) */
-.card-text {
-    font-family: 'sansLight', sans-serif;
-    font-size: 1rem;
-    color: #666;
-}
+		/* 축제 카드 세부 정보 (sansLight 폰트 적용) */
+		.card-text {
+		    font-family: 'sansLight', sans-serif;
+		    font-size: 1rem;
+		    color: #666;
+		}
 
+		.fc-day-other .custom-event {
+		    opacity: 0.3 !important;
+		}
 		
-
-        .fc-day-other .custom-event {
-            opacity: 0.3 !important;
-        }
-        
-        /* 공통 리본 스타일 */
-        .ongoing-badge, .upcoming-badge, .ended-badge {
-            position: absolute;
-            top: 10px;
-            left: -30px;
-            color: white;
-            padding: 5px 30px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            transform: rotate(-45deg);
-            z-index: 2;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            width: 100px; /* 리본 길이 고정 */
-            height: 25px; /* 리본 높이 고정 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            line-height: 25px;
-            white-space: nowrap;
-        }
-        
-        /* 개최중 배지 (녹색) */
-        .ongoing-badge {
-            background-color: #28a745;
-        }
-        
-        /* 예정 배지 (파란색) */
-        .upcoming-badge {
-            background-color: #007bff;
-        }
-        
-        /* 종료 배지 (빨간색) */
-        .ended-badge {
-            background-color: #dc3545;
-        }
-
+		/* 공통 리본 스타일 */
+		.ongoing-badge, .upcoming-badge, .ended-badge {
+		    position: absolute;
+		    top: 10px;
+		    left: -30px;
+		    color: white;
+		    padding: 5px 30px;
+		    font-size: 0.8rem;
+		    font-weight: normal;
+		    transform: rotate(-45deg);
+		    z-index: 2;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		    width: 100px;
+		    height: 25px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    line-height: 25px;
+		    white-space: nowrap;
+		}
+		
+		/* 개최중 배지 (녹색) */
+		.ongoing-badge {
+		    background-color: #28a745;
+		}
+		
+		/* 예정 배지 (파란색) */
+		.upcoming-badge {
+		    background-color: #007bff;
+		}
+		
+		/* 종료 배지 (빨간색) */
+		.ended-badge {
+		    background-color: #dc3545;
+		}
     </style>
 </head>
 <body>
@@ -472,8 +461,12 @@
 
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
+
                 const startDate = new Date(fest.feStartDate);
+                startDate.setHours(0, 0, 0, 0);
+
                 const endDate = new Date(fest.feEndDate);
+                endDate.setHours(0, 0, 0, 0);
 
                 // 상태 배지 추가
                 let badgeHTML = '';
@@ -526,8 +519,6 @@
                 eventDetailsEl.appendChild(loadMoreButton);
             }
         }
-
-
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
