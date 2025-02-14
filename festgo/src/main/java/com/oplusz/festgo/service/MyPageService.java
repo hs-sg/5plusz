@@ -155,7 +155,7 @@ public class MyPageService {
 		Integer meId = memberDao.selectByUsername(meUsername).getMeId();
 		log.debug("deleteLikeFestivalByFeId(feId={}, meId={}", feId, meId);
 		
-		Integer delLikeResult = likesDao.deleteLikeByFeIdAndMeUsername(feId, meId);
+		Integer delLikeResult = likesDao.deleteLikeByFeIdAndMeId(feId, meId);
 		log.debug("delete Like result={}", delLikeResult);
 		
 		return delLikeResult;
@@ -166,7 +166,7 @@ public class MyPageService {
 		Integer meId = memberDao.selectByUsername(meUsername).getMeId();
 		log.debug("insertLikeFestivalByFeId(feId={}, meId={}", feId, meId);
 		
-		Integer insLikeResult = likesDao.insertLikeByFeIdAndMeUsername(feId, meId);
+		Integer insLikeResult = likesDao.insertLikeByFeIdAndMeId(feId, meId);
 		log.debug("delete Like result={}", insLikeResult);
 		
 		return insLikeResult;

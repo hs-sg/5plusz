@@ -29,9 +29,10 @@
                 pointer-events: none; /* 백드롭이 클릭 이벤트를 차단하지 않도록 */
             }
         
+            
             /* 메인 배경 이미지 스타일 */
             .main-visual {
-                position: absolute;
+                z-index: 1050 !important;
                 top: 0;
                 left: 0;
                 width: 100%;
@@ -40,33 +41,7 @@
                 background-size: cover;
                 transition: opacity 0.5s ease-in-out;
             }
-            
-            /* 메인이미지가 사라질 때 */
-            .main-visual.hidden {
-                opacity: 0;
-            }
-            
-            /* 본문 컨텐츠 (고정된 이미지 위로 지나가게 함) */
-            .content {
-                margin-top: 100vh; /* 메인 이미지 높이만큼 여백 추가 */
-                padding: 50px 0;
-                background-color: white;
-            }
-            
-            .header-fixed {
-                position: fixed;
-                top: -100px; /* 화면 위쪽에 숨김 */
-                width: 100%;
-                background-color: rgba(255, 255, 255, 0.9);
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-                transition: top 0.3s ease-in-out; /* 위아래 움직임만 부드럽게 */
-                z-index: 999;
-            }
-            
-            /* 스크롤이 일정 이상 내려가면 즉시 헤더 보이기 */
-            .header-fixed.visible {
-                top: 0; /* 화면 상단에 고정 */
-            }
+
 
             /* 맵 & 정보 컨테이너 */
             .map-info-container {
@@ -142,8 +117,8 @@
         
         .festival-img {
             justify-content: space-around;
-            width: 250px;
-            max-width: 260px;
+            width: 300px;
+            max-width: 300px;
             height:300px;
             border-radius: 10px;
             border: 2px solid #ddd; /* 테두리 추가 */
@@ -154,7 +129,22 @@
             border-color: #007bff; /* 호버 시 테두리 색상 변경 */
         }
         
-                
+        .additional-images-count {
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: rgba(0, 0, 0, 0.7); /* 반투명 검정 배경 */
+            border-radius: 10px;
+            padding: 8px 12px;
+            position: absolute;
+            bottom: -40px; /* 이미지 아래로 위치 조정 */
+            left: 50%;
+            transform: translateX(-50%); /* 정확한 중앙 정렬 */
+            text-align: center;
+            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        }
+
+           
         /* 반응형: 모바일에서도 같은 정렬 유지 */
         @media (max-width: 768px) {
             .review-container {
@@ -166,12 +156,29 @@
                 max-width: 100%;
             }
         }
-
+        
+            .like-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; /* 하트와 숫자 사이 여백 */
+        }
+        
+        #likeIcon {
+            font-size: 36px; /* 하트 크기 키우기 */
+            cursor: pointer;
+        }
+        
+        #likeCount {
+            font-size: 24px; /* 숫자 크기 키우기 */
+            font-weight: bold;
+        }
+        
         </style>
     </head>
     <body>
-        <div class="header-fixed hidden">
-            <c:set var="pageTitle" value="축제 상세 정보" />
+        <div class="container-fluid">
+            <c:set var="pageTitle" value="축제 상세정보" />
             <%@ include file="../fragments/header.jspf" %>
         </div>
         
@@ -219,14 +226,20 @@
                     <div class="row row-cols-1 row-cols-md-3 g-4">
                         <c:forEach var="image" items="${festivalImages}" varStatus="status">
                             <c:if test="${status.index < 3}">
-                                <div class="col">
+                                <div class="col position-relative text-center">
                                     <div class="image-wrapper">
                                         <img src="${pageContext.request.contextPath}/uploads/${image.fiImages}" 
                                              class="festival-img"
                                              alt="축제 이미지 ${status.index + 1}"
                                              data-bs-toggle="modal"
                                              data-bs-target="#imageModal">
-                                    </div>
+                                    </div>                                    
+                                    <!-- 남은 사진 개수 표시 -->
+                                    <c:if test="${status.index == 2 && fn:length(festivalImages) > 3}">
+                                        <div class="additional-images-count position-absolute">
+                                            +${fn:length(festivalImages) - 3}장
+                                        </div>
+                                    </c:if>
                                 </div>
                             </c:if>
                         </c:forEach>
@@ -267,6 +280,18 @@
                 </div>
             </c:if>
             <p><strong>${festival.feContents}</strong></p>
+            
+            <!-- 좋아요 버튼 UI -->
+            <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
+            <input type="hidden" id="festivalId" value="${festival.feId}" />
+            <input type="hidden" id="meId" value="${sessionScope.meId}" />
+            
+            <div class="like-container text-center">
+                <button id="likeBtn" class="btn btn-outline-none" onclick="toggleLike()">
+                    <span id="likeIcon">${isLiked ? '❤️' : '🤍'}</span>
+                </button>
+                <span id="likeCount">${likeCount}</span>
+            </div>
             
             <h3 style="margin-top: 40px;">📍 축제 위치</h3>
             <p><strong>${festival.feAddress}</strong></p>
@@ -434,11 +459,11 @@
     <c:url var="reviewsJS" value="/js/reviews.js" /> 
     <script src="${reviewsJS}"></script>
     
-    <c:url var="festivalMainImageScrollJS" value="/js/festival-mainimage-scroll.js" /> 
-    <script src="${festivalMainImageScrollJS}"></script> 
+    <c:url var="festivalLikesJS" value="/js/festival-likes.js" /> 
+    <script src="${festivalLikesJS}"></script>
     
-    <c:url var="headerJspfScrollJS" value="/js/header-jspf-scroll.js" /> 
-    <script src="${headerJspfScrollJS}"></script>
+    <c:url var="festivalLikesUIJS" value="/js/festival-likes-ui.js" /> 
+    <script src="${festivalLikesUIJS}"></script>
 
 
     <!-- Bootstrap JS -->

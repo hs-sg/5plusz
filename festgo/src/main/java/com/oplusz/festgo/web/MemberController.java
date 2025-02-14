@@ -52,6 +52,10 @@ public class MemberController {
 			
 			session.setAttribute("memberRole", member.getMrId());
 			
+			session.setAttribute("meId", member.getMeId());
+			
+			log.debug("meId: {}", session.getAttribute("meId"));
+			
 			if (member.getMeSponsor() != null) {
 				session.setAttribute("memberSponsor", member.getMeSponsor());
 			}
