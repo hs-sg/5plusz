@@ -58,7 +58,36 @@
                 background-size: cover;
                 transition: opacity 0.5s ease-in-out;
             }
-
+            
+            .festival-poster-container {
+                display: flex;
+                justify-content: flex-start; /* 왼쪽 정렬 */
+                align-items: center; /* 세로 중앙 정렬 */
+                margin: 20px 0;
+            }
+            
+            .festival-poster-img {
+                width: 100%;
+                max-width: 300px; /* 크기를 300px로 조절 */
+                height: auto;
+                border-radius: 10px; /* 둥근 모서리 */
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
+            }
+            
+            .icon {
+                font-size: 30px; /* 아이콘 크기 조정 */
+                margin-right: 5px; /* 텍스트와 간격 조정 */
+            }
+            
+            .homepage-link {
+                color: #007bff; /* 파란색 */
+                text-decoration: none; /* 밑줄 제거 */
+                font-weight: bold; /* 굵게 표시 */
+            }
+            
+            .homepage-link:hover {
+                text-decoration: underline; /* 마우스 올리면 밑줄 표시 */
+            }
 
             /* 맵 & 정보 컨테이너 */
             .map-info-container {
@@ -177,7 +206,7 @@
             .like-container {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: start;
             gap: 10px; /* 하트와 숫자 사이 여백 */
         }
         
@@ -202,11 +231,13 @@
         <input type="hidden" id="festivalId" value="${festival.feId}" />
 
         <div class="main-visual" style="background-image: url('${pageContext.request.contextPath}/uploads/${festival.feImageMain}')"></div>
+        
+        <hr style="border: 1px solid #ddd; width: 100%;">
 
         <main class="container content">
             <input type="hidden" class="form-control" id="id" type="text" value="${festival.feId}" readonly />
         
-            <h1 style="margin-bottom: 20px;">🎆 ${festival.feName}</h1>
+            <h1 style="margin-bottom: 20px; margin-top: 40px;">🎆 ${festival.feName}</h1>
 
             <h3 style="margin-top: 40px;">📅</h3>
             
@@ -237,7 +268,7 @@
                 const contextPath = '${pageContext.request.contextPath}';
             </script>
 
-            <h3 style="margin-top: 40px;">📖 축제 내용</h3>
+            <h3 style="margin-top: 40px;">🖼️</h3>
             <c:if test="${not empty festivalImages}">
                 <div class="container mt-4 mb-4">
                     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -296,7 +327,6 @@
                     </div>
                 </div>
             </c:if>
-            <p><strong>${festival.feContents}</strong></p>
             
             <!-- 좋아요 버튼 UI -->
             <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
@@ -310,8 +340,33 @@
                 <span id="likeCount">${likeCount}</span>
             </div>
             
-            <h3 style="margin-top: 40px;">📍 축제 위치</h3>
-            <p><strong>${festival.feAddress}</strong></p>
+            <hr style="border: 1px solid #ddd; width: 100%;">
+            
+            <p><h3>📄 </h3><strong "style="margin-top: 20px;">${festival.feContents}</strong></p>
+            
+            <hr style="border: 1px solid #ddd; width: 100%;">
+            
+            <div class="festival-poster-container text-center">
+                <img src="${pageContext.request.contextPath}/uploads/${festival.fePoster}" 
+                     class="festival-poster-img" 
+                     alt="축제 포스터">
+            </div>
+            
+            <div class="row">
+                <div class="festival-info">
+                    <p><strong><span class="icon">📍</span> ${festival.feAddress}</strong></p>
+                    <p><strong><span class="icon">💰</span> ${festival.feFee}</strong></p>
+                    <p><strong><span class="icon">📢</span> ${festival.meSponsor}</strong></p>
+                    <p><strong><span class="icon">📞</span> ${festival.fePhone}</strong></p>
+                    <p><strong><span class="icon">🌐</span> 
+                        <a href="${festival.feHomepage}" target="_blank" class="homepage-link">${festival.feHomepage}</a>
+                    </strong></p>
+                </div>
+            </div>
+            
+            <hr style="border: 1px solid #ddd; width: 100%;">
+            
+            <h3 style="margin-top: 40px;">🗺️</h3>
 
             <!-- 카카오맵 표시 -->
             <div id="map" class="mb-3" style="position: relative;">
@@ -321,14 +376,10 @@
                     길찾기
                 </button>
             </div>
-
-            <div class="row">
-                <div class="col-md-8"> 
-                    <h3>💰 참가비</h3>
-                    <p><strong>${festival.feFee}</strong></p>
-                    <button class="btn btn-outline-secondary mt-2" id="btnToggleReview">리뷰 보기</button>
-                </div>
-            </div>
+            
+            <hr style="border: 1px solid #ddd; width: 100%;">
+            
+            <button class="btn btn-outline-secondary mt-2" id="btnToggleReview">리뷰 보기</button>
         
             <div class="row mt-4">  <!-- 같은 줄 맞추기 -->
                 <div class="col-md-8">  

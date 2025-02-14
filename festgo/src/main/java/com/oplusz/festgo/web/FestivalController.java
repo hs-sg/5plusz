@@ -89,7 +89,7 @@ public class FestivalController {
 	public class FileController {
 	    
 	    private static final String UPLOAD_DIR = "C:\\java157\\workspaces\\first-team\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\festgo\\uploads";
-
+	    
 	    @GetMapping("/{filename:.+}")
 	    @ResponseBody
 	    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
