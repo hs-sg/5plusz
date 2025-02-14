@@ -772,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card cardfestival col-4">
+            <div class="card cardfestival col-6">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
                     alt="${festival.feImageMain}"/>
                 <div class="card-body">
@@ -1304,6 +1304,22 @@ document.addEventListener('DOMContentLoaded', () => {
         
         divSponsorCheckList.innerHTML = html;
         
+        const btnToggleRefuseSponsors = document.querySelectorAll('button.btnToggleRefuseSponsor');
+        for(const btn of btnToggleRefuseSponsors) {
+            btn.addEventListener('click', (event) => {
+                const targetId = btn.getAttribute('data-bs-target');
+                const collapseElement = document.querySelector(targetId);
+                const bsCollapse = new bootstrap.Collapse(collapseElement, {
+                    toggle: false
+                });
+                if (collapseElement.classList.contains('show')) {
+                    bsCollapse.hide();
+                } else {
+                    bsCollapse.show();
+                }
+            });
+        }
+        
         const btnApproveSponsors = document.querySelectorAll('button.btnApproveSponsor');
         for(const btn of btnApproveSponsors) {
             btn.addEventListener('click', approveSponsor);
@@ -1311,7 +1327,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const btnRefuseSponsors = document.querySelectorAll('button.btnRefuseSponsor');
         for(const btn of btnRefuseSponsors) {
-            btn.addEventListener('click', RefuseSponsor);
+            btn.addEventListener('click', (event) => {
+                RefuseSponsor(event);
+            });
         }
     }
     
