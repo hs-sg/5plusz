@@ -23,15 +23,14 @@
     
     <!-- 정적 리소스 매핑 설정 -->
 
-    <!--  종후 <mvc:resources mapping="/uploads/**" 
-        location="file:///C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/" /> --> 
-
+    <mvc:resources mapping="/uploads/**" 
+        location="file:///C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/" />
 
      <!-- <mvc:resources mapping="/uploads/**" 
                location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/> -->
 
-     <mvc:resources mapping="/uploads/**" 
-               location="file:C:\Users\asc19\eclipse-workspace\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/>
+     <!-- <mvc:resources mapping="/uploads/**" 
+               location="file:C:\Users\asc19\eclipse-workspace\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
 
                
    <!-- 하신
