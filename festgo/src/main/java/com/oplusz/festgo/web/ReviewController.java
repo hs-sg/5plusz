@@ -28,6 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 
 	private final ReviewService reviewService;
+	
+	 @GetMapping("/average/{feId}")
+	    public ResponseEntity<Double> getAverageGrade(@PathVariable Integer feId) {
+	        double avgGrade = reviewService.getAverageGrade(feId);
+	        return ResponseEntity.ok(avgGrade);
+	    }
 
 	@GetMapping("/{reId}")
 	public ResponseEntity<ReviewItemDto> getReviewById(@PathVariable("reId") Integer reId) {
@@ -46,7 +52,7 @@ public class ReviewController {
 		List<ReviewItemDto> list = reviewService.readByFestivalId(feId);
 		
 		return ResponseEntity.ok(list);
-		
+		 
 	}
 	
 	@PostMapping

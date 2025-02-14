@@ -62,6 +62,7 @@
         <filter-class>com.oplusz.festgo.filter.RoleFilter</filter-class>
     </filter>
     <filter-mapping>
+
         <filter-name>roleFilter</filter-name>
         <url-pattern>/fest/create</url-pattern>
     </filter-mapping>
@@ -79,6 +80,7 @@
 
         <!-- multipart-config 설정 -->
             <multipart-config>
+                <location>C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/</location>
                 <max-file-size>10485760</max-file-size> <!-- 개별 파일 최대 크기 -->
                 <max-request-size>20971520</max-request-size> <!-- 요청 전체 최대 크기 -->
                 <file-size-threshold>0</file-size-threshold> <!-- 파일 임시 저장 기준 (0이면 바로 디스크에 저장) -->
@@ -90,5 +92,11 @@
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>
