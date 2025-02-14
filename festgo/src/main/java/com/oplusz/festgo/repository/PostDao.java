@@ -58,6 +58,8 @@ public interface PostDao {
 	
 	// 특정 게시글의 첨부파일 리스트 조회
 	List<String> selectAttachmentsByPostId(@Param("poId") Integer poId);
+	
+	PostAttachment selectAttachmentById(int fileId);
 
 	List<PostAttachment> selectAttachmentsByPostIdWithObject(@Param("poId") Integer poId);
 	// 다중 게시글 삭제

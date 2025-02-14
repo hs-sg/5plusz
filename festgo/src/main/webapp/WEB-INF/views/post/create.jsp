@@ -33,6 +33,10 @@
             text-align: center;
             padding: 0 16px;
         }
+        @font-face {        
+            font-family: 'dohyeon';     
+            src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');       
+        }   
     </style>
     </head>
     <body>
@@ -59,7 +63,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="poAuthor" class="form-label">작성자</label>
-                    <input type="text" id="poAuthor" name="poAuthor" class="form-control" required>
+                    <input type="text" id="poAuthor" name="poAuthor" class="form-control" value="${signedInUser}"required>
                 </div>
     
                 <div class="mb-3">

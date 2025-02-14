@@ -26,13 +26,16 @@
    <!-- 종후 <mvc:resources mapping="/uploads/**" 
     location="file:///C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/" /> -->
 
-     <mvc:resources mapping="/uploads/**" 
-               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
+     <!--  <mvc:resources mapping="/uploads/**" 
+               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>-->
                
+   <!--  <mvc:resources mapping="/uploads/**" 
+   location="file:C:\java157\workspaces\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/>-->
    <!-- 하신
    <mvc:resources mapping="/uploads/**" 
                location="file:C:\java157\workspaces\first-team\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
-    
+    <!-- 세은 --><mvc:resources mapping="/uploads/**" 
+    location="file:C:\java157\workspaces\oplusz\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/>
    <!-- 희성
    <mvc:resources mapping="/uploads/**" 
                location="file:C:\java157\workspaces\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->

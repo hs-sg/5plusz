@@ -41,7 +41,7 @@ public class PostService {
 	private final PostDao postDao;
 	private final MyPageService myPageService;
 	// 업로드된 파일을 저장할 기본 디렉토리
-	private static final String UPLOAD_DIR = "C:/JAVA157/Workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/";
+	private static final String UPLOAD_DIR = "C:\\java157\\workspaces\\oplusz\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\festgo\\uploads";
 
 	/**
 	 * 모든 게시글 목록 조회( 페이징 없음 )
