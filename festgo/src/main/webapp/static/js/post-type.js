@@ -28,5 +28,3 @@ document.addEventListener('DOMContentLoaded', function () {
         postTypeSelect.setAttribute('disabled', 'disabled'); // 선택 변경 불가
     }
 });
-
-/* */

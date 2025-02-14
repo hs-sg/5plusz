@@ -1,30 +1,104 @@
 @charset "UTF-8";
 /* home.jsp 파일에 포함 */
 
+/* ------------------------ 추가된 폰트 및 스타일 시작 ------------------------ */
 @font-face {
-font-family: 'dohyeon';
-src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
 }
 
-@font-face {
-font-family: 'sansBold';
-src: url('../font/GmarketSansTTFBold.ttf') format('truetype');
+.keyword-title, 
+.search-title  {
+    font-family: 'dohyeon', sans-serif;
 }
 
-@font-face {
-font-family: 'sansLight';
-src: url('../font/GmarketSansTTFLight.ttf') format('truetype');
+.festival-name {
+    font-family: ''sansLight';
 }
 
-@font-face {
-font-family: 'sansMedium';
-src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');
+.theme-button {
+    font-family: 'sansLight';
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #ff6600;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
-body {
-    background: linear-gradient(to bottom, #EAF6FF, #FFFFFF); /* 연한 하늘색 → 흰색 */
+.theme-button:hover {
+    background-color: #ff4500;
+    color: white;
 }
 
+.searchLine {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#btnShowMoreFestival {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    padding: 12px 20px;
+    transition: 0.3s;
+}
+
+#btnShowMoreFestival:hover {
+    background-color: #0056b3;
+}
+
+
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 선택 박스에 적용 (시기 선택, 지역 선택, 테마 선택) */
+select.form-select {
+    font-family: 'sansLight', sans-serif;
+}
+
+/* 검색창 입력 텍스트와 플레이스홀더에 적용 */
+input.searchLine {
+    font-family: 'sansLight', sans-serif;
+}
+input.searchLine::placeholder {
+    font-family: 'sansLight', sans-serif;
+}
+
+/* 축제 이름 스타일 */
+.swiper-slide .festival-name {
+    font-family: 'sansMedium', sans-serif;
+    color: gray;
+}
+
+
+
+
+/* 예시: Bootstrap의 네비게이션 바(menu) 적용 */
+.navbar, 
+.navbar-brand, 
+.navbar-nav .nav-link {
+    font-family: 'sansMedium', sans-serif;
+}
+
+/* ------------------------ 추가된 폰트 및 스타일 끝 ------------------------ */
+
+
+/* 기존 CSS 코드 시작 */
 .searchArea #searchText {
     border: none;
     border-bottom: 1px solid #1A1A24;
@@ -365,7 +439,6 @@ body {
    border: none; /* 테두리도 완전히 투명하게 */
 }
 
-
 .swiper-slide:hover {
    transform: translateY(-10px);
    background: rgba(255, 255, 255, 0.8); /* 호버 시 약간 더 선명하게 */
@@ -397,16 +470,10 @@ body {
    border-color: skyblue; /* 호버 시 테두리 색상 진하게 */
 }
 
-/* 축제 이름 스타일 */
-.swiper-slide .festival-name {
-   color: #808080;  /* 회색 (Gray) */
-   font-size: 1.2rem;
-   font-weight: bold;
-   margin-top: 15px;
-   text-align: center;
-   word-break: keep-all;
-}
-ㄴ
+
+
+
+
 
 /* Swiper 네비게이션 버튼 스타일 */
 .swiper-button-next,
@@ -451,27 +518,114 @@ body {
 }
 
 /* 축제 카드 스타일 */
-		.festival-card {
-		    border: 2px solid #E6E6FA;
-		    border-radius: 10px;
-		    cursor: pointer;
-		    transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
-		    position: relative;
-		    overflow: hidden;
-		}
-		
-		/* 마우스를 올렸을 때 효과 */
-		.festival-card:hover {
-		    transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
-		    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
-		}
-		
-		/* 카드 클릭 시 약간 줄어드는 효과 */
-		.festival-card:active {
-		    transform: translateY(-5px) scale(0.97);
-		    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-		}
+.festival-card {
+    border: 2px solid #E6E6FA;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1); /* 더 강한 애니메이션 */
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* 마우스를 올렸을 때 효과 */
+.festival-card:hover {
+    transform: translateY(-15px) scale(1.05); /* 더 강하게 떠오르고 확대 */
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4); /* 그림자 더 강하게 */
+}
+
+/* 카드 클릭 시 약간 줄어드는 효과 */
+.festival-card:active {
+    transform: translateY(-5px) scale(0.97);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-weight: bold;
+}
+   
+/* 공통 리본 스타일 */
+.ongoing-badge, .upcoming-badge, .ended-badge {
+    position: absolute;
+    top: 10px;
+    left: -30px;
+    color: white;
+    padding: 5px 30px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transform: rotate(-45deg);
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: 100px; /* 리본 길이 고정 */
+    height: 25px; /* 리본 높이 고정 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 25px;
+    white-space: nowrap;
+}
+
+/* 개최중 배지 (녹색) */
+.ongoing-badge {
+    background-color: #28a745;
+}
+
+/* 예정 배지 (파란색) */
+.upcoming-badge {
+    background-color: #007bff;
+}
+
+/* 종료 배지 (빨간색) */
+.ended-badge {
+    background-color: #dc3545;
+}
+/* 기존 CSS 코드 끝 */
 
         .card-title {
             font-weight: bold;
         }
+	
+		@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+.festival-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: skyblue;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.festival-list-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: purple;
+    text-align: center;
+    margin: 15px 0;
+}
+
+@font-face {		
+    font-family: 'sansMedium';		
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 축제 카드 제목 (sansMedium 폰트 적용) */
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+
+

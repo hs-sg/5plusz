@@ -182,5 +182,3 @@ document.addEventListener('DOMContentLoaded', function() {
         handleDropMultiple({dataTransfer: {files: this.files}}, inputAdditional, previewAdditionalContainer);
     });
 });
-
-/* */

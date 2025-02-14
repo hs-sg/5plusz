@@ -255,5 +255,3 @@ document.addEventListener('DOMContentLoaded', () => {
         showSearchResult();
     }
 });
-
-/* */

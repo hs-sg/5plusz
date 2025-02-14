@@ -12,6 +12,8 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
+    
+    
         /* 달력 테두리 영역 스타일 */
         #calendar {
             max-width: 90%;
@@ -200,18 +202,32 @@
             border-color: transparent !important;
         }
         
-        .custom-event {
-             white-space: pre-line !important;
-             text-align: center;
-             line-height: 0.8;
-             font-size: 0.9em;
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             gap: 0px;
-             padding: 0;
-             margin: 0;
-        }
+       @font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 날짜 셀 안의 축제 개수 표시 스타일 */
+.custom-event {
+    font-family: 'sansLight', sans-serif !important;
+    font-size: 0.9em;
+    color: gray !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    flex-wrap: wrap !important; /* 텍스트가 넘칠 경우 자동 줄바꿈 */
+    padding: 5px !important; /* 여백 추가 */
+    max-width: 90% !important; /* 셀 안에서 너무 커지지 않도록 제한 */
+    line-height: 1.2 !important; /* 줄 간격 조정 */
+    word-break: break-word !important; /* 긴 단어 자동 줄바꿈 */
+}
+
+
 
         .custom-event::before {
             content: attr(data-title);
@@ -248,6 +264,98 @@
             transform: translate(-50%, -50%) !important;
             width: 100% !important;
         }
+
+
+		.fc-day-other .custom-event {
+		    opacity: 0.3 !important;
+		}
+		
+		/* 공통 리본 스타일 */
+		.ongoing-badge, .upcoming-badge, .ended-badge {
+		    position: absolute;
+		    top: 10px;
+		    left: -30px;
+		    color: white;
+		    padding: 5px 30px;
+		    font-size: 0.8rem;
+		    font-weight: bold;
+		    transform: rotate(-45deg);
+		    z-index: 2;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		    width: 100px; /* 리본 길이 고정 */
+		    height: 25px; /* 리본 높이 고정 */
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    line-height: 25px;
+		    white-space: nowrap;
+		}
+		
+		/* 개최중 배지 (녹색) */
+		.ongoing-badge {
+		    background-color: #28a745;
+		}
+		
+		/* 예정 배지 (파란색) */
+		.upcoming-badge {
+		    background-color: #007bff;
+		}
+		
+		/* 종료 배지 (빨간색) */
+		.ended-badge {
+		    background-color: #dc3545;
+		}
+		
+		@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+.festival-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: skyblue;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.festival-list-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: purple;
+    text-align: center;
+    margin: 15px 0;
+}
+
+@font-face {		
+    font-family: 'sansMedium';		
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 축제 카드 제목 (sansMedium 폰트 적용) */
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 축제 카드 세부 정보 (sansLight 폰트 적용) */
+.card-text {
+    font-family: 'sansLight', sans-serif;
+    font-size: 1rem;
+    color: #666;
+}
+
+		
 
         .fc-day-other .custom-event {
             opacity: 0.3 !important;
@@ -290,7 +398,6 @@
             background-color: #dc3545;
         }
 
-
     </style>
 </head>
 <body>
@@ -298,12 +405,14 @@
         <c:set var="pageTitle" value="축제 달력" />
         <%@ include file="/WEB-INF/views/fragments/header.jspf" %>
     </div>
-    <main>
-        <div id="calendar"></div>
-        <h3 class="text-center my-3 festival-list-title">축제 리스트</h3>
-        <hr class="custom-hr">
-        <div id="eventDetails" class="my-4 text-center"></div>
-    </main>
+   <main>
+    <h2 class="festival-title">월간 축제 달력</h2>
+    <div id="calendar"></div>
+    <h3 class="festival-list-title">축제 리스트</h3>
+    <hr class="custom-hr">
+    <div id="eventDetails" class="my-4 text-center"></div>
+</main>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

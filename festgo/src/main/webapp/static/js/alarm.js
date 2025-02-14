@@ -57,8 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 }
                 notificationList.innerHTML += html;
+				console.log('알람 생성 결과: '+ notificationList.innerHTML);
                 // 알람이 없는 경우 메시지를 출력
                 if(notificationList.innerHTML === '') {
+					console.log('알람 없음');
                     noAlarm(notificationList);
                 }
             })
@@ -115,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const srNumbers = jsonData.srNumbers;
         let html = '';
         if (frNumbers !== 0) {
+			console.log("축제등록 요청 알람 생성");
             html += `
                 <div class="notification-card card mb-2" id="alarm-cards">
                     <div class="card-body d-flex align-items-center">
@@ -129,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>`;
         }
         if (srNumbers !== 0) {
+			console.log("가입승인 요청 알람 생성");
             html += `
                 <div class="notification-card card mb-2" id="alarm-cards">
                     <div class="card-body d-flex align-items-center">
@@ -222,8 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (count > 0) {
             badge.style.display = 'block';
             badge.textContent = count;
+            document.getElementById('markAllRead').disabled = false;
         } else {
             badge.style.display = 'none';
+            document.getElementById('markAllRead').disabled = true;
         }
     }
     
