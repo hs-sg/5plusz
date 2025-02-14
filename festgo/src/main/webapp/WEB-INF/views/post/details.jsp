@@ -24,6 +24,10 @@
             @font-face {        
                 font-family: 'sansLight';       
                 src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }  
+            @font-face {        
+            font-family: 'dohyeon';     
+            src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');       
             }       
             
             main {
