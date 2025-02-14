@@ -15,6 +15,28 @@
                 rel="stylesheet" 
                 integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
                 crossorigin="anonymous">
+            <style>
+            /* Font Faces */
+                @font-face {        
+                    font-family: 'sansMedium';      
+                    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+                }       
+                @font-face {        
+                    font-family: 'sansLight';       
+                    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+                }       
+                
+                main {
+                    font-family: 'sansMedium';
+                }
+                
+                .btn {
+                height: 36px;  /* 버튼 높이 */
+                line-height: 36px;  /* 버튼 높이와 동일한 line-height 설정 */
+                text-align: center;
+                padding: 0 16px;
+                }
+            </style>
         </head>
             <body>
                 <div class="container-fluid">
@@ -31,49 +53,45 @@
                                     <!-- 제목 입력 -->
                                     <div class="mt-2">
                                         <label class="form-label" for="title">제목</label>
-                                        <input class="form-control" id="title" type="text" name="poTitle" value="${postWithAttachments.post.poTitle}" required />
+                                        <input style="font-family:'sansLight"class="form-control" id="title" type="text" name="poTitle" value="${postWithAttachments.post.poTitle}" required />
                                     </div>
                                     
                                     <!-- 내용 입력 -->
                                     <div class="mt-2">
                                         <label class="form-label" for="content">내용</label>
-                                        <textarea class="form-control" id="content" rows="5" name="poContent" required>${postWithAttachments.post.poContent}</textarea>
+                                        <textarea style="font-family:'sansLight" class="form-control" id="content" rows="5" name="poContent" required>${postWithAttachments.post.poContent}</textarea>
                                     </div>
 
-                                    <!-- 기존 첨부파일 목록 -->
-                                    <ul class="list-group">
-                                        <c:forEach var="attachment" items="${postWithAttachments.attachments}" varStatus="status">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <div class="d-flex align-items-center">
-                                                    <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
-                                                    <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
-                                    
-                                                    <!-- 이미지 파일이면 미리보기 -->
-                                                    <c:choose>
-                                                        <c:when test="${fileExt eq 'jpg' or fileExt eq 'jpeg' or fileExt eq 'png' or fileExt eq 'gif'}">
-                                                            <img src="${pageContext.request.contextPath}/post/uploads/${attachment.paAttachments}"
-                                                                 alt="첨부 이미지"
-                                                                 class="img-thumbnail me-2"
-                                                                 style="max-width: 100px; height: auto;" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="material-icons me-2">attachment</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                    
-                                                    <!-- 파일명 -->
-                                                    <span>${attachment.paAttachments}</span>
-                                                </div>
-                                    
-                                                <!-- 삭제 버튼 추가 -->
-                                                <button type="button" class="btn btn-danger btn-sm deleteFileBtn" data-file-id="${attachment.paId}">삭제</button>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-
-
-            
-            
+									<!-- 기존 첨부파일 목록 -->
+									<ul class= "list-group" >
+									    <c:forEach var="attachment" items="${postWithAttachments.attachments}" varStatus="status">
+									        <li class="list-group-item d-flex justify-content-between align-items-center">
+									            <div style="font-family:'sansLight" class="d-flex align-items-center">
+									                <c:set var="fileNameParts" value="${fn:split(attachment.paAttachments, '.')}" />
+									                <c:set var="fileExt" value="${fn:toLowerCase(fileNameParts[fn:length(fileNameParts) - 1])}" />
+									
+									                <!-- 이미지 파일이면 미리보기 -->
+									                <c:choose>
+									                    <c:when test="${fileExt eq 'jpg' or fileExt eq 'jpeg' or fileExt eq 'png' or fileExt eq 'gif'}">
+									                        <img src="${pageContext.request.contextPath}/post/uploads/${attachment.paAttachments}"
+									                             alt="첨부 이미지"
+									                             class="img-thumbnail me-2"
+									                             style="max-width: 100px; height: auto;" />
+									                    </c:when>
+									                    <c:otherwise>
+									                        <span class="material-icons me-2">attachment</span>
+									                    </c:otherwise>
+									                </c:choose>
+									
+									                <!-- 파일명 -->
+									                <span>${attachment.paAttachments}</span>
+									            </div>
+									
+									            <!-- 삭제 버튼 추가 -->
+            									<button type="button" class="btn btn-danger btn-sm deleteFileBtn" data-file-id="${attachment.paId}">삭제</button>
+									        </li>
+									    </c:forEach>
+									</ul>
                                     <!-- 새 첨부파일 추가 -->
                                     <div class="mt-3">
                                         <label class="form-label">새로운 첨부파일 추가</label>

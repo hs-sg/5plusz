@@ -92,6 +92,16 @@ public class MyPageController {
 //		return ResponseEntity.ok(festivals);
 //	}
 	
+//	@GetMapping("/festcnt/")
+//	public ResponseEntity<List<Integer>> getFestivalCount(HttpSession session) {
+//		String username = session.getAttribute("signedInUser").toString();
+//		String role = session.getAttribute("role").toString();
+//		log.debug("getFestivalCount(username={}, role={})", username, role);
+//		List<Integer> festivalCounts = myPageService.countFestivalsByStatus(username, role);
+//		
+//		return ResponseEntity.ok(festivalCounts);
+//	}
+	
 	// 마이페이지 상에 유저가 볼 좋아요한 축제 리스트 가져오기
 	// eachNumber 만큼 가져옴
 	@GetMapping("/ufestivals/")

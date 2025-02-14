@@ -15,6 +15,10 @@ public interface FestRequestDao {
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	
 	int selectFrIdByFeId(int feId);
-	FestRequest selectFestRequestByFeId(int feId);
 
+	
+
+	FestRequest selectFestRequestByFrId(int frId);
 }
+
+

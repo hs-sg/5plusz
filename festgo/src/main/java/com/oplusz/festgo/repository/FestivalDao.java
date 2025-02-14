@@ -40,6 +40,9 @@ public interface FestivalDao {
     // 축제 이름으로 축제 id 검색
     int selectFeIdByName(String feName);
     
+    // 축제 이름과 주최자 조직명으로 축제 검색(제일 최근에 등록된 축제 1개만)
+    Festival selectFastestFestByFeNameAndMeSponsor(String feName, String meSponsor);
+    
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	
 	// 전체 축제 읽기

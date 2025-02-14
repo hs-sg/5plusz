@@ -22,6 +22,9 @@
             
         <c:url var="homeCSS" value="/css/home.css"/>
         <link href="${ homeCSS }" rel="stylesheet"/>
+        
+        <!-- ✅ 추가된 CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -201,6 +204,7 @@
         </script> 
         
         <c:url var="homeJS" value="/js/home.js"/>
+
         <script src="${ homeJS }"></script>
 
         
@@ -214,5 +218,6 @@
 		});
 		</script>
 
+       
     </body>
 </html>
