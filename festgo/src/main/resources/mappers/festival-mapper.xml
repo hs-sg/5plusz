@@ -33,6 +33,23 @@
         VALUES (#{feId}, #{fiImages})
     </insert>
     
+    <resultMap id="FestivalImageResultMap" type="com.oplusz.festgo.domain.FestivalImage">
+        <id property="fiId" column="fi_id"/>
+        <result property="feId" column="fe_id"/>
+        <result property="fiImages" column="fi_images"/>
+    </resultMap>
+    
+    <select id="selectFestivalImagesByFeId" resultMap="FestivalImageResultMap">
+        SELECT fi.fi_id, fi.fe_id, fi.fi_images
+        FROM festival_image fi
+        WHERE fi.fe_id = #{feId}
+    </select>
+
+    
+    <select id="getFestivalImages" parameterType="int" resultType="com.oplusz.festgo.domain.FestivalImage">
+        SELECT fi_images FROM festival_image WHERE fe_id = #{feId}
+    </select>
+    
     <!-- 상세보기에서 사용할 메서드 이름과 SQL 문장 -->
     <select id="selectFestivalById" resultType="Festival">
         select * from festival where fe_id = #{feId}

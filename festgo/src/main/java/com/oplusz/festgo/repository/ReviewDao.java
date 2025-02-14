@@ -23,4 +23,5 @@ public interface ReviewDao {
 	int updateReview(Review Review);
 	Review selectById(Integer reId);
 	Integer selectReviewCount (Integer feId);
+	double selectAverageGrade (Integer feId);
 }
