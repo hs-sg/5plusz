@@ -46,8 +46,8 @@
          <div>
             <c:url value="/" var="homePage"/>
             <a href="${pageContext.request.contextPath}/" class="text-dark text-decoration-none">
-                <img src="${pageContext.request.contextPath}/static/images/logo5.PNG" alt="Logo" style="height: 100px;">
-
+                <img src="${pageContext.request.contextPath}/static/images/logo5.PNG" alt="Logo" style="height: 150px;">
+    
             </a> 
         </div>
         <!-- 오른쪽: 사용자 정의 햄버거 메뉴 버튼 -->

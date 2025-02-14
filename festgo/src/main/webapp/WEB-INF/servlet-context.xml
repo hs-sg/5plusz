@@ -43,8 +43,8 @@
     <!-- 정적 자원 핸들러 추가 -->
     <!-- ✅ webapp-static 폴더에 있는 정적 리소스 매핑 -->
     
-    <!--  <mvc:resources location="/static/" mapping="/**" />-->
     
+    <!--  중요-->
     <mvc:resources mapping="/static/**" location="/static/" />
     <mvc:resources mapping="/js/**" location="/static/js/" />
     <mvc:resources mapping="/font/**" location="/static/font/" />
