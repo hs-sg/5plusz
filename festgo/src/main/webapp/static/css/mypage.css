@@ -26,15 +26,14 @@ html {
 }
 
 body {
+	min-width: 670px;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #EAF6FF, #FFFFFF); /* 연한 하늘색 → 흰색 */
-    background-repeat: no-repeat;
-    background-size: cover; /* 배경 이미지가 화면에 맞게 늘어납니다 */
     font-family: 'sansMedium';
     -ms-overflow-style: none;
     }
     ::-webkit-scrollbar {
     display: none;
+    overflow: visible !important;
 }
 
 .mypage-container .row {
@@ -42,8 +41,6 @@ body {
   }
 
 .mypage-container {
-    padding-left: 52px;  /* 왼쪽 여백 */
-    padding-right: 25px; /* 오른쪽 여백 */
 }
 
 #divMyProfile, #divFestivalList, #divPostList, #divReviewList, #divSponsorCheckList {
@@ -53,8 +50,8 @@ body {
 
 .sticky-sidebar {
     position: sticky; /* 스크롤 시 고정 */
-    top: 0; /* 상단에서의 거리 */
-    height: 40vh; /* 전체 화면 높이 */
+    top: 10px; /* 상단에서의 거리 */
+    height: 35vh; /* 전체 화면 높이 */
     width: 11rem;
     padding: 20px; /* 여백 설정 */
     background-color: rgba(0, 0, 0, 0.03); /* 배경색 설정 */
@@ -185,15 +182,15 @@ li {
 }
 
 .cardfestival {
-    padding-right: 0;
-    padding-left: 0;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
     margin-top: 20px;
-    width: 430px;
+    width: 510px !important;
 }
 
 .card-img-top {
-    width: 430px;
-    height: 430px;
+    width: 510px !important;
+    height: 510px !important;
 }
 
 .thPostId, .thPostTitle, .thPostAuthor, .thPostCreatedTime, .thPostViews
@@ -228,4 +225,16 @@ li {
 
 .thPostAuthor, .thPostCreatedTime, .thReviewAuthor, .thReviewCreatedTime {
     width: 20%;
+}
+
+#passwordChangeModal {
+	z-index: 1050 !important;
+    position: fixed;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%)
+}
+
+.modal-backdrop {
+	z-index: 1049;
 }
