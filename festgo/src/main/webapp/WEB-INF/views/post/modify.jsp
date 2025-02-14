@@ -92,24 +92,20 @@
 									        </li>
 									    </c:forEach>
 									</ul>
-
-
-            
-            
                                     <!-- 새 첨부파일 추가 -->
                                     <div class="mt-3">
                                         <label class="form-label">새로운 첨부파일 추가</label>
                                         <input type="file" name="files" class="form-control" multiple />
                                     </div>
             
-									
-									<!-- 수정 & 삭제 버튼 -->
+                                    
+                                    <!-- 수정 & 삭제 버튼 -->
                                     <%-- 로그인 사용자와 포스트 작성자가 같은 경우에만 삭제/업데이트 가능  --%>
                                     <c:if test="${sessionScope.signedInUser eq postWithAttachments.post.poAuthor}">
-    									<div class="card-footer d-flex justify-content-end mt-3">
-    									    <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
-    									    <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
-    									</div>
+                                        <div class="card-footer d-flex justify-content-end mt-3">
+                                            <button type="button" id="btnDelete" class="me-2 btn btn-outline-danger">삭제</button>
+                                            <button type="submit" id="btnUpdate" class="btn btn-outline-success">업데이트</button>       
+                                        </div>
                                     </c:if>
                                 </form>
                             </div>
@@ -127,4 +123,5 @@
                 <c:url var="postModifyJS" value="/js/post-modify.js"/>
                 <script src="${postModifyJS}"></script>
             </body>
+
 </html>

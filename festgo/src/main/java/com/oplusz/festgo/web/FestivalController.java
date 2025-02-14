@@ -1,6 +1,7 @@
 package com.oplusz.festgo.web;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,11 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +63,30 @@ public class FestivalController {
         model.addAttribute("festival", festival);
         return "fest/detail"; // JSP로 이동
     }
+    
+    @Controller
+    @RequestMapping("/uploads")
+    public class FileController {
+
+        @GetMapping("/{filename:.+}")
+        public ResponseEntity<Resource> getFile(@PathVariable String filename) {
+            try {
+                Path filePath = Paths.get("C:/workspace/project/uploads/").resolve(filename);
+                Resource resource = new UrlResource(filePath.toUri());
+
+                if (resource.exists() || resource.isReadable()) {
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.IMAGE_JPEG)
+                            .body(resource);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } catch (MalformedURLException e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        }
+    }
+
 
 
 	// GET 방식 매핑
@@ -80,6 +111,14 @@ public class FestivalController {
 	        @ModelAttribute FestivalCreateDto dto,
 	        HttpSession session,
 	        BindingResult result) {
+		
+		 if ("free".equals(feFeeType)) {
+		        dto.setFeFee("무료");
+		    } else {
+		        dto.setFeFee("유료");
+		    }
+
+		    log.debug("위도: {}, 경도: {}", dto.getFeLat(), dto.getFeLong());
 		
 		 if ("free".equals(feFeeType)) {
 	            dto.setFeFee("무료");
@@ -158,7 +197,8 @@ public class FestivalController {
 	    // DTO 저장
 	    festivalService.create(dto);
 	    
-	    alarmService.create(dto.getFeName(), session.getAttribute("signedInUser").toString()); //-> 알람 추가
+	    // 알람 추가
+	    alarmService.create(dto.getFeName(), dto.getMeSponsor(), session.getAttribute("signedInUser").toString());
 	    
 	    return "redirect:/";
 	}

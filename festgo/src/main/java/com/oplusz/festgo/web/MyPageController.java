@@ -92,6 +92,16 @@ public class MyPageController {
 //		return ResponseEntity.ok(festivals);
 //	}
 	
+//	@GetMapping("/festcnt/")
+//	public ResponseEntity<List<Integer>> getFestivalCount(HttpSession session) {
+//		String username = session.getAttribute("signedInUser").toString();
+//		String role = session.getAttribute("role").toString();
+//		log.debug("getFestivalCount(username={}, role={})", username, role);
+//		List<Integer> festivalCounts = myPageService.countFestivalsByStatus(username, role);
+//		
+//		return ResponseEntity.ok(festivalCounts);
+//	}
+	
 	// 마이페이지 상에 유저가 볼 좋아요한 축제 리스트 가져오기
 	// eachNumber 만큼 가져옴
 	@GetMapping("/ufestivals/")
@@ -259,8 +269,16 @@ public class MyPageController {
 	@DeleteMapping("/delpost/{poId}")
 	public void deletePostByPoId(@PathVariable("poId") String poId) {
 		Integer intPoId = Integer.parseInt(poId);
-		log.debug("deletePostByPoId()");
+		log.debug("deletePostByPoId(poId={})", poId);
 		postService.delete(intPoId);
+	}
+	
+	//  마이페이지 상에 리뷰 삭제하기
+	@DeleteMapping("/delreview/{reId}")
+	public void deleteReviewByReId(@PathVariable("reId") String reId) {
+		Integer intReId = Integer.parseInt(reId);
+		log.debug("deleteReviewByReId(reId={})", reId);
+		reviewService.delete(intReId);
 	}
 	
 	// 마이페이지 상에 유저가 등록한 리뷰 갯수 가져오기
@@ -382,4 +400,5 @@ public class MyPageController {
 		
 		return ResponseEntity.ok(refuseResult);
 	}
+
 }

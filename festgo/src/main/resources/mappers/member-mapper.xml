@@ -71,7 +71,6 @@
         set mr_id = 2
         where me_id = #{meId}
     </update>
-    
     <!-- 희성 작성 끝 -->
     
 </mapper>

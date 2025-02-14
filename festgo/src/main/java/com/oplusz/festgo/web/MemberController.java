@@ -40,7 +40,26 @@ public class MemberController {
 	@ResponseBody
 	public ResponseEntity<Integer> signIn(@RequestBody MemberSignInDto dto, HttpSession session) {
 		log.debug("signIn(dto={})", dto);
+		
+		Member member = memberService.read(dto);
+		if (member == null) {
+			// username과 password가 일치하는 사용자가 DB에 없는 경우 - 로그인 실패.
+			return ResponseEntity.ok(0);
+		} else {
+			session.setAttribute("signedInUser", member.getMeUsername());
 
+			session.setAttribute("mr_id", member.getMrId()); // 역할 ID 저장
+			
+			session.setAttribute("memberRole", member.getMrId());
+			
+			if (member.getMeSponsor() != null) {
+				session.setAttribute("memberSponsor", member.getMeSponsor());
+			}
+
+			return ResponseEntity.ok(1);
+		}
+		/* [하신] 아래 코드는 주석처리함 
+		 * - 사유: 사업자로 회원가입하면 승인여부 상관없이 우선 일반 사용자로 가입됨
 		Member memberForCheck = memberService.read(dto.getMeUsername());
 		SponRequest sr = sponRequestService.read(memberForCheck.getMeId());	
 		if (sr.getSrApproval() == 1) {
@@ -52,14 +71,19 @@ public class MemberController {
 				session.setAttribute("signedInUser", member.getMeUsername());
 
 				session.setAttribute("mr_id", member.getMrId()); // 역할 ID 저장
-
+				
 				session.setAttribute("memberRole", member.getMrId());
+				
+				if (member.getMeSponsor() != null) {
+					session.setAttribute("memberSponsor", member.getMeSponsor());
+				}
 
 				return ResponseEntity.ok(1);
 			}
 		} else { // srApproval의 값이 1(승인)이 아닌 경우 - 로그인 실패.
 			return ResponseEntity.ok(2);
 		}
+		*/
 	}
 
 	@GetMapping(value = "/check-login", produces = "application/json")
@@ -151,5 +175,4 @@ public class MemberController {
 			return ResponseEntity.ok("N");
 		}
 	}
-
 }

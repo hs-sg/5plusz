@@ -1,0 +1,231 @@
+@charset "UTF-8";
+/* mypage.jsp 파일에 포함 */
+
+@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sansBold';
+    src: url('../font/GmarketSansTTFBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sansLight';
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'sansMedium';
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #EAF6FF, #FFFFFF); /* 연한 하늘색 → 흰색 */
+    background-repeat: no-repeat;
+    background-size: cover; /* 배경 이미지가 화면에 맞게 늘어납니다 */
+    font-family: 'sansMedium';
+    -ms-overflow-style: none;
+    }
+    ::-webkit-scrollbar {
+    display: none;
+}
+
+.mypage-container .row {
+    display: flex;
+  }
+
+.mypage-container {
+    padding-left: 52px;  /* 왼쪽 여백 */
+    padding-right: 25px; /* 오른쪽 여백 */
+}
+
+#divMyProfile, #divFestivalList, #divPostList, #divReviewList, #divSponsorCheckList {
+	display: flex;
+	overflow: hidden;
+}
+
+.sticky-sidebar {
+    position: sticky; /* 스크롤 시 고정 */
+    top: 0; /* 상단에서의 거리 */
+    height: 40vh; /* 전체 화면 높이 */
+    width: 11rem;
+    padding: 20px; /* 여백 설정 */
+    background-color: rgba(0, 0, 0, 0.03); /* 배경색 설정 */
+    border-radius: 10px; /* 테두리 둥글게 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    backdrop-filter: blur(10px); /* 배경 블러 효과 */
+}
+
+/* 버튼 스타일 추가 */
+.sticky-sidebar .btn {
+    margin-bottom: 10px; /* 버튼 간 여백 */
+    width: 8rem; /* 버튼 너비를 100%로 설정 */
+    padding: 10px 20px; /* 버튼 패딩 조정 */
+    color: black; /* 버튼 텍스트 색상 */
+    border-radius: 5px; /* 버튼 테두리 둥글게 설정 */
+    transition: background-color 0.3s; /* 배경색 전환 효과 */
+}
+
+.sticky-sidebar .btn:hover {
+    background-color: #b8dbfd; /* 버튼 호버 시 배경색 */
+}
+
+.sticky-div {
+	padding-top: 10px;
+	padding-bottom: 10px;
+    position: sticky; /* 스크롤 시 고정 */
+    flex: 1;
+    top: 30px; /* 상단에서의 거리 */
+    height: 100vh; /* 전체 화면 높이 */
+    overflow-y: auto; /* 내용이 많을 경우 스크롤 가능하게 설정 */
+    margin-left: 20px;
+    border-radius: 10px; /* 테두리 둥글게 설정 */
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.myprofile_row, .sponrequest_row {
+    padding: 10px 20px;
+    border-radius: 12px;
+    box-shadow: 1px 1px 10px 0 rgba(72, 75, 108, .08);
+    border: solid 1px #e3e9ed;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.subindex_row .row_item {
+    padding: 12px 0px 12px 0px;
+}
+
+ul {
+	list-style: none;
+    display: block;
+    list-style-type: disc;
+    unicode-bidi: isolate;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+    list-style: none;
+}
+
+.row_item {
+    position: relative;
+}
+
+.row_item .item_text {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: -.8px;
+    color: #2e2e2e;
+    word-break: break-all;
+}
+
+.row_item .middle_data {
+    position: relative;
+    display: inline-block;
+    margin: 5px 0 0 12px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: -.8px;
+    color: #646871;
+    vertical-align: top;
+}
+
+.row_item .middle280 {
+    display: none;
+}
+
+.row_item .middle_data::before, .row_item .middle_text::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -8px;
+    width: 1px;
+    height: 20px;
+    background-color: #e4e5eb;
+}
+
+.div-buttons {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽으로 정렬 */
+    gap: 10px; /* 버튼 간의 간격 설정 */
+}
+
+.div-buttons .btn {
+    margin-left: 10px;
+    padding: 8px 12px; /* 버튼 크기 줄이기 */
+}
+
+.divFestivalbtn {
+    display: flex;
+    justify-content: space-around; /* 버튼 간 간격을 균등하게 설정 */
+    align-items: center; /* 세로 정렬 */
+    background-color: #f8f9fa; /* 배경색 설정 */
+    padding: 10px; /* 여백 설정 */
+    border-radius: 5px; /* 테두리를 둥글게 설정 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+.divFestivalbtn .btn {
+    flex: 1; /* 버튼이 공간을 균등하게 차지하도록 설정 */
+    margin: 5px; /* 버튼 간 여백 설정 */
+    padding: 10px 20px; /* 버튼 크기 설정 */
+    width: 150px;
+}
+
+.cardfestival {
+	padding-right: 0;
+	padding-left: 0;
+	margin: 20px 5px 0 5px;
+	width: 430px;
+}
+
+.card-img-top {
+    width: 430px;
+    height: 430px;
+}
+
+.thPostId, .thPostTitle, .thPostAuthor, .thPostCreatedTime, .thPostViews
+.thReviewId, .thReviewTitle, .thReviewAuthor, .thReviewCreatedTime, .thReviewGrade
+{
+	text-align: center;
+}
+
+.tdPostId, .tdPostAuthor, .tdPostViews, .tdPostNotice,
+.tdReviewId, .tdReviewAuthor, .tdReviewGrade
+{
+    text-align: center;
+}
+
+.tdPostNotice {
+	font-weight: bold;
+	color: #dd3333 !important;
+}
+
+.tdPostTitle a, .tdReviewTitle a{
+	color: #000000 !important;
+	text-decoration-line: none;
+}
+
+.thPostId, .thPostViews, .thReviewId, .thReviewGrade {
+	width: 10%;
+}
+
+.thPostTitle, thReviewTitle {
+	width: 40%;
+}
+
+.thPostAuthor, .thPostCreatedTime, .thReviewAuthor, .thReviewCreatedTime {
+	width: 20%;
+}

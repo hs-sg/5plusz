@@ -2,9 +2,13 @@
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
+<!-- Bootstrap Icons CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <!-- 사용자 정의 햄버거 아이콘 및 버튼 스타일 -->
 <style>
     /* 버튼 자체의 배경과 테두리를 제거 */
+    
     .btn-hamburger {
         background-color: transparent !important;
         border: none !important;
@@ -27,19 +31,76 @@
         left: 0;
         transition: all 0.2s;
     }
-    .custom-toggler-icon span:nth-child(1) {
-        top: 0;
-    }
-    .custom-toggler-icon span:nth-child(2) {
-        top: 10px;
-    }
-    .custom-toggler-icon span:nth-child(3) {
-        top: 20px;
+    .custom-toggler-icon span:nth-child(1) { top: 0; }
+    .custom-toggler-icon span:nth-child(2) { top: 10px; }
+    .custom-toggler-icon span:nth-child(3) { top: 20px; }
+
+    /* 알림 버튼 스타일 */
+    .btn-notification {
+        background-color: transparent !important;
+        border: none !important;
+        padding: 0;
+        margin-right: 1rem;
+        position: relative;
+        transition: transform 0.2s;
     }
     
+    .btn-notification:hover {
+        transform: scale(1.1);
+    }
+    
+    .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #dc3545;
+        color: white;
+        border-radius: 50%;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        display: none;
+    }
+
+    /* 알림 필터 스타일 */
+    .notification-filters {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .filter-btn {
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        border: 1px solid #dee2e6;
+        background: white;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+        background: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+
+    /* 빈 상태 스타일 */
+    .empty-state {
+        text-align: center;
+        padding: 2rem;
+        color: #6c757d;
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #dee2e6;
+    }
 </style>
 
-<!-- Header: 왼쪽에 Fest Go, 오른쪽에 햄버거 메뉴 버튼 -->
+<!-- Header -->
+<!-- Header: 왼쪽에 Fest Go, 오른쪽에 알림과 햄버거 메뉴 버튼 -->
 <header class="p-3" style="background-color: transparent;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <!-- 왼쪽: 로고 텍스트 -->
@@ -50,11 +111,22 @@
     
             </a> 
         </div>
-        <!-- 오른쪽: 사용자 정의 햄버거 메뉴 버튼 -->
-        <div>
+        <!-- 오른쪽: 알림 버튼과 햄버거 메뉴 버튼을 포함하는 div -->
+        <div class="d-flex align-items-center">
+            <!-- 알림 버튼 -->
+            <c:if test="${not empty signedInUser}">
+                <button class="btn btn-notification me-3" type="button"
+                        data-bs-toggle="modal" data-bs-target="#notificationModal"
+                        id="btnAlarm">
+                    <i class="bi bi-bell fs-4"></i>
+                    <span class="notification-badge" id="notificationBadge" style="display: none;">
+                    </span>
+                </button>
+            </c:if>
+            <!-- 햄버거 메뉴 버튼 -->
             <button class="btn btn-hamburger" type="button"
-                data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu"
-                aria-controls="offcanvasMenu">
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu"
+                    aria-controls="offcanvasMenu">
                 <span class="custom-toggler-icon">
                     <span></span>
                     <span></span>
@@ -65,11 +137,15 @@
     </div>
 </header>
 
-
 <!-- Offcanvas 메뉴 (오른쪽에서 슬라이드) -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        <c:if test="${ empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        </c:if>
+        <c:if test="${ not empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuId">안녕하세요! ${signedInUser }님</h5>
+        </c:if>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -87,15 +163,14 @@
                 <c:url value="/post/list" var="postList"/>
                 <a class="nav-link" href="${postList}">커뮤니티</a>
             </li>
-                    <c:if test="${memberRole eq 2 || memberRole eq 3}">
-	            <li class="nav-item">
+            <c:if test="${memberRole eq 2 || memberRole eq 3}">
+                <li class="nav-item">
                     <c:url value="/fest/create" var="festCreate"/>
                     <a class="nav-link" href="${festCreate}">축제등록</a>
-	            </li>
-                </c:if>
+                </li>
+            </c:if>
             <!-- 로그인 상태에 따른 메뉴 항목 -->
-            <c:if test="${ empty signedInUser }">
-
+            <c:if test="${empty signedInUser}">
                 <li class="nav-item">
                     <a class="nav-link" href="" id="linkSignin">LOGIN</a>
                 </li>
@@ -104,7 +179,7 @@
                     <a class="nav-link" href="${signUpPage}">SIGNUP</a>
                 </li>
             </c:if>
-            <c:if test="${ not empty signedInUser }">
+            <c:if test="${not empty signedInUser}">
                 <li class="nav-item">
                     <c:url value="/user/mypage" var="myPage"/>
                     <a class="nav-link" href="${myPage}">마이페이지</a>
@@ -118,8 +193,32 @@
     </div>
 </div>
 
+<!-- 알림 모달 -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">알림</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 알림 필터 -->
+                <div class="notification-filters">
+                    <button class="filter-btn active" id="defaultAlarmFilter" data-filter="all">전체</button>
+                    <button class="filter-btn" data-filter="festival">🎉 축제</button>
+                    <button class="filter-btn" data-filter="community">👥 계정</button>
+               </div>
 
-
+                <!-- 알림 목록 컨테이너 (현재는 숨김) -->
+                <div class="list-group" id="notificationList"></div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 로그인 모달 -->
 <div id="signinModal" class="modal" tabindex="-1">
@@ -137,7 +236,7 @@
                 <!-- 아이디 입력 -->
                 <div class="form-floating">
                     <input type="text" class="form-control mb-2" 
-                        id="modalSigninUsername" placeholder="아이디"  required />
+                        id="modalSigninUsername" placeholder="아이디" autofocus required />
                     <label for="modalSigninUsername">아이디</label>
                 </div>
                 <!-- 비밀번호 입력 -->
@@ -163,6 +262,12 @@
 <script src="${ signInJS }"></script>
 
 <script>
+    const alMeUsername = `${ signedInUser }`;
+    const alMrId = Number(${ memberRole });
+</script>
+
+
+<script>
 document.addEventListener("DOMContentLoaded", () => {
     // 로그인 모달 자동 실행 여부 확인
     <c:if test="${not empty loginRequired}">
@@ -171,6 +276,12 @@ document.addEventListener("DOMContentLoaded", () => {
     </c:if>
 });
 </script>
+
+<!-- 알림 관련 JavaScript -->
+<c:url var="alarmJS" value="/js/alarm.js" />
+<script src="${ alarmJS }"></script>
+
+
 <script>
 document.querySelector('.modal-content').addEventListener('click', function(e) {
     e.stopPropagation();

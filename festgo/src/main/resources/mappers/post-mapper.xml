@@ -145,26 +145,6 @@
 	  FROM post_attachment
 	  WHERE po_id = #{poId}
 	</select>
-	
-	<!--다중 삭제 -->
-	<delete id="deleteMultipleById" parameterType="java.util.List">
-	    DELETE FROM post
-	    WHERE po_id IN
-		    <foreach collection="postIds" item="poId" separator="," open="(" close=")">
-		        #{poId}
-		    </foreach>
-	</delete>
-	<!-- 특정 첨부파일 조회 -->
-	<select id="selectAttachmentById" parameterType="int" resultType="com.oplusz.festgo.domain.PostAttachment">
-	    SELECT * FROM post_attachment WHERE pa_id = #{fileId}
-	</select>
-
-	<!-- 특정 첨부파일 삭제 -->
-	<delete id="deleteAttachmentById" parameterType="int">
-	    DELETE FROM post_attachment WHERE pa_id = #{fileId}
-	</delete>
-
-	
 <!-- 희성 작성 시작 -->
 
     <!-- 검색된 게시글 개수 -->

@@ -141,7 +141,7 @@
         .card-header .ms-auto {
             margin-left: auto;
         }
-        
+
         #toggleNotice {
             margin-right: 10px;
         }
@@ -208,6 +208,8 @@
             padding: 0 16px;
         }
         </style>
+
+
     
         
     </head>
@@ -240,6 +242,7 @@
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
+
                                 	<c:if test="${userRole == 3}">
 							            <th style="width: 5%;">
 							                <input type="checkbox" id="selectAll"> <!-- ✅ 헤더에 전체 선택 버튼 -->
@@ -248,6 +251,7 @@
                                 	<th style="width: 10%;"></th>
                                     <th style="width: 60%;">제목</th>
                                     <th style="width: 20%;">작성자</th>
+
                                     <th>작성날짜</th>
                                     <th>조회수</th>
                                 </tr>
@@ -257,11 +261,14 @@
                                 <c:if test="${currentPage == 1}">
                                     <c:forEach var="notice" items="${notices}">
                                         <tr class="notice">
+
                                         	<c:if test="${userRole == 3}">
 							                    <td>
 							                        <input type="checkbox" name="deleteIds" value="${notice.poId}"> <!-- ✅ 관리자만 체크박스 표시 -->
 							                    </td>
 							                </c:if>
+
+ 
                                             <td>
                                                 <span class="notice-label badge">공지</span> <!-- 배지 스타일 -->
                                             </td>
@@ -281,15 +288,16 @@
                                 <!-- 일반 게시글 -->
                                 <c:forEach var="p" items="${posts}">
                                     <tr class="normal">
-                                    	<c:if test="${userRole == 3}">
-						                    <td>
-						                        <input type="checkbox" name="deleteIds" value="${p.poId}">
-						                    </td>
-						                </c:if>
+                                        <c:if test="${userRole == 3}">
+                                            <td>
+                                                <input type="checkbox" name="deleteIds" value="${p.poId}">
+                                            </td>
+                                        </c:if>
                                         <td>
 										   <span class="normal-label badge">일반</span> <!-- 일반 배지 -->
 										</td>
                                         <td style="text-align: left; padding-left: 15px; width: 60%;">
+
                                             <c:url var="postDetailsPage" value="/post/details">
                                                 <c:param name="poId" value="${p.poId}"/>
                                             </c:url>
@@ -303,9 +311,9 @@
                             </tbody>
                         </table>
                         <c:if test="${userRole == 3}">
+
 						    <button id="deleteSelected" class="delete-button">선택 삭제</button>
 						</c:if>
-
                     </div>
                         <!-- 검색 폼 -->
                         <c:url var="postSearchPage" value="/post/search"/>
@@ -412,8 +420,8 @@
                     }
 
                     if (confirm('선택한 게시글을 삭제하시겠습니까?')) {
-                    	fetch('${pageContext.request.contextPath}/post/delete-multiple', {  
-                    		//  JSP의 `contextPath`를 사용하여 동적으로 경로 설정
+                        fetch('${pageContext.request.contextPath}/post/delete-multiple', {  
+                            //  JSP의 `contextPath`를 사용하여 동적으로 경로 설정
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ postIds: selected })  
@@ -435,7 +443,10 @@
             }
         });
 
+
 		</script>
         
     </body>
+
 </html>
+
