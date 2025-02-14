@@ -397,8 +397,6 @@
         .ended-badge {
             background-color: #dc3545;
         }
->>>>>>> refs/heads/master
-
 
     </style>
 </head>
