@@ -8,6 +8,8 @@ public interface AlarmDao {
 	
 	// 희성 작성 시작
 	
+
+
 		Integer insertRequest(Alarm alarm);
 		Integer updateProcess(Integer alCategory, Integer alSfid);
 		Integer updateCheck(Integer alId);
@@ -22,3 +24,4 @@ public interface AlarmDao {
 	// 희성 작성 끝
 	List<Alarm> selectStatus1ByMeId(Integer meId);
 }
+

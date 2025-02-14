@@ -52,7 +52,7 @@ public class ReviewController {
 		List<ReviewItemDto> list = reviewService.readByFestivalId(feId);
 		
 		return ResponseEntity.ok(list);
-		
+		 
 	}
 	
 	@PostMapping
