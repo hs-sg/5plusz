@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 로그인한 프로필 출력 */
     function getMyProfile(data) {
         const createdDate = getDate(data.meCreatedTime);
-        let html =  `
+        let html = `
         <div class="subindex_row">
             <div class="myprofile_box">
                 <ul class="myprofile_row">
@@ -389,19 +389,19 @@ document.addEventListener('DOMContentLoaded', () => {
                             <span class="middle_data">${data.meEmail}</span>
                         </div>
                     </li>
-                    `
-                    if(role == `2`) {
-                        html += `
-                        <li>
-                            <div class="row_item sponsor">
-                                <span class="item_text">&#127970;&nbsp;업체명</span>
-                                <br class="middle280">
-                                <span class="middle_data">${data.meSponsor}</span>
-                            </div>
-                        </li>
-                        `    
-                    }
-                    html += `
+                    `;
+        if (role == `2`) {
+            html += `
+                    <li>
+                        <div class="row_item sponsor">
+                            <span class="item_text">&#127970;&nbsp;업체명</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.meSponsor}</span>
+                        </div>
+                    </li>
+                    `;
+        }
+        html += `
                     <li>
                         <div class="row_item createdtime">
                             <span class="item_text">&#128221;&nbsp;가입일</span>
@@ -419,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ul>
             </div>
         </div>
-        <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+        <div class="modal" id="passwordChangeModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -444,26 +444,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 data-bs-target="#passwordChangeModal">비밀번호 변경</button>
             <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
         </div>
-        `
+        `;
         divMyProfile.innerHTML = html;
-        
+
         const btnTogglePasswordChange = document.querySelector('button.btnTogglePasswordChange');
         const btnMemberWithdraw = document.querySelector('button.btnMemberWithdraw');
         const modalElement = document.getElementById('passwordChangeModal');
-        const passwordChangeModal = new bootstrap.Modal(modalElement, { backdrop: false });
+        const passwordChangeModal = new bootstrap.Modal(modalElement, {backdrop : 'static'});
         const divPasswordCheckMessage = document.querySelector('div.divPasswordCheckMessage');
-        
+
         btnTogglePasswordChange.addEventListener('click', () => {
             document.getElementById('inputPassword').value = '';
             document.getElementById('inputPasswordCheck').value = '';
             divPasswordCheckMessage.innerHTML = ``;
             passwordChangeModal.show();
         });
-        
+
+        const btnPasswordChange = document.getElementById('btnPasswordChange');
         btnPasswordChange.addEventListener('click', () => {
             passwordChange();
         });
-        
+
         btnMemberWithdraw.addEventListener('click', () => {
             memberWithdraw();
         });
@@ -572,13 +573,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = ""
         if(data == "") {
             html += `<h>좋아요한 축제가 없습니다<h>`
-            divFestivalList.innerHTML = html;
+            divUFestivalList.innerHTML = html;
             return;
         }
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card cardfestival col-4">
+            <div class="card cardfestival col-6 m-2">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
                     alt="${festival.feImageMain}"/>
                 <div class="card-body">
@@ -676,13 +677,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = "";
         if(data == "") {
             html += `<h>등록한 축제가 없습니다<h>`
-            divFestivalList.innerHTML = html;
+            divSFestivalList.innerHTML = html;
             return;
         }
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card cardfestival col-4">
+            <div class="card cardfestival col-6 m-2">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
                     alt="${festival.feImageMain}" style="width: 450px; height: 450px;"/>
                 <div class="card-body">
@@ -766,13 +767,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = "";       
         if(data == "") {
             html += `<h>등록된 축제가 없습니다<h>`
-            divFestivalList.innerHTML = html;
+            divAFestivalList.innerHTML = html;
             return;
         }
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card cardfestival col-6">
+            <div class="card cardfestival col-6 m-2">
                 <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
                     alt="${festival.feImageMain}"/>
                 <div class="card-body">
@@ -816,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="justify-content-end d-inline">
                         <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-1">상세보기</button></a>
                         <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-1">삭제</button>
-            `;
+            `                            
             if(festival.frApproval == 1) {
                 addHtml += `
                 <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-1">승인</button>
@@ -834,9 +835,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 </div>
-                `
+                `;
             } else {
-                addHtml += `</div>`
+                addHtml += `</div>`;
             }
             addHtml += `
                 </div>
@@ -863,6 +864,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const btn of btnRefuseFestivals) {
             btn.addEventListener('click', refuseFestival);
         }
+        
         const btnEachNumber = document.querySelector('button.btnEachNumber');
         btnEachNumber.addEventListener('click', () => {
             const aUri = `../api/mypage/afestivals/`;
@@ -905,7 +907,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const feId = event.target.getAttribute("data-id");
         const frCause = document.querySelector(`input[data-id="${feId}"]`).value;
         if(frCause == "") {
-            alert("내용을 입력해주세요")
+            alert("내용을 입력해주세요");
             return;
         }
         const result = confirm("등록을 거절하시겠습니까?");
@@ -914,20 +916,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const data = { frCause, feId };
-        const uri = `../api/mypage/festref/`
+        const uri = `../api/mypage/festref/`;
         
         axios
         .put(uri, data)
         .then((response) => {
             console.log(response);
             alert("축제 거절완료");
-            festivalList()
+            festivalList();
         })    
         .catch((error) => { console.log(error); });
     }
 
     // 축제 삭제 함수
     function deleteFestival(event) {
+        if(event.target)
         console.log(event.target);
         
         const result = confirm("축제를 삭제할까요?")
@@ -1284,7 +1287,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="card-footer d-flex justify-content-end my-3">
                     <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
-                    <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
+                    <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2" 
                     data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
                         거절
                     </button>

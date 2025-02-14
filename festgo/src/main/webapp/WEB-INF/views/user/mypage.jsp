@@ -29,8 +29,8 @@
 	    </div>
         <main>
             <div class="mypage-container">
-	            <div class="row">
-					<div class="col-auto sticky-sidebar d-flex flex-column align-item-center p-0">
+	            <div class="mypage-row row">
+					<div class="col-auto sticky-sidebar d-flex flex-column align-item-center p-0 me-3">
 						<button class="btn" id="btnToggleMyProfile">내 프로필</button>
 						<br />
 						<c:if test="${member.mrId eq 1 }">
@@ -55,7 +55,7 @@
 	                        <button class="btn" id="btnToggleSponsorCheckList">사업자승인</button>
 	                    </c:if>
 					</div>
-					<div class="col sticky-div p-0">
+					<div class="col sticky-div p-0 m-0">
 		                <section>
 		                    <div id="divMyProfile">
 		                    </div>
