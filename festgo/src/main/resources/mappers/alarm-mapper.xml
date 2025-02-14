@@ -41,6 +41,9 @@
     </select>
 <!-- 희성 작성 끝 -->
 
+
+
+
     <select id="selectStatus1ByMeId" resultType="Alarm">
         select *
         from alarm 
@@ -50,3 +53,4 @@
     </select>
     
 </mapper>
+

@@ -137,6 +137,7 @@ public class FestivalCreateDto {
                 ", feEndDate=" + feEndDate +
                 ", feAddress='" + feAddress + '\'' +
                 ", lcId=" + lcId +
+                ", meSponsor=" + meSponsor +
                 ", feLat=" + feLat +  // 확인!
                 ", feLong=" + feLong + // 확인!
                 '}';

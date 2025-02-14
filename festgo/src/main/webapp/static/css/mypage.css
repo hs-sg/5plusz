@@ -54,20 +54,20 @@ body {
 .sticky-sidebar {
     position: sticky; /* 스크롤 시 고정 */
     top: 0; /* 상단에서의 거리 */
-    height: 40vh; /* 전체 화면 높이 */
-    width: 11rem;
-    padding: 20px; /* 여백 설정 */
+    height: 27.5rem; /* 전체 화면 높이 */
+    width: 9.5rem;
     background-color: rgba(0, 0, 0, 0.03); /* 배경색 설정 */
     border-radius: 10px; /* 테두리 둥글게 설정 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
     backdrop-filter: blur(10px); /* 배경 블러 효과 */
+    font-family: 'dohyeon';
 }
 
 /* 버튼 스타일 추가 */
 .sticky-sidebar .btn {
-    margin-bottom: 10px; /* 버튼 간 여백 */
+    margin-top: 15px; /* 버튼 간 여백 */
+    margin-bottom: 15px; /* 버튼 간 여백 */
     width: 8rem; /* 버튼 너비를 100%로 설정 */
-    padding: 10px 20px; /* 버튼 패딩 조정 */
     color: black; /* 버튼 텍스트 색상 */
     border-radius: 5px; /* 버튼 테두리 둥글게 설정 */
     transition: background-color 0.3s; /* 배경색 전환 효과 */
@@ -175,6 +175,7 @@ li {
     padding: 10px; /* 여백 설정 */
     border-radius: 5px; /* 테두리를 둥글게 설정 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    font-family: 'dohyeon';
 }
 
 .divFestivalbtn .btn {
@@ -196,7 +197,7 @@ li {
     height: 430px;
 }
 
-.thPostId, .thPostTitle, .thPostAuthor, .thPostCreatedTime, .thPostViews
+.thPostId, .thPostTitle, .thPostAuthor, .thPostCreatedTime, .thPostViews,
 .thReviewId, .thReviewTitle, .thReviewAuthor, .thReviewCreatedTime, .thReviewGrade
 {
 	text-align: center;

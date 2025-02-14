@@ -84,6 +84,7 @@ public class ReviewService {
 	        return reviewDao.selectAverageGrade(feId);
 	    }
 
+
 	// 해당 아이디의 댓글 (1개)를 검색하는 서비스
 	public ReviewItemDto readById(Integer reId) {
 		log.debug("readById = {}", reId);
@@ -128,5 +129,6 @@ public class ReviewService {
 
 		return result;
 	}
+
 
 }
