@@ -204,19 +204,18 @@ public class FestivalController {
 				}
 			}
 			dto.setFiImages(savedImages);
-
 		} catch (IOException e) {
 			log.error("파일 업로드 실패", e);
 			throw new RuntimeException("파일 업로드 중 문제가 발생했습니다.");
 		}
 
-		// DTO 저장
-		festivalService.create(dto);
-
-		// 알람 추가
-		alarmService.create(dto.getFeName(), session.getAttribute("signedInUser").toString());
-
-		return "redirect:/";
+	    // DTO 저장
+	    festivalService.create(dto);
+	    
+	    // 알람 추가
+	    alarmService.create(dto.getFeName(), dto.getMeSponsor(), session.getAttribute("signedInUser").toString());
+	    
+	    return "redirect:/";
 	}
 
 }

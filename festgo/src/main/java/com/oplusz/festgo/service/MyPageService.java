@@ -42,15 +42,27 @@ public class MyPageService {
 		return list;
 	}
 
-	// fest_request와 조인된 전체 축제 읽기 -> 마이페이지 관리자에서 사용
-	public List<FestivalSelectJoinRequestDto> readFestivalAdminInMyPage() {
-		log.debug("readFestivalAdminInMyPage()");
-		
-		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestAll();
-		log.debug("result list={}", list);
-		
-		return list;
-	}
+//	// fest_request와 조인된 전체 축제 읽기 -> 마이페이지 관리자에서 사용
+//	public List<FestivalSelectJoinRequestDto> readFestivalAdminInMyPage() {
+//		log.debug("readFestivalAdminInMyPage()");
+//		
+//		List<FestivalSelectJoinRequestDto> list = festivalDao.selectFestivalJoinRequestAll();
+//		log.debug("result list={}", list);
+//		
+//		return list;
+//	}
+	
+//	public List<Integer> countFestivalsByStatus(String meUsername, String mrId) {
+//		switch(mrId) {
+//		case "1" :
+//			break;
+//		case "2" :
+//			Integer countallFestival = festivalDao.countAllFestival();
+//			Integer countApprovedFestival = festivalDao.countFestivalByFrApproval();
+//			Integer countWaitingFestival = festivalDao.countFestivalByFrApproval();
+//			Integer countRefusedFestival = festivalDao.countAllFestival();
+//		}
+//	}
 	
 	// fest_request와 조인된 전체 축제 eachNumber 만큼 읽기 -> 마이페이지 스폰서가 사용
 	// category = [-1:전체, 0:게시중, 1:승인대기, 2:거절됨], eachNumber = 가져올 갯수, meUsername = 로그인된 아이디

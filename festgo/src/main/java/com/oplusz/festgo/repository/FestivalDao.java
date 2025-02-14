@@ -42,6 +42,8 @@ public interface FestivalDao {
     
     public List<FestivalImage> selectFestivalImagesByFeId(Integer feId);
 
+    // 축제 이름과 주최자 조직명으로 축제 검색(제일 최근에 등록된 축제 1개만)
+    Festival selectFastestFestByFeNameAndMeSponsor(String feName, String meSponsor);
     
 //	희성 작성 시작 ------------------------------------------------------------------------------------------------------------------
 	

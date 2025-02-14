@@ -8,6 +8,7 @@
 <!-- 사용자 정의 햄버거 아이콘 및 버튼 스타일 -->
 <style>
     /* 버튼 자체의 배경과 테두리를 제거 */
+    
     .btn-hamburger {
         background-color: transparent !important;
         border: none !important;
@@ -139,7 +140,12 @@
 <!-- Offcanvas 메뉴 (오른쪽에서 슬라이드) -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        <c:if test="${ empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+        </c:if>
+        <c:if test="${ not empty signedInUser }">
+            <h5 class="offcanvas-title" id="offcanvasMenuId">안녕하세요! ${signedInUser }님</h5>
+        </c:if>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
@@ -202,16 +208,6 @@
                     <button class="filter-btn" data-filter="festival">🎉 축제</button>
                     <button class="filter-btn" data-filter="community">👥 계정</button>
                </div>
-                
-                <!-- 빈 상태 표시 
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="bi bi-bell-slash"></i>
-                    </div>
-                    <h6>알림이 없습니다</h6>
-                    <p class="text-muted">새로운 알림이 오면 여기에 표시됩니다</p>
-                </div>
-                -->
 
                 <!-- 알림 목록 컨테이너 (현재는 숨김) -->
                 <div class="list-group" id="notificationList"></div>
@@ -219,7 +215,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" id="markAllRead" disabled>모든 알림 읽음</button>
             </div>
         </div>
     </div>

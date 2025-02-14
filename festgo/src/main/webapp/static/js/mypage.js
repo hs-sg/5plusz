@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const divReviewList = document.getElementById('divReviewList');
     const divSponsorCheckList = document.getElementById('divSponsorCheckList');
     
+    divFestivalList.style.overflow = 'hidden';
+    
     myProfile();
     
     btnToggleMyProfile.addEventListener('click', () => {
@@ -52,7 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // 로그인된 아이디 프로필 가져오기
     function myProfile() {
-        btnToggleMyProfile.style.color = 'blue';
+        btnToggleMyProfile.style.textDecoration = 'underline';
+        btnToggleMyProfile.style.fontWeight = 'bold';
         divMyProfile.style.display = 'block';
         const uri = `../api/mypage/profile/${signedInUser}`;
                     
@@ -64,24 +67,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 로그인된 아이디 권한별 축제 리스트 가져오기
     function festivalList() {
-        btnToggleFestivalList.style.color = 'blue';
+        btnToggleFestivalList.style.textDecoration = 'underline';
+        btnToggleFestivalList.style.fontWeight = 'bold';
         divFestivalList.style.display = 'block';
-        let html = ``;
+        const eachNumber = 6;
+        let html = `<a id="festTop"></a>`;
         switch(role) {
             case `1` : // 일반유저
-                html = `<div id="divUFestivalList"></div>`;
+                html += `
+                <div id="divUFestivalList" class="row justify-content-center"></div>`
                 divFestivalList.innerHTML = html;
-                getUFestivalEachNumber(5);
+                getUFestivalEachNumber(eachNumber);
                 break;
                 
             case `2` :
                 
-            html = `
+            html += `
+            <div class="divFestivalbtn">
                         <input type="button" class="btnAllSFestival btn" value="전체"/>
                         <input type="button" class="btnPostSFestival btn" value="게시중"/>
                         <input type="button" class="btnWaitSFestival btn" value="승인대기"/>
                         <input type="button" class="btnRefuseSFestival btn" value="거절됨"/>
-                        <div id="divSFestivalList"></div>
+            </div>
+                        <div id="divSFestivalList" class="row justify-content-center"></div>
             `;
 
             divFestivalList.innerHTML = html;
@@ -91,51 +99,61 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnWaitSFestival = document.querySelector('input.btnWaitSFestival');
             const btnRefuseSFestival = document.querySelector('input.btnRefuseSFestival');
 
-            getSFestivalEachNumberAndCategory(5, -1);
+            getSFestivalEachNumberAndCategory(eachNumber, -1);
 
             btnAllSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, -1);
+                getSFestivalEachNumberAndCategory(eachNumber, -1);
             });
             btnPostSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 0);
+                getSFestivalEachNumberAndCategory(eachNumber, 0);
             });
             btnWaitSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 1);
+                getSFestivalEachNumberAndCategory(eachNumber, 1);
             });
             btnRefuseSFestival.addEventListener('click', ()=>{
-                getSFestivalEachNumberAndCategory(5, 2);
+                getSFestivalEachNumberAndCategory(eachNumber, 2);
             });
             break;
                 
             case `3` :
-                html = `
-                            <input type="button" class="btnAllAFestival btn" value="전체"/>
-                            <input type="button" class="btnPostAFestival btn" value="게시중"/>
-                            <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
-                            <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
-                            <div id="divAFestivalList"></div>
+/*                const uri = `../api/mypage/festcnt`
+                axios
+                .get(uri)
+                .then((response) => {
+                    
+                })
+                .error((error) => { console.log(error);
+                });*/
+                html += `
+                <div class="divFestivalbtn">
+                        <button class="btnAllAFestival btn">전체</button>
+                        <input type="button" class="btnPostAFestival btn" value="게시중"/>
+                        <input type="button" class="btnWaitAFestival btn" value="승인대기"/>
+                        <input type="button" class="btnRefuseAFestival btn" value="거절됨"/>
+                </div>    
+                        <div id="divAFestivalList" class="row justify-content-center"></div>
                 `;
                 
                 divFestivalList.innerHTML = html;
                 
-                const btnAllAFestival = document.querySelector('input.btnAllAFestival');
+                const btnAllAFestival = document.querySelector('button.btnAllAFestival');
                 const btnPostAFestival = document.querySelector('input.btnPostAFestival');
                 const btnWaitAFestival = document.querySelector('input.btnWaitAFestival');
                 const btnRefuseAFestival = document.querySelector('input.btnRefuseAFestival');
                 
-                getAFestivalEachNumberAndCategory(5, -1);
+                getAFestivalEachNumberAndCategory(eachNumber, -1);
                 
                 btnAllAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, -1);
+                    getAFestivalEachNumberAndCategory(eachNumber, -1);
                 });
                 btnPostAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 0);
+                    getAFestivalEachNumberAndCategory(eachNumber, 0);
                 });
                 btnWaitAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 1);
+                    getAFestivalEachNumberAndCategory(eachNumber, 1);
                 });
                 btnRefuseAFestival.addEventListener('click', ()=>{
-                    getAFestivalEachNumberAndCategory(5, 2);
+                    getAFestivalEachNumberAndCategory(eachNumber, 2);
                 });
                 break;
         }
@@ -143,7 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 로그인된 아이디 권한별 작성글 가져오기
     function postList() {
-        btnTogglePostList.style.color = 'blue';
+        btnTogglePostList.style.textDecoration = 'underline';
+        btnTogglePostList.style.fontWeight = 'bold';
         divPostList.style.display = 'block';
         let html = '';
         let pageCount = 1;
@@ -153,29 +172,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 const maxPage = Math.ceil(totalPostNum / 10);
                 console.log(`maxPage=${maxPage}`);
                 html = `
-                    <a>전체글</a>
-                    <a>공지글</a>
                     <div class="table-responsive m-2">
                         <table class="table table-striped table-hover">
                             <thead class="table-primary">
                                 <tr>
-                                    <th>번호</th>
-                                    <th>제목</th>
-                                    <th>작성자</th>
-                                    <th>작성날짜</th>
-                                    <th>조회수</th>
+                                    <th class="thPostId">번호</th>
+                                    <th class="thPostTitle">제목</th>
+                                    <th class="thPostAuthor">작성자</th>
+                                    <th class="thPostCreatedTime">작성날짜</th>
+                                    <th class="thPostViews">조회수</th>
                                 </tr>
                             </thead>
                             <tbody class="tbodyPostList">
                             </tbody>
                         </table>
                     </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="pbtnPrevious btn btn-outline-dark">Previous</button>
-                        <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
-                        <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
-                        <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
-                        <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
+                    <div class="divNotPost text-center m-3"></div>
+                    <div class="row justify-content-center">
+                        <div class="btn-group col-2 m-3 translate-middle" role="group">
+                            <button type="button" class="pbtnPrevious btn btn-outline-dark">Prev</button>
+                            <input type="button" class="pbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                            <input type="button" class="pbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                            <input type="button" class="pbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                            <button type="button" class="pbtnNext btn btn-outline-dark">Next</button>
+                        </div>
                     </div>
                 `;
                 
@@ -218,7 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 로그인 아이디 권한별 리뷰 목록 가져오기
     function reviewList() {
-        btnToggleReviewList.style.color = 'blue';
+        btnToggleReviewList.style.textDecoration = 'underline';
+        btnToggleReviewList.style.fontWeight = 'bold';
         divReviewList.style.display = 'block';
         let html = '';
         let pageCount = 1;
@@ -231,23 +252,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     <table class="table table-striped table-hover">
                         <thead class="table-primary">
                             <tr>
-                                <th>번호</th>
-                                <th>제목</th>
-                                <th>작성자</th>
-                                <th>작성날짜</th>
-                                <th>평점</th>
+                                <th class="thReviewId">번호</th>
+                                <th class="thReviewTitle">제목</th>
+                                <th class="thReviewAuthor">작성자</th>
+                                <th class="thReviewCreatedTime">작성날짜</th>
+                                <th class="thReviewGrade">평점</th>
                             </tr>
                         </thead>
-                        <tbody class="tbodyReviewList">
-                        </tbody>
+                        <tbody class="tbodyReviewList"></tbody>
                     </table>
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="rbtnPrevious btn btn-outline-dark">Previous</button>
-                    <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
-                    <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
-                    <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
-                    <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
+                <div class="divNotReview text-center m-3"></div>
+                <div class="row justify-content-center">
+                    <div class="btn-group col-2 mt-3 translate-middle" role="group">
+                        <button type="button" class="rbtnPrevious btn btn-outline-dark">Prev</button>
+                        <input type="button" class="rbtnFirstPaging btn btn-outline-dark" value="${pageCount}"/>
+                        <input type="button" class="rbtnSecondPaging btn btn-outline-dark" value="${pageCount+1}"/>
+                        <input type="button" class="rbtnThirdPaging btn btn-outline-dark" value="${pageCount+2}"/>
+                        <button type="button" class="rbtnNext btn btn-outline-dark">Next</button>
+                    </div>
                 </div>
             `;
             
@@ -289,7 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 사업자 아이디 승인목록 불러오기
     function sponsorCheckList() {
-        btnToggleSponsorCheckList.style.color = 'blue';
+        btnToggleSponsorCheckList.style.textDecoration = 'underline';
+        btnToggleSponsorCheckList.style.fontWeight = 'bold';
         divSponsorCheckList.style.display = 'block';
         const uri = `../api/mypage/sponcheck/`;
                 
@@ -301,18 +325,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 모든 버튼을 검정으로 모든 리스트를 안보이게 함!
     function allBtnAndDivDisable() {
-        btnToggleMyProfile.style.color = 'black';
+        btnToggleMyProfile.style.textDecoration = 'none';
+        btnToggleFestivalList.style.textDecoration = 'none';
+        btnTogglePostList.style.textDecoration = 'none';
+        btnToggleMyProfile.style.fontWeight = 'normal';
+        btnToggleFestivalList.style.fontWeight = 'normal';
+        btnTogglePostList.style.fontWeight = 'normal';
         divMyProfile.style.display = 'none';
-        btnToggleFestivalList.style.color = 'black';
         divFestivalList.style.display = 'none';
-        btnTogglePostList.style.color = 'black';
         divPostList.style.display = 'none';
         if(role == 1 || role == 3) {
-            btnToggleReviewList.style.color = 'black';
+            btnToggleReviewList.style.textDecoration = 'none';
+            btnToggleReviewList.style.fontWeight = 'normal';
             divReviewList.style.display = 'none';
         }
         if(role == 3) {
-            btnToggleSponsorCheckList.style.color = 'black';
+            btnToggleSponsorCheckList.style.textDecoration = 'none';
+            btnToggleSponsorCheckList.style.fontWeight = 'normal';
             divSponsorCheckList.style.display = 'none';
         }
     }
@@ -324,69 +353,97 @@ document.addEventListener('DOMContentLoaded', () => {
     /* 로그인한 프로필 출력 */
     function getMyProfile(data) {
         const createdDate = getDate(data.meCreatedTime);
-        let html = `
-            <table>
-                <tr>
-                    <th>아이디</th>
-                    <td>${data.meUsername}</td> 
-                </tr>
-                <tr>
-                    <th>이메일</th>
-                    <td>${data.meEmail}</td> 
-                </tr>
+        let html =  `
+        <div class="subindex_row">
+            <div class="myprofile_box">
+                <ul class="myprofile_row">
+                    <li>
+                        <div class="row_item id">
+                            <span class="item_text">아이디</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.meUsername}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row_item email">
+                            <span class="item_text">이메일</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.meEmail}</span>
+                        </div>
+                    </li>
+                    `
+                    if(role == `2`) {
+                        html += `
+                        <li>
+                            <div class="row_item sponsor">
+                                <span class="item_text">업체명</span>
+                                <br class="middle280">
+                                <span class="middle_data">${data.meSponsor}</span>
+                            </div>
+                        </li>
+                        `    
+                    }
+                    html += `
+                    <li>
+                        <div class="row_item createdtime">
+                            <span class="item_text">가입일</span>
+                            <br class="middle280">
+                            <span class="middle_data">${createdDate}</span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="row_item authority">
+                            <span class="item_text">&nbsp;권&nbsp;한&nbsp;</span>
+                            <br class="middle280">
+                            <span class="middle_data">${data.mrRoles}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordChangeModalLabel">비밀번호 변경</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <input id="inputPassword" type="password" class="form-control" placeholder="비밀번호 입력"/>
+                            <input id="inputPasswordCheck" type="password" class="form-control mt-2" placeholder="비밀번호 확인"/>
+                        </div>
+                        <div class="divPasswordCheckMessage my-2"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" id="btnPasswordChange">변경하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="div-buttons">
+            <button class="btnTogglePasswordChange btn btn-outline-primary" data-bs-toggle="modal" 
+                data-bs-target="#passwordChangeModal">비밀번호 변경</button>
+            <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
+        </div>
         `
-        if(role == `2`) {
-            html += `
-                <tr>
-                    <th>업체명</th>
-                    <td>${data.meSponsor}</td> 
-                </tr>
-            `    
-        }
-        html += `
-                <tr>
-                    <th>아이디생성날짜</th>
-                    <td>${createdDate}</td> 
-                </tr>
-                <tr>
-                    <th>권한명</th>
-                    <td>${data.mrRoles}</td> 
-                </tr>
-            </table>
-            <div>
-                <button class="btnTogglePasswordChange btn btn-outline-primary">비밀번호 변경</button>
-                <button class="btnMemberWithdraw btn btn-outline-danger">탈퇴하기</button>
-            </div>
-            <div class=divPasswordChange my-2 d-flex">
-            </div>
-        `;
         divMyProfile.innerHTML = html;
         
         const btnTogglePasswordChange = document.querySelector('button.btnTogglePasswordChange');
         const btnMemberWithdraw = document.querySelector('button.btnMemberWithdraw');
-        const divPasswordChange = document.querySelector('div.divPasswordChange');
+        const modalElement = document.getElementById('passwordChangeModal');
+        const passwordChangeModal = new bootstrap.Modal(modalElement, { backdrop: false });
+        const divPasswordCheckMessage = document.querySelector('div.divPasswordCheckMessage');
         
         btnTogglePasswordChange.addEventListener('click', () => {
-            if(divPasswordChange.innerHTML !== '') {
-                divPasswordChange.innerHTML = '';
-                return;
-            } else {
-                let html = `
-                    <div>
-                        <input id="inputPassword" type="password" placeholder="비밀번호 입력"/>
-                        <input id="inputPasswordCheck" type="password" placeholder="비밀번호 확인"/>
-                    </div>
-                    <div class="divPasswordCheckMessage"></div>
-                    <button id="btnPasswordChange" class="btn btn-outline-secondary">변경하기</button>
-                `
-                divPasswordChange.innerHTML = html;
-                
-                const btnPasswordChange = document.querySelector('button#btnPasswordChange');
-                
-                btnPasswordChange.addEventListener('click', () => {
-                    passwordChange();
-                });
-            }
+            document.getElementById('inputPassword').value = '';
+            document.getElementById('inputPasswordCheck').value = '';
+            divPasswordCheckMessage.innerHTML = ``;
+            passwordChangeModal.show();
+        });
+        
+        btnPasswordChange.addEventListener('click', () => {
+            passwordChange();
         });
         
         btnMemberWithdraw.addEventListener('click', () => {
@@ -492,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function getUFestivalList(data, eachNumber) {
         const divUFestivalList = document.querySelector("div#divUFestivalList");
-        eachNumber += 5;
+        eachNumber += 6;
         let today = new Date();
         let html = ""
         if(data == "") {
@@ -503,10 +560,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card cardfestival col-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -545,7 +602,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" class="btnEachNumber btn">더보기</button>`;
+        html += `
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
+        </div>
+        `;
         divUFestivalList.innerHTML = html;
 
         const btnEachNumber = document.querySelector('button.btnEachNumber');
@@ -592,7 +654,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function getSFestivalList(data, eachNumber, category) {
         const divSFestivalList = document.querySelector("div#divSFestivalList");
-        eachNumber += 5;
+        eachNumber += 6;
         let html = "";
         if(data == "") {
             html += `<h>등록한 축제가 없습니다<h>`
@@ -602,10 +664,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                    alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card cardfestival col-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}" style="width: 450px; height: 450px;"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -655,7 +717,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        html += `
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
+        </div>
+        `;
         divSFestivalList.innerHTML = html;
         
         const btnEachNumber = document.querySelector('button.btnEachNumber');
@@ -672,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function getAFestivalList(data, eachNumber, category) {
         const divAFestivalList = document.querySelector("div#divAFestivalList");
-        eachNumber += 5;    
+        eachNumber += 6;    
         let html = "";       
         if(data == "") {
             html += `<h>등록된 축제가 없습니다<h>`
@@ -682,10 +749,10 @@ document.addEventListener('DOMContentLoaded', () => {
         for(const festival of data) {
             const period = getDate(festival.feStartDate) + " ~ " + getDate(festival.feEndDate);
             let addHtml = `
-            <div class="card my-3 me-4">
-                <div class="card-body d-flex">
-                    <img class="me-2" src="/festgo/uploads/${festival.feImageMain}" class="img-thumbnail float-start" 
-                        alt="${festival.feImageMain}" style="width: 300px; height: 300px;"/>
+            <div class="card cardfestival col-4">
+                <img src="/festgo/uploads/${festival.feImageMain}" class="card-img-top" 
+                    alt="${festival.feImageMain}"/>
+                <div class="card-body">
                     <table class="inline">
                         <tr>
                             <th>축제명<th>
@@ -724,13 +791,13 @@ document.addEventListener('DOMContentLoaded', () => {
             addHtml +=`    
                     </div>
                     <div class="justify-content-end d-inline">
-                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-2">상세보기</button></a>
-                        <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-2">삭제</button>
+                        <a href="/festgo/fest/detail?feId=${festival.feId}"><button class="btnDetailFestival btn btn-outline-primary mx-1">상세보기</button></a>
+                        <button data-id="${festival.feId}" class="btnDeleteFestival btn btn-outline-danger mx-1">삭제</button>
             `;
             if(festival.frApproval == 1) {
                 addHtml += `
-                <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-2">승인</button>
-                <button data-id="${festival.feId}" class="btnToggleRefuseFestival btn btn-outline-secondary mx-2"
+                <button data-id="${festival.feId}" class="btnApproveFestival btn btn-outline-success mx-1">승인</button>
+                <button data-id="${festival.feId}" class="btnToggleRefuseFestival btn btn-outline-secondary mx-1"
                     data-bs-toggle="collapse" data-bs-target="#collapseRefuseFestival${festival.feId}" aria-expanded="false" aria-controls="collapseRefuseFestival${festival.feId}">
                         거절
                     </button>
@@ -754,7 +821,12 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
-        html += `<button each-number="${eachNumber}" category="${category}"class="btnEachNumber btn">더보기</button>`;
+        html += `
+        <div class="divEndBtn row">
+            <button each-number="${eachNumber}" category="${category}" class="btnEachNumber btn btn-outline-secondary my-3 justify-content-center">더보기</button>
+            <input type="button" class="btn d-flex" value="▲ 맨위로 ▲" onClick="location.href='#festTop'"> 
+        </div>
+        `;
         divAFestivalList.innerHTML = html;
         const btnDeleteFestivals = document.querySelectorAll('button.btnDeleteFestival');
         for(const btn of btnDeleteFestivals) {
@@ -921,22 +993,26 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function notPostList() {
         const tbodyPostList = document.querySelector('tbody.tbodyPostList');
-        tbodyPostList.innerHTML = '<p>작성한 게시글이 없습니다.</p>'
+        const divNotPost = document.querySelector('div.divNotPost');
+        divNotPost.innerHTML = '작성한 게시글이 없습니다.'
+        tbodyPostList.innerHTML = '';
     }
     
     function getPostList(data)
     {
         let html = ``
         const tbodyPostList = document.querySelector("tbody.tbodyPostList");
+        const divNotPost = document.querySelector('div.divNotPost');
+        divNotPost.innerHTML = '';
         for(const post of data) {
             const date = getDateTime(post.poModifiedTime);
             let addHtml = `
                 <tr>
             `
-            if(post.pcId == 1) addHtml += `<td>${post.poId}</td>`
-            else if(post.pcId == 2) addHtml += `<td>공지</td>`
+            if(post.pcId == 1) addHtml += `<td class="tdPostId">${post.poId}</td>`
+            else if(post.pcId == 2) addHtml += `<td class="tdPostNotice">공지</td>`
             addHtml += `  
-                    <td>
+                    <td class="tdPostTitle">
                         <a href="/festgo/post/details?poId=${post.poId}">${post.poTitle}</a>
             `
             if(role == 1 || role == 2){
@@ -958,9 +1034,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             </svg>
                         </a>
                     </td>
-                    <td>${post.poAuthor}</td>
-                    <td>${date}</td>
-                    <td>${post.poViews}</td>
+                    <td class="tdPostAuthor">${post.poAuthor}</td>
+                    <td class="tdPostDate">${date}</td>
+                    <td class="tdPostViews">${post.poViews}</td>
                 </tr>
             `
             html += addHtml;
@@ -1060,25 +1136,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
         
     function notReviewList() {
+        const divNotReview = document.querySelector('div.divNotReview');
         const tbodyReviewList = document.querySelector('tbody.tbodyReviewList');
-        tbodyReviewList.innerHTML = '<p>작성한 리뷰가 없습니다.</p>'
+        tbodyReviewList.innerHTML = '';
+        divNotReview.innerHTML = '작성한 리뷰가 없습니다.';
     }
     
     function getReviewList(data)
     {
         let html = ``
         const tbodyReviewList = document.querySelector("tbody.tbodyReviewList");
+        const divNotReview = document.querySelector('div.divNotReview');
+        divNotReview.innerHTML = '';
         for(const review of data) {
             const date = getDateTime(review.reModifiedTime);
             let addHtml = `
                 <tr>
-                    <td>${review.reId}</td>
-                    <td>
-                        <a href="/festgo/festival/details?feId=${review.feId}">${review.reTitle}</a>
+                    <td class="tdReviewId">${review.reId}</td>
+                    <td class="tdReviewTitle">
+                        <a href="/festgo/fest/detail?feId=${review.feId}">${review.reTitle}</a>
             `
             if(role == 1){
                 addHtml+= `
-                        <a href="/festgo/review/modify?reId=${review.reId}" onclick="return confirmDelete()">
+                        <a href="/festgo/fest/detail?feId=${review.feId}#btnToggleReview">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
@@ -1087,22 +1167,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 `
             }
             addHtml += `
-                        <a href="/festgo/review/delete?reId=${review.reId}" onclick="return confirmDelete()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
+                        <a data-id="${review.reId}" class="btnDeleteReview" style="cursor: pointer;">
+                            <svg data-id="${review.reId}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" 
                             class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                <path data-id="${review.reId}" d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path data-id="${review.reId}" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
                             </svg>
                         </a>
                     </td>
-                    <td>${review.reAuthor}</td>
-                    <td>${date}</td>
-                    <td>${review.reGrade}</td>
+                    <td class="tdReviewAuthor">${review.reAuthor}</td>
+                    <td class="tdReviewCreatedTime">${date}</td>
+                    <td class="tdReviewGrade">${review.reGrade}</td>
                 </tr>
             `
-        html += addHtml;
+            html += addHtml;
+            }
+        tbodyReviewList.innerHTML = html;
+    
+        const btnDeleteReviews = document.querySelectorAll('a.btnDeleteReview');
+        for(const btn of btnDeleteReviews) {
+            btn.addEventListener('click', (event) => {
+                deleteReview(event);
+            });
+        } 
+    }
+
+    function deleteReview(event) {
+        const result = confirm("리뷰를 삭제하시겠습니까?");
+        if(!result) {
+            return;
         }
-    tbodyReviewList.innerHTML = html;
+        const reId = event.target.getAttribute("data-id");
+        const uri = `../api/mypage/delreview/${reId}`;
+        
+        axios
+        .delete(uri)
+        .then(() => {
+            alert("삭제완료했습니다.")
+            reviewList();
+        })
+        .catch((error) => { console.log(error); });
     }
 
 // ---------------- 리뷰 기능 부분 끝 -----------------------------------------
@@ -1121,35 +1225,47 @@ document.addEventListener('DOMContentLoaded', () => {
                                  + requestSponsor.meCreatedTime[2] + "일 " + requestSponsor.meCreatedTime[4] + "시 "
                                  + requestSponsor.meCreatedTime[5] + "분";
             let addHtml = `
-                <div class="card my-3 me-4">
-                    <div class="card-body d-flex">
-                        <table>
-                            <tr>
-                                <th>아이디</th>
-                                <td>${requestSponsor.meUsername}</td> 
-                            </tr>
-                            <tr>
-                                <th>이메일</th>
-                                <td>${requestSponsor.meEmail}</td> 
-                            </tr>
-                            <tr>
-                                <th>업체명</th>
-                                <td>${requestSponsor.meSponsor}</td> 
-                            </tr>
-                            <tr>
-                                <th>생성날짜</th>
-                                <td>${createdTime}</td> 
-                            </tr>
-                            
-                        </table>
+                <div class="subindex_row card">
+                    <div class="sponrequest_box">
+                        <ul class="sponrequest_row" style="margin-bottom: 0">
+                            <li>
+                                <div class="row_item id">
+                                    <span class="item_text">아이디</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meUsername}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item email">
+                                    <span class="item_text">이메일</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meEmail}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item sponsor">
+                                    <span class="item_text">업체명</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${requestSponsor.meSponsor}</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row_item createdtime">
+                                    <span class="item_text">가입일</span>
+                                    <br class="middle280">
+                                    <span class="middle_data">${createdTime}</span>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="card-footer d-flex justify-content-end">
-                        <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
-                        <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
-                        data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
-                            거절
-                        </button>
-                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-end my-3">
+                    <button data-id="${requestSponsor.meId}" class="btnApproveSponsor btn btn-outline-success mx-2">승인</button>
+                    <button data-id="${requestSponsor.meId}" class="btnToggleRefuseSponsor btn btn-outline-secondary mx-2"
+                    data-bs-toggle="collapse" data-bs-target="#collapseRefuseSponsor${requestSponsor.meId}" aria-expanded="false" aria-controls="collapseRefuseSponsor${requestSponsor.meId}">
+                        거절
+                    </button>
+                </div>
                     <div class="collapse" id="collapseRefuseSponsor${requestSponsor.meId}">
                         <div class="card card-body">
                             <div class="input-group mb-3">
@@ -1162,6 +1278,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             html += addHtml;
         }
+        
         divSponsorCheckList.innerHTML = html;
         
         const btnApproveSponsors = document.querySelectorAll('button.btnApproveSponsor');
