@@ -9,8 +9,15 @@
 	    SELECT re_id, re_title, re_content, re_author, re_grade, re_created_time, re_modified_time 
 	    FROM review 
 	    WHERE fe_id = #{feId} 
-	    ORDER BY re_id DESC
+	    ORDER BY re_grade DESC, re_id DESC
 	</select>
+    
+    <!-- 축제 평균 별점 조회 기능 -->
+    <select id="selectAverageGrade" resultType="double">
+        SELECT NVL(AVG(re_grade), 0) 
+        FROM review 
+        WHERE fe_id = #{feId}
+    </select>
 
     
     <!-- 특정 포스트에 댓글 추가(insertReview) -->
