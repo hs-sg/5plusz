@@ -15,6 +15,24 @@
           
     <!-- Drag and drop CSS -->
     <style>
+    
+             @font-face {        
+                font-family: 'sansMedium';      
+                src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+            }       
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }  
+            @font-face {        
+            font-family: 'dohyeon';     
+            src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');       
+            }   
+            
+            body {
+                font-family: 'sansMedium';
+            }
+    
        .drop-area {
                 border: 2px dashed #4a90e2; /* 약간 더 어두운 파란색 */
                 border-radius: 16px;

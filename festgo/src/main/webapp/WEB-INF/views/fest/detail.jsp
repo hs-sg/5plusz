@@ -19,6 +19,24 @@
 
         <!-- Custom CSS -->
         <style>
+        
+            @font-face {        
+                font-family: 'sansMedium';      
+                src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+            }       
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }  
+            @font-face {        
+            font-family: 'dohyeon';     
+            src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');       
+            }   
+            
+            body {
+                font-family: 'sansMedium';
+            }
+        
             .modal {
                 z-index: 1055 !important;
                 pointer-events: auto; /* 클릭 가능하도록 설정 */
@@ -27,8 +45,7 @@
             .modal-backdrop {
                 z-index: 1050 !important; /* 모달보다 낮게 */
                 pointer-events: none; /* 백드롭이 클릭 이벤트를 차단하지 않도록 */
-            }
-        
+            }    
             
             /* 메인 배경 이미지 스타일 */
             .main-visual {
@@ -299,8 +316,8 @@
             <!-- 카카오맵 표시 -->
             <div id="map" class="mb-3" style="position: relative;">
                 <!-- 길찾기 버튼 -->
-                <button id="direction-btn" class="btn btn-primary" 
-                        style="position: absolute; bottom: 10px; right: 10px; z-index: 10;">
+                <button id="direction-btn" class="btn btn-primary"  
+                        style="position: absolute; bottom: 10px; right: 10px; z-index: 10; font-family:'sansMedium';">
                     길찾기
                 </button>
             </div>
