@@ -104,12 +104,12 @@
 <header class="p-3" style="background-color: transparent;">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <!-- 왼쪽: 로고 텍스트 -->
-        <div>
+         <div>
             <c:url value="/" var="homePage"/>
-            <a href="${homePage}" class="text-dark text-decoration-none" 
-               style="font-size: 2.5rem; font-weight: bold;">
-                🅵🅴🆂🆃 🅶🅾
-            </a>
+            <a href="${pageContext.request.contextPath}/" class="text-dark text-decoration-none">
+                <img src="${pageContext.request.contextPath}/static/images/logo5.PNG" alt="Logo" style="height: 150px;">
+    
+            </a> 
         </div>
         <!-- 오른쪽: 알림 버튼과 햄버거 메뉴 버튼을 포함하는 div -->
         <div class="d-flex align-items-center">
@@ -266,9 +266,21 @@
     const alMrId = Number(${ memberRole });
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 로그인 모달 자동 실행 여부 확인
+    <c:if test="${not empty loginRequired}">
+        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: false });
+        signinModal.show();
+    </c:if>
+});
+</script>
+
 <!-- 알림 관련 JavaScript -->
 <c:url var="alarmJS" value="/js/alarm.js" />
 <script src="${ alarmJS }"></script>
+
 
 <script>
 document.querySelector('.modal-content').addEventListener('click', function(e) {

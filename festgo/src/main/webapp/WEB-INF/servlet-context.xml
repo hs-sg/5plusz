@@ -19,10 +19,24 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
+    
+    
     <!-- 정적 리소스 매핑 설정 -->
+
+   <!-- 종후 <mvc:resources mapping="/uploads/**" 
+    location="file:///C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/" /> -->
+
+     <mvc:resources mapping="/uploads/**" 
+               location="C:/JAVA157/workspaces/oplusz/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/"/>
+               
+   <!-- 하신
    <mvc:resources mapping="/uploads/**" 
-    location="file:///C:/JAVA157/Workspaces/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/festgo/uploads/" />
+               location="file:C:\java157\workspaces\first-team\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
+    
+   <!-- 희성
+   <mvc:resources mapping="/uploads/**" 
+               location="file:C:\java157\workspaces\teamproject\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads"/> -->
+
 
     <!-- Spring MVC에서 dispatcherServlet이 처리하지 않는 정적 요청에 필요한 파일들
     (이미지, CSS, JavaScript, ...)이 있는 폴더 위치를 설정.
@@ -30,7 +44,19 @@
     요청 주소가 /context-root/폴더(하위폴더)이름/*.jpg[js, css, ...]인 요청들에 대해서
     폴더위치를 webapp/static/ 폴더에 찾을 수 있도록 하기 위한 설정.
     -->
-    <mvc:resources location="/static/" mapping="/**" />
+    
+    <!-- 정적 자원 핸들러 추가 -->
+    <!-- ✅ webapp-static 폴더에 있는 정적 리소스 매핑 -->
+    
+    
+    <!--  중요-->
+    <mvc:resources mapping="/static/**" location="/static/" />
+    <mvc:resources mapping="/js/**" location="/static/js/" />
+    <mvc:resources mapping="/font/**" location="/static/font/" />
+    <mvc:resources mapping="/css/**" location="/static/css/" />
+    
+    <!-- 정적 리소스 핸들러 추가 중요-->
+    <mvc:default-servlet-handler />
        
     <!-- 뷰 리졸버: Spring MVC에서 사용하는 뷰(JSP)를 찾기 위한 설정. -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
