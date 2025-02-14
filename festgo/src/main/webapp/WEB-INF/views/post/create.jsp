@@ -59,7 +59,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="poAuthor" class="form-label">작성자</label>
-                    <input type="text" id="poAuthor" name="poAuthor" class="form-control" required>
+                    <input type="text" id="poAuthor" name="poAuthor" value="${signedInUser}" class="form-control" required>
                 </div>
     
                 <div class="mb-3">

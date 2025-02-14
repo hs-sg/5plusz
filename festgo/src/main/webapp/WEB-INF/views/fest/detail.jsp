@@ -318,11 +318,8 @@
 
 </body>
 
-<<<<<<< HEAD
-</html>
-=======
+
 </html>
 
->>>>>>> refs/heads/master
 
 
