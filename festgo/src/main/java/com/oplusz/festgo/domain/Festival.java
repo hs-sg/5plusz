@@ -1,6 +1,7 @@
 package com.oplusz.festgo.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,4 +34,5 @@ public class Festival {
     private String fePoster;
     private LocalDateTime feCreatedTime;
     private LocalDateTime feModifiedTime;
+    private List<FestivalImage> festivalImages;
 }

@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (userElement) {
         signedInUser = userElement.value;
     }
-	console.log("현재 로그인한 사용자:", signedInUser);
+    console.log("현재 로그인한 사용자:", signedInUser);
 
     // 리뷰 등록 함수
     function registerReview() {
@@ -79,11 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const reTitle = document.querySelector('#reTitle').value.trim();
         const reGrade = parseInt(document.querySelector('#reGrade').value) || 3;
         const reContent = document.querySelector('#reContent').value.trim();
-
-        if (!reTitle || !reContent) {
-            alert('제목과 내용을 입력하세요!');
-            return;
-        }
 
         fetch('/festgo/user/check-login')
             .then(response => response.json())
@@ -126,6 +121,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 로그인 상태이면 리뷰 등록
                 const reviewData = { feId, reTitle, reContent, reGrade };  // data -> reviewData로 변경
+
+                if (!reTitle || !reContent) {
+                    alert('제목과 내용을 입력하세요!');
+                    return;
+                }
                         axios.post('../api/review', reviewData, { withCredentials: true })
                             .then(response => {
                                 if (response.data === 1) {
@@ -147,21 +147,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // 모든 리뷰를 가져오는 함수
     function getAllReviews() {
         const feIdElement = document.querySelector('#id');
-        if (!feIdElement) return;
+        if (!feIdElement) {
+            console.error("축제 ID 요소를 찾을 수 없습니다.");
+            return;
+        }
 
         const feId = feIdElement.value;
+        
+        // 평균 별점 가져오기
+        axios.get(`../api/review/average/${feId}`)
+            .then(response => {
+                const avgGrade = response.data.toFixed(1); // 소수점 1자리로 표시
+                document.querySelector('#avgGrade').innerHTML = `⭐ 평균 별점: ${avgGrade} / 5`;
+            })
+            .catch(error => console.error("평균 별점 불러오기 오류:", error));
+
+        // 별점순 정렬된 리뷰 가져오기
         axios.get(`../api/review/all/${feId}`)
             .then(response => {
-                console.log('리뷰 목록 응답:', response.data);
+                console.log("서버 응답:", response.data);
+                if (!response.data || response.data.length === 0) {
+                    document.querySelector('#divReviews').innerHTML = `<p class="text-muted">등록된 리뷰가 없습니다.</p>`;
+                    return;
+                }
                 makeCommentElements(response.data);
             })
-            .catch(error => console.error('리뷰 불러오기 오류:', error.response ? error.response.data : error));
+            .catch(error => console.error("리뷰 불러오기 오류:", error));
     }
 
     // 리뷰 데이터를 HTML 요소로 변환하여 화면에 표시하는 함수
     function makeCommentElements(data) {
         const divReviews = document.querySelector('#divReviews');
-        if (!divReviews) return;
+        if (!divReviews) {
+            console.error("❌ 리뷰 목록을 표시할 divReviews 요소를 찾을 수 없습니다.");
+            return;
+        }
 
         let html = `<ul class="list-group list-group-flush">`;
 
@@ -184,25 +204,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>
                     <button class="btnDeleteReview btn btn-outline-danger btn-sm"
                             data-id="${review.reId}">삭제</button>
-							<button class="btnUpdateReview btn btn-outline-primary btn-sm" data-id="${review.reId}">
-							    수정
-							</button>
+                    <button class="btnUpdateReview btn btn-outline-primary btn-sm" data-id="${review.reId}">
+                        수정
+                    </button>
                 </div>`;
             }
 
-            html += `</li>`; 
+            html += `</li>`;
         });
 
         html += `</ul>`;
         divReviews.innerHTML = html;
 
-        document.querySelectorAll('.btnDeleteReview').forEach(btn => {
-            btn.addEventListener('click', deleteReview);
-        });
+        // HTML 업데이트 후 이벤트 리스너 추가
+        setTimeout(() => {
+            document.querySelectorAll('.btnDeleteReview').forEach(btn => {
+                btn.addEventListener('click', deleteReview);
+            });
 
-        document.querySelectorAll('.btnUpdateReview').forEach(btn => {
-            btn.addEventListener('click', showCommentModal);
-        });
+            document.querySelectorAll('.btnUpdateReview').forEach(btn => {
+                btn.addEventListener('click', showCommentModal);
+            });
+        }, 0);
     }
 
     // 댓글 삭제 함수
@@ -220,18 +243,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 리뷰 수정 모달을 띄우는 함수
     function showCommentModal(event) {
-		const reviewId = event.target.getAttribute('data-id');
+        const reviewId = event.target.getAttribute('data-id');
 
-		if (!reviewId) {
-		    console.error("리뷰 ID가 없습니다!");
-		    return;
-		}
+        if (!reviewId) {
+            console.error("리뷰 ID가 없습니다!");
+            return;
+        }
 
-		console.log("수정할 리뷰 ID:", reviewId);
+        console.log("수정할 리뷰 ID:", reviewId);
 
         axios.get(`../api/review/${reviewId}`)
             .then(response => {
-				console.log("불러온 리뷰 데이터:", response.data);
+                console.log("불러온 리뷰 데이터:", response.data);
                 const modalReviewId = document.querySelector('#modalReviewId');
                 const modalReviewTitle = document.querySelector('#modalReviewTitle');
                 const modalReviewGrade = document.querySelector('#modalReviewGrade');
@@ -242,9 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     modalReviewTitle.value = response.data.reTitle;
                     modalReviewGrade.value = response.data.reGrade;
                     modalReviewText.value = response.data.reContent;
-					
-					console.log("불러온 리뷰 데이터:", response.data);
-					
+                    
+                    console.log("불러온 리뷰 데이터:", response.data);
+                    
                     if (reviewModal) reviewModal.show();
                 }
             })
@@ -258,10 +281,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalReviewGrade = document.querySelector('#modalReviewGrade');
         const modalReviewText = document.querySelector('#modalReviewText');
 
-		if (!modalReviewId || !modalReviewTitle || !modalReviewGrade || !modalReviewText) {
-		        console.error("수정할 입력 요소가 없습니다!");
-		        return;
-		    }
+        if (!modalReviewId || !modalReviewTitle || !modalReviewGrade || !modalReviewText) {
+                console.error("수정할 입력 요소가 없습니다!");
+                return;
+            }
 
         const reviewId = modalReviewId.value;
         const reTitle = modalReviewTitle.value.trim();
@@ -274,8 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = { reTitle, reGrade, reContent };
-		
-		console.log("수정 요청 데이터:", data);
+        
+        console.log("수정 요청 데이터:", data);
 
         axios.put(`../api/review/${reviewId}`, data)
             .then(() => {

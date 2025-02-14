@@ -25,4 +25,8 @@ public interface ReviewDao {
 	Review selectById(Integer reId);
 	Integer selectReviewCount (Integer feId);
 
+
+
+	double selectAverageGrade (Integer feId);
+
 }
