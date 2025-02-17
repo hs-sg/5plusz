@@ -567,3 +567,21 @@ input.searchLine::placeholder {
     font-weight: 300;
     color: #333;
 }
+
+/* 쇼케이스 섹션 이미지 스타일 */
+.mainVisual {
+    position: relative;
+    overflow: hidden;
+}
+
+.mainVisual img {
+    width: 100%;
+    height: 500px; /* 원하는 높이로 조정 가능 */
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.mainVisual img:hover {
+    transform: scale(1.05);
+}
+
