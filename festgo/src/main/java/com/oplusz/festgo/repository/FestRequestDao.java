@@ -1,6 +1,6 @@
 package com.oplusz.festgo.repository;
 
-import org.apache.ibatis.annotations.Param;
+import com.oplusz.festgo.domain.FestRequest;
 
 public interface FestRequestDao {
 	
@@ -8,8 +8,17 @@ public interface FestRequestDao {
 	
 //	희성 작성 시작 --------------------------------------------------------------------------------------------------------------------
 	
-	Integer approveFestivalByFeId(@Param("feId") Integer feId);
+	int approveFestivalByFeId(int feId);
+	int refuseFestivalByMeId(String frCause, int feId);
+	int countFestivalByFrApproval(int frApproval);
 	
 //	희성 작성 끝 ----------------------------------------------------------------------------------------------------------------------
 	
+	int selectFrIdByFeId(int feId);
+
+	
+
+	FestRequest selectFestRequestByFrId(int frId);
 }
+
+

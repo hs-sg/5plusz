@@ -12,12 +12,12 @@
     <!-- POM에서 사용할 속성(변수) 정의 -->
     <properties>
         <servlet-api-version>6.0.0</servlet-api-version>
-        <jsp-api-vesrsion>4.0.0</jsp-api-vesrsion>
+        <jsp-api-version>4.0.0</jsp-api-version>
         <el-api-version>5.0.0</el-api-version>
         <jstl-api-version>3.0.2</jstl-api-version>
         <jstl-impl-version>3.0.1</jstl-impl-version>
         <log4j-version>2.24.3</log4j-version>
-        <sl4fj-api-version>2.0.16</sl4fj-api-version>
+        <slf4j-api-version>2.0.16</slf4j-api-version>
         <junit-version>5.11.4</junit-version>
         <ojdbc17-version>23.6.0.24.10</ojdbc17-version>
         <hikaricp-version>6.2.1</hikaricp-version>
@@ -32,6 +32,7 @@
     <!-- 의존성(라이브러리) 설정 -->
     
     <dependencies>
+
     
         <!-- multipart 라이브러리 사용하기 위해 설정-->
         <dependency>
@@ -53,7 +54,7 @@
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>${jsp-api-vesrsion}</version>
+            <version>${jsp-api-version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -105,7 +106,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${sl4fj-api-version}</version>
+            <version>${slf4j-api-version}</version>
         </dependency>
         
         <!-- 자바 단위 테스트(Java unit test)를 하기 위해서 -->
@@ -221,6 +222,21 @@
             <artifactId>mybatis-spring</artifactId>
             <version>${mybatis-spring-version}</version>
         </dependency>
+
+        
+            <!-- Spring Web: Spring MVC 및 파일 업로드 기능 지원 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-version}</version>
+            </dependency>
+
+            <!-- Apache Commons FileUpload: 파일 업로드를 위한 추가 유틸리티 -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.5</version>
+            </dependency>
         
     </dependencies>
     
@@ -231,6 +247,9 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>21</release>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

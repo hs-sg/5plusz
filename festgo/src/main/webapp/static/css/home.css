@@ -1,0 +1,593 @@
+@charset "UTF-8";
+/* home.jsp 파일에 포함 */
+
+/* ------------------------ 추가된 폰트 및 스타일 시작 ------------------------ */
+@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+}
+
+.keyword-title, 
+.search-title  {
+    font-family: 'dohyeon', sans-serif;
+    font-weight: 300;
+}
+
+.festival-name {
+    font-family: 'sansLight';
+}
+
+.theme-button {
+    font-family: 'sansLight';
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #ff6600;
+    color: #fff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.theme-button:hover {
+    background-color: #ff4500;
+    color: white;
+}
+
+.searchLine {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#btnShowMoreFestival {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    padding: 12px 20px;
+    transition: 0.3s;
+}
+
+#btnShowMoreFestival:hover {
+    background-color: #0056b3;
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 선택 박스에 적용 (시기 선택, 지역 선택, 테마 선택) */
+select.form-select {
+    font-family: 'sansLight', sans-serif;
+}
+
+/* 검색창 입력 텍스트와 플레이스홀더에 적용 */
+input.searchLine {
+    font-family: 'sansLight', sans-serif;
+}
+input.searchLine::placeholder {
+    font-family: 'sansLight', sans-serif;
+}
+
+/* 축제 이름 스타일 */
+.swiper-slide .festival-name {
+    font-family: 'sansMedium', sans-serif;
+    color: gray;
+}
+
+/* 예시: Bootstrap의 네비게이션 바(menu) 적용 
+.navbar, 
+.navbar-brand, 
+.navbar-nav .nav-link {
+    font-family: 'sansMedium', sans-serif;
+}
+*/
+/* ------------------------ 추가된 폰트 및 스타일 끝 ------------------------ */
+
+
+/* 기존 CSS 코드 시작 */
+.searchArea #searchText {
+    border: none;
+    border-bottom: 1px solid #1A1A24;
+}
+
+.searchArea #searchBtn {
+    width: 20px;
+    height: 20px;
+    background:
+        url(https://kfescdn.visitkorea.or.kr/kfes/resources/img/search_box_btn.png)
+        no-repeat center;
+    background-size: 20px 20px;
+    border: none;
+}
+
+.keyword a {
+    color: #80808a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 16px;
+    height: 100%;
+    border-radius: 99px;
+    border: 1px solid #80808a;
+}
+
+.keyword ul {
+    flex-wrap: wrap;
+    gap: 8px;
+    display: flex;
+    margin-top: 15px;
+    list-style: none;
+}
+
+.keyword li {
+    text-align: -webkit-match-parent;
+}
+
+.swiper {
+    width: 100%;
+    height: 20em;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* hr 스타일 - 필요에 따라 여백 및 선 스타일 조정 */
+.custom-hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 0 auto 20px;
+    max-width: 90%;
+}
+/* 추천 키워드 테마버튼 */
+.theme-button {
+    border-radius: 50px;
+    background-color: #f8f9fa;
+    display: inline-block;
+    text-decoration: none;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+.theme-button:hover {
+    background-color: skyblue !important;
+    color: white !important;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(135, 206, 250, 0.6);
+}
+
+/* 추천 키워드 제목 스타일 */
+.keyword-title {
+    position: relative;
+    display: inline-block;
+    font-size: 2rem;
+    color: white;
+    padding: 10px 20px;
+    z-index: 2;
+    font-weight: 300;
+}
+
+/* 연한 하늘색 브러쉬 효과 */
+.keyword-title::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -5%;
+    width: 110%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(173, 216, 230, 0.9), rgba(135, 206, 250, 0.9));
+    z-index: -1;
+    transform: skewX(-15deg) rotate(-2deg);
+    border-radius: 20px;
+    opacity: 1;
+    padding: 5px;
+}
+
+/* 추가적인 질감 효과 */
+.keyword-title::after {
+    content: "";
+    position: absolute;
+    top: 5%;
+    left: -3%;
+    width: 105%;
+    height: 90%;
+    background: rgba(135, 206, 250, 0.7);
+    z-index: -2;
+    transform: rotate(3deg);
+    filter: blur(3px);
+    border-radius: 15px;
+    opacity: 0.8;
+}
+
+/* 축제 검색 제목 스타일 */
+.search-title {
+    position: relative;
+    display: inline-block;
+    font-size: 2rem;
+    color: white;
+    padding: 10px 20px;
+    z-index: 2;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+/* 연한 하늘색 브러쉬 효과 */
+.search-title::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -5%;
+    width: 110%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(173, 216, 230, 0.9), rgba(135, 206, 250, 0.9));
+    z-index: -1;
+    transform: skewX(-15deg) rotate(-2deg);
+    border-radius: 20px;
+    opacity: 1;
+    padding: 5px;
+}
+
+/* 추가적인 질감 효과 */
+.search-title::after {
+    content: "";
+    position: absolute;
+    top: 5%;
+    left: -3%;
+    width: 105%;
+    height: 90%;
+    background: rgba(135, 206, 250, 0.7);
+    z-index: -2;
+    transform: rotate(3deg);
+    filter: blur(3px);
+    border-radius: 15px;
+    opacity: 0.8;
+}
+
+/* 축제 검색 폼 전체 컨테이너 스타일 */
+#searchFestival {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 셀렉트 박스 공통 스타일 */
+.form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 0.8rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.form-select:hover {
+    border-color: skyblue;
+}
+
+.form-select:focus {
+    border-color: skyblue;
+    box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25);
+    outline: none;
+}
+
+/* 입력 그룹 스타일 */
+.input-group {
+    position: relative;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* @ 아이콘 스타일 변경 */
+.input-group-text {
+    background-color: transparent;
+    border: none;
+    color: skyblue;
+    font-weight: normal;
+    padding: 0.8rem;
+}
+
+/* 검색창 스타일 */
+.searchArea {
+    position: relative;
+    width: 100%;
+}
+
+.searchArea #searchText {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.searchArea #searchText:focus {
+    border-color: skyblue;
+    box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.25);
+    outline: none;
+}
+
+/* 검색 버튼 스타일 */
+.searchArea #searchBtn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: url(https://kfescdn.visitkorea.or.kr/kfes/resources/img/search_box_btn.png) no-repeat center;
+    background-size: contain;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.searchArea #searchBtn:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* 각 컬럼에 여백 추가 */
+.col-sm-3 {
+    padding: 0.5rem;
+}
+
+/* 옵션 스타일 */
+.form-select option {
+    padding: 10px;
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+    #searchFestival {
+        padding: 1rem;
+    }
+    
+    .col-sm-3 {
+        margin-bottom: 1rem;
+    }
+}
+
+/* 완전히 투명한 슬라이드 카드 스타일 */
+.swiper-slide {
+   background: transparent !important;
+   backdrop-filter: blur(8px);
+   -webkit-backdrop-filter: blur(8px); 
+   border-radius: 20px;
+   padding: 20px;
+   box-shadow: none;
+   transition: all 0.3s ease;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   max-width: 300px;
+   margin: 15px;
+   border: none;
+}
+
+.swiper-slide:hover {
+   transform: translateY(-10px);
+   background: rgba(255, 255, 255, 0.8);
+   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* 이미지 컨테이너 스타일 */
+.swiper-slide a {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   text-decoration: none;
+   width: 100%;
+}
+
+/* 원형 이미지 스타일 */
+.swiper-slide img {
+   width: 200px;
+   height: 200px;
+   border-radius: 50%;
+   object-fit: cover;
+   border: 4px solid rgba(135, 206, 235, 0.7);
+   margin-bottom: 15px;
+   transition: transform 0.3s ease;
+}
+
+.swiper-slide:hover img {
+   transform: scale(1.05);
+   border-color: skyblue;
+}
+
+/* Swiper 네비게이션 버튼 스타일 */
+.swiper-button-next,
+.swiper-button-prev {
+   color: skyblue;
+   background-color: rgba(255, 255, 255, 0.8);
+   padding: 25px;
+   border-radius: 50%;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+   font-size: 1.2rem;
+}
+
+/* Swiper 스크롤바 스타일 */
+.swiper-scrollbar {
+   background-color: rgba(224, 224, 224, 0.5);
+   height: 8px;
+   border-radius: 4px;
+}
+
+.swiper-scrollbar-drag {
+   background-color: rgba(135, 206, 235, 0.7);
+   border-radius: 4px;
+}
+
+.main-slide-title {
+    color: gray !important;
+    font-weight: 300 !important;
+}
+
+.main-slide-title span {
+    color: gray !important;
+    font-weight: 300 !important;
+}
+
+.main-slide-title h2 {
+    color: gray !important;
+    font-weight: 300 !important;
+}
+
+/* 축제 카드 스타일 */
+.festival-card {
+    border: 2px solid #E6E6FA;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.festival-card:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+.festival-card:active {
+    transform: translateY(-5px) scale(0.97);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: #333;
+}
+
+/* 공통 리본 스타일 */
+.ongoing-badge, .upcoming-badge, .ended-badge {
+    position: absolute;
+    top: 10px;
+    left: -30px;
+    color: white;
+    padding: 5px 30px;
+    font-size: 0.8rem;
+    font-weight: 300;
+    transform: rotate(-45deg);
+    z-index: 2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    width: 100px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 25px;
+    white-space: nowrap;
+}
+
+.ongoing-badge {
+    background-color: #28a745;
+}
+
+.upcoming-badge {
+    background-color: #007bff;
+}
+
+.ended-badge {
+    background-color: #dc3545;
+}
+
+/* 기존 폰트 및 제목 스타일 */
+@font-face {
+    font-family: 'dohyeon';
+    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+.festival-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: skyblue;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.festival-list-title {
+    font-family: 'dohyeon', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: purple;
+    text-align: center;
+    margin: 15px 0;
+}
+
+@font-face {		
+    font-family: 'sansMedium';		
+    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+}
+
+@font-face {		
+    font-family: 'sansLight';		
+    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+}
+
+/* 축제 카드 제목 (sansMedium 폰트 적용) */
+.card-title {
+    font-family: 'sansMedium', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: #333;
+}
+
+/*----*/
+/* 쇼케이스 섹션 이미지 스타일 */
+.mainVisual {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.mainVisual img {
+    width: 100%;
+    height: 500px; /* 원하는 높이로 조정 가능 */
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.mainVisual img:hover {
+    transform: scale(1.05);
+}
+
+.mainSlide{
+    border-radius: 20px;
+}

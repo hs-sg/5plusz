@@ -18,5 +18,13 @@
         FROM THEME
         ORDER BY THE_ID
     </select>
-    
+
+    <!-- 현재 등록 되어있는 축제들의 theme 불러오기 -->
+    <select id="selectThemeInFestival" resultType="Theme">
+        select distinct t.the_id, t.the_name
+        from theme t
+            inner join festival f on t.the_id = f.the_id
+    </select>
+
   </mapper>
+

@@ -51,10 +51,6 @@
         delete from member where me_username = #{meUsername}
     </delete>
     
-    <delete id="deleteSponRequestByUsername">
-        delete from spon_request where me_usernam = #{meUsername}
-    </delete>
-    
     <!-- 승인 대기중인 스폰서 목록 찾기 -->
     <select id="selectMemberJoinSponRequestBySrApproval">
         select member.me_id, me_username, me_sponsor, me_email, me_created_time 
@@ -64,6 +60,17 @@
         order by me_created_time
     </select>
     
+    <update id="updatePasswordByUsername">
+        update member
+		set me_password = #{mePassword}
+		where me_username = #{meUsername}
+    </update>
+    
+    <update id="updateSponsorRoleByMeId">
+        update member
+        set mr_id = 2
+        where me_id = #{meId}
+    </update>
     <!-- 희성 작성 끝 -->
     
 </mapper>

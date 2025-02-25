@@ -9,5 +9,35 @@
         insert into fest_request(FE_ID, FR_APPROVAL)
         values(#{feId}, #{frApproval})
     </insert>
+    
+    <!-- 희성 작성 시작 -->
+    
+    <!-- 축제 승인해주기 fr_approval을 0으로 바꿔줌 -->
+    <update id="approveFestivalByFeId">
+        update fest_request
+        set fr_approval = 0
+        where fe_id = #{feId}
+    </update>
+    
+    <update id="refuseFestivalByMeId">
+        update fest_request
+        set fr_approval = 2, fr_cause = #{frCause}
+        where fe_id = #{feId}
+    </update>
+    
+    <select id="countFestivalByFrApproval">
+        select count(*) from fest_request where fr_approval = #{frApproval}
+    </select>
+    
+    <!-- 희성 작성 끝 -->
 
+    <!-- feId로 frId를 검색 -->
+    <select id="selectFrIdByFeId" resultType="integer">
+        select fr_id from fest_request where fe_id = #{feId}
+    </select>
+    
+    <!-- frId로 검색 -->
+    <select id="selectFestRequestByFrId" resultType="FestRequest">
+        select * from fest_request where fr_id = #{frId}
+    </select>
 </mapper>

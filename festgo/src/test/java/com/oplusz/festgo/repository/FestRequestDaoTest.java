@@ -1,7 +1,6 @@
 package com.oplusz.festgo.repository;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,11 +26,11 @@ public class FestRequestDaoTest {
 	}
 	
 //	@Test
-//	public void testRefuseSponsorMemberByMeId() {
-//		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 61);
-//		log.debug(refuseResult.toString());
-//		Assertions.assertEquals(refuseResult, 1);
-//	}
+	public void testRefuseFestivalByMeId() {
+		Integer refuseResult = festRequestDao.refuseFestivalByMeId("거절됐습니다", 117);
+		log.debug(refuseResult.toString());
+		Assertions.assertEquals(refuseResult, 1);
+	}
 	
 //	희성 작성 끝 -------------------------------------------------------------------------------------------------
 }

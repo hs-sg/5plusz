@@ -15,6 +15,24 @@
           
     <!-- Drag and drop CSS -->
     <style>
+    
+             @font-face {        
+                font-family: 'sansMedium';      
+                src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');        
+            }       
+            @font-face {        
+                font-family: 'sansLight';       
+                src: url('../font/GmarketSansTTFLight.ttf') format('truetype');     
+            }  
+            @font-face {        
+            font-family: 'dohyeon';     
+            src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');       
+            }   
+            
+            body {
+                font-family: 'sansMedium';
+            }
+    
        .drop-area {
                 border: 2px dashed #4a90e2; /* 약간 더 어두운 파란색 */
                 border-radius: 16px;
@@ -97,6 +115,12 @@
                 border-radius: 12px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
+            
+            .error-message {
+                color: red;
+                margin-top: 5px;
+                font-size: 0.9rem;
+            }
     </style>
     
 </head>
@@ -108,7 +132,7 @@
         
     <div class="container">
         <h2 class="mt-5">새 축제 등록</h2>
-        <form method="post" enctype="multipart/form-data">
+        <form id="festivalForm" method="post" enctype="multipart/form-data">
             <!-- 축제 이름 -->
             <div class="mb-3">
                 <label for="feName" class="form-label">축제 이름</label>
@@ -150,6 +174,9 @@
                 <label for="sample6_extraAddress" class="form-label">참고항목</label>
                 <input type="text" class="form-control" id="sample6_extraAddress" name="feExtraAddress" placeholder="참고항목" readonly>
             </div>
+            
+            <input type="hidden" id="feLat" name="feLat">
+			<input type="hidden" id="feLong" name="feLong">
 
 
             <!-- 전화번호 -->
@@ -161,13 +188,16 @@
             <!-- 후원자 -->
             <div class="mb-3">
                 <label for="meSponsor" class="form-label">주최자명</label>
-                <input type="text" class="form-control" id="meSponsor" name="meSponsor" placeholder="주최자명" required>
+                <input type="text" class="form-control" id="meSponsor" value="${memberSponsor}" name="meSponsor" placeholder="주최자명" required readonly>
             </div>
 
             <!-- 참가비 -->
             <div class="mb-3">
-                <label for="feFee" class="form-label">축제비용</label>
-                <input type="text" class="form-control" id="feFee" name="feFee" placeholder="참가비" required>
+                <label for="feFeeType" class="form-label">축제비용</label>
+                <select class="form-select" id="feFeeType" name="feFeeType">
+                    <option value="paid">유료</option>
+                    <option value="free">무료</option>
+                </select>
             </div>
 
             <!-- 테마 선택 -->
@@ -191,7 +221,7 @@
             <!-- 내용 -->
             <div class="mb-3">
                 <label for="feContents" class="form-label">내용</label>
-                <textarea class="form-control" id="feContents" name="feContents" rows="5" placeholder="내용" required></textarea>
+                <textarea class="form-control" id="feContents" name="feContents" rows="5" placeholder="축제 비용이 유료이면 1인기준 성인, 어린이, 노약자 등 금액을 상세히 적어주시기 바랍니다." required></textarea>
             </div>
 
             <!-- 홈페이지 -->
@@ -201,15 +231,18 @@
             </div>
 
             <!-- 대표 이미지 (드래그 앤 드롭) -->
+            
             <div class="mb-3">
                 <label for="feImageMainFile" class="form-label">축제 대표 이미지</label>
                 <div id="dropAreaRep" class="drop-area">
                     <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
-                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*" required hidden>
+                    <input type="file" id="feImageMainFile" name="feImageMainFile" accept="image/*"  hidden>
                 </div>
                 <div class="mt-2">
                     <img id="previewRep" src="" alt="대표 이미지 미리보기" class="img-preview d-none" />
                 </div>
+                <!-- 대표 이미지 오류 메시지 -->
+                <div id="errorRep" class="error-message"></div>
             </div>
             
             <!-- 포스터 (드래그 앤 드롭) -->
@@ -217,12 +250,15 @@
                 <label for="fePosterFile" class="form-label">축제 포스터</label>
                 <div id="dropAreaPoster" class="drop-area">
                     <span class="spanText">사진을 마우스로 끌거나 선택하세요 📂</span>
-                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*" required hidden>
+                    <input type="file" id="fePosterFile" name="fePosterFile" accept="image/*"  hidden>
                 </div>
                 <div class="mt-2">
                     <img id="previewPoster" src="" alt="포스터 미리보기" class="img-preview d-none" />
                 </div>
+                <!-- 포스터 오류 메시지 -->
+                <div id="errorPoster" class="error-message"></div>
             </div>
+          
             
             <!-- 추가 이미지 (드래그 앤 드롭, 다중 업로드) -->
             <div class="mb-3">
@@ -253,59 +289,98 @@
         crossorigin="anonymous"></script>
         
 
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script>
-            function sample6_execDaumPostcode() {
-                new daum.Postcode({
-                    oncomplete: function(data) {
-                        // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	    function sample6_execDaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function(data) {
+	                // 사용자가 선택한 주소 저장
+	                var addr = ''; // 주소 변수
+	                var extraAddr = ''; // 참고항목 변수
+	
+	                if (data.userSelectedType === 'R') { // 도로명 주소 선택
+	                    addr = data.roadAddress;
+	                } else { // 지번 주소 선택
+	                    addr = data.jibunAddress;
+	                }
+	
+	                // 참고항목 처리
+	                if (data.userSelectedType === 'R') {
+	                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	                        extraAddr += data.bname;
+	                    }
+	                    if (data.buildingName !== '' && data.apartment === 'Y') {
+	                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                    }
+	                    if (extraAddr !== '') {
+	                        extraAddr = ' (' + extraAddr + ')';
+	                    }
+	                    document.getElementById("sample6_extraAddress").value = extraAddr;
+	                } else {
+	                    document.getElementById("sample6_extraAddress").value = '';
+	                }
+	
+	                // 주소 입력 필드에 값 설정
+	                document.getElementById('sample6_postcode').value = data.zonecode;
+	                document.getElementById("sample6_address").value = addr;
+	                document.getElementById("sample6_detailAddress").focus();
+	
+	                // 📌 [수정] 위도·경도를 설정하는 Geocoder 추가
+	                const geocoder = new kakao.maps.services.Geocoder();
+	                geocoder.addressSearch(addr, function (result, status) {
+	                    if (status === kakao.maps.services.Status.OK) {
+	                        console.log("위도:", result[0].y, "경도:", result[0].x);
+	                        document.getElementById("feLat").value = result[0].y;
+	                        document.getElementById("feLong").value = result[0].x;
+	                    } else {
+	                        console.error("위도·경도를 찾을 수 없습니다.");
+	                        document.getElementById("feLat").value = "";
+	                        document.getElementById("feLong").value = "";
+	                    }
+	                });
+	            }
+	        }).open();
+	    }
+	</script>
+
         
-                        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                        var addr = ''; // 주소 변수
-                        var extraAddr = ''; // 참고항목 변수
+		<!-- 카카오맵 API 추가 -->
+		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf94a4eafbce0c713bd14afa38fa62da&libraries=services"></script>
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+			    const addressInput = document.getElementById("sample6_address");
+			    const latitudeInput = document.getElementById("feLat");
+			    const longitudeInput = document.getElementById("feLong");
+			    const geocoder = new kakao.maps.services.Geocoder();
+	
+			    // 주소 입력이 변경될 때마다 실행
+			    addressInput.addEventListener("input", function () {  
+			        const address = addressInput.value;
+			        if (address.trim() !== "") {  // 빈 값이 아닐 경우 실행
+			            geocoder.addressSearch(address, function (result, status) {
+			                if (status === kakao.maps.services.Status.OK) {
+			                    console.log("위도:", result[0].y, "경도:", result[0].x);
+			                    latitudeInput.value = result[0].y;  // 위도 설정
+			                    longitudeInput.value = result[0].x;  // 경도 설정
+			                } else {
+			                    console.error("위도·경도를 찾을 수 없습니다.");
+			                    latitudeInput.value = "";
+			                    longitudeInput.value = "";
+			                }
+			            });
+			        }
+			    });
+			});
+		</script>
         
-                        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                        if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                            addr = data.roadAddress;
-                        } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                            addr = data.jibunAddress;
-                        }
-        
-                        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-                        if(data.userSelectedType === 'R'){
-                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                                extraAddr += data.bname;
-                            }
-                            // 건물명이 있고, 공동주택일 경우 추가한다.
-                            if(data.buildingName !== '' && data.apartment === 'Y'){
-                                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                            }
-                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                            if(extraAddr !== ''){
-                                extraAddr = ' (' + extraAddr + ')';
-                            }
-                            // 조합된 참고항목을 해당 필드에 넣는다.
-                            document.getElementById("sample6_extraAddress").value = extraAddr;
-                        
-                        } else {
-                            document.getElementById("sample6_extraAddress").value = '';
-                        }
-        
-                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                        document.getElementById('sample6_postcode').value = data.zonecode;
-                        document.getElementById("sample6_address").value = addr;
-                        // 커서를 상세주소 필드로 이동한다.
-                        document.getElementById("sample6_detailAddress").focus();
-                    }
-                }).open();
-            }
-        </script>
         
         <!-- Axios Http JS -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        
+        <!-- 메인, 포스터 이미지 없을 시 알람 -->
+        <c:url var="festivalMainPosterImage" value="/js/festival-main-poster-image.js" /> 
+        <script src="${festivalMainPosterImage}"></script>
         
         <!-- 날짜 설정 및 테마 입력 관련 JS (date-config.js, theme-input.js) -->
         <c:url var="dateConfig" value="/js/date-config.js" /> 

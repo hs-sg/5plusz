@@ -1,234 +1,211 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-    
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-         
-        <!-- Bootstrap을 사용하기 위한 meta name="viewport"설정 -->
+        <!-- Bootstrap을 사용하기 위한 meta viewport 설정 -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Fest Go</title>
         
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-            rel="stylesheet" 
-            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-            crossorigin="anonymous" />
+              rel="stylesheet" 
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+              crossorigin="anonymous" />
         
         <!-- Swiper CSS -->
         <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
-            
-        <style>
-            .searchArea #searchText {
-                border: none;
-                border-bottom: 1px solid #1A1A24;
-            }
-            .searchArea #searchBtn {
-                width: 20px;
-                height: 20px;
-                background: url(https://kfescdn.visitkorea.or.kr/kfes/resources/img/search_box_btn.png) no-repeat center;
-                background-size: 20px 20px;
-                border: none;
-            }
-            .keyword a {
-                color: #80808a;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-sizing: border-box;
-                padding: 0 16px;
-                height: 100%;
-                border-radius: 99px;
-                border: 1px solid #80808a;
-            }
-            .keyword ul {
-                flex-wrap: wrap;
-                gap: 8px;
-                display: flex;
-                margin-top: 15px;
-                list-style: none;
-            }
-            .keyword li {
-                text-align: -webkit-match-parent;
-            }
-            .swiper {
-                width: 600px;
-                height: 300px;
-            }
-        </style>
+        
+        <!-- 기존 CSS 파일 링크 (경로가 이미 있으므로 그대로 사용) -->
+        <c:url var="homeCSS" value="/css/home.css"/>
+        <link href="${homeCSS}" rel="stylesheet"/>
+        <!-- 또는 static 폴더를 사용 중이라면 -->
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/home.css">
     </head>
     <body>
         <div class="container-fluid">
-            <c:set var = "pageTitle" value = "홈 페이지" />
+            <c:set var="pageTitle" value="Fest Go" />
             <%@ include file="./fragments/header.jspf" %>
         </div>
         <main>
-            <!-- 쇼케이스 섹션: 최신 축제, 추천 축제 -->
-            <section class="pt-3">
+            <!-- 쇼케이스 섹션 (화살표 추가) -->
+            <section class="pt-3 mb-6">
                 <div class="mainVisual">
-                    <!--<div class="bg-info" id="backgroundImage"></div>-->
                     <div class="innerVisual">
-                        <div id="carouselExampleIndicators" class="carousel slide">
-                            <div class="carousel-indicators">
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="0" class="active"
-                                    aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="1"
-                                    aria-label="Slide 2"></button>
-                                <button type="button"
-                                    data-bs-target="#carouselExampleIndicators"
-                                    data-bs-slide-to="2"
-                                    aria-label="Slide 3"></button>
-                            </div>
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 1</text>
-                                    </svg>
+                        <swiper-container 
+                            class="mainSwiper" 
+                            pagination="true" 
+                            pagination-dynamic-bullets="true" 
+                            navigation="true">
+                            
+                            <swiper-slide>
+                                <img src="${pageContext.request.contextPath}/static/images/main1.jpg" alt="main1" />
+                            </swiper-slide>
+                            <swiper-slide>
+                                <img src="${pageContext.request.contextPath}/static/images/main2.jpg" alt="main2" />
+                            </swiper-slide>
+                            <!--  
+                            <swiper-slide>
+                                <c:url var="linkMainVisual1" 
+                                    value="/fest/detail?feId=${festivalsForMainVisual1.feId}" />
+                                <a href="${linkMainVisual1}">
+                                    <c:url var="mainVisual1Img" 
+                                        value="/uploads/${festivalsForMainVisual1.feImageMain}" />
+                                    <img class="mainSlide" src="${mainVisual1Img}" alt="축제 이미지 1">
+                                </a>
+                                <div class="swiper-slide-container-box theme">
                                 </div>
-                                <div class="carousel-item">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 2</text>
-                                    </svg>
+                            </swiper-slide>
+                            
+                            <swiper-slide>
+                                <c:url var="linkMainVisual2" 
+                                    value="/fest/detail?feId=${festivalsForMainVisual2.feId}" />
+                                <a href="${linkMainVisual2}">
+                                    <c:url var="mainVisual2Img" 
+                                        value="/uploads/${festivalsForMainVisual2.feImageMain}" />
+                                    <img class="mainSlide" src="${mainVisual2Img}" alt="축제 이미지 2">
+                                </a>
+                                <div class="swiper-slide-container-box theme">
                                 </div>
-                                <div class="carousel-item">
-                                    <!-- <img src="..." class="d-block w-100" alt="..."> -->
-                                    <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100"
-                                        width="800" height="400">
-                                        <rect width="100%" height="100%" style="fill:#555"></rect>
-                                        <text x="50%" y="50%" fill="#333" dx="-3em">축제 Visual 3</text>
-                                    </svg>
-                                </div>
-                            </div>
-                            <button class="carousel-control-prev"
-                                type="button"
-                                data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next"
-                                type="button"
-                                data-bs-target="#carouselExampleIndicators"
-                                data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
-                    </div>                
+                            </swiper-slide>
+                            -->
+                        </swiper-container>
+                    </div>
                 </div>
             </section>
-            <!--// 쇼케이스 섹션  -->
-            <!-- 검색 -->
-            <section class="pt-3">
-                <form class="row gx-3 gy-2 align-items-center">
+                          
+            <section class="my-5">
+                <div class="keyword pt-3 ps-3 pe-3">
+                    <h2 class="mb-3 text-center keyword-title">
+                        <em>추천 축제</em> 키워드
+                    </h2>
+                    <ul class="d-flex flex-wrap justify-content-start">
+                        <c:forEach var="t" items="${themesInFestival}">
+                            <li class="mx-2 my-2">
+                                <a href="#" class="linkRecommendTheme px-3 py-2 theme-button" theme-id="${ t.theId }">
+                                    #${t.theName}
+                                </a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </section>
+    
+            <!-- 검색 섹션 -->
+            <section class="pb-4">
+                <h2 class="mb-4 search-title">축제 검색</h2>
+                <form class="row gx-3 gy-2 align-items-center" id="searchFestival">
                     <div class="col-sm-3">
                         <div class="input-group">
-                            <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectTime">
-                                <option selected>시기</option>
-                                <option value="1">1월</option>
+                            <div class="input-group-text">📆</div>
+                            <select class="form-select" id="selectTime" name="month">
+                                <option value="" selected>시기 선택</option>
+                                <% for (int i = 1; i <= 12; i++) { %>
+                                    <option value="<%= i %>"><%= i %>월</option>
+                                <% } %>
                             </select>
                         </div>
                     </div>
+    
                     <div class="col-sm-3">
                         <div class="input-group">
-                            <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectRegion">
-                                <option selected>지역</option>
-                                <option value="1">서울</option>
+                            <div class="input-group-text">📍</div>
+                            <select class="form-select" id="selectLocation" name="lcId">
+                                <option value="" selected>지역 선택</option>
+                                <c:forEach var="lc" items="${locations}">
+                                    <option value="${lc.lcId}">${lc.lcName}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
+    
                     <div class="col-sm-3">
                         <div class="input-group">
-                            <div class="input-group-text">@</div>
-                            <select class="form-select" id="selectTheme">
-                                <option selected>테마</option>
-                                <option value="1">눈꽃</option>
+                            <div class="input-group-text">🎨</div>
+                            <select class="form-select" id="selectTheme" name="theId">
+                                <option value="" selected>테마 선택</option>
+                                <c:forEach var="the" items="${themes}">
+                                    <option value="${the.theId}">${the.theName}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
+    
                     <div class="col-sm-3">
                         <div class="searchArea">
-                            <input id="searchText" name="searchText" class="searchLine" title="검색"
-                                value placeholder="검색어를 입력해주세요."/>
-                            <button type="button" id="searchBtn"></button>
+                            <input class="searchLine" id="searchText" name="keyword" 
+                                   placeholder="검색어를 입력해주세요" />
+                            <button type="submit" id="searchBtn"></button>
                         </div>
                     </div>
                 </form>
             </section>
-            <!--// 검색  -->
-            <!-- 추천 축제 -->
-            <section>
-                <div class="keyword mt-3">
-                    <h2>
-                        <em>좋아요</em> 많은 키워드
-                    </h2>
-                    <ul>
-                        <li>
-                            <a href=#>눈꽃</a>
-                        </li>
-                        <li>
-                            <a href=#>산천어</a>
-                        </li>
-                    </ul>
+    
+            <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
+            <section class="my-5">
+                <div id="eventDetails" class="my-4 text-center"></div>
+                <div id="showMoreFestival" class="d-none mb-5 d-grid gap-2 col-6 mx-auto">
+                    <button id="btnShowMoreFestival" type="button" class="btn btn-outline-secondary px-4 py-3">
+                        더보기 +
+                    </button>
                 </div>
             </section>
-            <!--// 추천 축제 -->
-            <!-- HOT & NEW 축제 -->
-            <section>
+    
+            <section class="my-5">
                 <div class="mt-3">
-                    <h2>
-                        <em>HOT & NEW</em> 축제
-                    </h2>
-                    <!-- Slider main container -->
-                    <div class="swiper">
-                        <!-- Additional required wrapper -->
+                    <h2 class="mb-4 keyword-title">새로 등록된 축제</h2>
+                    <div class="swiper festivalSwiper">
                         <div class="swiper-wrapper">
-                            <!-- Slides -->
-                            <div class="swiper-slide">Slide 1</div>
-                            <div class="swiper-slide">Slide 2</div>
-                            <div class="swiper-slide">Slide 3</div>
-                            ...
+                            <c:forEach var="fn" items="${festivalsForNewVisual}">
+                                <div class="swiper-slide">
+                                    <c:url var="linkNewFestival" value="/fest/detail?feId=${fn.feId}" />
+                                    <a href="${linkNewFestival}">
+                                        <c:url var="linkNewFestivalImg" value="/uploads/${fn.feImageMain}" />
+                                        <img src="${linkNewFestivalImg}" alt="${fn.feName}">
+                                        <div class="festival-name">${fn.feName}</div>
+                                    </a>
+                                </div>
+                            </c:forEach>
                         </div>
-        
-                        <!-- If we need navigation buttons -->
                         <div class="swiper-button-prev"></div>
                         <div class="swiper-button-next"></div>
-        
-                        <!-- If we need scrollbar -->
                         <div class="swiper-scrollbar"></div>
                     </div>
                 </div>
             </section>
-            <!--// HOT & NEW 축제 -->
-            
         </main>
-        
+    
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-             crossorigin="anonymous"></script>
-
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+                crossorigin="anonymous"></script>
+    
         <!-- Axios Http JS -->    
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         
         <!-- Swiper JS -->
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js"></script>
+        
+        <!-- 컨텍스트 경로를 위한 스크립트 -->
+        <script>
+            var contextPath = '${pageContext.request.contextPath}';
+        </script>
         
         <c:url var="homeJS" value="/js/home.js"/>
-        <script src="${ homeJS }"></script>
+        <script src="${homeJS}"></script>
+        
+        <!-- 권한 없음 알림 표시용 -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const roleRequired = "<c:out value='${roleRequired}'/>";
+                if (roleRequired === "true") {
+                    alert("권한이 없습니다.\n홈페이지로 이동합니다.");
+                }
+            });
+        </script>
     </body>
 </html>

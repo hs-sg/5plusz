@@ -4,20 +4,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.oplusz.festgo.domain.Festival;
 import com.oplusz.festgo.domain.FestivalImage;
-
 import com.oplusz.festgo.dto.FestivalCreateDto;
-
 import com.oplusz.festgo.dto.FestivalSelectJoinLikesDto;
 import com.oplusz.festgo.dto.FestivalSelectJoinRequestDto;
-
-import com.oplusz.festgo.domain.Festival;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -125,11 +121,7 @@ public class FestivalDaoTest {
 	
 	// @Test
 	public void testDeleteFestivalByFeId() {
-		Integer imageDelResult = festivalDao.deleteFestivalImageByFeId(21);
-		Integer requestDelResult = festivalDao.deleteFestivalRequestByFeId(21);
 		Integer festivalDelResult = festivalDao.deleteFestivalByFeId(21);
-		Assertions.assertEquals(1, imageDelResult);
-		Assertions.assertEquals(1, requestDelResult);
 		Assertions.assertEquals(1, festivalDelResult);
 	} //-> 아직 임시 테스트중 좋아요하고 댓글쪽도 같이 삭제 해야됨.
 	

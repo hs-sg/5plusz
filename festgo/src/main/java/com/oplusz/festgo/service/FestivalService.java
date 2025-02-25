@@ -1,22 +1,22 @@
 package com.oplusz.festgo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oplusz.festgo.dto.FestivalCalendarDto;
-import com.oplusz.festgo.domain.FestivalImage;
 import com.oplusz.festgo.domain.Festival;
+import com.oplusz.festgo.domain.FestivalImage;
+import com.oplusz.festgo.dto.FestivalCalendarDto;
 import com.oplusz.festgo.dto.FestivalCreateDto;
+import com.oplusz.festgo.dto.FestivalSearchDto;
 import com.oplusz.festgo.dto.FestivalWithImagesDto;
 import com.oplusz.festgo.repository.FestRequestDao;
 import com.oplusz.festgo.repository.FestivalDao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,6 +60,25 @@ public class FestivalService {
 		return FestivalWithImagesDto.builder().festival(festival).images(images).build();
 	}
 	
+	public List<FestivalImage> getFestivalImages(Integer feId) {
+	    List<FestivalImage> images = festivalsDao.selectFestivalImagesByFeId(feId);
+	    if (images == null || images.isEmpty()) {
+	        log.warn("⚠️ festivalImages 테이블에서 feId={}의 데이터를 찾을 수 없음", feId);
+	    } else {
+	        log.debug("✅ festivalImages 조회 성공: {}", images);
+	    }
+	    return images;
+	}
+	
+	// 상세보기 서비스
+	public Festival read(Integer feId) {
+		log.debug("read = {}", feId);
+		
+		Festival festival = festivalsDao.selectFestivalById(feId);
+		
+		return festival;
+	}
+	
 	  /**
      * 지정된 기간 (start ~ end, 형식: yyyy-MM-dd) 내의 축제 정보를 조회하여 반환합니다.
      * FullCalendar가 자동으로 start, end 파라미터를 전달할 때 사용합니다.
@@ -67,6 +86,40 @@ public class FestivalService {
     public List<FestivalCalendarDto> getFestivalsBetweenDates(String start, String end) {
         log.debug("getFestivalsBetweenDates() invoked with start: {}, end: {}", start, end);
         return festivalsDao.findFestivalsBetween(start, end);
+    }
+    
+    // 축제 검색
+    public List<FestivalCalendarDto> read(FestivalSearchDto dto) {
+    	log.debug("read(dto={})", dto);
+    	if(dto.getKeyword() == null) dto.setKeyword("");
+    	
+    	return festivalsDao.selectFestivalForSearch(dto);
+    }
+    
+    // 검색한 축제 개수
+    public int readForReload(FestivalSearchDto dto) {
+    	log.debug("readForReload(dto={})", dto);
+    	if(dto.getKeyword() == null) dto.setKeyword("");
+    	
+    	return festivalsDao.selectFestivalForReload(dto);
+    }
+
+    // 홈페이지 메인 화면에 띄울 축제 검색
+    public List<Festival> read(List<Integer> ListFeId) {
+    	log.debug("read(ListFeId={})", ListFeId);
+    	List<Festival> festivals = new ArrayList<Festival>();
+    	for (int id : ListFeId) {
+    		festivals.add(festivalsDao.selectFestivalById(id));
+    	}
+    	
+    	return festivals;
+    }
+    
+    // 홈페이지 New 축제 화면에 띄울 축제 검색
+    public List<Festival> readByCreatedTime() {
+    	log.debug("readByCreatedTime()");
+    	
+    	return festivalsDao.selectFestivalByCreatedTime();
     }
 
 

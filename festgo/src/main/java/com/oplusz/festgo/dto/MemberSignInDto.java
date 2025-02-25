@@ -1,6 +1,5 @@
 package com.oplusz.festgo.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.oplusz.festgo.domain.Member;
 
 import lombok.Data;

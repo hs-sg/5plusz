@@ -1,105 +1,342 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 
-<header class="mt-2 p-4 bg-primary text-white text-center">
-    <h1>${pageTitle}</h1>
-</header>
+    pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>${pageTitle}</title>
+    <!-- Bootstrap CSS (버전 5.3 사용) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Styles -->
+    <style>
+        /* 전체 페이지 여백 적용 */
+        body {
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+        /* 헤더 스타일: 배경 흰색, 텍스트 다크 */
+        header {
+            background-color: #ffffff;
+        }
+        header .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+        }
+        /* body 폰트 설정 */
+        body {
+            font-family: 'dohyeon', sans-serif;
+        }
+        /* 로그인 모달의 입력 필드는 기본 시스템 폰트 사용 */
+        #signinModal input {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+        }
+        /* 알림 버튼 스타일 */
+        .btn-notification {
+            background-color: transparent !important;
+            border: none !important;
+            padding: 0;
+            margin-right: 1rem;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .btn-notification:hover {
+            transform: scale(1.1);
+        }
+        /* 종 아이콘 크게 */
+        .btn-notification i {
+            font-size: 2.5rem;
+        }
+        /* 알림 뱃지 */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            display: none;
+        }
+        /* 타원형 네비게이션 바 (연한 하늘색 파스텔 적용) */
+        nav.navbar.oval-nav {
+            background-color: #e0f7fa !important;
+            border-radius: 30px;
+            padding: 0.5rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 0 2rem;
+        }
+        nav.oval-nav .nav-link {
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+        nav.oval-nav .nav-link:hover {
+            color: #0056b3;
+            animation: bounce 0.5s;
+        }
+        
+        /* [hs] Bootstrap의 네비게이션 바(menu) 적용 */ 
+        .navbar, 
+        .navbar-brand, 
+        .navbar-nav .nav-link {
+            font-family: 'sansMedium' !important;
+        }
+        
+        /* 헤더 컨테이너 조정 */
+        header .container-fluid {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        /* 메뉴 항목 hover 시 bounce 효과 */
+        @keyframes bounce {
+            0%   { transform: translateY(0); }
+            30%  { transform: translateY(-15px); }
+            50%  { transform: translateY(0); }
+            70%  { transform: translateY(-7px); }
+            100% { transform: translateY(0); }
+        }
+        /* 모달 공통 스타일 */
+        .modal-content {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            background: linear-gradient(90deg, #66b3ff, #b3d7ff);
+            color: white;
+            border-bottom: none;
+        }
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+        .modal-body {
+            background-color: #f7f9fc;
+            padding: 1rem;
+        }
+        .modal-footer {
+            background-color: #f1f3f5;
+            border-top: none;
+        }
+        /* 필터 버튼 스타일 */
+        .notification-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .filter-btn {
+            border: 1px solid #dee2e6;
+            background: #ffffff;
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .filter-btn.active {
+            background: #66b3ff;
+            color: white;
+            border-color: #66b3ff;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+        .empty-state-icon i {
+            font-size: 3rem;
+            color: #dee2e6;
+        }
+        /* 반응형 스타일 */
+        @media (max-width: 992px) {
+            nav.oval-nav {
+                margin: 0;
+                border-radius: 15px;
+            }
+            .navbar-collapse {
+                background-color: #e0f7fa;
+                border-radius: 15px;
+                padding: 1rem;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더: Fest Go 로고와 알림 버튼, 그리고 타원형 네비게이션 바 -->
+    <header class="mt-2 p-4">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            
+            <c:url value="/" var="homePage"/>
+            <a href="${pageContext.request.contextPath}/" class="text-dark text-decoration-none">
+                <img src="${pageContext.request.contextPath}/static/images/logo5.PNG" alt="Logo" style="height: 150px;">
+    
+            </a> 
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <c:url value="/" var="homePage"/>
-        <a class="navbar-brand" href="${homePage}">LOGO</a>
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <c:url value="/" var="homePage"/>
-                    <a class="nav-link " href="${homePage}">전국축제</a>
-                </li>
-                <li class="nav-item">
-                    <c:url value="/fest/cal" var="festCal"/>
-                    <a class="nav-link" href="${festCal}">축제달력</a>
-                </li>
-                <li class="nav-item">
-                    <c:url value="/post/list" var="postList"/>
-                    <a class="nav-link" href="${postList}">커뮤니티</a>
-                </li>
-                <li class="nav-item">
-                    <c:url value="/fest/create" var="festCreate"/>
-                    <a class="nav-link" href="${festCreate}">축제등록</a>
-                </li>
-                
-                <%-- 세션에 로그인 사용자 정보가 없는 경우 --%>
-                <c:if test="${ empty signedInUser }">
-                <li class="nav-item">
-                    <!-- <c:url var="signInPage" value="/user/signin"/> --> 
-                    <a class="nav-link " href="" id="linkSignin">LOGIN</a>
-                </li>
-                <li class="nav-item">
-                    <c:url var="signUpPage" value="/user/signup"/>
-                    <a class="nav-link " href="${signUpPage}">SIGNUP</a>
-                </li>
-                </c:if>
-                
-                <%-- 세션에 로그인 사용자 정보가 있는 경우 --%>
-                <c:if test="${ not empty signedInUser }">
-                <li class="nav-item">
-                    <c:url value="/user/mypage" var="myPage"/>
-                    <a class="nav-link" href="${myPage}">마이페이지</a>
-                </li>
-                <li class="nav-item">
-                    <c:url var="signOutPage" value="/user/signout"/>
-                    <a class="nav-link " href="${signOutPage}">LOGOUT</a>
-                </li>
-                </c:if>
-            </ul>
+            <!-- 타원형 네비게이션 바 (연한 하늘색 파스텔 적용) -->
+            <nav class="navbar navbar-expand-lg oval-nav">
+                <div class="container">
+                    <!-- 모바일 토글 버튼 -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" 
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <!-- 메뉴 항목 -->
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav w-100 justify-content-evenly">
+                            <li class="nav-item">
+                                <c:url value="/" var="homePage"/>
+                                <a class="nav-link" href="${homePage}">전국축제</a>
+                            </li>
+                            <li class="nav-item">
+                                <c:url value="/fest/cal" var="festCal"/>
+                                <a class="nav-link" href="${festCal}">축제달력</a>
+                            </li>
+                            <li class="nav-item">
+                                <c:url value="/post/list" var="postList"/>
+                                <a class="nav-link" href="${postList}">커뮤니티</a>
+                            </li>
+                            <c:if test="${memberRole eq 2 || memberRole eq 3}">
+                                <li class="nav-item">
+                                    <c:url value="/fest/create" var="festCreate"/>
+                                    <a class="nav-link" href="${festCreate}">축제등록</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${empty signedInUser}">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" id="linkSignin">LOGIN</a>
+                                </li>
+                                <li class="nav-item">
+                                    <c:url value="/user/signup" var="signUpPage"/>
+                                    <a class="nav-link" href="${signUpPage}">SIGNUP</a>
+                                </li>
+                            </c:if>
+                            <c:if test="${not empty signedInUser}">
+                                <li class="nav-item">
+                                    <c:url value="/user/mypage" var="myPage"/>
+                                    <a class="nav-link" href="${myPage}">마이페이지</a>
+                                </li>
+                                <li class="nav-item">
+                                    <c:url value="/user/signout" var="signOutPage"/>
+                                    <a class="nav-link" href="${signOutPage}">LOGOUT</a>
+                                </li>
+                            </c:if>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- 로그인한 사용자에게만 알림 버튼 표시 -->
+
+   
+            <c:if test="${not empty signedInUser}">
+                <button class="btn btn-notification" data-bs-toggle="modal" data-bs-target="#notificationModal">
+                    <i class="bi bi-bell fs-2"></i>
+                    <span class="notification-badge" id="notificationBadge">0</span>
+                </button>
+            </c:if>
+        </div>
+    </header>
+
+
+    <!-- 알림 모달 -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">알림</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- 알림 필터 -->
+                    <div class="notification-filters">
+                    <button class="filter-btn active" id="defaultAlarmFilter" data-filter="all">전체</button>
+                        <button class="filter-btn" data-filter="festival">🎉 축제</button>
+                        <button class="filter-btn" data-filter="community">👥 계정</button>
+                    </div>
+                    
+					<!-- 알림 목록 컨테이너 (현재는 숨김) -->
+                    <div class="list-group" id="notificationList"></div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
 
-<!-- 로그인 모달 -->
-<div id="signinModal" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- 최상단 닫기 버튼 -->
-            <div class="modal-header">
-                <button class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- 상단 타이틀 -->
-                <div>
-                    <h4 class="text-center">FestGo</h4>
+    <!-- 로그인 모달 (커스텀 스타일 적용) -->
+    <div id="signinModal" class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">로그인</h5>
+                    <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <!-- 아이디 입력 -->
-                <div class="form-floating">
-                    <input type="text" class="form-control mb-2" 
-                        id="modalSigninUsername" placeholder="아이디" autofocus required />
-                    <label for="modalSigninUsername">아이디</label>
-                </div>
-                <!-- 비밀번호 입력 -->
-                <div class="form-floating">
-                    <input type="password" class="form-control mb-2" 
-                        id="modalSigninPassword" placeholder="비밀번호" required />
-                    <label for="modalSigninPassword">비밀번호</label>
-                </div>
-                <!-- 로그인 버튼 -->
-                <div class="text-danger mb-3" id="warningText"></div>
-                <div class="d-grid gap-2 mx-auto">
-                    <button class="btn btn-primary btn-lg" id="btnSignin">로그인</button>
+                <div class="modal-body">
+                    <div class="mb-3 text-center">
+                        <h4>FestGo</h4>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="modalSigninUsername" placeholder="아이디" autofocus required>
+                        <label for="modalSigninUsername">아이디</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="modalSigninPassword" placeholder="비밀번호" required>
+                        <label for="modalSigninPassword">비밀번호</label>
+                    </div>
+                    <div class="text-danger mb-3" id="warningText"></div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg" id="btnSignin">로그인</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Axios Http JS -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Axios Http JS -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- signIn.js (로그인 관련 스크립트) -->
+    <c:url var="signInJS" value="/js/signIn.js" />
+    <script src="${ signInJS }"></script>
 
-<c:url var="signInJS" value="/js/signIn.js" />
-<script src="${ signInJS }"></script>
+	<script>
+    const alMeUsername = `${ signedInUser }`;
+    const alMrId = Number(${ memberRole });
+	</script>
+   
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // 로그인 모달 자동 실행 여부 확인
+    <c:if test="${not empty loginRequired}">
+        const signinModal = new bootstrap.Modal(document.getElementById("signinModal"), { backdrop: false });
+        signinModal.show();
+    </c:if>
+});
+</script>
+
+<!-- 알림 관련 JavaScript -->
+<c:url var="alarmJS" value="/js/alarm.js" />
+<script src="${ alarmJS }"></script>
+
+
+<script>
+document.querySelector('.modal-content').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+</script>
+
+    <!-- Bootstrap JS Bundle (Popper 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

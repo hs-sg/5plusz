@@ -13,4 +13,25 @@
     <select id="selectByMeId" resultType="SponRequest">
         select * from spon_request where me_id = #{meId}
     </select>
+    
+    
+    <!-- 희성 작성 시작 -->
+    <!-- 스폰서 멤버 승인해주기 sr_approval을 1로 바꿔줌 -->
+    <update id="approveSponsorMemberByMeId">
+        update spon_request
+        set sr_approval = 1
+        where me_id = #{meId}
+    </update>
+    
+    <update id="refuseSponsorMemberByMeId">
+        update spon_request
+        set sr_approval = 2, sr_cause = #{srCause}
+        where me_id = #{meId}
+    </update>
+        
+    <select id="countSponsorBySrApproval">
+        select count(*) from spon_request where sr_approval = #{srApproval}
+    </select>
+    
+    <!-- 희성 작성 끝 -->
 </mapper>

@@ -32,9 +32,39 @@
             <param-value>UTF-8</param-value>
         </init-param>
     </filter>
+    
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- 인증(로그인 여부 체크) 필터 -->
+    <filter>
+        <filter-name>authenticationFilter</filter-name>
+        <filter-class>com.oplusz.festgo.filter.AuthenticationFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>authenticationFilter</filter-name>
+        <url-pattern>/post/create</url-pattern>
+        <url-pattern>/post/details</url-pattern>
+        <url-pattern>/post/modify</url-pattern>
+        <url-pattern>/post/update</url-pattern>
+        <url-pattern>/post/delete</url-pattern>
+        <url-pattern>/api/review/*</url-pattern>
+        <url-pattern>/user/mypage</url-pattern>
+        <url-pattern>/fest/create</url-pattern>
+    </filter-mapping>
+    
+    <!-- 권한(들어갈 수 있는 페이지) 필터 (사업자, 관리자용)-->
+    <filter>
+        <filter-name>roleFilter</filter-name>
+        <filter-class>com.oplusz.festgo.filter.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+
+        <filter-name>roleFilter</filter-name>
+        <url-pattern>/fest/create</url-pattern>
     </filter-mapping>
     
     
@@ -47,18 +77,26 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/servlet-context.xml</param-value>
         </init-param>
+
         <!-- multipart-config 설정 -->
             <multipart-config>
+                <location>C:\java157\workspaces\first-team\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\festgo\uploads</location>
                 <max-file-size>10485760</max-file-size> <!-- 개별 파일 최대 크기 -->
                 <max-request-size>20971520</max-request-size> <!-- 요청 전체 최대 크기 -->
                 <file-size-threshold>0</file-size-threshold> <!-- 파일 임시 저장 기준 (0이면 바로 디스크에 저장) -->
-            </multipart-config>
+             </multipart-config>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
-</web-app>
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
+
+
+</web-app>

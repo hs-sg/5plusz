@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" 
-         pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -12,49 +12,397 @@
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css" rel="stylesheet">
     <style>
-        /* 달력 영역 스타일 */
+        /* 달력 테두리 영역 스타일 */
         #calendar {
             max-width: 90%;
             margin: 20px auto;
-            border: 4px solid skyblue; /* 하늘색 테두리, 두께 4px */
-            border-radius: 15px;       /* 모서리 둥글게 */
+            border: 6px solid skyblue; /* 두께를 6px로 변경 */
+            border-radius: 15px;
             padding: 10px;
         }
+
+        .fc-toolbar-title {
+            font-weight: normal !important;
+            color: skyblue !important;
+        }
+        
+        /* 년/월 타이틀 왼쪽으로 이동 */
+        .fc-toolbar-title {
+            text-align: center !important;
+            font-size: 1.6rem !important;
+            font-weight: normal !important;
+            width: 100% !important;
+            display: block !important;
+            position: relative !important;
+            transform: translateX(-85px) !important;  
+        }
+                
         /* 클릭한 날짜 강조 스타일 */
         .fc-daygrid-day.fc-highlighted {
             background-color: #ffecd1 !important;
             border: 2px solid #ffa726 !important;
         }
+
+        /* 날짜 셀 호버 효과 강화 */
+        .fc .fc-daygrid-day {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .fc .fc-daygrid-day:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            background-color: #f8f9fa;
+        }
+
+        /* 호버 시 날짜 텍스트 강조 */
+        .fc .fc-daygrid-day:hover .fc-daygrid-day-number {
+            font-weight: normal;
+            transform: scale(1.1);
+        }
+
         /* 기본 스타일 설정 */
         .fc .fc-col-header-cell {
             color: blue;
             text-decoration: none !important;
         }
+
         .fc .fc-col-header-cell.fc-day-sun {
             color: red !important;
             text-decoration: none !important;
         }
+
         .fc .fc-daygrid-day-number {
             color: black;
             text-decoration: none !important;
+            transition: transform 0.3s ease;
         }
+
         .fc .fc-day-sun .fc-daygrid-day-number {
             color: red !important;
             text-decoration: none !important;
         }
+
+        /* 이벤트 스타일 */
+        .fc-event {
+            margin: 1px 2px !important;
+            padding: 2px !important;
+            font-size: 12px !important;
+            text-align: center !important;
+            border-radius: 4px !important;
+        }
+
+        /* 이벤트가 있는 날짜 셀 스타일 */
+        .fc-daygrid-day-events {
+            margin-top: 2px !important;
+        }
+
+         /* 축제 카드 스타일 */
+        .festival-card {
+            border: 2px solid #E6E6FA;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.22, 1.61, 0.36, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 마우스를 올렸을 때 효과 */
+        .festival-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 카드 클릭 시 약간 줄어드는 효과 */
+        .festival-card:active {
+            transform: translateY(-5px) scale(0.97);
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-weight: normal;
+        }
+
+        .festival-list-title {
+            font-weight: normal;
+            color: purple !important;
+        }
+
+        .custom-hr {
+            border: none;
+            border-top: 2px solid #ccc;
+            margin: 0 auto 20px;
+            max-width: 90%;
+        }
+        
+        /* 더보기 버튼 스타일 */
+        .load-more-btn {
+            background-color: #E6E6FA;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 20px auto;
+            display: block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background-color: #D8BFD8;
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+       
+       .fc-event-title {
+            font-size: 18px !important;
+        }
+        
+        .fc-event-title {
+             font-size: 18px !important;
+             display: flex !important;
+             justify-content: center !important;
+             align-items: center !important;
+             height: 100% !important;
+        }
+
+        .fc-daygrid-event {
+            text-align: center !important;
+            margin-top: 10px !important;
+        }
+        
+        .fc-button-primary {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            color: #000 !important;
+        }
+
+        .fc-button-primary:hover {
+             background-color: transparent !important;
+             border-color: transparent !important;
+        }
+
+        .fc-button-primary:disabled {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+
+        .fc-button-primary:not(:disabled):active,
+        .fc-button-primary:not(:disabled).fc-button-active {
+            background-color: transparent !important;
+            border-color: transparent !important;
+        }
+        
+      
+
+       /* 날짜 셀 안의 축제 개수 표시 스타일 */
+       .custom-event {
+           font-family: 'sansLight', sans-serif !important;
+           font-size: 0.9em;
+           color: gray !important;
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           display: flex !important;
+           align-items: center !important;
+           justify-content: center !important;
+           text-align: center !important;
+           flex-wrap: wrap !important;
+           padding: 5px !important;
+           max-width: 90% !important;
+           line-height: 1.2 !important;
+           word-break: break-word !important;
+       }
+
+       .custom-event::before {
+           content: attr(data-title);
+           font-weight: normal;
+           font-size: 1em;
+           margin-bottom: -4px;
+       }
+        
+       .custom-event {
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           font-size: 1rem !important;
+           font-weight: normal !important;
+           text-align: center !important;
+           display: flex !important;
+           flex-direction: column !important;
+           align-items: center !important;
+           justify-content: center !important;
+           gap: 2px !important;
+           white-space: nowrap !important;
+           color: gray !important;
+       }
+        
+       .fc-daygrid-day {
+           position: relative !important;
+       }
+        
+       .fc-daygrid-day-events {
+           position: absolute !important;
+           top: 50% !important;
+           left: 50% !important;
+           transform: translate(-50%, -50%) !important;
+           width: 100% !important;
+       }
+
+		.fc-day-other .custom-event {
+		    opacity: 0.3 !important;
+		}
+		
+		/* 공통 리본 스타일 */
+		.ongoing-badge, .upcoming-badge, .ended-badge {
+		    position: absolute;
+		    top: 10px;
+		    left: -30px;
+		    color: white;
+		    padding: 5px 30px;
+		    font-size: 0.8rem;
+		    font-weight: normal;
+		    transform: rotate(-45deg);
+		    z-index: 2;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		    width: 100px;
+		    height: 25px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    line-height: 25px;
+		    white-space: nowrap;
+		}
+		
+		/* 개최중 배지 (녹색) */
+		.ongoing-badge {
+		    background-color: #28a745;
+		}
+		
+		/* 예정 배지 (파란색) */
+		.upcoming-badge {
+		    background-color: #007bff;
+		}
+		
+		/* 종료 배지 (빨간색) */
+		.ended-badge {
+		    background-color: #dc3545;
+		}
+		
+		@font-face {
+		    font-family: 'dohyeon';
+		    src: url('../font/BMDOHYEON_ttf.ttf') format('truetype');
+		    font-weight: normal;
+		    font-style: normal;
+		}
+
+		.festival-title {
+		    font-family: 'dohyeon', sans-serif;
+		    font-size: 2rem;
+		    font-weight: normal;
+		    color: skyblue;
+		    text-align: center;
+		    margin: 20px 0;
+		}
+
+		.festival-list-title {
+		    font-family: 'dohyeon', sans-serif;
+		    font-size: 1.8rem;
+		    font-weight: normal;
+		    color: purple;
+		    text-align: center;
+		    margin: 15px 0;
+		}
+
+		@font-face {		
+		    font-family: 'sansMedium';		
+		    src: url('../font/GmarketSansTTFMedium.ttf') format('truetype');		
+		}
+
+		@font-face {		
+		    font-family: 'sansLight';		
+		    src: url('../font/GmarketSansTTFLight.ttf') format('truetype');		
+		}
+
+		/* 축제 카드 제목 (sansMedium 폰트 적용) */
+		.card-title {
+		    font-family: 'sansMedium', sans-serif;
+		    font-size: 1.4rem;
+		    font-weight: normal;
+		    color: #333;
+		}
+
+		/* 축제 카드 세부 정보 (sansLight 폰트 적용) */
+		.card-text {
+		    font-family: 'sansLight', sans-serif;
+		    font-size: 1rem;
+		    color: #666;
+		}
+
+		.fc-day-other .custom-event {
+		    opacity: 0.3 !important;
+		}
+		
+		/* 공통 리본 스타일 */
+		.ongoing-badge, .upcoming-badge, .ended-badge {
+		    position: absolute;
+		    top: 10px;
+		    left: -30px;
+		    color: white;
+		    padding: 5px 30px;
+		    font-size: 0.8rem;
+		    font-weight: normal;
+		    transform: rotate(-45deg);
+		    z-index: 2;
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+		    width: 100px;
+		    height: 25px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    text-align: center;
+		    line-height: 25px;
+		    white-space: nowrap;
+		}
+		
+		/* 개최중 배지 (녹색) */
+		.ongoing-badge {
+		    background-color: #28a745;
+		}
+		
+		/* 예정 배지 (파란색) */
+		.upcoming-badge {
+		    background-color: #007bff;
+		}
+		
+		/* 종료 배지 (빨간색) */
+		.ended-badge {
+		    background-color: #dc3545;
+		}
     </style>
 </head>
 <body>
     <div class="container-fluid">
-        <!-- 헤더 (필요시 include) -->
         <c:set var="pageTitle" value="축제 달력" />
         <%@ include file="/WEB-INF/views/fragments/header.jspf" %>
     </div>
-    <main>
-        <div id="calendar"></div>
-        <!-- AJAX로 불러온 축제 정보들이 표시될 영역 -->
-        <div id="eventDetails" class="my-4 text-center"></div>
-    </main>
+   <main>
+    <h2 class="festival-title">월간 축제 달력</h2>
+    <div id="calendar"></div>
+    <h3 class="festival-list-title">축제 리스트</h3>
+    <hr class="custom-hr">
+    <div id="eventDetails" class="my-4 text-center"></div>
+</main>
+
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- FullCalendar JS -->
@@ -62,87 +410,203 @@
     <!-- Axios Http JS -->    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>  
     
-    <!-- JSP 페이지 내 스크립트 부분 -->
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const calendarEl = document.getElementById('calendar');
-    const eventDetailsEl = document.getElementById('eventDetails');
-    
-    // JSP EL을 통해 컨텍스트 경로를 자바스크립트 변수에 저장
-    var contextPath = '${pageContext.request.contextPath}';
-    var festivalsUrl = '<c:url value="/api/festivals" />';
-    
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: ''
-        },
-        locale: 'ko',
-        events: festivalsUrl,
-        dateClick: function(info) {
-            // 기존 강조 제거
-            document.querySelectorAll('.fc-daygrid-day.fc-highlighted')
-                .forEach(el => el.classList.remove('fc-highlighted'));
-            // 클릭한 날짜 강조
-            info.dayEl.classList.add('fc-highlighted');
-
-            var clickedDate = info.dateStr.split("T")[0];
-
-            fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
-            .then(response => response.json())
-            .then(data => {
-                console.log("받은 데이터:", data);
-
-                eventDetailsEl.innerHTML = ''; // 기존 내용 초기화
-
-                if (data && data.length > 0) {
-                    const rowDiv = document.createElement('div');
-                    rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
-
-                    data.forEach(function(fest) {
-                        var eventCol = document.createElement('div');
-                        eventCol.classList.add('col');
-
-                        var eventDiv = document.createElement('div');
-                        eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
-
-                        eventDiv.innerHTML = 
-                            '<img src="' + contextPath + '/uploads/' + fest.feImageMain + '" alt="' + fest.feName + '" ' +
-                            'class="card-img-top" style="height: 200px; object-fit: cover;">' +
-                            '<div class="card-body">' +
-                                '<h5 class="card-title">' + fest.feName + '</h5>' +
-                                '<p class="card-text"><strong>기간:</strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
-                                '<p class="card-text"><strong>위치:</strong> ' + fest.feAddress + '</p>' +
-                                '<a href="#" class="btn btn-primary">자세히 보기</a>' +
-                            '</div>';
-
-                        eventCol.appendChild(eventDiv);
-                        rowDiv.appendChild(eventCol);
-                    });
-
-                    eventDetailsEl.appendChild(rowDiv);
-                } else {
-                    eventDetailsEl.innerHTML = 
-                        '<div class="alert alert-info" role="alert">' +
-                        '해당 날짜에 진행하는 축제가 없습니다.' +
-                        '</div>';
-                }
-            })
-            .catch(error => {
-                console.error("축제 정보를 불러오는 중 오류 발생:", error);
-                eventDetailsEl.innerHTML = 
-                    '<div class="alert alert-danger" role="alert">' +
-                    '축제 정보를 불러오는데 실패했습니다.' +
-                    '</div>';
-            });
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const eventDetailsEl = document.getElementById('eventDetails');
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let currentFestivals = [];
+        
+        var contextPath = '${pageContext.request.contextPath}';
+        var festivalsUrl = '<c:url value="/api/festivals" />';
+        
+        function createLoadMoreButton() {
+            const button = document.createElement('button');
+            button.className = 'load-more-btn';
+            updateLoadMoreButtonText(button); // 버튼 텍스트 초기화
+            button.onclick = () => {
+                currentPage++;
+                displayFestivals(currentFestivals, false);
+            };
+            return button;
         }
+
+        function updateLoadMoreButtonText(button) {
+            const totalFestivals = currentFestivals.length; // 전체 축제 개수
+            const displayedFestivals = Math.min(currentPage * itemsPerPage, totalFestivals); // 현재 표시된 축제 개수
+            button.textContent = '('+ displayedFestivals + '/'+ totalFestivals + ')' + ' 더보기';
+        }
+
+
+        function displayFestivals(festivals, resetPage = true) {
+            if (resetPage) {
+                currentPage = 1;
+                eventDetailsEl.innerHTML = '';
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const festivalsToShow = festivals.slice(startIndex, endIndex);
+
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row', 'row-cols-1', 'row-cols-md-3', 'g-4');
+
+            festivalsToShow.forEach(function (fest) {
+                var eventCol = document.createElement('div');
+                eventCol.classList.add('col');
+
+                var eventDiv = document.createElement('div');
+                eventDiv.classList.add('card', 'h-100', 'festival-card', 'shadow-sm');
+
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const startDate = new Date(fest.feStartDate);
+                startDate.setHours(0, 0, 0, 0);
+
+                const endDate = new Date(fest.feEndDate);
+                endDate.setHours(0, 0, 0, 0);
+
+                // 상태 배지 추가
+                let badgeHTML = '';
+                if (today >= startDate && today <= endDate) {
+                    badgeHTML = '<span class="ongoing-badge">개최중</span>';
+                } else if (today < startDate) {
+                    badgeHTML = '<span class="upcoming-badge">예정</span>';
+                } else if (today > endDate) {
+                    badgeHTML = '<span class="ended-badge">종료</span>';
+                }
+
+                var imageUrl = fest.feImageMain
+                    ? contextPath + '/uploads/' + fest.feImageMain
+                    : contextPath + '/resources/images/default-festival.jpg';
+
+                eventDiv.innerHTML =
+                    '<div class="position-relative">' +
+                    badgeHTML +
+                    '<img src="' + imageUrl + '" alt="" ' +
+                    'class="card-img-top" style="height: 200px; object-fit: cover;">' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<h5 class="card-title">' + fest.feName + '</h5>' +
+                    '<p class="card-text"><strong></strong> ' + fest.feStartDate + ' ~ ' + fest.feEndDate + '</p>' +
+                    '<p class="card-text"><strong></strong> ' + fest.feAddress + '</p>' +
+                    '</div>';
+
+                eventDiv.onclick = function () {
+                    window.location.href = contextPath + '/fest/detail?feId=' + fest.feId;
+                };
+
+                eventCol.appendChild(eventDiv);
+                rowDiv.appendChild(eventCol);
+            });
+
+            const oldButton = eventDetailsEl.querySelector('.load-more-btn');
+            if (oldButton) {
+                oldButton.remove();
+            }
+
+            if (resetPage) {
+                eventDetailsEl.innerHTML = '';
+            }
+
+            eventDetailsEl.appendChild(rowDiv);
+
+            if (festivals.length > endIndex) {
+                const loadMoreButton = createLoadMoreButton();
+                updateLoadMoreButtonText(loadMoreButton);
+                eventDetailsEl.appendChild(loadMoreButton);
+            }
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: ''
+            },
+            locale: 'ko',
+            datesSet: function(info) {
+                const start = info.start.toISOString().split('T')[0];
+                const end = info.end.toISOString().split('T')[0];
+                
+                fetch(festivalsUrl + '?start=' + start + '&end=' + end)
+                    .then(response => response.json())
+                    .then(data => {
+                        calendar.removeAllEvents();
+                        
+                        const eventCounts = {};
+                        data.forEach(fest => {
+                            const startDate = fest.feStartDate.split('T')[0];
+                            const endDate = fest.feEndDate.split('T')[0];
+                            
+                            let currentDate = new Date(startDate);
+                            const lastDate = new Date(endDate);
+                            while (currentDate <= lastDate) {
+                                const dateStr = currentDate.toISOString().split('T')[0];
+                                eventCounts[dateStr] = (eventCounts[dateStr] || 0) + 1;
+                                currentDate.setDate(currentDate.getDate() + 1);
+                            }
+                        });
+                        
+                        Object.entries(eventCounts).forEach(([date, count]) => {
+                            calendar.addEvent({
+                                title: count + '개' + '\n⌵',
+                                start: date,
+                                allDay: true,
+                                backgroundColor: 'transparent',
+                                borderColor: 'transparent',
+                                textColor: 'gray',
+                                display: 'block',
+                                classNames: ['custom-event']
+                            });
+                        });
+                    })
+                    .catch(error => console.error('축제 정보 로딩 실패:', error));
+            },
+            eventDisplay: 'block',
+            displayEventTime: false,
+            dateClick: function(info) {
+                document.querySelectorAll('.fc-daygrid-day.fc-highlighted')
+                    .forEach(el => el.classList.remove('fc-highlighted'));
+
+                info.dayEl.classList.add('fc-highlighted');
+
+                var clickedDate = info.dateStr.split("T")[0];
+
+                fetch(festivalsUrl + '?start=' + clickedDate + '&end=' + clickedDate)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("받은 데이터:", data);
+                        currentFestivals = data;
+
+                        if (data && data.length > 0) {
+                            displayFestivals(data, true);
+                        } else {
+                            eventDetailsEl.innerHTML = 
+                                '<div class="alert alert-info" role="alert">' +
+                                '해당 날짜에 진행하는 축제가 없습니다.' +
+                                '</div>';
+                        }
+
+                        setTimeout(() => {
+                            eventDetailsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 300);
+                    })
+                    .catch(error => {
+                        console.error("축제 정보를 불러오는 중 오류 발생:", error);
+                        eventDetailsEl.innerHTML = 
+                            '<div class="alert alert-danger" role="alert">' +
+                            '축제 정보를 불러오는데 실패했습니다.' +
+                            '</div>';
+                    });
+            }
+        });
+        
+        calendar.render();
     });
-
-    calendar.render();
-});
-</script>
-
+    </script>
 </body>
 </html>

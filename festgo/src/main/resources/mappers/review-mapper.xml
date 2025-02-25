@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oplusz.festgo.repository.ReviewDao">
+
+    <!-- 특정 포스트에 달려 있는 댓글 목록 검색 -->
+	<select id="selectByFestivalId" resultType="Review">
+	    SELECT re_id, re_title, re_content, re_author, re_grade, re_created_time, re_modified_time 
+	    FROM review 
+	    WHERE fe_id = #{feId} 
+	    ORDER BY re_grade DESC, re_id DESC
+	</select>
+    
+    <!-- 축제 평균 별점 조회 기능 -->
+    <select id="selectAverageGrade" resultType="double">
+        SELECT NVL(AVG(re_grade), 0) 
+        FROM review 
+        WHERE fe_id = #{feId}
+    </select>
+
+    
+    <!-- 특정 포스트에 댓글 추가(insertReview) -->
+	<insert id="insertReview">
+	    INSERT INTO review (fe_id, re_author, re_title, re_content, re_grade, re_created_time, re_modified_time)
+	    VALUES (#{feId}, #{reAuthor}, #{reTitle}, #{reContent}, #{reGrade}, SYSTIMESTAMP, SYSTIMESTAMP)
+	</insert>
+
+    <!-- 댓글 ID로 댓글 삭제하기(deleteById) -->
+    <delete id="deleteById">
+        delete from review where re_id = #{reId}
+    </delete>
+    
+    <!-- 특정 포스트에 달려 있는 모든 댓글 삭제(deleteByFestivalId) -->
+    <delete id="deleteByFestivalId">
+        delete from review where fe_id = #{feId}
+    </delete>
+    
+    <!-- 해당 아이디의 댓글 내용 수정(updateReview) -->
+	<update id="updateReview">
+	    UPDATE review
+	    SET re_content = #{reContent},
+	    	re_title = #{reTitle},
+	    	re_grade = #{reGrade}, 
+	        re_modified_time = SYSTIMESTAMP
+	    WHERE re_id = #{reId}
+	</update>
+
+    
+    <!-- 특정 포스트에 달려 있는 댓글 개수(selectReviewCount) -->
+    <select id="selectReviewCount" resultType="integer">
+        select count(*) from review where fe_id = #{feId}
+    </select>
+    
+    <!-- 해당 ID의 댓글 1개를 검색(selectById) -->
+    <select id = "selectById" resultType="Review" >
+        select * from review where re_id = #{reId}
+    </select>
+
+
+<!-- 희성 작성 시작 -->
+
+    <!-- 로그인된 아이디로 작성된 글 목록 조회 -->
+    <!-- <select id="readByMeUsername" resultType="Post">
+        select *
+		from post
+		where po_author = #{meUsername}
+    </select> -->
+    
+    <!-- 관리자용 전체글 목록 원하는 수대로 가져오기 -->
+    <select id="readReviewVariableByPageNum" resultType="Review">
+	    select re_id, re_title, re_content, re_author, re_created_time, re_modified_time, re_grade, fe_id from
+	        (
+		    select rownum rno, re_id, re_title, re_content, re_author, re_created_time, re_modified_time, re_grade, fe_id
+		    from (select * from review order by re_created_time desc)
+		    where re_id > 0 and rownum > 0 and rownum <![CDATA[<]]>= #{maxReviewNum}
+	        )
+	    where rno >= #{minReviewNum} and rno <![CDATA[<]]>= #{maxReviewNum}
+    </select>
+    
+    <!-- 일반, 스폰서용 작성글 원하는 수대로 가져오기 -->
+    <select id="readReviewVariableByMeUsername" resultType="Review">
+        select re_id, re_title, re_content, re_author, re_created_time, re_modified_time, re_grade, fe_id from
+            (
+            select rownum rno, re_id, re_title, re_content, re_author, re_created_time, re_modified_time, re_grade, fe_id
+            from (select * from review where re_author = #{meUsername} order by re_created_time desc)
+            where re_id > 0 and rownum > 0 and rownum <![CDATA[<]]>= #{maxReviewNum}
+            )
+        where rno >= #{minReviewNum} and rno <![CDATA[<]]>= #{maxReviewNum}
+    </select>
+    
+    <!-- 전체 글 갯수 세기 -->
+    <select id="countAllReviews">
+        select count(*) from review
+    </select>
+    
+    <!-- 로그인한 아이디가 등록한 글 갯수 세기 -->
+    <select id="countReviewsByMeUsername">
+        select count(*) from review where re_author = #{meUsername}
+    </select>
+    
+    <!-- 선택된 리뷰 삭제하기 -->
+    <delete id="deleteReviewByReId">
+        delete from review where re_id = #{reId}
+    </delete>
+    
+<!-- 희성 작성 끝 -->
+
+</mapper>
